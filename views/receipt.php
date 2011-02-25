@@ -31,7 +31,7 @@ elseif(isset($_SESSION['order_id'])) {
   
   // Begin iDevAffiliate Tracking
   if(CART66_PRO && $url = Cart66Setting::getValue('idevaff_url')) {
-    require_once(WP_PLUGIN_DIR. "/cart66/pro/idevaffiliate-award.php");
+    require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/idevaffiliate-award.php");
   }
   // End iDevAffiliate Tracking
 }

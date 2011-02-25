@@ -94,7 +94,7 @@ class Cart66Common {
       }
     }
 
-    $filename = WP_PLUGIN_DIR . "/cart66/$filename"; 
+    $filename = WP_PLUGIN_DIR . "/cart66-lite/$filename"; 
     ob_start();
     include $filename;
     $contents = ob_get_contents();
@@ -120,7 +120,7 @@ class Cart66Common {
     if(defined('CART66_DEBUG') && CART66_DEBUG) {
       $date = date('m/d/Y g:i:s a');
       $header = "\n\n[LOG DATE: $date]\n";
-      $filename = WP_PLUGIN_DIR . "/cart66/log.txt"; 
+      $filename = WP_PLUGIN_DIR . "/cart66-lite/log.txt"; 
       if(file_exists($filename) && is_writable($filename)) {
         file_put_contents($filename, $header . $data, FILE_APPEND);
       }

@@ -2,7 +2,7 @@
 class Cart66Log {
   
   public static function getLogFilePath() {
-    $logFilePath = WP_PLUGIN_DIR . '/cart66/log.txt';
+    $logFilePath = WP_PLUGIN_DIR . '/cart66-lite/log.txt';
     return $logFilePath;
   }
   

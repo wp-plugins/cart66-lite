@@ -124,7 +124,7 @@ if(count($items)): ?>
         </td>
         <?php if($fullMode): ?>
           <?php
-            $removeItemImg = WPCURL . '/plugins/cart66/images/remove-item.png';
+            $removeItemImg = WPCURL . '/plugins/cart66-lite/images/remove-item.png';
             if($cartImgPath) {
               $removeItemImg = $cartImgPath . 'remove-item.png';
             }

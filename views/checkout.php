@@ -160,7 +160,7 @@ $b = $gateway->getBilling();
 $s = $gateway->getShipping();
 
 // Include the HTML markup for the checkout form
-include(WP_PLUGIN_DIR . '/cart66/views/checkout-form.php');
+include(WP_PLUGIN_DIR . '/cart66-lite/views/checkout-form.php');
 
 // Include the client side javascript validation                 
-include(WP_PLUGIN_DIR . '/cart66/views/client/checkout.php'); 
+include(WP_PLUGIN_DIR . '/cart66-lite/views/client/checkout.php'); 

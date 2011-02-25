@@ -142,7 +142,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
                     <option value='0'>None</option>
                     <?php
                       global $wpdb;
-                      require_once(WP_PLUGIN_DIR. "/cart66/pro/models/Cart66GravityReader.php");
+                      require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/models/Cart66GravityReader.php");
                       $gfIdsInUse = Cart66GravityReader::getIdsInUse();
                       $gfTitles = array();
                       $forms = Cart66Common::getTableName('rg_form', '');
