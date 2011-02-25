@@ -26,9 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 if(!class_exists('Cart66')) {
-  require_once(WP_PLUGIN_DIR. "/cart66/models/Cart66CartWidget.php");
-  require_once(WP_PLUGIN_DIR. "/cart66/models/Cart66.php");
-  require_once(WP_PLUGIN_DIR. "/cart66/models/Cart66Common.php");
+  require_once(WP_PLUGIN_DIR. "/cart66-lite/models/Cart66CartWidget.php");
+  require_once(WP_PLUGIN_DIR. "/cart66-lite/models/Cart66.php");
+  require_once(WP_PLUGIN_DIR. "/cart66-lite/models/Cart66Common.php");
   
   define("CART66_ORDER_NUMBER", false);
   define("CART66_PRO", false);
@@ -37,7 +37,7 @@ if(!class_exists('Cart66')) {
   define("WPURL", Cart66Common::getWpUrl());
   
   if(CART66_PRO) {
-    require_once(WP_PLUGIN_DIR. "/cart66/pro/models/Cart66ProCommon.php");
+    require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/models/Cart66ProCommon.php");
   }
 
   // IS_ADMIN is true when the dashboard or the administration panels are displayed
@@ -46,7 +46,7 @@ if(!class_exists('Cart66')) {
   }
 
   /* Uncomment this block of code for load time debugging
-  $filename = WP_PLUGIN_DIR . "/cart66/log.txt"; 
+  $filename = WP_PLUGIN_DIR . "/cart66-lite/log.txt"; 
   if(file_exists($filename) && is_writable($filename)) {
     file_put_contents($filename, "\n\n\n================= Loading Cart66 Main File [" . date('m/d/Y g:i:s a') . "] " . 
       $_SERVER['REMOTE_ADDR'] . " " . $_SERVER['REQUEST_URI'] . " =================\n\n", FILE_APPEND);

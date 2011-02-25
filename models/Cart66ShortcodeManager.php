@@ -106,7 +106,7 @@ class Cart66ShortcodeManager {
 
   public function manualCheckout($attrs=null) {
     if(!$_SESSION['Cart66Cart']->hasSubscriptionProducts()) {
-      require_once(WP_PLUGIN_DIR . "/cart66/gateways/Cart66ManualGateway.php");
+      require_once(WP_PLUGIN_DIR . "/cart66-lite/gateways/Cart66ManualGateway.php");
       $manual = new Cart66ManualGateway();
       $view = $this->_buildCheckoutView($manual);
     }
@@ -118,7 +118,7 @@ class Cart66ShortcodeManager {
 
   public function authCheckout($attrs) {
     if(!$_SESSION['Cart66Cart']->hasPayPalSubscriptions()) {
-      require_once(WP_PLUGIN_DIR . "/cart66/pro/gateways/Cart66AuthorizeNet.php");
+      require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/gateways/Cart66AuthorizeNet.php");
       $authnet = new Cart66AuthorizeNet();
       $view = $this->_buildCheckoutView($authnet);
       return $view;
@@ -169,8 +169,8 @@ class Cart66ShortcodeManager {
   }
 
   public function processIPN($attrs) {
-    require_once(WP_PLUGIN_DIR. "/cart66/models/Cart66PayPalIpn.php");
-    require_once(WP_PLUGIN_DIR. "/cart66/gateways/Cart66PayPalStandard.php");
+    require_once(WP_PLUGIN_DIR. "/cart66-lite/models/Cart66PayPalIpn.php");
+    require_once(WP_PLUGIN_DIR. "/cart66-lite/gateways/Cart66PayPalStandard.php");
     $ipn = new Cart66PayPalIpn();
     if($ipn->validate($_POST)) {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Working with  IPN transaction type: " . $_POST['txn_type']);
@@ -510,7 +510,7 @@ class Cart66ShortcodeManager {
     }
     
     if(!$_SESSION['Cart66Cart']->requirePayment()) {
-      require_once(WP_PLUGIN_DIR . "/cart66/gateways/Cart66ManualGateway.php");
+      require_once(WP_PLUGIN_DIR . "/cart66-lite/gateways/Cart66ManualGateway.php");
       $gateway = new Cart66ManualGateway();
     }
     
