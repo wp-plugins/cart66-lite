@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Cart66 Lite ===
 Contributors: reality66
 Donate link: http://cart66.com
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales
