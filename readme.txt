@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Cart66 Lite ===
 Contributors: reality66
 Donate link: http://cart66.com
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales
@@ -86,3 +86,6 @@ We are not able to provide anything other than community based support for Cart6
 * Security enhancements
 * Added the CSS class Cart66ContinueShopping to the continue shopping links in the view cart screen
 * Cart66 scripts are only included in admin pages pertaining to Cart66
+
+
+
