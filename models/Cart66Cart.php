@@ -418,7 +418,7 @@ class Cart66Cart {
       $total = $this->getNonSubscriptionAmount();
       $discountedTotal = $this->_promotion->discountTotal($total);
       $discount = number_format($total - $discountedTotal, 2, '.', '');
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Getting discount Total: $total -- Discounted Total: $discountedTotal -- Discount: $discount");
+      // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Getting discount Total: $total -- Discounted Total: $discountedTotal -- Discount: $discount");
     }
     return $discount;
   }

@@ -79,6 +79,13 @@ input[type=submit] {
 
 #Cart66ReceiptExpectation { margin-top: 7px; font-style: italic;}
 
+#Cart66NewsletterList .Cart66CheckboxList {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+
 .purAddToCart {
   vertical-align: middle; 
   width: auto !important; 
@@ -189,6 +196,7 @@ input[type=submit] {
   width: 400px;
   height: auto;
   color: black;
+  z-index: 100;
 }
 
 .Cart66Unavailable h2 {

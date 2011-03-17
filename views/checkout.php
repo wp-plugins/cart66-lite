@@ -95,6 +95,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
       }
 
       if(count($errors) == 0) {
+        
+        // Look for constant contact opt-in
+        if(CART66_PRO) { include(WP_PLUGIN_DIR . "/cart66-lite/pro/Cart66ConstantContactOptIn.php"); }
+        
         $gatewayName = get_class($gateway);
         $gateway->initCheckout($oneTimeTotal);
         if($oneTimeTotal > 0 || $gatewayName == 'Cart66ManualGateway') {

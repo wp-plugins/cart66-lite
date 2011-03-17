@@ -238,7 +238,7 @@ else {
               ?>
               <input type='radio' name='auth_force_ssl' value="yes" style='width: auto;' <?php if($force == 'yes') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'>Yes</label>
               <input type='radio' name='auth_force_ssl' value="no" style='width: auto;' <?php if($force == 'no') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'>No</label>
-                <span style="margin-left: 10px;" class="description">Be sure to select yes for SSL when your site is live</span>
+                <p style="width: 450px;" class="label_desc">Be sure use an SSL certificate if you are using a payment gateway other than PayPal Website Payments Standard or PayPal Express Checkout.</p>
               </li>
               
               <?php if(CART66_PRO): ?>
@@ -415,7 +415,7 @@ else {
     </div>
     
     <!-- PayPal Settings -->
-    <div class="widgets-holder-wrap <?php echo Cart66Setting::getValue('paypal_email') ? '' : 'closed'; ?>">
+    <div class="widgets-holder-wrap <?php echo (Cart66Setting::getValue('paypal_email') || Cart66Setting::getValue('paypalpro_api_username') ) ? '' : 'closed'; ?>">
       <div class="sidebar-name">
         <div class="sidebar-name-arrow"><br/></div>
         <h3>PayPal Settings <span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
@@ -491,8 +491,14 @@ else {
               <li><label style="display: inline-block; width: 120px; text-align: right;">&nbsp;</label>
                 <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
                 
-              <li><p class='label_desc' style='color: #999'>Note: The Website Payments Pro solution is only available in <a href="http://cart66.com">Cart66 Professional</a>
-                 and can only be implemented by UK, Canadian and US Merchants. <a href="https://www.x.com/docs/DOC-1510">Learn more</a></p></li>
+              <?php if(CART66_PRO): ?>
+                <li><p class='label_desc' style='color: #999'>Note: The Website Payments Pro solution can only be implemented by UK, Canadian and US Merchants.
+                  <a href="https://www.x.com/docs/DOC-1510">Learn more</a></p></li>
+              <?php else: ?>
+                <li><p class='label_desc' style='color: #999'>Note: The Website Payments Pro solution is only available in <a href="http://cart66.com">Cart66 Professional</a>
+                   and can only be implemented by UK, Canadian and US Merchants.</p></li>
+              <?php endif; ?>
+              
             </ul>
           </form>
         </div>
@@ -535,7 +541,7 @@ else {
 
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='auth_username'>API Login ID:</label>
               <input type='text' name='auth_username' id='auth_username' style='width: 375px;' value="<?php echo Cart66Setting::getValue('auth_username'); ?>" />
-              <p id="authnet-image" class="label_desc"><a href="http://www.Cart66.com/phpages/wp-content/uploads/authnet-api-login.jpg" target="_blank">Where can I find 
+              <p id="authnet-image" class="label_desc"><a href="http://cart66.com/system66/wp-content/uploads/authnet-api-login.jpg" target="_blank">Where can I find 
                 my Authorize.net API Login ID and Transaction Key?</a></p>
               </li>
 
@@ -843,6 +849,122 @@ else {
     </div>
     -->
     
+    <!-- Constant Contact Settings -->
+    <a href="#" name="constantcontact"></a>
+    <div class="widgets-holder-wrap <?php echo Cart66Setting::getValue('constantcontact_username') ? '' : 'closed'; ?>">
+      <div class="sidebar-name">
+        <div class="sidebar-name-arrow"><br/></div>
+        <h3>Constant Contact Settings<span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
+      </div>
+      <div class="widget-holder">
+        <p class="description">Configure your Constant Contact account information so your buyers can opt in to your newsletter.</p>
+        <div>
+          <?php if(CART66_PRO): ?>
+          <form id="constantcontact" class="ajaxSettingForm" action="" method='post'>
+            <input type='hidden' name='action' value="save_settings" />
+            <input type='hidden' name='_success' value="Your Constant Contact settings have been saved.">
+            <input type='hidden' name='constantcontact_apikey' value="9a2f451c-ccd6-453f-994f-6cc8c5dc1e94">
+            <ul>
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for='constantcontact_username'>Username:</label>
+              <input type='text' name='constantcontact_username' id='constantcontact_username' value="<?php echo Cart66Setting::getValue('constantcontact_username'); ?>" />
+              
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for='constantcontact_password'>Password:</label>
+              <input type='text' name='constantcontact_password' id='constantcontact_password' value="<?php echo Cart66Setting::getValue('constantcontact_password'); ?>" />
+              
+              <li><label style="display: inline-block; width: 120px; text-align: right; margin-top: 0px;" for='receipt_intro'>Opt-in Message:</label>
+              <br/><textarea style="width: 375px; height: 140px; margin-left: 125px; margin-top: -20px;" 
+              name='opt_in_message'><?php echo Cart66Setting::getValue('opt_in_message'); ?></textarea>
+              <p style="margin-left: 125px;" class="description">Provide a message to tell your buyers what your newsletter is about.<br/>For example, you might want to say something like
+                "Yes! I would like to subscribe to:"</p></li>
+                
+              <?php
+                // Show the constant contact lists
+                if(Cart66Setting::getValue('constantcontact_username')) {
+                  echo '<li><label style="display: inline-block; width: 120px; text-align: right;">Show lists:</label>';
+                  echo '<div style="width: 600px; display: block; margin-left: 125px; margin-top: -1.25em;">';
+                  echo '<input type="hidden" name="constantcontact_list_ids" value="" />';
+                  $cc = new Cart66ConstantContact();
+                  $lists = $cc->get_all_lists('lists', 3);
+                  if(is_array($lists)) {
+                    $savedListIds = array();
+                    if($savedLists = Cart66Setting::getValue('constantcontact_list_ids')) {
+                      $savedListIds = explode('~', $savedLists);
+                    }
+                    
+                    foreach($lists as $list) {
+                      $checked = '';
+                      $val = $list['id'] . '::' . $list['Name'];
+                      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] looking for: $val in " . print_r($savedListIds, true));
+                      if(in_array($val, $savedListIds)) {
+                        $checked = 'checked="checked"';
+                      }
+                      echo '<input type="checkbox" name="constantcontact_list_ids[]" value="' . $val . '" ' . $checked . '> ' . $list['Name'] . '<br />';
+                    }
+                  }
+                  else {
+                    echo '<p class="description">You do not have any lists</p>';
+                  } 
+                  echo '</div></li>';
+                }
+              ?>
+              
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+            </ul>
+          </form>
+          <?php else: ?>
+            <p class="description" style="font-style: normal; color: #333; width: 600px;">Constant Contact is
+              an industry leader in email marketing. Constant Contact provides email marketing software that makes it easy to 
+              create professional HTML email campaigns with no tech skills.</p>
+            <p class="description">This feature is only available in <a href="http://cart66.com">Cart66 Professional</a>.</p>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- iDevAffiliate Settings -->
+    <a href="#" name="idevaffiliate"></a>
+    <div class="widgets-holder-wrap <?php echo Cart66Setting::getValue('idevaff_url') ? '' : 'closed'; ?>">
+      <div class="sidebar-name">
+        <div class="sidebar-name-arrow"><br/></div>
+        <h3>iDevAffiliate Settings<span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
+      </div>
+      <div class="widget-holder">
+        <p class="description">Configure your iDevAffiliate account information so Cart66 can award commissions to your affiliates.</p>
+        <div>
+          <?php if(CART66_PRO): ?>
+          <form id="iDevAffiliateForm" class="ajaxSettingForm" action="" method='post'>
+            <input type='hidden' name='action' value="save_settings" />
+            <input type='hidden' name='_success' value="Your iDevAffiliate settings have been saved.">
+            <ul>
+              
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for='idevaff_url'>URL:</label>
+              <input type='text' name='idevaff_url' id='idevaff_url' style="width: 75%;"
+              value="<?php echo Cart66Setting::getValue('idevaff_url'); ?>" />
+              <p class="description" style='margin-left: 125px;'>Copy and paste your iDevAffiliate "3rd Party Affiliate Call" URL. It will looks like:<br/>
+                http://www.yoursite.com/idevaffiliate/sale.php?profile=72198&amp;idev_saleamt=XXX&amp;idev_ordernum=XXX<br/>
+                Be sure to leave the XXX's in place and Cart66 will replace the XXX's with the appropriate values for each sale.
+                <?php if(Cart66Setting::getValue('idevaff_url')): ?>
+                  <br/><br/><em>Note: To disable iDevAffiliate integration, simply delete this URL and click Save.</em>
+                <?php endif; ?>
+              </p>
+              
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+            </ul>
+          </form>
+          <?php else: ?>
+            <p class="description" style="font-style: normal; color: #333; width: 600px;"><a href="http://www.idevdirect.com/14717499.html">iDevAffiliate</a> is
+              The Industry Leader in self managed affiliate program software. Started in 1999, iDevAffiliate is the original in self managed affiliate software!  
+              iDevAffiliate was hand coded from scratch by the same team that provides their technical support! iDevAffilaite is also the affilate software that runs
+              our <a href="http://affiliates.reality66.com/idevaffiliate/">Cart66 Affilaite Program</a>.</p>
+            <p class="description">This feature is only available in <a href="http://cart66.com">Cart66 Professional</a>.</p>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+    
     <!-- Zendesk Settings -->
     <a href="#" name="zendesk"></a>
     <div class="widgets-holder-wrap <?php echo Cart66Setting::getValue('zendesk_token') ? '' : 'closed'; ?>">
@@ -884,48 +1006,6 @@ else {
           <?php else: ?>
             <p class="description" style="font-style: normal; color: #333; width: 600px;"><a href="http://www.zendesk.com">Zendesk</a> is the industry leader 
               in web-based help desk software with an elegant support ticket system and a self-service customer support platform. Agile, smart, and convenient.</p>
-            <p class="description">This feature is only available in <a href="http://cart66.com">Cart66 Professional</a>.</p>
-          <?php endif; ?>
-        </div>
-      </div>
-    </div>
-    
-    <!-- iDevAffiliate Settings -->
-    <a href="#" name="idevaffiliate"></a>
-    <div class="widgets-holder-wrap <?php echo Cart66Setting::getValue('idevaff_url') ? '' : 'closed'; ?>">
-      <div class="sidebar-name">
-        <div class="sidebar-name-arrow"><br/></div>
-        <h3>iDevAffiliate Settings<span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
-      </div>
-      <div class="widget-holder">
-        <p class="description">Configure your iDevAffiliate account information so Cart66 can award commissions to your affiliates.</p>
-        <div>
-          <?php if(CART66_PRO): ?>
-          <form id="iDevAffiliateForm" class="ajaxSettingForm" action="" method='post'>
-            <input type='hidden' name='action' value="save_settings" />
-            <input type='hidden' name='_success' value="Your iDevAffiliate settings have been saved.">
-            <ul>
-              
-              <li><label style="display: inline-block; width: 120px; text-align: right;" for='idevaff_url'>URL:</label>
-              <input type='text' name='idevaff_url' id='idevaff_url' style="width: 75%;"
-              value="<?php echo Cart66Setting::getValue('idevaff_url'); ?>" />
-              <p class="description" style='margin-left: 125px;'>Copy and paste your iDevAffiliate "3rd Party Affiliate Call" URL. It will looks like:<br/>
-                http://www.yoursite.com/idevaffiliate/sale.php?profile=72198&amp;idev_saleamt=XXX&amp;idev_ordernum=XXX<br/>
-                Be sure to leave the XXX's in place and Cart66 will replace the XXX's with the appropriate values for each sale.
-                <?php if(Cart66Setting::getValue('idevaff_url')): ?>
-                  <br/><br/><em>Note: To disable iDevAffiliate integration, simply delete this URL and click Save.</em>
-                <?php endif; ?>
-              </p>
-              
-              <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
-            </ul>
-          </form>
-          <?php else: ?>
-            <p class="description" style="font-style: normal; color: #333; width: 600px;"><a href="http://www.idevdirect.com/14717499.html">iDevAffiliate</a> is
-              The Industry Leader in self managed affiliate program software. Started in 1999, iDevAffiliate is the original in self managed affiliate software!  
-              iDevAffiliate was hand coded from scratch by the same team that provides their technical support! iDevAffilaite is also the affilate software that runs
-              our <a href="http://affiliates.reality66.com/idevaffiliate/">Cart66 Affilaite Program</a>.</p>
             <p class="description">This feature is only available in <a href="http://cart66.com">Cart66 Professional</a>.</p>
           <?php endif; ?>
         </div>
@@ -1106,7 +1186,7 @@ else {
                                 }
                               }
                           ?><br>
-
+									Current Dir: <?php echo getcwd(); ?><br>
              </div>
            </li>
           </ul>

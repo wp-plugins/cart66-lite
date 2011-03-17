@@ -53,16 +53,16 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
           $description = '(# '.$p->itemNumber.')';
         }
 
-  	    $types .= '"' . $type . '", ';
+  	    $types .= '"' . htmlspecialchars($type) . '", ';
   	    
   	    if(CART66_PRO && $p->isPayPalSubscription()) {
   	      $sub = new Cart66PayPalSubscription($p->id);
   	      $subPrice = strip_tags($sub->getPriceDescription($sub->offerTrial > 0, '(trial)'));
-  	      $prices .= '"' . $subPrice . '", ';
+  	      $prices .= '"' . htmlspecialchars($subPrice) . '", ';
   	      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] subscription price in dialog: $subPrice");
   	    }
   	    else {
-  	      $prices .= '"' . $p->getPriceDescription() .'", ';
+  	      $prices .= '"' . htmlspecialchars($p->getPriceDescription()) .'", ';
   	    }
   	    
   	    

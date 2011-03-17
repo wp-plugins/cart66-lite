@@ -292,10 +292,10 @@ class Cart66Common {
     if(isset($_POST[$key])) {
       $value = $_POST[$key];
       if(is_scalar($value)) {
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] PostVal before cleanup: $value");
+        // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] PostVal before cleanup: $value");
         $value = strip_tags($value);
         $value = preg_replace('/[<>\\\\\/]/', '', $value);
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] PostVal after cleanup: $value");
+        // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] PostVal after cleanup: $value");
       }
     }
     return $value;
@@ -906,50 +906,64 @@ _script_here_
   }
   
   public static function downloadFile($path) {
-    // Erase and close all output buffers
-    while (@ob_end_clean());
-
-    // Get the name of the file to be downloaded
-    $fileName = basename($path);
-    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Download file name: $fileName");
-
-    // This is required for IE, otherwise Content-disposition is ignored
-    if(ini_get('zlib.output_compression')) {
-      ini_set('zlib.output_compression', 'Off');
-    }
-
-    $bytes = 'unknown';
-    if(substr($path, 0, 4) == 'http') {
-      $bytes = Cart66Common::remoteFileSize($path);
-    }
-    else {
-      $bytes = filesize($path);
-    }
-    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Download file size: $bytes");
     
-    ob_start();
-    header("Pragma: public");
-    header("Expires: 0");
-    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-    header("Cache-Control: private",false);
-    header("Content-Type: application/octet-stream;");
-    header("Content-Disposition: attachment; filename=\"".$fileName."\";" );
-    header("Content-Transfer-Encoding: binary");
-    header("Content-Length: $bytes");
+    // Validate the $path
+    if(!strpos($path, '://')) {
+      if($productFolder = Cart66Setting::getValue('product_folder')) {
+        if(strpos($path, $productFolder) === 0) {
+          // Erase and close all output buffers
+          while (@ob_end_clean());
 
-    //open the file and stream download
-    if($fp = fopen($path, 'rb')) {
-      while(!feof($fp)) {
-        //reset time limit for big files
-        @set_time_limit(0);
-        echo fread($fp, 1024*8);
-        flush();
-        ob_flush();
+          // Get the name of the file to be downloaded
+          $fileName = basename($path);
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Download file name: $fileName");
+
+          // This is required for IE, otherwise Content-disposition is ignored
+          if(ini_get('zlib.output_compression')) {
+            ini_set('zlib.output_compression', 'Off');
+          }
+
+          $bytes = 'unknown';
+          if(substr($path, 0, 4) == 'http') {
+            $bytes = Cart66Common::remoteFileSize($path);
+          }
+          else {
+            $bytes = filesize($path);
+          }
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Download file size: $bytes");
+
+          ob_start();
+          header("Pragma: public");
+          header("Expires: 0");
+          header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+          header("Cache-Control: private",false);
+          header("Content-Type: application/octet-stream;");
+          header("Content-Disposition: attachment; filename=\"".$fileName."\";" );
+          header("Content-Transfer-Encoding: binary");
+          header("Content-Length: $bytes");
+
+          //open the file and stream download
+          if($fp = fopen($path, 'rb')) {
+            while(!feof($fp)) {
+              //reset time limit for big files
+              @set_time_limit(0);
+              echo fread($fp, 1024*8);
+              flush();
+              ob_flush();
+            }
+            fclose($fp);
+          }
+          else {
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] fopen failed to open path: $path");
+          }
+        }
+        else {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Unable to download file because the requested file is not in the path defined by the product folder settings: $path");
+        }
       }
-      fclose($fp);
-    }
-    else {
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] fopen failed to open path: $path");
+      else {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Unable to download file because the product folder is not set.");
+      }
     }
     
   }

@@ -32,6 +32,23 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-action'] == 'paypalexp
   // Calculate IPN URL
   $ipnPage = get_page_by_path('store/ipn');
   $ipnUrl = get_permalink($ipnPage->ID);
+
+  // Set shipping as an item if the item total is $0.00, otherwise PayPal will fail
+  if($itemTotal == 0 && $shipping > 0) {
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Setting shipping to be an item because the item total would otherwise be $0.00");
+    $itemTotal = $shipping;
+    $itemData = array(
+      'NAME' => 'Shipping',
+      'AMT' => $shipping,
+      'NUMBER' => 'SHIPPING',
+      'QTY' => 1
+    );
+    $pp->addItem($itemData);
+    $shipping = 0;
+  }
+  else {
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not making shipping part of the item list. Item Total: $itemTotal");
+  }
   
   // Set payment information
   $payment = array(
@@ -127,6 +144,6 @@ if(!isset($data['style'])) {
 ?>
 <form action="" method='post' style="<?php echo $data['style']; ?>">
   <input type='hidden' name='cart66-action' value='paypalexpresscheckout'>
-  <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="left" style="margin-right:7px;" value="PayPal Express Checkout" />
+  <input type="image" id='PayPalExpressCheckoutButton' src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="left" style="margin-right:7px;" value="PayPal Express Checkout" />
 </form>
 <?php endif; ?>

@@ -6,7 +6,7 @@
   
   <?php
   if(CART66_PRO) {
-    require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/admin/accounts.php");
+    require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/admin/reports.php");
   }
   else {
     echo '<p class="description">Sales reports are only available in <a href="http://cart66.com">Cart66 Professional</a>.</p>';

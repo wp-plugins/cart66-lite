@@ -206,6 +206,24 @@ if($accountId = Cart66Common::isLoggedIn()) {
             <input type="text" id="payment-email" name="payment[email]" value="<?php Cart66Common::showValue($p['email']); ?>">
           </li>
           
+          <?php if($lists = Cart66Setting::getValue('constantcontact_list_ids')): ?>
+            <li>
+              <?php
+                if(!$optInMessage = Cart66Setting::getValue('opt_in_message')) {
+                  $optInMessage = 'Yes, I would like to subscribe to:';
+                }
+                echo "<p>$optInMessage</p>";
+                $lists = explode('~', $lists);
+                echo '<ul id="Cart66NewsletterList">';
+                foreach($lists as $list) {
+                  list($id, $name) = explode('::', $list);
+                  echo "<li><input class=\"Cart66CheckboxList\" type=\"checkbox\" name=\"constantcontact_subscribe_ids[]\" value=\"$id\" /> $name</li>";
+                }
+                echo '</ul>';
+              ?>
+            </li>
+          <?php endif; ?>
+          
           <?php if(!Cart66Common::isLoggedIn()): ?>
 
             <?php if($_SESSION['Cart66Cart']->hasSubscriptionProducts()): ?>

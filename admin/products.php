@@ -149,7 +149,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
                       $sql = "SELECT id, title from $forms where is_active=1 order by title";
                       $results = $wpdb->get_results($sql);
                       foreach($results as $r) {
-                        $disabled = in_array($r->id, $gfIdsInUse) ? 'disabled="disabled"' : '';
+                        $disabled = ( in_array($r->id, $gfIdsInUse) && $r->id != $product->gravityFormId) ? 'disabled="disabled"' : '';
                         $gfTitles[$r->id] = $r->title;
                         $selected = ($product->gravityFormId == $r->id) ? 'selected="selected"' : '';
                         echo "<option value='$r->id' $selected $disabled>$r->title</option>";
@@ -158,23 +158,21 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
                   </select>
                   <span class="label_desc">A Gravity Form may only be linked to one product</span>
                 </li>
-                <?php if($product->gravityFormId > 0 || 1): ?>
-                  <li class="">
-                    <label class="long">Quantity field:</label>
-                    <select name="product[gravity_form_qty_id]" id="gravity_form_qty_id">
-                      <option value='0'>None</option>
-                      <?php
-                        $gr = new Cart66GravityReader($product->gravityFormId);
-                        $fields = $gr->getStandardFields();
-                        foreach($fields as $id => $label) {
-                          $selected = ($product->gravityFormQtyId == $id) ? 'selected="selected"' : '';
-                          echo "<option value='$id' $selected $disabled>$label</option>\n";
-                        }
-                      ?>
-                    </select>
-                    <span class="label_desc">Use one of the Gravity Form fields as the quantity for your product.</span>
-                  </li>
-                <?php endif; ?>
+                <li class="">
+                  <label class="long">Quantity field:</label>
+                  <select name="product[gravity_form_qty_id]" id="gravity_form_qty_id">
+                    <option value='0'>None</option>
+                    <?php
+                      $gr = new Cart66GravityReader($product->gravityFormId);
+                      $fields = $gr->getStandardFields();
+                      foreach($fields as $id => $label) {
+                        $selected = ($product->gravityFormQtyId == $id) ? 'selected="selected"' : '';
+                        echo "<option value='$id' $selected>$label</option>\n";
+                      }
+                    ?>
+                  </select>
+                  <span class="label_desc">Use one of the Gravity Form fields as the quantity for your product.</span>
+                </li>
                 
               <?php endif; ?>
               
@@ -261,12 +259,12 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
             <ul>
               <li>
                 <label class="med" for='product[options_1]'>Option Group 1:</label>
-                <input style="width: 80%" type='text' name='product[options_1]' id='product_options_1' value="<?php echo $product->options_1 ?>" />
+                <input style="width: 80%" type='text' name='product[options_1]' id='product_options_1' value="<?php echo htmlentities($product->options_1); ?>" />
                 <p class="label_desc">Small, Medium +$2.00, Large +$4.00</p>
               </li>
               <li>
                 <label class="med" for='product[options_2]'>Option Group 2:</label>
-                <input style="width: 80%" type='text' name='product[options_2]' id='product_options_1' value="<?php echo $product->options_2 ?>" />
+                <input style="width: 80%" type='text' name='product[options_2]' id='product_options_1' value="<?php echo htmlentities($product->options_2); ?>" />
                 <p class="label_desc">Red, White, Blue</p>
               </li>
               <li>

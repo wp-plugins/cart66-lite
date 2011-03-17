@@ -76,7 +76,17 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     
     // DoExpressCheckout for non-subscription products
     if($keepGoing) {
-      if($itemAmount > 0) {
+      
+      // Look for constant contact opt-in
+      if(CART66_PRO) { include(WP_PLUGIN_DIR . "/cart66-lite/pro/Cart66ConstantContactOptIn.php"); }
+      
+      if($itemAmount > 0 || $shipping > 0) {
+        // Send shipping as the item amount if the item amount is $0.00 otherwise paypal will refuse the transaction
+        if($itemAmount == 0 && $shipping > 0) {
+          $itemAmount = $shipping;
+          $shipping = 0;
+        }
+        
         Cart66Common::log("Preparing DoExpressCheckout:\nToken: $token\nPayerID: $payerId\nItem Amount: $itemAmount\nShipping: $shipping\nTax: $tax");
         $response = $pp->DoExpressCheckout($token, $payerId, $itemAmount, $shipping, $tax);
       }
@@ -271,6 +281,27 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
         echo "<p>Your current subscription: $mySub->subscriptionPlanName<br/> $mySub->subscriptionPlanName will be canceled when your new subscription is activated.</p>";
       } 
     ?>
+    
+    <?php if($lists = Cart66Setting::getValue('constantcontact_list_ids')): ?>
+        <?php
+          if(!$optInMessage = Cart66Setting::getValue('opt_in_message')) {
+            $optInMessage = 'Yes, I would like to subscribe to:';
+          }
+          echo "<p>$optInMessage</p>";
+        
+          $lists = explode('~', $lists);
+          echo '<ul id="Cart66NewsletterList">';
+          foreach($lists as $list) {
+            list($id, $name) = explode('::', $list);
+            echo "<li><input class=\"Cart66CheckboxList\" type=\"checkbox\" name=\"constantcontact_subscribe_ids[]\" value=\"$id\" /> $name</li>";
+          }
+          echo '<li><label style="width: auto;">Email:</label><input type="text" name="constantcontact_email" value="' . $details['EMAIL'] . '" /></li>';
+          echo '</ul>';
+          
+          echo '<input type="hidden" name="constantcontact_first_name" value="' . $details['FIRSTNAME'] . '" />';
+          echo '<input type="hidden" name="constantcontact_last_name"  value="' . $details['LASTNAME'] . '" />';
+        ?>
+    <?php endif; ?>
       
 
     <?php if($_SESSION['Cart66Cart']->hasSubscriptionProducts()): ?>

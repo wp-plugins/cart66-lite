@@ -33,9 +33,16 @@ class Cart66 {
   }
   
   public function init() {
-    ob_start();
     $this->loadCoreModels();
     $this->initCurrencySymbols();
+    
+    // Verify that upgrade has been run
+    if(IS_ADMIN) {
+      $dbVersion = Cart66Setting::getValue('version');
+      if(version_compare(CART66_VERSION_NUMBER, $dbVersion)) {
+        $this->install();
+      }
+    }
 
     // Define debugging and testing info
     $cart66Logging = Cart66Setting::getValue('enable_logging') ? true : false;
@@ -50,12 +57,14 @@ class Cart66 {
     }
     
     if(IS_ADMIN) {
-      add_action('admin_head', array($this, 'registerAdminStyles'));
+      if(strpos($_SERVER['QUERY_STRING'], 'page=cart66') !== false) {
+        add_action('admin_head', array($this, 'registerAdminStyles'));
+        add_action('admin_init', array($this, 'registerCustomScripts'));
+      }
+      
       add_action('admin_menu', array($this, 'buildAdminMenu'));
-      add_action('admin_init', array($this, 'registerCustomScripts'));
       add_action('admin_init', array($this, 'addEditorButtons'));
       add_action('admin_init', array($this, 'forceDownload'));
-      add_action('admin_head', array($this, 'registerAdminStyles'));
       add_action('wp_ajax_save_settings', array('Cart66Ajax', 'saveSettings'));
       
       if(CART66_PRO) {
@@ -207,6 +216,12 @@ class Cart66 {
       require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66PayPalRecurringPayment.php");
       require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66PayPalSubscription.php");
       require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66Ups.php");
+      
+      // Load Constant Contact classes
+      if(Cart66Setting::getValue('constantcontact_username')) {
+        require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66ConstantContact.php");
+        //require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66ConstantContactWrapper.php");
+      }
     }
 
     require_once(WP_PLUGIN_DIR. "/cart66-lite/gateways/Cart66GatewayAbstract.php");
@@ -246,15 +261,17 @@ class Cart66 {
   }
   
   public function registerCustomScripts() {
-    $path = WPCURL . '/plugins/cart66-lite/js/ajax-setting-form.js';
-    wp_enqueue_script('ajax-setting-form', $path);
+    if(strpos($_SERVER['QUERY_STRING'], 'page=cart66') !== false) {
+      $path = WPCURL . '/plugins/cart66-lite/js/ajax-setting-form.js';
+      wp_enqueue_script('ajax-setting-form', $path);
 
-    // Include jquery-multiselect and jquery-ui
-    wp_enqueue_script('jquery');
-    wp_enqueue_script('jquery-ui-core');
-    wp_enqueue_script('jquery-ui-sortable');
-    $path = WPCURL . '/plugins/cart66-lite/js/ui.multiselect.js';
-    wp_enqueue_script('jquery-multiselect', $path, null, null, true);
+      // Include jquery-multiselect and jquery-ui
+      wp_enqueue_script('jquery');
+      wp_enqueue_script('jquery-ui-core');
+      wp_enqueue_script('jquery-ui-sortable');
+      $path = WPCURL . '/plugins/cart66-lite/js/ui.multiselect.js';
+      wp_enqueue_script('jquery-multiselect', $path, null, null, true);
+    }
   }
   
   public function registerAdminStyles() {

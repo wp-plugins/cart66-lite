@@ -226,8 +226,11 @@ class Cart66ShortcodeManager {
         
         // Send logged in user to the appropriate page after logging in
         $url = Cart66Common::getCurrentPageUrl();
-        if(isset($attrs['url']) && !empty($attrs['url']) && 'stay' != strtolower($attrs['url'])) {
-          $url = $attrs['url'];
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Account Login: " . print_r($attrs, true));
+        if(isset($attrs['url']) && !empty($attrs['url'])) {
+          if('stay' != strtolower($attrs['url'])) {
+            $url = $attrs['url'];
+          }
         }
         else {
           // Locate logged in user home page

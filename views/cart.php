@@ -363,9 +363,9 @@ if(count($items)): ?>
     <tr>
       <td style='text-align: left; vertical-align: top;'>
         <?php if($cartImgPath): ?>
-          <a href='<?php echo $_SESSION['Cart66LastPage']; ?>'><img src='<?php echo $continueShoppingImg ?>' /></a>
+          <a href='<?php echo $_SESSION['Cart66LastPage']; ?>' class="Cart66CartContinueShopping" ><img src='<?php echo $continueShoppingImg ?>' /></a>
         <?php else: ?>
-          <a href='<?php echo $_SESSION['Cart66LastPage']; ?>' class="Cart66ButtonSecondary">Continue Shopping</a>
+          <a href='<?php echo $_SESSION['Cart66LastPage']; ?>' class="Cart66ButtonSecondary Cart66CartContinueShopping">Continue Shopping</a>
         <?php endif; ?>
       </td>
       <td style='text-align: right; vertical-align: top;'>

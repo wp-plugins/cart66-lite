@@ -78,7 +78,7 @@
   border-radius: 5px;
   cursor: pointer;
   overflow: visible;
-  background-image: url(images/btn-bg.png);
+  background-image: url(../images/btn-bg.png);
   background-repeat: repeat-x;
   background-color: #445e67;
   color: #FFFFFF !important;

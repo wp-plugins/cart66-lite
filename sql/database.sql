@@ -137,7 +137,7 @@ create table if not exists `[prefix]order_items` (
   `product_id` int(10) unsigned not null,
   `item_number` varchar(50) not null,
   `product_price` decimal(8,2) not null,
-  `description` varchar(250) not null,
+  `description` text not null,
   `quantity` int(10) unsigned not null,
   `duid` varchar(100) null,
   `form_entry_ids` varchar(100) not null,
@@ -214,3 +214,6 @@ alter table `[prefix]accounts` add column `notes` text not null;
 alter table `[prefix]products` add column `start_recurring_number` int(10) unsigned not null default 1;
 alter table `[prefix]products` add column `start_recurring_unit` varchar(50) not null;
 alter table `[prefix]products` add column `price_description` varchar(255) not null;
+
+-- Upgrading to Cart66 1.0.6
+alter table `[prefix]order_items` modify `description` text;

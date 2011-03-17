@@ -37,7 +37,8 @@ class Cart66Promotion extends Cart66ModelAbstract {
   
   public function loadByCode($code) {
     $loaded = false;
-    $sql = "SELECT * from $this->_tableName where code = '$code'";
+    $sql = "SELECT * from $this->_tableName where code = %s";
+    $sql = $this->_db->prepare($sql, $code);
     if($data = $this->_db->get_row($sql, ARRAY_A)) {
       $this->setData($data);
       $loaded = true;
@@ -54,7 +55,7 @@ class Cart66Promotion extends Cart66ModelAbstract {
         $total = $total * ((100 - $this->amount)/100);
       }
     }
-    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Calculated discount total: $total");
+    // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Calculated discount total: $total");
     return $total;
   }
   

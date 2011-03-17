@@ -48,8 +48,8 @@ class Cart66PayPalStandard {
       // Parse custom value
       $referrer = false;
       $deliveryMethod = $pp['custom'];
-      if(strpos($deliveryMethod, '~') !== false) {
-        list($deliveryMethod, $referrer, $gfData) = explode('~', $deliveryMethod);
+      if(strpos($deliveryMethod, '|') !== false) {
+        list($deliveryMethod, $referrer, $gfData) = explode('|', $deliveryMethod);
       }
       
       // Parse Gravity Forms ids
@@ -105,6 +105,16 @@ class Cart66PayPalStandard {
         throw new Exception("This is not an IPN that should be managed by Cart66");
       }
       
+      // Look for the 100% coupons shipping item and move it back to a shipping costs rather than a product
+      if($data['shipping'] == 0) {
+        for($i=1; $i <= $numCartItems; $i++) {
+          $itemNumber = strtoupper($pp['item_number' . $i]);
+          if($itemNumber == 'SHIPPING') {
+            $data['shipping'] = isset($pp['mc_gross_' . $i]) ? $pp['mc_gross_' . $i] : $pp['mc_gross' . $i];
+          }
+        }
+      }
+      
       $wpdb->insert($orderTable, $data);
       $orderId = $wpdb->insert_id;
 
@@ -112,52 +122,55 @@ class Cart66PayPalStandard {
       for($i=1; $i <= $numCartItems; $i++) {
         $sql = "SELECT id from $productsTable where item_number = '" . $pp['item_number' . $i] . "'";
         $productId = $wpdb->get_var($sql);
-        $product->load($productId);
         
-        // Decrement inventory
-        $info = $pp['item_name' . $i];
-        if(strpos($info, '(') > 0) {
-          $start = strpos($info, '(');
-          $end = strpos($info, ')');
-          $length = $end - $start;
-          $variation = substr($info, $start+1, $length-1);
-          Cart66Common::log("PayPal Variation Information: $variation\n$info");
-        }
-        $qty = $pp['quantity' . $i];
-        Cart66Product::decrementInventory($productId, $variation, $qty);
-        
-        
-        if($hasDigital == false) {
-          $hasDigital = $product->isDigital();
-        }
+        if($productId > 0) {
+          $product->load($productId);
 
-        // PayPal is not consistent in the way it passes back the item amounts
-        $amt = 0;
-        if(isset($pp['mc_gross' . $i])) {
-          $amt = $pp['mc_gross' . $i];
-        }
-        elseif(isset($pp['mc_gross_' . $i])) {
-          $amt = $pp['mc_gross_' . $i]/$pp['quantity' . $i];
+          // Decrement inventory
+          $info = $pp['item_name' . $i];
+          if(strpos($info, '(') > 0) {
+            $start = strpos($info, '(');
+            $end = strpos($info, ')');
+            $length = $end - $start;
+            $variation = substr($info, $start+1, $length-1);
+            Cart66Common::log("PayPal Variation Information: $variation\n$info");
+          }
+          $qty = $pp['quantity' . $i];
+          Cart66Product::decrementInventory($productId, $variation, $qty);
+
+          if($hasDigital == false) {
+            $hasDigital = $product->isDigital();
+          }
+
+          // PayPal is not consistent in the way it passes back the item amounts
+          $amt = 0;
+          if(isset($pp['mc_gross' . $i])) {
+            $amt = $pp['mc_gross' . $i];
+          }
+          elseif(isset($pp['mc_gross_' . $i])) {
+            $amt = $pp['mc_gross_' . $i]/$pp['quantity' . $i];
+          }
+
+          // Look for Gravity Form Entry ID
+          $formEntryId = '';
+          if(is_array($gfIds) && !empty($gfIds) && isset($gfIds[$i])) {
+            $formEntryId = $gfIds[$i];
+          }
+
+          $duid = md5($pp['txn_id'] . '-' . $orderId . '-' . $productId);
+          $data = array(
+            'order_id' => $orderId,
+            'product_id' => $productId,
+            'item_number' => $pp['item_number' . $i],
+            'product_price' => $amt,
+            'description' => $pp['item_name' . $i],
+            'quantity' => $pp['quantity' . $i],
+            'duid' => $duid,
+            'form_entry_ids' => $formEntryId
+          );
+          $wpdb->insert($orderItemsTable, $data);
         }
         
-        // Look for Gravity Form Entry ID
-        $formEntryId = '';
-        if(is_array($gfIds) && !empty($gfIds) && isset($gfIds[$i])) {
-          $formEntryId = $gfIds[$i];
-        }
-
-        $duid = md5($pp['txn_id'] . '-' . $orderId . '-' . $productId);
-        $data = array(
-          'order_id' => $orderId,
-          'product_id' => $productId,
-          'item_number' => $pp['item_number' . $i],
-          'product_price' => $amt,
-          'description' => $pp['item_name' . $i],
-          'quantity' => $pp['quantity' . $i],
-          'duid' => $duid,
-          'form_entry_ids' => $formEntryId
-        );
-        $wpdb->insert($orderItemsTable, $data);
       }
       
       // Handle email receipts

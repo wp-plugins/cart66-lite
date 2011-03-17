@@ -74,7 +74,9 @@
         $i = 1;
         $gfIds = array();
         foreach($items as $item) {
-          echo "\n<input type='hidden' name='item_name_$i' value=\"" . $item->getFullDisplayName() .  ' ' . $item->getCustomFieldInfo() . "\" />";
+          $name  = $item->getFullDisplayName() .  ' ' . $item->getCustomFieldInfo();
+          $escapedName = htmlentities($name);
+          echo "\n<input type='hidden' name='item_name_$i' value=\"" . $escapedName . "\" />";
           echo "\n<input type='hidden' name='item_number_$i' value='" . $item->getItemNumber() . "' />";
           echo "\n<input type='hidden' name='amount_$i' value='" . $item->getProductPrice() . "' />";
           echo "\n<input type='hidden' name='quantity_$i' value='" . $item->getQuantity() . "' />";
@@ -88,14 +90,24 @@
         
         echo "\n<input type='hidden' name='business' value='" . Cart66Setting::getValue('paypal_email'). "' />";
         echo "\n<input type='hidden' name='shopping_url' value='" . Cart66Setting::getValue('shopping_url') . "' />\n";
+      
+        // Send shipping price as an item amount if the item total - discount amount = $0.00 otherwise paypal will ignore the discount
+        $itemTotal = $_SESSION['Cart66Cart']->getNonSubscriptionAmount() - $_SESSION['Cart66Cart']->getDiscountAmount();
+        if($itemTotal == 0 && $shipping > 0) {
+          echo "\n<input type='hidden' name='item_name_$i' value=\"Shipping\" />";
+          echo "\n<input type='hidden' name='item_number_$i' value='SHIPPING' />";
+          echo "\n<input type='hidden' name='amount_$i' value='" . $shipping . "' />";
+          echo "\n<input type='hidden' name='quantity_$i' value='1' />";
+          $shipping = 0;
+        }
       ?>
-    
+      
       <input type="hidden" name="cmd" value="_cart" />
       <input type="hidden" name="upload" value="1" />
       <input type="hidden" name="no_shipping" value="2" />
       <input type="hidden" name="currency_code" value="<?php echo CURRENCY_CODE; ?>" id="currency_code" />
-      <input type="hidden" name="custom" value="<?php echo $shippingMethod ?>~<?php echo $aff;  ?>~<?php echo $gfIds ?>" />
-
+      <input type="hidden" name="custom" value="<?php echo $shippingMethod ?>|<?php echo $aff;  ?>|<?php echo $gfIds ?>" />
+      
       <?php if($shipping > 0): ?>
         <input type='hidden' name='handling_cart' value='<?php echo $shipping ?>' />
       <?php endif;?>

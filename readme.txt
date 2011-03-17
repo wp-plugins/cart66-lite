@@ -36,6 +36,7 @@ Checkout using
 Only community support is provided. For additional features and professional support please consider [Cart66 Professional](http://cart66.com "Cart66 WordPress Ecommerce Plugin").
 
 == Installation ==
+[Download complete documentation for Cart66 Lite.](http://cart66.com/lite "Cart66 Lite")
 
 To  Install Cart66 Lite
 
@@ -78,3 +79,10 @@ We are not able to provide anything other than community based support for Cart6
 1. Cart66 Product Creation Form
 2. Cart66 Promotion Management
 3. Cart66 Product Management
+
+== Changelog ==
+
+= 1.0.7 =
+* Security enhancements
+* Added the CSS class Cart66ContinueShopping to the continue shopping links in the view cart screen
+* Cart66 scripts are only included in admin pages pertaining to Cart66

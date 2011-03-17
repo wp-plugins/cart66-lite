@@ -31,6 +31,9 @@ class Cart66Ajax {
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Caught Cart66 exception: " . $e->getMessage());
           }
         }
+        elseif($key == 'constantcontact_list_ids') {
+          
+        }
 
         Cart66Setting::setValue($key, trim(stripslashes($value)));
 
