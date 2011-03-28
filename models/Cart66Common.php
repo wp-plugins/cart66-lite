@@ -94,7 +94,7 @@ class Cart66Common {
       }
     }
 
-    $filename = WP_PLUGIN_DIR . "/cart66-lite/$filename"; 
+    $filename = CART66_PATH . "/$filename"; 
     ob_start();
     include $filename;
     $contents = ob_get_contents();
@@ -120,7 +120,7 @@ class Cart66Common {
     if(defined('CART66_DEBUG') && CART66_DEBUG) {
       $date = date('m/d/Y g:i:s a');
       $header = "\n\n[LOG DATE: $date]\n";
-      $filename = WP_PLUGIN_DIR . "/cart66-lite/log.txt"; 
+      $filename = CART66_PATH . "/log.txt"; 
       if(file_exists($filename) && is_writable($filename)) {
         file_put_contents($filename, $header . $data, FILE_APPEND);
       }
@@ -290,16 +290,30 @@ class Cart66Common {
   public static function postVal($key) {
     $value = false;
     if(isset($_POST[$key])) {
-      $value = $_POST[$key];
-      if(is_scalar($value)) {
-        // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] PostVal before cleanup: $value");
-        $value = strip_tags($value);
-        $value = preg_replace('/[<>\\\\\/]/', '', $value);
-        // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] PostVal after cleanup: $value");
-      }
+      $value = self::deepTagClean($_POST[$key]);
     }
     return $value;
   }
+  
+  public static function deepTagClean(&$data) {
+    if(is_array($data)) {
+      foreach($data as $key => $value) {
+        if(is_array($value)) {
+          $data[$key] = self::deepTagClean($value);
+        }
+        else {
+          $value = strip_tags($value);
+          $data[$key] = preg_replace('/[<>\\\\\/]/', '', $value);
+        }
+      }
+    }
+    else {
+      $data= strip_tags($data);
+      $data = preg_replace('/[<>\\\\\/]/', '', $data);;
+    }
+    return $data;
+  }
+  
 
   /**
    * Strip slashes and escape sequences from GET values and returened the scrubbed value.
@@ -312,6 +326,21 @@ class Cart66Common {
       $value = preg_replace('/[<>\\\\\/]/', '', $value);
     }
     return $value;
+  }
+  
+  /**
+   * Get home country code from cart settings or return US if no setting exists
+   * 
+   * @return string
+   */
+  public static function getHomeCountryCode() {
+    if($homeCountry = Cart66Setting::getValue('home_country')) {
+      list($homeCountryCode, $dummy) = explode('~', $homeCountry); 
+    }
+    else {
+      $homeCountryCode = 'US';
+    }
+    return $homeCountryCode;
   }
   
   public static function getCountryName($code) {
@@ -996,6 +1025,61 @@ _script_here_
     }
     
     return $onlyPayPalStandard;
+  }
+  
+  /**
+   * Convert an array into XML
+   * 
+   * Example use: echo arrayToXml($products,'products');
+   * 
+   * @param array $array       - The array you wish to convert into a XML structure.
+   * @param string $name       - The name you wish to enclose the array in, the 'parent' tag for XML.
+   * @param string $space      - The xml namespace
+   * @param bool $standalone   - This will add a document header to identify this solely as a XML document.
+   * @param bool $beginning    - INTERNAL USE... DO NOT USE!
+   * @param int $nested        - INTERNAL USE... DO NOT USE! The nest level for pretty formatting
+   * @return Gives a string output in a XML structure
+  */
+  public static function arrayToXml($array, $name, $space='', $standalone=false, $beginning=true, $nested=0) {
+    $output = '';
+    if ($beginning) {
+      if($standalone) header("content-type:text/xml;charset=utf-8");
+      if(!isset($output)) { $output = ''; }
+      if($standalone) $output .= '<'.'?'.'xml version="1.0" encoding="UTF-8"'.'?'.'>' . "\n";
+      if(!empty($space)) {
+        $output .= '<' . $name . ' xmlns="' . $space . '">' . "\n";
+      }
+      else {
+        $output .= '<' . $name . '>' . "\n";
+      }
+      $nested = 0;
+    }
+
+    // This is required because XML standards do not allow a tag to start with a number or symbol, you can change this value to whatever you like:
+    $ArrayNumberPrefix = 'ARRAY_NUMBER_';
+
+     foreach ($array as $root=>$child) {
+      if (is_array($child)) {
+        $output .= str_repeat(" ", (2 * $nested)) . '  <' . (is_string($root) ? $root : $ArrayNumberPrefix . $root) . '>' . "\n";
+        $nested++;
+        $output .= self::arrayToXml($child,NULL,NULL,NULL,FALSE, $nested);
+        $nested--;
+        $tag = is_string($root) ? $root : $ArrayNumberPrefix . $root;
+        list($tag, $dummy) = explode(' ', $tag);
+        $output .= str_repeat(" ", (2 * $nested)) . '  </' . $tag . '>' . "\n";
+      }
+      else {
+        if(!isset($output)) { $output = ''; }
+        $tag = is_string($root) ? $root : $ArrayNumberPrefix . $root;
+        list($tag, $dummy) = explode(' ', $tag);
+        $output .= str_repeat(" ", (2 * $nested)) . '  <' . (is_string($root) ? $root : $ArrayNumberPrefix . $root) . '>' . $child . '</' . $tag . '>' . "\n";
+      }
+    }
+    
+    list($name, $dummy) = explode(' ', $name);
+    if ($beginning) $output .= '</' . $name . '>';
+
+    return $output;
   }
   
 }

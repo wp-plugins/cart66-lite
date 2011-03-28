@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Cart66
+Plugin Name: Cart66 Lite
 Plugin URI: http://www.cart66.com
 Description: Wordpress Shopping Cart
-Version: 1.0.7
+Version: 1.0.8
 Author: Reality 66
 Author URI: http://www.Reality66.com
 
@@ -27,18 +27,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 if(!class_exists('Cart66')) {
   ob_start();
-  require_once(WP_PLUGIN_DIR. "/cart66-lite/models/Cart66CartWidget.php");
-  require_once(WP_PLUGIN_DIR. "/cart66-lite/models/Cart66.php");
-  require_once(WP_PLUGIN_DIR. "/cart66-lite/models/Cart66Common.php");
+  define("CART66_PATH", plugin_dir_path( __FILE__ ) ); // e.g. /var/www/example.com/wordpress/wp-content/plugins/cart66
+  define("CART66_URL", rtrim(plugin_dir_url( __FILE__ ), '/') ); // e.g. http://example.com/wordpress/wp-content/plugins/cart66
+
+  require_once(CART66_PATH. "/models/Cart66CartWidget.php");
+  require_once(CART66_PATH. "/models/Cart66.php");
+  require_once(CART66_PATH. "/models/Cart66Common.php");
   
   define("CART66_ORDER_NUMBER", false);
   define("CART66_PRO", false);
-  define('CART66_VERSION_NUMBER', '1.0.7');
+  define('CART66_VERSION_NUMBER', '1.0.8');
   define("WPCURL", Cart66Common::getWpContentUrl());
   define("WPURL", Cart66Common::getWpUrl());
+
   
   if(CART66_PRO) {
-    require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/models/Cart66ProCommon.php");
+    require_once(CART66_PATH. "/pro/models/Cart66ProCommon.php");
   }
 
   // IS_ADMIN is true when the dashboard or the administration panels are displayed
@@ -47,7 +51,7 @@ if(!class_exists('Cart66')) {
   }
 
   /* Uncomment this block of code for load time debugging
-  $filename = WP_PLUGIN_DIR . "/cart66-lite/log.txt"; 
+  $filename = CART66_PATH . "/log.txt"; 
   if(file_exists($filename) && is_writable($filename)) {
     file_put_contents($filename, "\n\n\n================= Loading Cart66 Main File [" . date('m/d/Y g:i:s a') . "] " . 
       $_SERVER['REMOTE_ADDR'] . " " . $_SERVER['REQUEST_URI'] . " =================\n\n", FILE_APPEND);

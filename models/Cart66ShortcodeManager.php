@@ -106,7 +106,7 @@ class Cart66ShortcodeManager {
 
   public function manualCheckout($attrs=null) {
     if(!$_SESSION['Cart66Cart']->hasSubscriptionProducts()) {
-      require_once(WP_PLUGIN_DIR . "/cart66-lite/gateways/Cart66ManualGateway.php");
+      require_once(CART66_PATH . "/gateways/Cart66ManualGateway.php");
       $manual = new Cart66ManualGateway();
       $view = $this->_buildCheckoutView($manual);
     }
@@ -118,7 +118,7 @@ class Cart66ShortcodeManager {
 
   public function authCheckout($attrs) {
     if(!$_SESSION['Cart66Cart']->hasPayPalSubscriptions()) {
-      require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/gateways/Cart66AuthorizeNet.php");
+      require_once(CART66_PATH . "/pro/gateways/Cart66AuthorizeNet.php");
       $authnet = new Cart66AuthorizeNet();
       $view = $this->_buildCheckoutView($authnet);
       return $view;
@@ -169,8 +169,8 @@ class Cart66ShortcodeManager {
   }
 
   public function processIPN($attrs) {
-    require_once(WP_PLUGIN_DIR. "/cart66-lite/models/Cart66PayPalIpn.php");
-    require_once(WP_PLUGIN_DIR. "/cart66-lite/gateways/Cart66PayPalStandard.php");
+    require_once(CART66_PATH . "/models/Cart66PayPalIpn.php");
+    require_once(CART66_PATH . "/gateways/Cart66PayPalStandard.php");
     $ipn = new Cart66PayPalIpn();
     if($ipn->validate($_POST)) {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Working with  IPN transaction type: " . $_POST['txn_type']);
@@ -194,7 +194,7 @@ class Cart66ShortcodeManager {
   }
 
   public function cart66Tests() {
-    $view = Cart66Common::getView('tests/environment/tests.php');
+    $view = Cart66Common::getView('tests/tests.php');
     $view = "<pre>$view</pre>";
     return $view;
   }
@@ -458,19 +458,21 @@ class Cart66ShortcodeManager {
   }
   
   public function gravityFormToCart($entry) {
-    $formId = Cart66GravityReader::getGravityFormIdForEntry($entry['id']);
-    if($formId) {
-      $productId = Cart66Product::getProductIdByGravityFormId($formId);
-      if($productId > 0) {
-        $product = new Cart66Product($productId);
-        $qty = $product->gravityCheckForEntryQuantity($entry);
-        $options = $product->gravityGetVariationPrices($entry);
-        $_SESSION['Cart66Cart']->addItem($productId, $qty, $options, $entry['id']);
-        $cartPage = get_page_by_path('store/cart');
-        $cartPageLink = get_permalink($cartPage->ID);
-        $_SESSION['Cart66LastPage'] = $_SERVER['HTTP_REFERER'];
-        wp_redirect($cartPageLink);
-        exit;
+    if(CART66_PRO) {
+      $formId = Cart66GravityReader::getGravityFormIdForEntry($entry['id']);
+      if($formId) {
+        $productId = Cart66Product::getProductIdByGravityFormId($formId);
+        if($productId > 0) {
+          $product = new Cart66Product($productId);
+          $qty = $product->gravityCheckForEntryQuantity($entry);
+          $options = $product->gravityGetVariationPrices($entry);
+          $_SESSION['Cart66Cart']->addItem($productId, $qty, $options, $entry['id']);
+          $cartPage = get_page_by_path('store/cart');
+          $cartPageLink = get_permalink($cartPage->ID);
+          $_SESSION['Cart66LastPage'] = $_SERVER['HTTP_REFERER'];
+          wp_redirect($cartPageLink);
+          exit;
+        }
       }
     }
   }
@@ -513,7 +515,7 @@ class Cart66ShortcodeManager {
     }
     
     if(!$_SESSION['Cart66Cart']->requirePayment()) {
-      require_once(WP_PLUGIN_DIR . "/cart66-lite/gateways/Cart66ManualGateway.php");
+      require_once(CART66_PATH . "/gateways/Cart66ManualGateway.php");
       $gateway = new Cart66ManualGateway();
     }
     

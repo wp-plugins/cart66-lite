@@ -42,11 +42,46 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     }
     $method->pruneCarrierMethods('ups', $codes);
   }
+  elseif($_POST['cart66-action'] == 'save usps account info') {
+    foreach($_POST['ups'] as $key => $value) {
+      Cart66Setting::setValue($key, $value);
+    }
+    
+    $methods = $_POST['usps_methods'];
+    $codes = array();
+    if(is_array($methods)) {
+      foreach($methods as $methodData) {
+        list($code, $name) = explode('~', $methodData);
+        $m = new Cart66ShippingMethod();
+        $m->code = $code;
+        $m->name = $name;
+        $m->carrier = 'usps';
+        $m->save();
+        $codes[] = $code;
+      }
+    }
+    else {
+      $codes[] = -1;
+    }
+    $method->pruneCarrierMethods('usps', $codes);
+  }
   elseif($_POST['cart66-action'] == 'enable live rates') {
     Cart66Setting::setValue('use_live_rates', 1);
   }
   elseif($_POST['cart66-action'] == 'disable live rates') {
     Cart66Setting::setValue('use_live_rates', '');
+  }
+  elseif($_POST['cart66-action'] == 'save rate tweak') {
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Saving a rate tweak");
+    $factor = Cart66Common::postVal('rate_tweak_factor');
+    if(is_numeric($factor)) {
+      Cart66Setting::setValue('rate_tweak_factor', $factor);
+      Cart66Setting::setValue('rate_tweak_type', Cart66Common::postVal('rate_tweak_type'));
+    }
+    else {
+      Cart66Setting::setValue('rate_tweak_factor', '');
+      Cart66Setting::setValue('rate_tweak_type', '');
+    }
   }
 }
 elseif(isset($_GET['task']) && $_GET['task'] == 'edit' && isset($_GET['id']) && $_GET['id'] > 0) {
@@ -84,30 +119,117 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
 <div class='wrap'>
 
   <?php if(CART66_PRO): ?>
-  <div style="padding: 10px; 25px; width: 600px; background-color: #EEE; border: 1px solid #CCC; -moz-border-radius: 5px; -webkit-border-radius: 5px;">
+  <div style="padding: 10px; 25px; width: 580px; background-color: #EEE; border: 1px solid #CCC; -moz-border-radius: 5px; -webkit-border-radius: 5px;">
     <h3>Live Shipping Rates</h3>
   
     <p>Using live shipping rates overrides all other types of shipping settings.</p>
   
     <?php if(Cart66Setting::getValue('use_live_rates')): ?>
-      <form action="" method='post'>
+      <form action="" method="post">
         <p>Live shipping rates are enabled.</p>
         <input type='hidden' name='cart66-action' value='disable live rates' />
         <input type="submit" name="submit" value="Disable Live Shipping Rates" id="submit" class="button-secondary" />
       </form>
     <?php else: ?>
-      <form action="" method='post'>
+      <form action="" method="post">
         <p>Live shipping rates are not enabled.</p>
         <input type='hidden' name='cart66-action' value='enable live rates' />
         <input type="submit" name="submit" value="Enable Live Shipping Rates" id="submit" class="button-primary" />
       </form>
-  
     <?php endif; ?>
   </div>
   <?php endif; ?>
   
   <?php if(CART66_PRO && Cart66Setting::getValue('use_live_rates')): ?>
-  
+    
+    <h3>Rate Tweaker</h3>
+    
+    <p style="border: 1px solid #CCC; background-color: #eee; padding: 5px; width: 590px; -moz-border-radius: 5px; -webkit-border-radius: 5px;">
+      <strong>Current Tweak Factor:</strong> 
+      <?php
+        if(Cart66Setting::getValue('rate_tweak_factor')) {
+          $type = Cart66Setting::getValue('rate_tweak_type');
+          $factor = Cart66Setting::getValue('rate_tweak_factor');
+          
+          if($type == 'percentage') {
+            $direction = $factor > 0 ? 'increased' : 'decreased';
+            echo "All rates will be $direction by " . abs($factor) . '%';
+          }
+          else {
+            $direction = $factor > 0 ? 'added to' : 'subtracted from';
+            echo CURRENCY_SYMBOL . number_format(abs($factor), 2) . " will be $direction all rates";
+          }
+          
+        }
+        else {
+          echo 'The calculated rates will not be tweaked.';
+        }
+      ?>
+    </p>
+    
+    <form action="" method="post">
+      <input type="hidden" name="cart66-action" value="save rate tweak" />
+      <select name="rate_tweak_type" id="rate_tweak_type">
+        <option value="percentage">Tweak by percentage</option>
+        <option value="fixed">Tweak by fixed amount</option>
+      </select>
+      <span id="currency" style="display:none;">&nbsp;<?php echo CURRENCY_SYMBOL; ?></span>
+      <input type="text" name="rate_tweak_factor" style="width: 5em;" />
+      <span id="percentSign" style="display:none;">%</span>
+      <input type='submit' name='submit' class="button-primary" style='width: 60px; margin-top: 10px; margin-left: 20px; margin-right: 20px;' value='Save' />
+      <a id="whatIsRateTweaker" href="#" class='what_is'>What is this?</a>
+    </form>
+    
+    <div id="whatIsRateTweaker_answer" style="display: none; border: 1px solid #eee; background-color: #fff; padding: 0px 10px; width: 590px; margin-top: 10px; -moz-border-radius: 5px; -webkit-border-radius: 5px;">
+      <h3>How The Rate Tweaker Works</h3>
+      <p>The rate tweaker provides a way to adjust the live rate quotes by increasing or decreasing all of the calculated rates by a specified amount. 
+        You may choose to modify the rates by a percentage amount or by fixed amount. Enter a positive value to increase the calculated rates or negative value to reduce them. 
+        The rate tweaker will never reduce shipping rates below zero.</p>
+      <p>For example, if you want to increase all the calculated rates by 15% select "Tweak by percentage" and enter 15 in the text field then click "Save"</p>
+      <p>If you want to take $5.00 off all the shipping rates select "Tweak by fixed amount" and enter -5 in the text field then click "Save"</p>
+      <p>To stop using the rate tweaker, enter 0 and click "save"</p>
+    </div>
+    
+    <br/><br/>
+    
+    <h3 style="clear: both;">USPS Shipping Account Information</h3>
+    <p>If you intend to use United States Postal Service real-time shipping quotes please provide your USPS account information.<br/>This feature requires a <strong>production USPS account.</strong> A test account will not work.</p>
+    <form action="" method='post'>
+      <input type='hidden' name='cart66-action' value='save usps account info' />
+      <ul>
+        <li>
+          <label class="med">Webtools username:</label>
+          <input type='text' name='ups[usps_username]' id='usps_username' value='<?php echo Cart66Setting::getValue('usps_username'); ?>' />
+        </li>
+        <li>
+          <label class="med">Ship from zip:</label>
+          <input type='text' name='ups[usps_ship_from_zip]' id='usps_ship_from_zip' value='<?php echo Cart66Setting::getValue('usps_ship_from_zip'); ?>' />
+        </li>
+        <li>
+          <p>Select the USPS shipping methods you would like to offer to your customers.</p>
+          <label class="med">&nbsp;</label> <a href="#" id="usps_clear_all">Clear All</a> | <a href="#" id="usps_select_all">Select All</a>
+        </li>
+        <li>
+          <?php
+            $services = Cart66ProCommon::getUspsServices();
+            $methods = $method->getServicesForCarrier('usps');
+            foreach($services as $name => $code) {
+              $checked = '';
+              if(in_array($code, $methods)) {
+                $checked = 'checked="checked"';
+              }
+              echo '<label class="med">&nbsp;</label>';
+              echo "<input type='checkbox' class='usps_shipping_options' name='usps_methods[]' value='$code~$name' $checked> $name<br/>";
+            }
+          ?>
+        </li>
+        <li>
+          <label class="med">&nbsp;</label>
+          <input type='submit' name='submit' class="button-primary" style='width: 60px; margin-top: 10px;' value='Save' />
+        </li>
+      </ul>
+    </form>
+    
     <h3 style="clear: both;">UPS Shipping Account Information</h3>
     <p>If you intend to use UPS real-time shipping quotes please provide your UPS account information.</p>
     <form action="" method='post'>
@@ -135,19 +257,19 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
         </li>
         <li>
           <p>Select the UPS shipping methods you would like to offer to your customers.</p>
-          <label class="med">&nbsp;</label> <a href="#" id="clear_all">Clear All</a> | <a href="#" id="select_all">Select All</a>
+          <label class="med">&nbsp;</label> <a href="#" id="ups_clear_all">Clear All</a> | <a href="#" id="ups_select_all">Select All</a>
         </li>
         <li>
           <?php
             $services = Cart66ProCommon::getUpsServices();
-            $methods = $method->getMethodsForCarrier('ups');
+            $methods = $method->getServicesForCarrier('ups');
             foreach($services as $name => $code) {
               $checked = '';
               if(in_array($code, $methods)) {
                 $checked = 'checked="checked"';
               }
               echo '<label class="med">&nbsp;</label>';
-              echo "<input type='checkbox' class='shipping_options' name='ups_methods[]' value='$code~$name' $checked> $name<br/>";
+              echo "<input type='checkbox' class='ups_shipping_options' name='ups_methods[]' value='$code~$name' $checked> $name<br/>";
             }
           ?>
         </li>
@@ -419,19 +541,51 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
   
   $jq(document).ready(function() {
     
-    $jq('#clear_all').click(function() {
-      $jq('.shipping_options').attr('checked', false);
+    $jq('#ups_clear_all').click(function() {
+      $jq('.ups_shipping_options').attr('checked', false);
       return false;
     });
     
-    $jq('#select_all').click(function() {
-      $jq('.shipping_options').attr('checked', true);
+    $jq('#ups_select_all').click(function() {
+      $jq('.ups_shipping_options').attr('checked', true);
       return false;
     });
     
+    $jq('#usps_clear_all').click(function() {
+      $jq('.usps_shipping_options').attr('checked', false);
+      return false;
+    });
+    
+    $jq('#usps_select_all').click(function() {
+      $jq('.usps_shipping_options').attr('checked', true);
+      return false;
+    });
+    
+    setRateTweakerSymbol();
+    
+    $jq('#rate_tweak_type').change(function() {
+      setRateTweakerSymbol();
+    });
+    
+  });
+  
+  $jq('.what_is').click(function() {
+    $jq('#' + $jq(this).attr('id') + '_answer').toggle('slow');
+    return false;
   });
   
   $jq('.delete').click(function() {
     return confirm('Are you sure you want to delete this entry?');
   });
+  
+  function setRateTweakerSymbol() {
+    if($jq('#rate_tweak_type').val() == 'percentage') {
+      $jq('#percentSign').css('display', 'inline');
+      $jq('#currency').css('display', 'none');
+    }
+    else {
+      $jq('#currency').css('display', 'inline');
+      $jq('#percentSign').css('display', 'none');
+    }
+  }
 </script>

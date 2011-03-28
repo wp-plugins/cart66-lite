@@ -20,7 +20,7 @@
 			// Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceExample');
 			ed.addCommand('mcephproduct', function() {
 				ed.windowManager.open({
-					file : url + '/cart66Dialog.php',
+					file : wpurl + '?cart66dialog=1', // wpurl is home_url( '/' )
 					width : 500,
 					height : 255 + (tinyMCE.isNS7 ? 20 : 0) + (tinyMCE.isMSIE ? 0 : 0),
 					inline : 1

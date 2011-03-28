@@ -9,6 +9,7 @@ class Cart66Cart {
   private $_promotion;
   private $_promoStatus;
   private $_shippingMethodId;
+  private $_liveRates;
   
   public function __construct($items=null) {
     if(is_array($items)) {
@@ -19,6 +20,11 @@ class Cart66Cart {
     }
     $this->_promoStatus = 0;
     $this->_setDefaultShippingMethodId();
+    
+    if(CART66_PRO) {
+      $this->_liveRates = new Cart66LiveRates();
+    }
+    
   }
   
   /**
@@ -270,7 +276,7 @@ class Cart66Cart {
       $shipping = 0; 
     }
     // Check to see if Live Rates are enabled and available
-    elseif(isset($_SESSION['Cart66LiveRates']) && Cart66Setting::getValue('use_live_rates')) {
+    elseif(isset($_SESSION['Cart66LiveRates']) && get_class($_SESSION['Cart66LiveRates']) == 'Cart66LiveRates' && Cart66Setting::getValue('use_live_rates')) {
       $liveRate = $_SESSION['Cart66LiveRates']->getSelected();
       if(is_numeric($liveRate->rate)) {
         return number_format($liveRate->rate, 2, '.', '');
@@ -664,56 +670,114 @@ class Cart66Cart {
     return $alert;
   }
   
-  /**
-   * Return Cart66LiveRates object. 
-   * The shipping zip code must be in the session before calling this function.
-   * 
-   * @return Cart66LiveRates
-   */
-  public function getUpsRates() {
-    $liveRates = new Cart66LiveRates();
-    $cartWeight = $_SESSION['Cart66Cart']->getCartWeight();
-    $zip = $_SESSION['cart66_shipping_zip'];
-    $countryCode = $_SESSION['cart66_shipping_country_code'];
+  public function getLiveRates() {
+    $weight = $_SESSION['Cart66Cart']->getCartWeight();
+    $zip = isset($_SESSION['cart66_shipping_zip']) ? $_SESSION['cart66_shipping_zip'] : false;
+    $countryCode = isset($_SESSION['cart66_shipping_country_code']) ? $_SESSION['cart66_shipping_country_code'] : Cart66Common::getHomeCountryCode();
     
-    if($cartWeight > 0 && isset($_SESSION['cart66_shipping_zip']) && isset($_SESSION['cart66_shipping_country_code'])) {
-
-      // Return the live rates from the session if the zip, country code, and cart weight are the same
-      if(isset($_SESSION['Cart66LiveRates'])) {
-        $cartWeight = $this->getCartWeight();
-        $liveRates = $_SESSION['Cart66LiveRates'];
-        Cart66Common::log(  "Live Rates were found in session. Now comparing...
-            $liveRates->weight --> $cartWeight
-            $liveRates->toZip --> $zip
-            $liveRates->toCountryCode --> $countryCode
-        ");
-        if($liveRates->weight == $cartWeight && $liveRates->toZip == $zip && $liveRates->toCountryCode == $countryCode) {
-          Cart66Common::log("Using Live Rates from the session");
-          return $liveRates; 
+    // Make sure _liveRates is a Cart66LiveRates object
+    if(get_class($this->_liveRates) != 'Cart66LiveRates') {
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] WARNING: \$this->_liveRates is not a Cart66LiveRates object so we're making it one now.");
+      $this->_liveRates = new Cart66LiveRates();
+    }
+    
+    // Return the live rates from the session if the zip, country code, and cart weight are the same
+    if(isset($_SESSION['Cart66LiveRates']) && get_class($this->_liveRates) == 'Cart66LiveRates') {
+      $cartWeight = $this->getCartWeight();
+      $this->_liveRates = $_SESSION['Cart66LiveRates'];
+      
+      $liveWeight = $this->_liveRates->weight;
+      $liveZip = $this->_liveRates->toZip;
+      $liveCountry = $this->_liveRates->getToCountryCode();
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] 
+        $liveWeight == $weight
+        $liveZip == $zip
+        $liveCountry == $countryCode
+      ");
+      
+      if($this->_liveRates->weight == $weight && $this->_liveRates->toZip == $zip && $this->_liveRates->getToCountryCode() == $countryCode) {
+        Cart66Common::log("Using Live Rates from the session");
+        return $_SESSION['Cart66LiveRates']; 
+      }
+    }
+    
+    if($this->getCartWeight() > 0 && isset($_SESSION['cart66_shipping_zip']) && isset($_SESSION['cart66_shipping_country_code'])) {
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Clearing current live shipping rates and recalculating new rates.");
+      $this->_liveRates->clearRates();
+      $this->_liveRates->weight = $weight;
+      $this->_liveRates->toZip = $zip;
+      $method = new Cart66ShippingMethod();
+      
+      // Look for USPS shipping rates
+      if(Cart66Setting::getValue('usps_username')) {
+        $rates = ($countryCode == 'US') ? $this->getUspsRates() : $this->getUspsIntlRates($countryCode);
+        $uspsServices = $method->getServicesForCarrier('usps');
+        foreach($rates as $name => $price) {
+          $price = number_format($price, 2, '.', '');
+          if(in_array($name, $uspsServices)) {
+            $this->_liveRates->addRate('USPS', 'USPS ' . $name, $price);
+          }
         }
       }
 
-      // If there are no live rates in the session or the zip/weight has been changed then look up new rates
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Live Shipping: There are no live rates in the session or the zip/weight has been changed");
-      $ups = new Cart66Ups();
-      $liveRates->weight = $this->getCartWeight();
-      $liveRates->toZip = $zip;
-      $liveRates->toCountryCode = $countryCode;
-      $rates = $ups->getAllRates($zip, $countryCode, $liveRates->weight);
-      $liveRates->clearRates();
-      foreach($rates as $service => $rate) {
-        $liveRates->addRate($service, $rate);
+      // Get UPS Live Shipping Rates
+      if(Cart66Setting::getValue('ups_apikey')) {
+        $rates = $this->getUpsRates();
+        foreach($rates as $name => $price) {
+          $this->_liveRates->addRate('UPS', $name, $price);
+        }
       }
+      
     }
     else {
-      $liveRates->weight = 0;
-      $liveRates->toZip = $zip;
-      $liveRates->toCountryCode = $countryCode;
-      $liveRates->addRate('Free Shipping', '0.00');
+      $this->_liveRates->clearRates();
+      $this->_liveRates->weight = 0;
+      $this->_liveRates->toZip = $zip;
+      $this->_liveRates->setToCountryCode($countryCode);
+      $this->_liveRates->addRate('SYSTEM', 'Free Shipping', '0.00');
     }
     
-    $_SESSION['Cart66LiveRates'] = $liveRates;
-    return $liveRates;
+    $_SESSION['Cart66LiveRates'] = $this->_liveRates;
+    
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Dump live rates: " . print_r($this->_liveRates, true));
+    return $this->_liveRates;
+  }
+  
+  /**
+   * Return a hash where the keys are service names and the values are the service rates.
+   * @return array 
+   */
+  public function getUspsRates() {
+    $usps = new Cart66Usps();
+    $weight = $this->getCartWeight();
+    $fromZip = Cart66Setting::getValue('usps_ship_from_zip');
+    $toZip = $_SESSION['cart66_shipping_zip'];
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Getting rates for USPS: $fromZip > $toZip > $weight");
+    $rates = $usps->getRates($fromZip, $toZip, $weight);
+    return $rates;
+  }
+  
+  public function getUspsIntlRates($countryCode) {
+    $usps = new Cart66Usps();
+    $weight = $this->getCartWeight();
+    $value = $this->getSubTotal();
+    $zipOrigin = Cart66Setting::getValue('usps_ship_from_zip');
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Getting rates for USPS Intl: $zipOrigin > $countryCode > $value > $weight");
+    $rates = $usps->getIntlRates($zipOrigin, $countryCode, $value, $weight);
+    return $rates;
+  }
+  
+  /**
+   * Return a hash where the keys are service names and the values are the service rates.
+   * @return array 
+   */
+  public function getUpsRates() {
+    $ups = new Cart66Ups();
+    $weight = $_SESSION['Cart66Cart']->getCartWeight();
+    $zip = $_SESSION['cart66_shipping_zip'];
+    $countryCode = $_SESSION['cart66_shipping_country_code'];
+    $rates = $ups->getAllRates($zip, $countryCode, $weight);
+    return $rates;
   }
   
   protected function _setDefaultShippingMethodId() {
@@ -734,8 +798,8 @@ class Cart66Cart {
     }
     // Using live rates
     elseif(isset($_POST['live_rates'])) {
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Using live shipping rates");
       if(isset($_SESSION['Cart66LiveRates'])) {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Using live shipping rates to set shipping method from post");
         $_SESSION['Cart66LiveRates']->setSelected($_POST['live_rates']);
       }
     }

@@ -1,18 +1,6 @@
 <?php
-
-global $wp_db_version;
-
-if(file_exists('abspath.php')){
-  include('abspath.php');
-  if(CART66_ABSPATH !== false) {
-    require_once( CART66_ABSPATH . "wp-load.php");
-  }
-  else {
-    require_once dirname(__FILE__) . '/../../../../wp-load.php';
-  }
-}
-
-
+if ( !defined( 'ABSPATH' ) )
+  die( 'Do not include this file directly' );
 
 $product= new Cart66Product();
 

@@ -78,7 +78,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     if($keepGoing) {
       
       // Look for constant contact opt-in
-      if(CART66_PRO) { include(WP_PLUGIN_DIR . "/cart66-lite/pro/Cart66ConstantContactOptIn.php"); }
+      if(CART66_PRO) { include(CART66_PATH . "/pro/Cart66ConstantContactOptIn.php"); }
       
       if($itemAmount > 0 || $shipping > 0) {
         // Send shipping as the item amount if the item amount is $0.00 otherwise paypal will refuse the transaction

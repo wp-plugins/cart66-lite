@@ -24,7 +24,7 @@ $track = Cart66Setting::getValue('track_inventory');
 $wpurl = get_bloginfo('wpurl');
 
 if(CART66_PRO) {
-  require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/admin/inventory.php");
+  require_once(CART66_PATH . "/pro/admin/inventory.php");
 }
 else {
   echo '<p class="description">This feature is only available in <a href="http://cart66.com">Cart66 Professional</a></p>';

@@ -65,11 +65,9 @@ if(count($items)): ?>
   </div>
 <?php elseif(isset($_SESSION['Cart66ShippingWarning'])): ?>
   <div id="Cart66ShippingWarning" class="Cart66Unavailable">
-    <h2>No Shipping Option Selected</h2>
-    <p>We cannot process your order because you have not selected a shipping method.</p>
-    <?php 
-      unset($_SESSION['Cart66ShippingWarning']);
-    ?>
+    <h2>No Shipping Service Selected</h2>
+    <p>We cannot process your order because you have not selected a shipping method. If there are no shipping services available, we may not be able to ship to your location.</p>
+    <?php unset($_SESSION['Cart66ShippingWarning']); ?>
     <input type="button" name="close" value="Ok" id="close" class="Cart66ButtonSecondary modalClose" />
   </div>
 <?php endif; ?>
@@ -84,7 +82,6 @@ if(count($items)): ?>
     <input type="button" name="close" value="Ok" id="close" class="Cart66ButtonSecondary modalClose" />
   </div>
 <?php endif; ?>
-
 
 <?php 
   if($accountId = Cart66Common::isLoggedIn()) {
@@ -124,7 +121,7 @@ if(count($items)): ?>
         </td>
         <?php if($fullMode): ?>
           <?php
-            $removeItemImg = WPCURL . '/plugins/cart66-lite/images/remove-item.png';
+            $removeItemImg = CART66_URL . '/images/remove-item.png';
             if($cartImgPath) {
               $removeItemImg = $cartImgPath . 'remove-item.png';
             }
@@ -180,7 +177,7 @@ if(count($items)): ?>
                 (<a href="#" id="change_shipping_zip_link">change</a>)
                 &nbsp;
                 <?php
-                  $liveRates = $_SESSION['Cart66Cart']->getUpsRates();
+                  $liveRates = $_SESSION['Cart66Cart']->getLiveRates();
                   $rates = $liveRates->getRates();
                   $selectedRate = $liveRates->getSelected();
                   $shipping = $_SESSION['Cart66Cart']->getShippingCost();
@@ -217,16 +214,7 @@ if(count($items)): ?>
                   ?>
                 </select>
               <?php else: ?>
-                <?php
-                  $homeCountry = Cart66Setting::getValue('home_country');
-                  if($homeCountry) {
-                    list($homeCountryCode, $homeCountryName) = explode('~', $homeCountry);
-                  }
-                  else {
-                    $homeCountryCode = 'US'; // Default to US if the home country code cannot be determined
-                  }
-                ?>
-                <input type="hidden" name="shipping_country_code" value="<?php echo $homeCountryCode ?>" id="shipping_country_code">
+                <input type="hidden" name="shipping_country_code" value="<?php echo Cart66Common::getHomeCountryCode(); ?>" id="shipping_country_code">
               <?php endif; ?>
               
               <input type="submit" name="updateCart" value="Calculate Shipping" id="shipping_submit" class="Cart66ButtonSecondary" />
@@ -236,7 +224,7 @@ if(count($items)): ?>
           <tr>
             <th colspan="5" align='right'>
               <?php
-                $liveRates = $_SESSION['Cart66Cart']->getUpsRates();
+                $liveRates = $_SESSION['Cart66Cart']->getLiveRates();
                 if($liveRates && !empty($_SESSION['cart66_shipping_zip']) && !empty($_SESSION['cart66_shipping_country_code'])) {
                   $selectedRate = $liveRates->getSelected();
                   echo "Shipping to " . $_SESSION['cart66_shipping_zip'] . " via " . $selectedRate->service;

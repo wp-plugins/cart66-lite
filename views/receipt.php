@@ -31,7 +31,7 @@ elseif(isset($_SESSION['order_id'])) {
   
   // Begin iDevAffiliate Tracking
   if(CART66_PRO && $url = Cart66Setting::getValue('idevaff_url')) {
-    require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/idevaffiliate-award.php");
+    require_once(CART66_PATH . "/pro/idevaffiliate-award.php");
   }
   // End iDevAffiliate Tracking
 }
@@ -301,7 +301,7 @@ jQuery(document).ready(function($) {
   $('#print_version').click(function() {
     myWindow = window.open('','Your_Receipt','resizable=yes,scrollbars=yes,width=550,height=700');
     myWindow.document.open("text/html","replace");
-    myWindow.document.write('<?php echo $printView; ?>');
+    myWindow.document.write(decodeURIComponent('<?php echo rawurlencode($printView); ?>' + ''));
     return false;
   });
 });

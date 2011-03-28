@@ -14,13 +14,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
   $gatewayName = Cart66Common::postVal('cart66-gateway-name');
   if(in_array($gatewayName, $supportedGateways)) {
     $gateway->validateCartForCheckout();
-    $gateway->setBilling($_POST['billing']);
-    $gateway->setPayment($_POST['payment']);
+    $gateway->setBilling(Cart66Common::postVal('billing'));
+    $gateway->setPayment(Cart66Common::postVal('payment'));
+    
     if(isset($_POST['sameAsBilling'])) {
-      $gateway->setShipping($_POST['billing']);
+      $gateway->setShipping(Cart66Common::postVal('billing'));
     }
     elseif(isset($_POST['shipping'])) {
-      $gateway->setShipping($_POST['shipping']);
+      $gateway->setShipping(Cart66Common::postVal('shipping'));
     }
 
     $errors = $gateway->getErrors();     // Error info for server side error code
@@ -37,8 +38,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
       
       // Process subscription charges
       if($_SESSION['Cart66Cart']->hasSubscriptionProducts()) {
-        $billing = $_POST['billing'];
-        $payment = $_POST['payment'];
+        $billing = Cart66Common::postVal('billing');
+        $payment = Cart66Common::postVal('payment');
         
         $account = new Cart66Account();
         
@@ -97,7 +98,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
       if(count($errors) == 0) {
         
         // Look for constant contact opt-in
-        if(CART66_PRO) { include(WP_PLUGIN_DIR . "/cart66-lite/pro/Cart66ConstantContactOptIn.php"); }
+        if(CART66_PRO) { include(CART66_PATH . "/pro/Cart66ConstantContactOptIn.php"); }
         
         $gatewayName = get_class($gateway);
         $gateway->initCheckout($oneTimeTotal);
@@ -164,7 +165,7 @@ $b = $gateway->getBilling();
 $s = $gateway->getShipping();
 
 // Include the HTML markup for the checkout form
-include(WP_PLUGIN_DIR . '/cart66-lite/views/checkout-form.php');
+include(CART66_PATH . '/views/checkout-form.php');
 
 // Include the client side javascript validation                 
-include(WP_PLUGIN_DIR . '/cart66-lite/views/client/checkout.php'); 
+include(CART66_PATH . '/views/client/checkout.php'); 

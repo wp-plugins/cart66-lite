@@ -4,7 +4,7 @@ class Cart66 {
   public function install() {
     global $wpdb;
     $prefix = Cart66Common::getTablePrefix();
-    $sqlFile = WP_PLUGIN_DIR. '/cart66-lite/sql/database.sql';
+    $sqlFile = CART66_PATH . '/sql/database.sql';
     $sql = str_replace('[prefix]', $prefix, file_get_contents($sqlFile));
     $queries = explode(";\n", $sql);
     $wpdb->hide_errors();
@@ -14,10 +14,10 @@ class Cart66 {
         Cart66Common::log("Running: $sql");
       }
     }
-    require_once(WP_PLUGIN_DIR. "/cart66-lite/create-pages.php");
+    require_once(CART66_PATH . "/create-pages.php");
 
     // Set the version number for this version of Cart66
-    require_once(WP_PLUGIN_DIR. "/cart66-lite/models/Cart66Setting.php");
+    require_once(CART66_PATH . "/models/Cart66Setting.php");
     Cart66Setting::setValue('version', CART66_VERSION_NUMBER);
     
     // Look for hard coded order number
@@ -56,7 +56,14 @@ class Cart66 {
       add_action('wp_ajax_nopriv_check_inventory_on_add_to_cart', array('Cart66Ajax', 'checkInventoryOnAddToCart'));
     }
     
+    // Handle dynamic JS requests
+    // See: http://ottopress.com/2010/dont-include-wp-load-please/ for why
+    add_filter('query_vars', array($this, 'addJsTrigger'));
+    add_action('template_redirect', array($this, 'jsTriggerCheck'));
+    
     if(IS_ADMIN) {
+      add_action('admin_head', array( $this, 'registerBasicScripts'));
+
       if(strpos($_SERVER['QUERY_STRING'], 'page=cart66') !== false) {
         add_action('admin_head', array($this, 'registerAdminStyles'));
         add_action('admin_init', array($this, 'registerCustomScripts'));
@@ -77,6 +84,7 @@ class Cart66 {
         add_action('add_meta_boxes', array($this, 'addFeatureLevelMetaBox'));
       }
       
+      
       //Plugin update actions
       if(CART66_PRO) {
         add_action('update_option__transient_update_plugins', array('Cart66ProCommon', 'checkUpdate'));             //used by WP 2.8
@@ -85,7 +93,7 @@ class Cart66 {
       }
       
       // Include the jquery table quicksearch library
-      $path = WPCURL . '/plugins/cart66-lite/js/jquery.quicksearch.js';
+      $path = CART66_URL . '/js/jquery.quicksearch.js';
       wp_enqueue_script('quicksearch', $path, array('jquery'));
     }
     else {
@@ -95,12 +103,13 @@ class Cart66 {
 
       if(CART66_PRO) {
         add_action('wp_head', array($this, 'checkInventoryOnCheckout'));
+        add_action('wp_head', array($this, 'checkShippingMethodOnCheckout'));
         add_action('template_redirect', array($this, 'protectSubscriptionPages'));
         add_filter('wp_list_pages_excludes', array($this, 'hideStorePages'));
         add_filter('wp_list_pages_excludes', array($this, 'hidePrivatePages'));
         add_filter('wp_nav_menu_items', array($this, 'filterPrivateMenuItems'), 10, 2);
       }
-      
+      add_action('wp_head', array($this, 'displayVersionInfo'));
     }
 
     // ================================================================
@@ -130,6 +139,15 @@ class Cart66 {
       $_SESSION['Cart66Cart']->addItem(Cart66Common::getVal('cart66ItemId'), 1, $options);
     }
     
+  }
+  
+  public function displayVersionInfo() {
+    if(CART66_PRO) {
+      echo '<meta name="Cart66Version" content="Professional ' . Cart66Setting::getValue('version') . '" />' . "\n";
+    }
+    else {
+      echo '<meta name="Cart66Version" content="Lite ' . Cart66Setting::getValue('version') . '" />' . "\n";
+    }
   }
   
   public function filterPrivateMenuItems($menuItems, $args=null) {
@@ -171,7 +189,7 @@ class Cart66 {
   }
   
   public static function enqueueScripts() {
-    $url = WPCURL . '/plugins/cart66-lite/cart66.css';
+    $url = CART66_URL . '/cart66.css';
     wp_enqueue_style('cart66-css', $url, null, CART66_VERSION_NUMBER, 'all');
 
     if($css = Cart66Setting::getValue('styles_url')) {
@@ -179,57 +197,59 @@ class Cart66 {
     }
     
     // Include the cart66 javascript library
-    $path = WPCURL . '/plugins/cart66-lite/js/cart66-library.js';
+    $path = CART66_URL . '/js/cart66-library.js';
     wp_enqueue_script('cart66-library', $path, array('jquery'), CART66_VERSION_NUMBER);
   }
   
   public function loadCoreModels() {
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66ModelAbstract.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66Setting.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66Admin.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66Ajax.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66Log.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66Product.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66CartItem.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66Cart.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66CartWidget.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66Exception.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66TaxRate.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66Order.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66Promotion.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66ShippingMethod.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66ShippingRate.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66ShippingRule.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66ShortcodeManager.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/models/Cart66ButtonManager.php");
-    
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/gateways/Cart66GatewayAbstract.php");
-    require_once(WP_PLUGIN_DIR . "/cart66-lite/gateways/Cart66PayPalExpressCheckout.php");
+    require_once(CART66_PATH . "/models/Cart66BaseModelAbstract.php");
+    require_once(CART66_PATH . "/models/Cart66ModelAbstract.php");
+    require_once(CART66_PATH . "/models/Cart66Setting.php");
+    require_once(CART66_PATH . "/models/Cart66Admin.php");
+    require_once(CART66_PATH . "/models/Cart66Ajax.php");
+    require_once(CART66_PATH . "/models/Cart66Log.php");
+    require_once(CART66_PATH . "/models/Cart66Product.php");
+    require_once(CART66_PATH . "/models/Cart66CartItem.php");
+    require_once(CART66_PATH . "/models/Cart66Cart.php");
+    require_once(CART66_PATH . "/models/Cart66CartWidget.php");
+    require_once(CART66_PATH . "/models/Cart66Exception.php");
+    require_once(CART66_PATH . "/models/Cart66TaxRate.php");
+    require_once(CART66_PATH . "/models/Cart66Order.php");
+    require_once(CART66_PATH . "/models/Cart66Promotion.php");
+    require_once(CART66_PATH . "/models/Cart66ShippingMethod.php");
+    require_once(CART66_PATH . "/models/Cart66ShippingRate.php");
+    require_once(CART66_PATH . "/models/Cart66ShippingRule.php");
+    require_once(CART66_PATH . "/models/Cart66ShortcodeManager.php");
+    require_once(CART66_PATH . "/models/Cart66ButtonManager.php");
+    require_once(CART66_PATH . "/gateways/Cart66GatewayAbstract.php");
+    require_once(CART66_PATH . "/gateways/Cart66PayPalExpressCheckout.php");
     
     if(CART66_PRO) {
-      require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66AccessManager.php");
-      require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66AccountSubscription.php");
-      require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66Account.php");
-      require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66GravityReader.php");
-      require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66LiveRates.php");
-      require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/gateways/Cart66PayPalPro.php");
-      require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66PayPalRecurringPayment.php");
-      require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66PayPalSubscription.php");
-      require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66Ups.php");
+      require_once(CART66_PATH . "/pro/models/Cart66AccessManager.php");
+      require_once(CART66_PATH . "/pro/models/Cart66AccountSubscription.php");
+      require_once(CART66_PATH . "/pro/models/Cart66Account.php");
+      require_once(CART66_PATH . "/pro/models/Cart66GravityReader.php");
+      require_once(CART66_PATH . "/pro/models/Cart66LiveRate.php");
+      require_once(CART66_PATH . "/pro/models/Cart66LiveRates.php");
+      require_once(CART66_PATH . "/pro/gateways/Cart66PayPalPro.php");
+      require_once(CART66_PATH . "/pro/models/Cart66PayPalRecurringPayment.php");
+      require_once(CART66_PATH . "/pro/models/Cart66PayPalSubscription.php");
+      require_once(CART66_PATH . "/pro/models/Cart66Ups.php");
+      require_once(CART66_PATH . "/pro/models/Cart66Usps.php");
       
       // Load Constant Contact classes
       if(Cart66Setting::getValue('constantcontact_username')) {
-        require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66ConstantContact.php");
-        //require_once(WP_PLUGIN_DIR . "/cart66-lite/pro/models/Cart66ConstantContactWrapper.php");
+        require_once(CART66_PATH . "/pro/models/Cart66ConstantContact.php");
+        //require_once(CART66_PATH . "/pro/models/Cart66ConstantContactWrapper.php");
       }
     }
 
-    require_once(WP_PLUGIN_DIR. "/cart66-lite/gateways/Cart66GatewayAbstract.php");
+    require_once(CART66_PATH . "/gateways/Cart66GatewayAbstract.php");
     
     self::loadSpreedlyModels();
     
     if(CART66_PRO && Cart66Setting::getValue('zendesk_token')) {
-      require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/models/ZendeskRemoteAuth.php");
+      require_once(CART66_PATH . "/pro/models/ZendeskRemoteAuth.php");
     }
   }
   
@@ -237,13 +257,13 @@ class Cart66 {
     $shortName = Cart66Setting::getValue('spreedly_shortname');
     $apiToken = Cart66Setting::getValue('spreedly_apitoken');
     if(CART66_PRO && $shortName && $apiToken) {
-      require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/models/SpreedlyCommon.php");
-      require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/models/SpreedlyCreditCard.php");
-      require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/models/SpreedlyException.php");
-      require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/models/SpreedlyInvoice.php");
-      require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/models/SpreedlySubscriber.php");
-      require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/models/SpreedlySubscription.php");
-      require_once(WP_PLUGIN_DIR. "/cart66-lite/pro/models/SpreedlyXmlObject.php");
+      require_once(CART66_PATH . "/pro/models/SpreedlyCommon.php");
+      require_once(CART66_PATH . "/pro/models/SpreedlyCreditCard.php");
+      require_once(CART66_PATH . "/pro/models/SpreedlyException.php");
+      require_once(CART66_PATH . "/pro/models/SpreedlyInvoice.php");
+      require_once(CART66_PATH . "/pro/models/SpreedlySubscriber.php");
+      require_once(CART66_PATH . "/pro/models/SpreedlySubscription.php");
+      require_once(CART66_PATH . "/pro/models/SpreedlyXmlObject.php");
       SpreedlyCommon::init($shortName, $apiToken);
     }
   }
@@ -260,16 +280,20 @@ class Cart66 {
     define("CURRENCY_CODE", $ccd);
   }
   
+  public function registerBasicScripts() {
+    ?><script type="text/javascript">var wpurl = '<?php echo esc_js( home_url('/') ); ?>';</script><?php
+  }
+  
   public function registerCustomScripts() {
     if(strpos($_SERVER['QUERY_STRING'], 'page=cart66') !== false) {
-      $path = WPCURL . '/plugins/cart66-lite/js/ajax-setting-form.js';
+      $path = CART66_URL . '/js/ajax-setting-form.js';
       wp_enqueue_script('ajax-setting-form', $path);
 
       // Include jquery-multiselect and jquery-ui
       wp_enqueue_script('jquery');
       wp_enqueue_script('jquery-ui-core');
       wp_enqueue_script('jquery-ui-sortable');
-      $path = WPCURL . '/plugins/cart66-lite/js/ui.multiselect.js';
+      $path = CART66_URL . '/js/ui.multiselect.js';
       wp_enqueue_script('jquery-multiselect', $path, null, null, true);
     }
   }
@@ -279,10 +303,10 @@ class Cart66 {
       $widgetCss = WPURL . '/wp-admin/css/widgets.css';
       echo "<link rel='stylesheet' type='text/css' href='$widgetCss' />\n";
 
-    	$adminCss = WPCURL . '/plugins/cart66-lite/admin/admin-styles.css';
+    	$adminCss = CART66_URL . '/admin/admin-styles.css';
       echo "<link rel='stylesheet' type='text/css' href='$adminCss' />\n";
 
-      $uiCss = WPCURL . '/plugins/cart66-lite/views/jquery-ui-1.7.1.custom.css';
+      $uiCss = CART66_URL . '/views/jquery-ui-1.7.1.custom.css';
       echo "<link rel='stylesheet' type='text/css' href='$uiCss' />\n";
     }
   }
@@ -291,7 +315,7 @@ class Cart66 {
    * Put Cart66 in the admin menu
    */
   public function buildAdminMenu() {
-    $icon = WPCURL . '/plugins/cart66-lite/images/cart66_logo_16.gif';
+    $icon = CART66_URL . '/images/cart66_logo_16.gif';
     add_menu_page('Cart66', 'Cart66', 'edit_pages', 'cart66_admin', null, $icon);
     add_submenu_page('cart66_admin', __('Orders', 'cart66'), __('Orders', 'cart66'), 'edit_pages', 'cart66_admin', array('Cart66Admin', 'ordersPage'));
     add_submenu_page('cart66_admin', __('Products', 'cart66'), __('Products', 'cart66'), 'manage_options', 'cart66-products', array('Cart66Admin', 'productsPage'));
@@ -313,9 +337,27 @@ class Cart66 {
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
       global $post;
       $checkoutPage = get_page_by_path('store/checkout');
-      if($post->ID == $checkoutPage->ID) {
+      if( isset( $post->ID ) && $post->ID == $checkoutPage->ID) {
         $inventoryMessage = $_SESSION['Cart66Cart']->checkCartInventory();
         if(!empty($inventoryMessage)) { $_SESSION['Cart66InventoryWarning'] = $inventoryMessage; }
+      }
+    }
+  }
+  
+  public function checkShippingMethodOnCheckout() {
+    if($_SERVER['REQUEST_METHOD'] == 'GET') {
+      global $post;
+      $checkoutPage = get_page_by_path('store/checkout');
+      if( isset( $post->ID ) && $post->ID == $checkoutPage->ID) {
+        if(isset($_SESSION['Cart66LiveRates']) && get_class($_SESSION['Cart66LiveRates']) == 'Cart66LiveRates') {
+          if(!$_SESSION['Cart66LiveRates']->hasValidShippingService()) {
+            $_SESSION['Cart66ShippingWarning'] = true;
+            $viewCartPage = get_page_by_path('store/cart');
+            $viewCartLink = get_permalink($viewCartPage->ID);
+            wp_redirect($viewCartLink);
+            exit();
+          }
+        }
       }
     }
   }
@@ -341,7 +383,7 @@ class Cart66 {
   }
 
   public function addTinymcePlugin($plugin_array) {
-    $plugin_array['cart66'] = plugins_url().'/cart66-lite/js/editor_plugin.js';
+    $plugin_array['cart66'] = CART66_URL . '/js/editor_plugin.js';
     return $plugin_array;
   }
   
@@ -412,13 +454,30 @@ class Cart66 {
     add_shortcode('spreedly_listener',            array($sc, 'spreedlyListener'));
     
     // Enable Gravity Forms hooks if Gravity Forms is available
-    if(class_exists('RGForms')) {
+    if(CART66_PRO && class_exists('RGForms')) {
       add_action("gform_post_submission", array($sc, 'gravityFormToCart'));
     }
     
   }
   
-  
+  /**
+   * Adds a query var trigger for the dynamic JS dialog
+   */
+  public function addJsTrigger($vars) {
+    $vars[] = 'cart66dialog';
+    return $vars;
+  }
+
+  /**
+   * Handles the query var trigger for the dyamic JS dialog
+   */
+  public function jsTriggerCheck() {
+    if ( intval( get_query_var( 'cart66dialog' ) ) == 1 ) {
+      include( CART66_PATH . '/js/cart66Dialog.php' );
+      exit;
+    }
+  }
+
   /**
    * Register Cart66 cart sidebar widget
    */
@@ -515,7 +574,8 @@ class Cart66 {
     $excludes[] = $receipt->ID;
     
     $spreedly = get_page_by_path('store/spreedly');
-    $excludes[] = $spreedly->ID;
+    if ( isset( $spreedly->ID ) )
+			$excludes[] = $spreedly->ID;
     
     if(is_array(get_option('exclude_pages'))){
   		$excludes = array_merge(get_option('exclude_pages'), $excludes );
@@ -527,7 +587,7 @@ class Cart66 {
   
   public function protectSubscriptionPages() {
     global $wp_query;
-    $pid = $wp_query->post->ID;
+    $pid = isset( $wp_query->post->ID ) ? $wp_query->post->ID : NULL;
 
     // Keep visitors who are not logged in from seeing private pages
     Cart66AccessManager::verifyPageAccessRights($pid);
@@ -632,7 +692,7 @@ class Cart66 {
     ob_end_clean();
 
     if($_SERVER['REQUEST_METHOD'] == 'POST' && Cart66Common::postVal('cart66-action') == 'export_csv') {
-      require_once(WP_PLUGIN_DIR. "/cart66-lite/models/Cart66Exporter.php");
+      require_once(CART66_PATH . "/models/Cart66Exporter.php");
       $start = Cart66Common::postVal('start_date');
       $end = Cart66Common::postVal('end_date');
 
