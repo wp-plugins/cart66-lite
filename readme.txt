@@ -4,7 +4,7 @@ Donate link: http://cart66.com
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales
 Requires at least: 2.8
 Tested up to: 3.1
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 
 Sell digital products and/or physical products with the Cart66 WordPress ecommerce shopping cart plugin.
 
@@ -81,6 +81,11 @@ We are not able to provide anything other than community based support for Cart6
 3. Cart66 Product Management
 
 == Changelog ==
+
+= 1.0.8 =
+* Updated: Changed paths to use a new constant so that the plugins folder can be installed in custom locations
+* Fixed: Resolved an issue with Gravity Forms where submitting a form would generate a class not found error.
+* Fixed: Resolved several PHP Notice messages
 
 = 1.0.7 =
 * Security enhancements
