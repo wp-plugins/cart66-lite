@@ -1,7 +1,7 @@
 === Cart66 Lite ===
 Contributors: reality66
 Donate link: http://cart66.com
-Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales
+Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, cart66-lite, products, sales
 Requires at least: 2.8
 Tested up to: 3.1
 Stable tag: 1.0.8
