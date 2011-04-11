@@ -11,6 +11,8 @@ create table if not exists `[prefix]products` (
   `shipped` tinyint(1) unsigned not null,
   `weight` decimal(8,2) unsigned not null default 0,
   `download_path` text,
+  `s3_bucket` varchar(200) not null,
+  `s3_file` varchar(200) not null,
   `download_limit` tinyint default 0,
   `spreedly_subscription_id` varchar(250) not null default '',
   `allow_cancel` tinyint default 1,
@@ -31,6 +33,8 @@ create table if not exists `[prefix]products` (
   `start_recurring_number` int(10) unsigned not null default 1,
   `start_recurring_unit` varchar(50) not null,
   `price_description` varchar(255) not null,
+  `is_membership_product` tinyint(1) not null default 0,
+  `lifetime_membership` tinyint(1) not null default 0,
   primary key(`id`)
 );
 
@@ -175,6 +179,7 @@ create table if not exists `[prefix]account_subscriptions` (
   `paypal_billing_profile_id` varchar(50) not null,
   `status` varchar(20) not null default '',
   `active_until` datetime not null,
+  `lifetime` tinyint(1) not null default 0,
   `subscriber_token` varchar(50) not null,
   `created_at` datetime not null,
   `updated_at` datetime not null,
@@ -205,6 +210,17 @@ create table if not exists `[prefix]pp_recurring_payments` (
   primary key(`id`)
 );
 
+create table if not exists`[prefix]sessions` (
+  `id` int(10) unsigned not null auto_increment,
+  `session_id` varchar(50) not null,
+  `ip_address` varchar(16) default '0' not null,
+  `user_agent` varchar(255) not null,
+  `last_activity` datetime not null,
+  `user_data` text default '' not null,
+  unique key `sid` (`session_id`),
+  primary key (`id`)
+);
+
 --  Upgrading to Cart66 1.0.1
 
 alter table `[prefix]accounts` add column `notes` text not null;
@@ -216,4 +232,13 @@ alter table `[prefix]products` add column `start_recurring_unit` varchar(50) not
 alter table `[prefix]products` add column `price_description` varchar(255) not null;
 
 -- Upgrading to Cart66 1.0.6
+
 alter table `[prefix]order_items` modify `description` text;
+
+-- Upgrading to Cart66 1.0.8
+
+alter table `[prefix]products` add column `is_membership_product` tinyint(1) not null default 0;
+alter table `[prefix]products` add column `lifetime_membership` tinyint(1) not null default 0;
+alter table `[prefix]products` add column `s3_bucket` varchar(200) not null;
+alter table `[prefix]products` add column `s3_file` varchar(200) not null;
+alter table `[prefix]account_subscriptions` add column `lifetime` tinyint(1) not null default 0;

@@ -56,8 +56,8 @@ class Cart66Cart {
   
   public function updateCart() {
     if(Cart66Common::postVal('updateCart') == 'Calculate Shipping') {
-      $_SESSION['cart66_shipping_zip'] = Cart66Common::postVal('shipping_zip');
-      $_SESSION['cart66_shipping_country_code'] = Cart66Common::postVal('shipping_country_code');
+      Cart66Session::set('cart66_shipping_zip', Cart66Common::postVal('shipping_zip'));
+      Cart66Session::set('cart66_shipping_country_code', Cart66Common::postVal('shipping_country_code'));
     }
     $this->_setShippingMethodFromPost();
     $this->_updateQuantitiesFromPost();
@@ -80,9 +80,9 @@ class Cart66Cart {
           $this->_items[] = $newItem;
         }
       }
-      elseif($product->isSubscription() && $this->hasSubscriptionProducts()) {
+      elseif( ($product->isSubscription() || $product->isMembershipProduct()) && ($this->hasSubscriptionProducts() || $this->hasMembershipProducts() )) {
         // Make sure only one subscription can be added to the cart. Spreedly only allows one subscription per subscriber.
-        $_SESSION['Cart66SubscriptionWarning'] = true;
+        Cart66Session::set('Cart66SubscriptionWarning', true);
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Tried to add more than one subscripton to the cart.");
         return;
       }
@@ -276,8 +276,8 @@ class Cart66Cart {
       $shipping = 0; 
     }
     // Check to see if Live Rates are enabled and available
-    elseif(isset($_SESSION['Cart66LiveRates']) && get_class($_SESSION['Cart66LiveRates']) == 'Cart66LiveRates' && Cart66Setting::getValue('use_live_rates')) {
-      $liveRate = $_SESSION['Cart66LiveRates']->getSelected();
+    elseif(Cart66Session::get('Cart66LiveRates') && get_class(Cart66Session::get('Cart66LiveRates')) == 'Cart66LiveRates' && Cart66Setting::getValue('use_live_rates')) {
+      $liveRate = Cart66Session::get('Cart66LiveRates')->getSelected();
       if(is_numeric($liveRate->rate)) {
         return number_format($liveRate->rate, 2, '.', '');
       }
@@ -471,6 +471,15 @@ class Cart66Cart {
     return $allDigital;
   }
   
+  public function hasMembershipProducts() {
+    foreach($this->getItems() as $item) {
+      if($item->isMembershipProduct()) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
   public function hasSubscriptionProducts() {
     foreach($this->getItems() as $item) {
       if($item->isSubscription()) {
@@ -513,6 +522,37 @@ class Cart66Cart {
       }
     }
     return false;
+  }
+  
+  /**
+   * Return the CartItem that holds the membership product.
+   * If there is no membership product in the cart, return false.
+   * 
+   * @return Cart66CartItem
+   */
+  public function getMembershipProductItem() {
+    foreach($this->getItems() as $item) {
+      if($item->isMembershipProduct()) {
+        return $item;
+      }
+    }
+    return false;
+  }
+  
+  /**
+   * Return the membership product in the cart. 
+   * Only one membership or subscription type item may be in the cart at any given time. 
+   * Note that this function returns the actual Cart66Product not the Cart66CartItem.
+   * If there is no membership product in the cart, return false.
+   * 
+   * @return Cart66Product
+   */
+  public function getMembershipProduct() {
+    $product = false;
+    if($item = $this->getMembershipProductItem()) {
+      $product = new Cart66Product($item->getProductId());
+    }
+    return $product;
   }
   
   public function getPayPalSubscriptionId() {
@@ -601,8 +641,8 @@ class Cart66Cart {
 
   public function getShippingMethodName() {
     // Look for live rates
-    if(isset($_SESSION['Cart66LiveRates'])) {
-      $rate = $_SESSION['Cart66LiveRates']->getSelected();
+    if(Cart66Session::get('Cart66LiveRates')) {
+      $rate = Cart66Session::get('Cart66LiveRates')->getSelected();
       return $rate->service;
     }
     // Not using live rates
@@ -671,9 +711,11 @@ class Cart66Cart {
   }
   
   public function getLiveRates() {
-    $weight = $_SESSION['Cart66Cart']->getCartWeight();
-    $zip = isset($_SESSION['cart66_shipping_zip']) ? $_SESSION['cart66_shipping_zip'] : false;
-    $countryCode = isset($_SESSION['cart66_shipping_country_code']) ? $_SESSION['cart66_shipping_country_code'] : Cart66Common::getHomeCountryCode();
+    if(!CART66_PRO) { return false; }
+    
+    $weight = Cart66Session::get('Cart66Cart')->getCartWeight();
+    $zip = Cart66Session::get('cart66_shipping_zip') ? Cart66Session::get('cart66_shipping_zip') : false;
+    $countryCode = Cart66Session::get('cart66_shipping_country_code') ? Cart66Session::get('cart66_shipping_country_code') : Cart66Common::getHomeCountryCode();
     
     // Make sure _liveRates is a Cart66LiveRates object
     if(get_class($this->_liveRates) != 'Cart66LiveRates') {
@@ -682,9 +724,9 @@ class Cart66Cart {
     }
     
     // Return the live rates from the session if the zip, country code, and cart weight are the same
-    if(isset($_SESSION['Cart66LiveRates']) && get_class($this->_liveRates) == 'Cart66LiveRates') {
+    if(Cart66Session::get('Cart66LiveRates') && get_class($this->_liveRates) == 'Cart66LiveRates') {
       $cartWeight = $this->getCartWeight();
-      $this->_liveRates = $_SESSION['Cart66LiveRates'];
+      $this->_liveRates = Cart66Session::get('Cart66LiveRates');
       
       $liveWeight = $this->_liveRates->weight;
       $liveZip = $this->_liveRates->toZip;
@@ -697,11 +739,11 @@ class Cart66Cart {
       
       if($this->_liveRates->weight == $weight && $this->_liveRates->toZip == $zip && $this->_liveRates->getToCountryCode() == $countryCode) {
         Cart66Common::log("Using Live Rates from the session");
-        return $_SESSION['Cart66LiveRates']; 
+        return Cart66Session::get('Cart66LiveRates'); 
       }
     }
     
-    if($this->getCartWeight() > 0 && isset($_SESSION['cart66_shipping_zip']) && isset($_SESSION['cart66_shipping_country_code'])) {
+    if($this->getCartWeight() > 0 && Cart66Session::get('cart66_shipping_zip') && Cart66Session::get('cart66_shipping_country_code')) {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Clearing current live shipping rates and recalculating new rates.");
       $this->_liveRates->clearRates();
       $this->_liveRates->weight = $weight;
@@ -737,7 +779,7 @@ class Cart66Cart {
       $this->_liveRates->addRate('SYSTEM', 'Free Shipping', '0.00');
     }
     
-    $_SESSION['Cart66LiveRates'] = $this->_liveRates;
+    Cart66Session::set('Cart66LiveRates', $this->_liveRates);
     
     Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Dump live rates: " . print_r($this->_liveRates, true));
     return $this->_liveRates;
@@ -751,7 +793,7 @@ class Cart66Cart {
     $usps = new Cart66Usps();
     $weight = $this->getCartWeight();
     $fromZip = Cart66Setting::getValue('usps_ship_from_zip');
-    $toZip = $_SESSION['cart66_shipping_zip'];
+    $toZip = Cart66Session::get('cart66_shipping_zip');
     Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Getting rates for USPS: $fromZip > $toZip > $weight");
     $rates = $usps->getRates($fromZip, $toZip, $weight);
     return $rates;
@@ -773,9 +815,9 @@ class Cart66Cart {
    */
   public function getUpsRates() {
     $ups = new Cart66Ups();
-    $weight = $_SESSION['Cart66Cart']->getCartWeight();
-    $zip = $_SESSION['cart66_shipping_zip'];
-    $countryCode = $_SESSION['cart66_shipping_country_code'];
+    $weight = Cart66Session::get('Cart66Cart')->getCartWeight();
+    $zip = Cart66Session::get('cart66_shipping_zip');
+    $countryCode = Cart66Session::get('cart66_shipping_country_code');
     $rates = $ups->getAllRates($zip, $countryCode, $weight);
     return $rates;
   }
@@ -798,9 +840,9 @@ class Cart66Cart {
     }
     // Using live rates
     elseif(isset($_POST['live_rates'])) {
-      if(isset($_SESSION['Cart66LiveRates'])) {
+      if(Cart66Session::get('Cart66LiveRates')) {
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Using live shipping rates to set shipping method from post");
-        $_SESSION['Cart66LiveRates']->setSelected($_POST['live_rates']);
+        Cart66Session::get('Cart66LiveRates')->setSelected($_POST['live_rates']);
       }
     }
   }
@@ -817,9 +859,10 @@ class Cart66Cart {
           else {
             $qtyAvailable = Cart66Product::checkInventoryLevelForProduct($item->getProductId(), $item->getOptionInfo());
             $this->setItemQuantity($itemIndex, $qtyAvailable);
-            if(empty($_SESSION['Cart66InventoryWarning'])) { $_SESSION['Cart66InventoryWarning'] = ''; }
-            $_SESSION['Cart66InventoryWarning'] .= '<p>The quantity for ' . $item->getFullDisplayName() . " could not be changed to $qty because 
-              we only have $qtyAvailable in stock.</p>";
+            if(Cart66Session::get('Cart66InventoryWarning')) { Cart66Session::set('Cart66InventoryWarning', ''); }
+            $inventoryWarning = Cart66Session::get('Cart66InventoryWarning');
+            $inventoryWarning .= '<p>The quantity for ' . $item->getFullDisplayName() . " could not be changed to $qty because we only have $qtyAvailable in stock.</p>";
+            Cart66Session::set('Cart66InventoryWarning', $inventoryWarning);
             Cart66Common::log("Quantity available ($qtyAvailable) cannot meet desired quantity ($qty)");
           }
         }

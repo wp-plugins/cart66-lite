@@ -3,7 +3,7 @@
 Plugin Name: Cart66 Lite
 Plugin URI: http://www.cart66.com
 Description: Wordpress Shopping Cart
-Version: 1.0.8
+Version: 1.1
 Author: Reality 66
 Author URI: http://www.Reality66.com
 
@@ -36,7 +36,7 @@ if(!class_exists('Cart66')) {
   
   define("CART66_ORDER_NUMBER", false);
   define("CART66_PRO", false);
-  define('CART66_VERSION_NUMBER', '1.0.8');
+  define('CART66_VERSION_NUMBER', '1.1');
   define("WPCURL", Cart66Common::getWpContentUrl());
   define("WPURL", Cart66Common::getWpUrl());
 

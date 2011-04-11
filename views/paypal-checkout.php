@@ -1,22 +1,22 @@
 <!-- PayPal Checkout -->
 <?php
-  $items = $_SESSION['Cart66Cart']->getItems();
-  $shipping = $_SESSION['Cart66Cart']->getShippingCost();
-  $shippingMethod = $_SESSION['Cart66Cart']->getShippingMethodName();
+  $items = Cart66Session::get('Cart66Cart')->getItems();
+  $shipping = Cart66Session::get('Cart66Cart')->getShippingCost();
+  $shippingMethod = Cart66Session::get('Cart66Cart')->getShippingMethodName();
   $setting = new Cart66Setting();
   $paypalEmail = Cart66Setting::getValue('paypal_email');
   $returnUrl = Cart66Setting::getValue('paypal_return_url');
   
   $checkoutOk = true;
-  if($_SESSION['Cart66Cart']->requireShipping()) {
+  if(Cart66Session::get('Cart66Cart')->requireShipping()) {
     $liveRates = Cart66Setting::getValue('use_live_rates');
     if($liveRates) {
-      if(!isset($_SESSION['Cart66LiveRates'])) {
+      if(!Cart66Session::get('Cart66LiveRates')) {
         $checkoutOk = false;
       }
       else {
         // Check to make sure a valid shipping method is selected
-        $selectedRate = $_SESSION['Cart66LiveRates']->getSelected();
+        $selectedRate = Cart66Session::get('Cart66LiveRates')->getSelected();
         if($selectedRate->rate === false) {
           $checkoutOk = false;
         }
@@ -30,8 +30,8 @@
   
   // Start affiliate program integration
   $aff = '';
-  if (!empty($_SESSION['ap_id'])) {
-    $aff .= $_SESSION['ap_id'];
+  if (Cart66Session::get('ap_id')) {
+    $aff .= Cart66Session::get('ap_id');
   }
   elseif(isset($_COOKIE['ap_id'])) {
     $aff .= $_COOKIE['ap_id'];
@@ -61,7 +61,7 @@
 <?php endif; ?>
 
 
-<?php if($_SESSION['Cart66Cart']->countItems() > 0): ?>
+<?php if(Cart66Session::get('Cart66Cart')->countItems() > 0): ?>
   <?php
     $paypalAction = 'https://www.paypal.com/cgi-bin/webscr';
     if(SANDBOX) {
@@ -92,7 +92,7 @@
         echo "\n<input type='hidden' name='shopping_url' value='" . Cart66Setting::getValue('shopping_url') . "' />\n";
       
         // Send shipping price as an item amount if the item total - discount amount = $0.00 otherwise paypal will ignore the discount
-        $itemTotal = $_SESSION['Cart66Cart']->getNonSubscriptionAmount() - $_SESSION['Cart66Cart']->getDiscountAmount();
+        $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
         if($itemTotal == 0 && $shipping > 0) {
           echo "\n<input type='hidden' name='item_name_$i' value=\"Shipping\" />";
           echo "\n<input type='hidden' name='item_number_$i' value='SHIPPING' />";
@@ -112,8 +112,8 @@
         <input type='hidden' name='handling_cart' value='<?php echo $shipping ?>' />
       <?php endif;?>
     
-      <?php if($_SESSION['Cart66Cart']->getDiscountAmount() > 0): ?>
-        <input type="hidden" name="discount_amount_cart" value="<?php echo number_format($_SESSION['Cart66Cart']->getDiscountAmount(), 2, '.', ''); ?>"/>
+      <?php if(Cart66Session::get('Cart66Cart')->getDiscountAmount() > 0): ?>
+        <input type="hidden" name="discount_amount_cart" value="<?php echo number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2, '.', ''); ?>"/>
       <?php endif; ?>
     
       <input type="hidden" name="notify_url" value="<?php echo $ipnUrl ?>">

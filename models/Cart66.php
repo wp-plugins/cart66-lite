@@ -109,7 +109,9 @@ class Cart66 {
         add_filter('wp_list_pages_excludes', array($this, 'hidePrivatePages'));
         add_filter('wp_nav_menu_items', array($this, 'filterPrivateMenuItems'), 10, 2);
       }
+      
       add_action('wp_head', array($this, 'displayVersionInfo'));
+      add_action('shutdown', 'Cart66Session::touch');
     }
 
     // ================================================================
@@ -136,7 +138,7 @@ class Cart66 {
       if(isset($_GET['options'])) {
         $options = Cart66Common::getVal('options');
       }
-      $_SESSION['Cart66Cart']->addItem(Cart66Common::getVal('cart66ItemId'), 1, $options);
+      Cart66Session::get('Cart66Cart')->addItem(Cart66Common::getVal('cart66ItemId'), 1, $options);
     }
     
   }
@@ -204,6 +206,7 @@ class Cart66 {
   public function loadCoreModels() {
     require_once(CART66_PATH . "/models/Cart66BaseModelAbstract.php");
     require_once(CART66_PATH . "/models/Cart66ModelAbstract.php");
+    require_once(CART66_PATH . "/models/Cart66Session.php");
     require_once(CART66_PATH . "/models/Cart66Setting.php");
     require_once(CART66_PATH . "/models/Cart66Admin.php");
     require_once(CART66_PATH . "/models/Cart66Ajax.php");
@@ -331,15 +334,15 @@ class Cart66 {
 
   /**
    * Check inventory levels when accessing the checkout page.
-   * If inventory is insufficient place a warning message in $_SESSION['Cart66InventoryWarning']
+   * If inventory is insufficient place a warning message in Cart66Session::get('Cart66InventoryWarning')
    */
   public function checkInventoryOnCheckout() {
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
       global $post;
       $checkoutPage = get_page_by_path('store/checkout');
       if( isset( $post->ID ) && $post->ID == $checkoutPage->ID) {
-        $inventoryMessage = $_SESSION['Cart66Cart']->checkCartInventory();
-        if(!empty($inventoryMessage)) { $_SESSION['Cart66InventoryWarning'] = $inventoryMessage; }
+        $inventoryMessage = Cart66Session::get('Cart66Cart')->checkCartInventory();
+        if(!empty($inventoryMessage)) { Cart66Session::set('Cart66InventoryWarning', $inventoryMessage); }
       }
     }
   }
@@ -349,9 +352,9 @@ class Cart66 {
       global $post;
       $checkoutPage = get_page_by_path('store/checkout');
       if( isset( $post->ID ) && $post->ID == $checkoutPage->ID) {
-        if(isset($_SESSION['Cart66LiveRates']) && get_class($_SESSION['Cart66LiveRates']) == 'Cart66LiveRates') {
-          if(!$_SESSION['Cart66LiveRates']->hasValidShippingService()) {
-            $_SESSION['Cart66ShippingWarning'] = true;
+        if(Cart66Session::get('Cart66LiveRates') && get_class(Cart66Session::get('Cart66LiveRates')) == 'Cart66LiveRates') {
+          if(!Cart66Session::get('Cart66LiveRates')->hasValidShippingService()) {
+            Cart66Session::set('Cart66ShippingWarning', true);
             $viewCartPage = get_page_by_path('store/cart');
             $viewCartLink = get_permalink($viewCartPage->ID);
             wp_redirect($viewCartLink);
@@ -383,7 +386,7 @@ class Cart66 {
   }
 
   public function addTinymcePlugin($plugin_array) {
-    $plugin_array['cart66'] = CART66_URL . '/js/editor_plugin.js';
+    $plugin_array['cart66'] = CART66_URL . '/js/editor_plugin_src.js';
     return $plugin_array;
   }
   
@@ -391,31 +394,30 @@ class Cart66 {
    * Load the cart from the session or put a new cart in the session
    */
   public function initCart() {
-    session_start();
 
-    if(!isset($_SESSION['Cart66Cart'])) {
-      $_SESSION['Cart66Cart'] = new Cart66Cart();
+    if(!Cart66Session::get('Cart66Cart')) {
+      Cart66Session::set('Cart66Cart', new Cart66Cart());
     }
 
     if(isset($_POST['task'])) {
       if($_POST['task'] == 'addToCart') {
-        $_SESSION['Cart66Cart']->addToCart();
+        Cart66Session::get('Cart66Cart')->addToCart();
       }
       elseif($_POST['task'] == 'updateCart') {
-        $_SESSION['Cart66Cart']->updateCart();
+        Cart66Session::get('Cart66Cart')->updateCart();
       }
     }
     elseif(isset($_GET['task'])) {
       if($_GET['task']=='removeItem') {
         $itemIndex = Cart66Common::getVal('itemIndex');
-        $_SESSION['Cart66Cart']->removeItem($itemIndex);
+        Cart66Session::get('Cart66Cart')->removeItem($itemIndex);
       }
     }
     elseif(isset($_POST['cart66-action'])) {
       $task = Cart66Common::postVal('cart66-action');
       if($task == 'authcheckout') {
-        $inventoryMessage = $_SESSION['Cart66Cart']->checkCartInventory();
-        if(!empty($inventoryMessage)) { $_SESSION['Cart66InventoryWarning'] = $inventoryMessage; }
+        $inventoryMessage = Cart66Session::get('Cart66Cart')->checkCartInventory();
+        if(!empty($inventoryMessage)) { Cart66Session::set('Cart66InventoryWarning', $inventoryMessage); }
       }
     }
     
@@ -507,12 +509,18 @@ class Cart66 {
         }
       }
 
-      // Load feature levels defined in as PayPal subscriptions
+      // Load feature levels defined in PayPal subscriptions
       $sub = new Cart66PayPalSubscription();
       $subs = $sub->getSubscriptionPlans();
       foreach($subs as $s) {
         $plans[$s->name] = $s->featureLevel;
         $featureLevels[] = $s->featureLevel;
+      }
+      
+      // Load feature levels defined in Membership products
+      foreach(Cart66Product::getMembershipProducts() as $membership) {
+        $plans[$membership->name] = $membership->featureLevel;
+        $featureLevels[] = $membership->featureLevel;
       }
 
       // Put unique feature levels in alphabetical order
@@ -593,7 +601,7 @@ class Cart66 {
     Cart66AccessManager::verifyPageAccessRights($pid);
 
     // block subscription pages from non-subscribers
-    $accountId = Cart66Common::isLoggedIn() ? $_SESSION['Cart66AccountId'] : 0;
+    $accountId = Cart66Common::isLoggedIn() ? Cart66Session::get('Cart66AccountId') : 0;
     $account = new Cart66Account($accountId);
     
     // Get a list of the required subscription ids
@@ -640,11 +648,13 @@ class Cart66 {
 
     if(Cart66Common::isLoggedIn()) {
       $hidePrivate = false;
-      $account = new Cart66Account($_SESSION['Cart66AccountId']);
+      $account = new Cart66Account(Cart66Session::get('Cart66AccountId'));
+      
       if($account->isActive()) {
         $activeAccount = true;
         $featureLevel = $account->getFeatureLevel();
       }
+      
       // Optionally add the logout link to the end of the navigation
       if(Cart66Setting::getValue('auto_logout_link')) {
         add_filter('wp_list_pages', array($this, 'appendLogoutLink'));

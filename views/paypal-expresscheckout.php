@@ -19,15 +19,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-action'] == 'paypalexp
   $pp = new Cart66PayPalExpressCheckout();
   
   // Calculate total amount to charge customer
-  $total = $_SESSION['Cart66Cart']->getGrandTotal(false);
+  $total = Cart66Session::get('Cart66Cart')->getGrandTotal(false);
   $total = number_format($total, 2, '.', '');
   
   // Calculate total cost of all items in cart, not including tax and shipping
-  $itemTotal = $_SESSION['Cart66Cart']->getNonSubscriptionAmount() - $_SESSION['Cart66Cart']->getDiscountAmount();
+  $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
   $itemTotal = number_format($itemTotal, 2, '.', '');
   
   // Calculate shipping costs
-  $shipping = $_SESSION['Cart66Cart']->getShippingCost();
+  $shipping = Cart66Session::get('Cart66Cart')->getShippingCost();
   
   // Calculate IPN URL
   $ipnPage = get_page_by_path('store/ipn');
@@ -61,7 +61,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-action'] == 'paypalexp
   $pp->setPaymentDetails($payment);
   
   // Add cart items to PayPal
-  $items = $_SESSION['Cart66Cart']->getItems(); // An array of Cart66CartItem objects
+  $items = Cart66Session::get('Cart66Cart')->getItems(); // An array of Cart66CartItem objects
   foreach($items as $i) {
     if($i->isPayPalSubscription()) {
       $plan = $i->getPayPalSubscription();
@@ -93,7 +93,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-action'] == 'paypalexp
   }
   
   // Add a coupon discount if needed
-  $discount = number_format($_SESSION['Cart66Cart']->getDiscountAmount(), 2, '.', '');
+  $discount = number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2, '.', '');
   
   if($discount > 0) {
     $negDiscount = 0 - $discount;
@@ -120,7 +120,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-action'] == 'paypalexp
   $response = $pp->SetExpressCheckout();
   $ack = strtoupper($response['ACK']);
   if('SUCCESS' == $ack || 'SUCCESSWITHWARNING' == $ack) {
-    $_SESSION['PayPalProToken'] = $response['TOKEN'];
+    Cart66Session::set('PayPalProToken', $response['TOKEN']);
     $expressCheckoutUrl = $pp->getExpressCheckoutUrl($response['TOKEN']);
   	header("Location: $expressCheckoutUrl");
   	exit;

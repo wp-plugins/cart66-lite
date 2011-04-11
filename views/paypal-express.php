@@ -17,7 +17,7 @@ if(CART66_PRO) {
 $details = $pp->GetExpressCheckoutDetails($token);
 
 $account = false;
-if($_SESSION['Cart66Cart']->hasSubscriptionProducts()) {
+if(Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() || Cart66Session::get('Cart66Cart')->hasMembershipProducts() ) {
   // Set up a new Cart66Account and start by pre-populating the data or load the logged in account
   if($accountId = Cart66Common::isLoggedIn()) {
     $account = new Cart66Account($accountId);
@@ -40,17 +40,18 @@ if($_SESSION['Cart66Cart']->hasSubscriptionProducts()) {
 }
 
 
-$delivery = $_SESSION['Cart66Cart']->getShippingMethodName();
+$delivery = Cart66Session::get('Cart66Cart')->getShippingMethodName();
 $tax = 0;
 
 if($_SERVER['REQUEST_METHOD'] == "POST") {
   
   if($_POST['task'] == 'doexpresscheckout') {
+    $createAccount = false;
     $keepGoing = true; // Change to false if a critical step in the checkout fails.
     $token = Cart66Common::postVal('token');
     $payerId = Cart66Common::postVal('PayerID');
-    $itemAmount = $_SESSION['Cart66Cart']->getNonSubscriptionAmount() - $_SESSION['Cart66Cart']->getDiscountAmount();
-    $shipping = $_SESSION['Cart66Cart']->getShippingCost();
+    $itemAmount = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
+    $shipping = Cart66Session::get('Cart66Cart')->getShippingCost();
     if(isset($_POST['tax']) && $_POST['tax'] > 0) {
       $tax = Cart66Common::postVal('tax');
     }
@@ -58,18 +59,17 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     
     // Create a new account if the account is not already saved
     if($account !== false && $account->id < 1) {
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Creating new Cart66Account");
       $errors = $account->validate();
       if($acctData['password'] != $acctData['password2']) {
         $errors[] = "Passwords do not match";
       }
       if(count($errors) == 0) {
-        $account->save();
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Saved account for $account->firstName $account->lastName $account->email");
+        $createAccount = true;
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Noted that a new account is needed for $account->firstName $account->lastName $account->email");
       }
       else {
         $keepGoing = false;
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Account creation failed: " . print_r($errors, true));
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Account validation failed: " . print_r($errors, true));
       }
     }
     
@@ -99,10 +99,16 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
 
       if('SUCCESS' == $ack || 'SUCCESSWITHWARNING' == $ack) {
 
+        // Wait to make sure the transaction is a success before creating the account
+        if($createAccount) {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Creating account after successful PayPal transaction");
+          $account->save();
+        }
+        
         // Create Recurring Payment Profile if a subscription has been sold
         $profileResponse = array('ACK' => 'SKIPPED');
-        if($cartItem = $_SESSION['Cart66Cart']->getPayPalSubscriptionItem()) {
-          $planIndex = $_SESSION['Cart66Cart']->getPayPalSubscriptionIndex();
+        if($cartItem = Cart66Session::get('Cart66Cart')->getPayPalSubscriptionItem()) {
+          $planIndex = Cart66Session::get('Cart66Cart')->getPayPalSubscriptionIndex();
           $plan = new Cart66PayPalSubscription($cartItem->getPayPalSubscriptionId());
           $profileResponse = $pp->CreateRecurringPaymentsProfile($token, $cartItem, $planIndex);
 
@@ -116,6 +122,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
             $account->attachPayPalSubscription($details, $paypalPaymentProfileId, $plan, $activeUntil);
           }
         }
+        elseif($cartItem = Cart66Session::get('Cart66Cart')->getMembershipProductItem()) {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Got membership product from the cart after a PayPal transaction.");
+          $product = new Cart66Product($cartItem->getProductId());
+          $account->attachMembershipProduct($product, $details['FIRSTNAME'], $details['LASTNAME']);
+        }
 
         // Save the order
         if('FAILURE' != strtoupper($profileResponse['ACK'])) {
@@ -128,10 +139,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
             $status = trim($opts[0]);
           }
           $transId = isset($response['TRANSACTIONID']) ? $response['TRANSACTIONID'] : '';
-          $promo = $_SESSION['Cart66Cart']->getPromotion();
+          $promo = Cart66Session::get('Cart66Cart')->getPromotion();
           $promoMsg = "none";
           if($promo) {
-            $promoMsg = $promo->code . ' (-' . CURRENCY_SYMBOL . number_format($_SESSION['Cart66Cart']->getDiscountAmount(), 2) . ')';
+            $promoMsg = $promo->code . ' (-' . CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2) . ')';
           }
 
           list($shipFirstName, $shipLastName) = split(' ', $details['SHIPTONAME'], 2);
@@ -155,17 +166,17 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           $orderInfo['email'] = $details['EMAIL'];
           $orderInfo['coupon'] = $promoMsg;
           $orderInfo['tax'] = isset($response['TAXAMT']) ? $response['TAXAMT'] : '';
-          $orderInfo['shipping'] = $_SESSION['Cart66Cart']->getShippingCost();
-          $orderInfo['subtotal'] = $_SESSION['Cart66Cart']->getSubTotal();
+          $orderInfo['shipping'] = Cart66Session::get('Cart66Cart')->getShippingCost();
+          $orderInfo['subtotal'] = Cart66Session::get('Cart66Cart')->getSubTotal();
           
           $taxAmt = isset($response['TAXAMT']) ? $response['TAXAMT'] : '';
-          $orderInfo['total'] = number_format($_SESSION['Cart66Cart']->getGrandTotal() + $taxAmt, 2, '.', '');
+          $orderInfo['total'] = number_format(Cart66Session::get('Cart66Cart')->getGrandTotal() + $taxAmt, 2, '.', '');
           
-          $orderInfo['non_subscription_total'] = number_format($_SESSION['Cart66Cart']->getNonSubscriptionAmount(), 2, '.', '');
+          $orderInfo['non_subscription_total'] = number_format(Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount(), 2, '.', '');
           $orderInfo['trans_id'] = $response['TRANSACTIONID'];
           $orderInfo['status'] = $status;
-          $orderInfo['ordered_on'] = date('Y-m-d H:i:s');
-          $orderInfo['shipping_method'] = $_SESSION['Cart66Cart']->getShippingMethodName();
+          $orderInfo['ordered_on'] = date('Y-m-d H:i:s', Cart66Common::localTs());
+          $orderInfo['shipping_method'] = Cart66Session::get('Cart66Cart')->getShippingMethodName();
 
           if($account) {
             $orderInfo['account_id'] = $account->id;
@@ -174,10 +185,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
             $orderInfo['account_id'] = 0;
           }
 
-          $orderId = $_SESSION['Cart66Cart']->storeOrder($orderInfo);  
+          $orderId = Cart66Session::get('Cart66Cart')->storeOrder($orderInfo);  
 
           $receiptPage = get_page_by_path('store/receipt');
-          $_SESSION['order_id'] = $orderId;
+          Cart66Session::set('order_id', $orderId);
           header("Location: " . get_permalink($receiptPage->ID));
         } 
         else {
@@ -212,9 +223,9 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
   }
   
   if($isTaxed) {
-    $taxable = $_SESSION['Cart66Cart']->getTaxableAmount();
+    $taxable = Cart66Session::get('Cart66Cart')->getTaxableAmount();
     if($taxRate->tax_shipping == 1) {
-      $taxable += $_SESSION['Cart66Cart']->getShippingCost();
+      $taxable += Cart66Session::get('Cart66Cart')->getShippingCost();
     }
     $tax = number_format($taxable * ($taxRate->rate/100), 2, '.', '');
   }
@@ -277,9 +288,17 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
     <input type="hidden" name="tax" value="<?php echo $tax; ?>">
     
     <?php 
-      if($_SESSION['Cart66Cart']->hasSubscriptionProducts() && Cart66Common::isLoggedIn()) {
-        echo "<p>Your current subscription: $mySub->subscriptionPlanName<br/> $mySub->subscriptionPlanName will be canceled when your new subscription is activated.</p>";
-      } 
+      if(Cart66Common::isLoggedIn()) {
+        $name = $account->firstName . '&nbsp;' . $account->lastName;
+        $logout = Cart66Common::appendQueryString('cart66-task=logout');
+        echo "<p id='Cart66PayPalExpressLoggedIn'><strong>You Are Logged In As $name</strong><br/>If you are not $name <a href='$logout'>Log out</a></p>";
+        
+        if(Cart66Session::get('Cart66Cart')->hasSubscriptionProducts()) {
+          if($mySub = $account->getCurrentAccountSubscription()) {
+            echo "<p id='Cart66PayPalExpressCurrentSubscription'>Your current subscription: $mySub->subscriptionPlanName<br/> $mySub->subscriptionPlanName will be canceled when your new subscription is activated.</p>";
+          }
+        }
+      }
     ?>
     
     <?php if($lists = Cart66Setting::getValue('constantcontact_list_ids')): ?>
@@ -287,7 +306,7 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
           if(!$optInMessage = Cart66Setting::getValue('opt_in_message')) {
             $optInMessage = 'Yes, I would like to subscribe to:';
           }
-          echo "<p>$optInMessage</p>";
+          echo "<p id='Cart66OptInMessage'>$optInMessage</p>";
         
           $lists = explode('~', $lists);
           echo '<ul id="Cart66NewsletterList">';
@@ -304,7 +323,7 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
     <?php endif; ?>
       
 
-    <?php if($_SESSION['Cart66Cart']->hasSubscriptionProducts()): ?>
+    <?php if($account->id < 1 && (Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() || Cart66Session::get('Cart66Cart')->hasMembershipProducts()) ): ?>
     <ul>    
       <li><h3>Create Your Account</h3></li>
       <li>
@@ -344,7 +363,7 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
       </li>
     </ul>
   <?php else: ?>
-    <?php
+    <?php 
       $cartImgPath = Cart66Setting::getValue('cart_images_url');
       if($cartImgPath) {
         if(strpos(strrev($cartImgPath), '/') !== 0) {

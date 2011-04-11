@@ -82,6 +82,13 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.1 =
+* New: Amazon S3 integration. Sell digital products and delivery them through Amazon S3.
+* New: Database backed session management. This resolves the unpleasant "incomplete object" errors caused when other plugins start a session before the Cart66 plugin is loaded. 
+* New: Security updates
+* New: Setting to keep Cart66 Database when uninstalling Cart66 Lite. Cart66 Pro can use the same database tables as Cart66 Lite so if you are upgrading to Cart66 Pro you can use all you Cart66 Lite settings.
+* Updated: Cart66 date/time calculations now use the Wordpress timezone offset rather than PHP timezone.  
+
 = 1.0.8 =
 * Updated: Changed paths to use a new constant so that the plugins folder can be installed in custom locations
 * Fixed: Resolved an issue with Gravity Forms where submitting a form would generate a class not found error.

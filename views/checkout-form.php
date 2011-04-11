@@ -24,7 +24,11 @@ if($accountId = Cart66Common::isLoggedIn()) {
       <td valign='top' style="">
         <ul id="billingAddress" class="shortLabels" style="width: 275px;">
           <?php if($gatewayName == 'Cart66ManualGateway'): ?>
-            <li><h2>Shipping Address</h2></li>
+            <?php if(Cart66Session::get('Cart66Cart')->requireShipping()): ?>
+              <li><h2>Shipping Address</h2></li>
+            <?php else: ?>
+              <li><h2>Order Information</h2></li>
+            <?php endif; ?>
           <?php else: ?>
             <li><h2>Billing Address</h2></li>
           <?php endif; ?>
@@ -74,7 +78,7 @@ if($accountId = Cart66Common::isLoggedIn()) {
           </li>
         </ul>
     
-    <?php if($_SESSION['Cart66Cart']->requireShipping() && $gatewayName != 'Cart66ManualGateway'): ?>
+    <?php if(Cart66Session::get('Cart66Cart')->requireShipping() && $gatewayName != 'Cart66ManualGateway'): ?>
         <ul>
           <li><h2>Shipping Address</h2></li>
     
@@ -132,10 +136,16 @@ if($accountId = Cart66Common::isLoggedIn()) {
           </li>
         </ul>
       
-    <?php else: ?>
-      <input type='hidden' id='sameAsBilling' name='sameAsBilling' value='1' />
-    <?php endif; ?>
+        <?php else: ?>
+          <input type='hidden' id='sameAsBilling' name='sameAsBilling' value='1' />
+        <?php endif; ?>
   
+        <?php if(!Cart66Common::isLoggedIn()): ?>
+          <?php if(Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() || Cart66Session::get('Cart66Cart')->hasMembershipProducts()): ?>
+            <?php echo Cart66Common::getView('pro/views/account-form.php', array('account' => $account, 'embed' => false)); ?>
+          <?php endif; ?>
+        <?php endif; ?>
+        
       </td>
       <td valign='top'>
   
@@ -180,7 +190,7 @@ if($accountId = Cart66Common::isLoggedIn()) {
             <select id="payment-cardExpirationYear" name="payment[cardExpirationYear]" style="margin:0;">
               <option value=''></option>
               <?php
-                $year = date('Y');
+                $year = date('Y', Cart66Common::localTs());
                 for($i=$year; $i<=$year+12; $i++){
                   echo "<option value='$i'>$i</option>\n";
                 } 
@@ -224,20 +234,6 @@ if($accountId = Cart66Common::isLoggedIn()) {
             </li>
           <?php endif; ?>
           
-          <?php if(!Cart66Common::isLoggedIn()): ?>
-
-            <?php if($_SESSION['Cart66Cart']->hasSubscriptionProducts()): ?>
-              <li><label>Password:</label>
-              <input type="password" id="payment-password" name="payment[password]" value="<?php Cart66Common::showValue($p['password']); ?>">
-              </li>
-
-              <li><label>&nbsp;</label>
-              <input type="password" id="payment-password2" name="payment[password2]" value="<?php Cart66Common::showValue($p['password2']); ?>">
-              <p class="description">Enter your password again</p>
-              </li>
-            <?php endif; ?>
-          <?php endif; ?>
-
           <li>&nbsp;</li>
 
           <li>

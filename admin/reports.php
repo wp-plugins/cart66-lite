@@ -18,7 +18,7 @@
   <h3>Export Orders</h3>
   
   <?php
-    $firstDayLastMonth =  date("m/1/Y", strtotime('-1 month'));
+    $firstDayLastMonth =  date("m/1/Y", strtotime('-1 month', Cart66Common::localTs()));
     $lastDayLastMonth =  date("m/d/Y", strtotime('-1 day', strtotime('+1 month', strtotime($firstDayLastMonth))));
   ?>
   <form action="" method="post" style="margin-bottom: 25px;">

@@ -221,9 +221,9 @@ abstract class Cart66GatewayAbstract {
   public function getTaxAmount() {
     $tax = 0;
     if($this->isTaxed()) {
-      $taxable = $_SESSION['Cart66Cart']->getTaxableAmount();
+      $taxable = Cart66Session::get('Cart66Cart')->getTaxableAmount();
       if($this->taxShipping()) {
-        $taxable += $_SESSION['Cart66Cart']->getShippingCost();
+        $taxable += Cart66Session::get('Cart66Cart')->getShippingCost();
       }
       $tax = number_format($taxable * ($this->_taxRate->rate/100), 2, '.', '');
     }
@@ -260,15 +260,15 @@ abstract class Cart66GatewayAbstract {
     $orderInfo['email'] = $p['email'];
     $orderInfo['coupon'] = Cart66Common::getPromoMessage();
     $orderInfo['tax'] = $tax;
-    $orderInfo['shipping'] = $_SESSION['Cart66Cart']->getShippingCost();
-    $orderInfo['subtotal'] = $_SESSION['Cart66Cart']->getSubTotal();
+    $orderInfo['shipping'] = Cart66Session::get('Cart66Cart')->getShippingCost();
+    $orderInfo['subtotal'] = Cart66Session::get('Cart66Cart')->getSubTotal();
     $orderInfo['total'] = preg_replace("/[^0-9\.]/", "", $total);
     $orderInfo['trans_id'] = $transId;
     $orderInfo['status'] = $status;
-    $orderInfo['ordered_on'] = date('Y-m-d H:i:s');
-    $orderInfo['shipping_method'] = $_SESSION['Cart66Cart']->getShippingMethodName();
+    $orderInfo['ordered_on'] = date('Y-m-d H:i:s', Cart66Common::localTs());
+    $orderInfo['shipping_method'] = Cart66Session::get('Cart66Cart')->getShippingMethodName();
     $orderInfo['account_id'] = $accountId;
-    $orderId = $_SESSION['Cart66Cart']->storeOrder($orderInfo);  
+    $orderId = Cart66Session::get('Cart66Cart')->storeOrder($orderInfo);  
     return $orderId;
   }
   
@@ -280,7 +280,7 @@ abstract class Cart66GatewayAbstract {
    */
   public function validateCartForCheckout() {
     $isValid = true;
-    $itemCount = $_SESSION['Cart66Cart']->countItems();
+    $itemCount = Cart66Session::get('Cart66Cart')->countItems();
     if($itemCount < 1) {
       $this->_errors['Invalid Cart'] = "There must be at least one item in the cart.";
       $isValid = false;

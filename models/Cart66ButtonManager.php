@@ -63,7 +63,7 @@ class Cart66ButtonManager {
       // Look for common images
       $cartImgPath = Cart66Setting::getValue('cart_images_url');
       if($cartImgPath) {
-        $cartImgPath = Cart66Common::scrubPath($cartImgPath);
+        $cartImgPath = Cart66Common::endSlashPath($cartImgPath);
         $path = $cartImgPath . 'add-to-cart.png';
       }
     }

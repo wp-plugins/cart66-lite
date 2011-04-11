@@ -6,7 +6,7 @@
 ?>
 
 <?php if($data['showPrice'] == 'only'): ?>
-  <p class="Cart66Price" $style>Price: <?php echo $data['price'] ?></p>
+  <p class="Cart66Price" <?php echo $style; ?>>Price: <?php echo $data['price'] ?></p>
 <?php else: ?>
   <form id='cartButtonForm_<?php echo $id ?>' class="Cart66CartButton" method="post" action="<?php echo Cart66Common::getPageLink('store/cart'); ?>" <?php echo $data['style']; ?>>
     <input type='hidden' name='task' id="task_<?php echo $id ?>" value='addToCart' />
@@ -19,7 +19,7 @@
     <?php if($data['product']->isAvailable()): ?>
       <?php echo $data['productOptions'] ?>
     
-      <?php if($data['product']->recurring_interval > 0 && !CART66PRO): ?>
+      <?php if($data['product']->recurring_interval > 0 && !CART66_PRO): ?>
           <div class='Cart66ProRequired'><a href='http://www.cart66.com'>Cart66 Professional</a> is required to sell subscriptions</div>
       <?php else: ?>
         <?php if($data['addToCartPath']): ?> 

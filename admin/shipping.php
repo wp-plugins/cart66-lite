@@ -365,15 +365,15 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
           <li>
             <label class="med">Product:</label>
             <select name='rate[product_id]'>
-              <?php foreach($product->getModels(null, 'name') as $p): ?>
-                <option value="<?php echo $p->id; ?>" <?php echo ($p->id == $rate->product_id) ? 'selected="selected"' : '' ?>><?php echo $p->item_number ?> <?php echo $p->name ?></option>
+              <?php foreach($product->getModels(null, 'order by name') as $p): ?>
+                <option value="<?php echo $p->id; ?>" <?php echo ($p->id == $rate->product_id) ? 'selected="selected"' : '' ?>><?php echo $p->name ?> (<?php echo $p->item_number ?>)</option>
               <?php endforeach; ?>
             </select>
           </li>
           <li>
             <label class="med">Shipping method:</label>
             <select name='rate[shipping_method_id]'>
-              <?php foreach($method->getModels(null, 'name') as $m): ?>
+              <?php foreach($method->getModels("where carrier = ''", 'order by name') as $m): ?>
                 <option value="<?php echo $m->id; ?>" <?php echo ($m->id == $rate->shipping_method_id) ? 'selected="selected"' : '' ?>><?php echo $m->name ?></option>
               <?php endforeach; ?>
             </select>

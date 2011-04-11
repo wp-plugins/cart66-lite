@@ -130,6 +130,20 @@ span.label_desc {
   float: right;
 }
 
+.Cart66SelectAll {
+	padding:0px 0px 10px 0px;
+}
+
+.Cart66BoxSelectAll, .Cart66BoxSelectNone, .Cart66BoxSelectQty {
+	text-decoration:underline;
+	cursor:pointer;
+	color:#21759B;
+}
+
+.member_product_attrs {
+  display: none;
+}
+
 /********************************************************
  * Table css
  ********************************************************/

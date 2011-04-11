@@ -11,8 +11,8 @@ class Cart66CartWidget extends WP_Widget {
   public function widget($args, $instance) {
     extract($args);
     $data['title'] = $instance['title'];
-    if(isset($_SESSION['Cart66Cart']) && is_object($_SESSION['Cart66Cart'] == 'Cart66Cart')) {
-      $this->_items = $_SESSION['Cart66Cart']->getItems();
+    if(Cart66Session::get('Cart66Cart') && get_class(Cart66Session::get('Cart66Cart')) == 'Cart66Cart') {
+      $this->_items = Cart66Session::get('Cart66Cart')->getItems();
       $data['items'] = $this->_items;
     }
     $data['cartPage'] = get_page_by_path('store/cart');
@@ -34,26 +34,26 @@ class Cart66CartWidget extends WP_Widget {
   }
   
   public function getItems() {
-    if(isset($_SESSION['Cart66Cart'])) {
-      return $_SESSION['Cart66Cart']->getItems();
+    if(Cart66Session::get('Cart66Cart')) {
+      return Cart66Session::get('Cart66Cart')->getItems();
     }
   }
   
   public function countItems() {
-    if(isset($_SESSION['Cart66Cart'])) {
-      return $_SESSION['Cart66Cart']->countItems();
+    if(Cart66Session::get('Cart66Cart')) {
+      return Cart66Session::get('Cart66Cart')->countItems();
     }
   }
   
   public function getSubTotal() {
-    if(isset($_SESSION['Cart66Cart'])) {
-      return $_SESSION['Cart66Cart']->getSubTotal();
+    if(Cart66Session::get('Cart66Cart')) {
+      return Cart66Session::get('Cart66Cart')->getSubTotal();
     }
   }
   
   public function getDiscountAmount() {
-    if(isset($_SESSION['Cart66Cart'])) {
-      return $_SESSION['Cart66Cart']->getDiscountAmount();
+    if(Cart66Session::get('Cart66Cart')) {
+      return Cart66Session::get('Cart66Cart')->getDiscountAmount();
     }
   }
   

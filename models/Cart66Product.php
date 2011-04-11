@@ -347,7 +347,7 @@ class Cart66Product extends Cart66ModelAbstract {
 
   public function isDigital() {
     $isDigital = false;
-    if(strlen($this->downloadPath) > 2) {
+    if(strlen($this->downloadPath) > 2 || strlen($this->s3File) > 2) {
       $isDigital = true;
     }
     return $isDigital;
@@ -394,6 +394,13 @@ class Cart66Product extends Cart66ModelAbstract {
     return $rate;
   }
   
+  public function isMembershipProduct() {
+    $isMembershipProduct = false;
+    if($this->isMembershipProduct == 1) {
+      $isMembershipProduct = true;
+    }
+    return $isMembershipProduct;
+  }
   
   public function isSubscription() {
     $isSub = false;
@@ -454,6 +461,19 @@ class Cart66Product extends Cart66ModelAbstract {
       }
     }
     return $subscriptions;
+  }
+  
+  public static function getMembershipProducts() {
+    global $wpdb;
+    $memberships = array();
+    $product = new Cart66Product();
+    $products = $product->getModels('where is_membership_product=1');
+    foreach($products as $p) {
+      if($p->isMembershipProduct()) {
+        $memberships[] = $p;
+      }
+    }
+    return $memberships;
   }
   
   /**
@@ -830,12 +850,12 @@ class Cart66Product extends Cart66ModelAbstract {
     $data = false;
     if($this->isSpreedlySubscription()) {
       if(Cart66Common::isLoggedIn()) {
-        if($subscriptionId = $_SESSION['Cart66Cart']->getSpreedlySubscriptionId()) {
+        if($subscriptionId = Cart66Session::get('Cart66Cart')->getSpreedlySubscriptionId()) {
           try {
             $invoiceData = array(
               'subscription-plan-id' => $subscriptionId,
               'subscriber' => array(
-                'customer-id' => $_SESSION['Cart66AccountId']
+                'customer-id' => Cart66Session::get('Cart66AccountId')
               )
             );
             $invoice = new SpreedlyInvoice();
@@ -851,7 +871,7 @@ class Cart66Product extends Cart66ModelAbstract {
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Spreedly Invoice: " . print_r($invoice->invoiceData, true));
           }
           catch(SpreedlyException $e) {
-            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Unable to locate spreedly customer: " . $_SESSION['Cart66AccountId']);
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Unable to locate spreedly customer: " . Cart66Session::get('Cart66AccountId'));
           }
         }
       }
@@ -894,7 +914,7 @@ class Cart66Product extends Cart66ModelAbstract {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] " . get_class($this) . " save errors: " . print_r($errors, true));
       $this->setErrors($errors);
       $errors = print_r($errors, true);
-      throw new Cart66Exception('Product save failed: $errors', 66102);
+      throw new Cart66Exception('Product save failed: ' . $errors, 66102);
     }
     return $productId;
   }

@@ -12,13 +12,13 @@ if(isset($_GET['ouid'])) {
     exit();
   }
 }
-elseif(isset($_SESSION['order_id'])) {
-  $order = new Cart66Order($_SESSION['order_id']);
-  unset($_SESSION['order_id']);
+elseif(Cart66Session::get('order_id')) {
+  $order = new Cart66Order(Cart66Session::get('order_id'));
+  Cart66Session::get('order_id');
   
   // Begin processing affiliate information
-  if(!empty($_SESSION['ap_id'])) {
-    $referrer = $_SESSION['ap_id'];
+  if(Cart66Session::get('ap_id')) {
+    $referrer = Cart66Session::get('ap_id');
   }
   elseif(isset($_COOKIE['ap_id'])) {
     $referrer = $_COOKIE['ap_id'];
@@ -41,9 +41,7 @@ if(isset($_COOKIE['ap_id']) && $_COOKIE['ap_id']) {
   unset($_COOKIE['ap_id']);
 }
 
-if(isset($_SESSION['app_id']) && $_SESSION['app_id']) {
-  unset($_SESSION['app_id']);
-}
+Cart66Session::drop('app_id');
 
 if(isset($_GET['duid'])) {
   $duid = $_GET['duid'];
@@ -67,9 +65,19 @@ if(isset($_GET['duid'])) {
       $wpdb->insert($downloadsTable, $data, array('%s', '%s', '%s'));
       
       $setting = new Cart66Setting();
-      $dir = Cart66Setting::getValue('product_folder');
-      $path = $dir . DIRECTORY_SEPARATOR . $product->download_path;
-      Cart66Common::downloadFile($path);
+      
+      if(!empty($product->s3Bucket) && !empty($product->s3File)) {
+        require_once(CART66_PATH . '/models/Cart66AmazonS3.php');
+        $link = Cart66AmazonS3::prepareS3Url($product->s3Bucket, $product->s3File, '1 minute');
+        wp_redirect($link);
+        exit();
+      }
+      else {
+        $dir = Cart66Setting::getValue('product_folder');
+        $path = $dir . DIRECTORY_SEPARATOR . $product->download_path;
+        Cart66Common::downloadFile($path);
+      }
+      
     }
     else {
       echo "You have exceeded the maximum number of downloads for this product";
@@ -85,7 +93,7 @@ if(isset($_GET['duid'])) {
 <?php 
 if(CART66_PRO) {
   $logInLink = Cart66AccessManager::getLogInLink();
-  if(isset($_SESSION['Cart66LoginInfo']) && $logInLink !== false) {
+  if(Cart66Session::get('Cart66LoginInfo') && $logInLink !== false) {
     echo '<h2>Your Account</h2>';
     echo "<p><a href=\"$logInLink\">Log into your account</a>.</p>";
   }
@@ -280,7 +288,7 @@ if(CART66_PRO) {
   }
   
   // Erase the shopping cart from the session at the end of viewing the receipt
-  unset($_SESSION['Cart66Cart']);
+  Cart66Session::drop('Cart66Cart');
 ?>
 <?php else: ?>
   <p>Receipt not available</p>

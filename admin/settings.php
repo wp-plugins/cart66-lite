@@ -849,6 +849,36 @@ else {
     </div>
     -->
     
+    <!-- Amazon S3 Settings -->
+    <a href="#" name="amazons3"></a>
+    <div class="widgets-holder-wrap <?php echo Cart66Setting::getValue('amazons3_id') ? '' : 'closed'; ?>">
+      <div class="sidebar-name">
+        <div class="sidebar-name-arrow"><br/></div>
+        <h3>Amazon S3 Settings<span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
+      </div>
+      <div class="widget-holder">
+        <p class="description" style="font-style: normal; color: #333; width: 600px;">Amazon S3 provides a simple web services interface for delivering digital content. It gives you access to the same highly scalable, reliable, secure, fast, inexpensive infrastructure that Amazon uses to run its own global network of web sites. Deliver you Cart66 digital products throught your Amazon S3 account to increase security and performance when selling digital products.</p>
+        <p class="description">Configure your Amazon S3 account information so Cart66 can distribute secure digital downloads from your Amazon S3 account.</p>
+        <div>
+          <form id="amazons3Form" class="ajaxSettingForm" action="" method='post'>
+            <input type='hidden' name='action' value="save_settings" />
+            <input type='hidden' name='_success' value="Your Amazon S3 settings have been saved.">
+            <ul>
+              
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for='amazons3_id'>Access Key ID:</label>
+              <input type='text' name='amazons3_id' id='amazons3_id' style="width: 75%;" value="<?php echo Cart66Setting::getValue('amazons3_id'); ?>" />
+              
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for='amazons3_key'>Secret Key:</label>
+              <input type='text' name='amazons3_key' id='amazons3_key' style="width: 75%;" value="<?php echo Cart66Setting::getValue('amazons3_key'); ?>" />
+              
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+            </ul>
+          </form>
+        </div>
+      </div>
+    </div>
+    
     <!-- Constant Contact Settings -->
     <a href="#" name="constantcontact"></a>
     <div class="widgets-holder-wrap <?php echo Cart66Setting::getValue('constantcontact_username') ? '' : 'closed'; ?>">
@@ -1107,10 +1137,16 @@ else {
                 />
                 <span class="label_desc">Send transactions to <a href='https://developer.paypal.com'>PayPal's developer sandbox</a>.</span>
               </li>
+              
+              <li style="background-color: #eee; border: 1px solid #933; margin: 10px 50px; padding: 10px;">
+                <label style="display: inline-block; width: 220px; text-align: right;" for='styles_url'>Delete database when uninstalling:</label>
+                <input type='checkbox' name='uninstall_db' id='uninstall_db' value="1" <?php echo Cart66Setting::getValue('uninstall_db') ? 'checked="checked"' : '' ?> />
+                <p style="padding: 10px;" class="description"><strong>WARNING:</strong> Cart66 Lite and Cart66 Professional share the same database. If you are upgrading from Cart66 Lite to Professional
+                  and want to keep all your settings, <strong>do not delete the database</strong> when uninstalling Cart66 Lite.</p>
+              </li>
 
               <li><label style="display: inline-block; width: 220px; text-align: right;" for='submit'>&nbsp;</label>
               <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
-              
               
             </ul>
             

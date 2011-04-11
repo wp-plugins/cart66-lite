@@ -58,7 +58,7 @@ abstract class Cart66ModelAbstract extends Cart66BaseModelAbstract {
       $orderBy = ' ' . $orderBy;
     }
     $sql = 'SELECT id FROM ' . $this->_tableName . $where . $orderBy;
-    // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] getModels: $sql");
+    // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] " . get_class($this) . " getModels: $sql");
     $ids = $wpdb->get_col($sql);
     foreach($ids as $id) {
       $className = get_class($this);
@@ -85,7 +85,7 @@ abstract class Cart66ModelAbstract extends Cart66BaseModelAbstract {
         $this->_data[$key] = stripslashes($value);
       }
     }
-    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Saving Data: " . print_r($this->_data, true));
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] " . get_class($this) . " Saving Data: " . print_r($this->_data, true));
     return $this->_data['id'] >= 1 ? $this->_update() : $this->_insert();
   }
   
@@ -95,10 +95,10 @@ abstract class Cart66ModelAbstract extends Cart66BaseModelAbstract {
   
   protected function _insert() {
     if(isset($this->_data['created_at'])) {
-      $this->_data['created_at'] = date('Y-m-d H:i:s');
+      $this->_data['created_at'] = date('Y-m-d H:i:s', Cart66Common::localTs());
     }
     if(isset($this->_data['updated_at'])) {
-      $this->_data['updated_at'] = date('Y-m-d H:i:s');
+      $this->_data['updated_at'] = date('Y-m-d H:i:s', Cart66Common::localTs());
     }
     $this->_db->insert($this->_tableName, $this->_data);
     $this->id = $this->_db->insert_id;
@@ -107,7 +107,7 @@ abstract class Cart66ModelAbstract extends Cart66BaseModelAbstract {
   
   protected function _update() {
     if(isset($this->_data['updated_at'])) {
-      $this->_data['updated_at'] = date('Y-m-d H:i:s');
+      $this->_data['updated_at'] = date('Y-m-d H:i:s',  Cart66Common::localTs());
     }
     $this->_db->update($this->_tableName, $this->_data, array('id' => $this->_data['id']));
     return $this->id;

@@ -118,7 +118,7 @@ class Cart66Common {
    */
   public static function log($data) {
     if(defined('CART66_DEBUG') && CART66_DEBUG) {
-      $date = date('m/d/Y g:i:s a');
+      $date = date('m/d/Y g:i:s a', self::localTs());
       $header = "\n\n[LOG DATE: $date]\n";
       $filename = CART66_PATH . "/log.txt"; 
       if(file_exists($filename) && is_writable($filename)) {
@@ -139,7 +139,7 @@ class Cart66Common {
 	public static function getRandString($length = 14) {
 	  $string = '';
     $chrs = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    for($i=0; $i<14; $i++) {
+    for($i=0; $i<$length; $i++) {
       $loc = mt_rand(0, strlen($chrs)-1);
       $string .= $chrs[$loc];
     }
@@ -159,8 +159,8 @@ class Cart66Common {
    */
   public static function isLoggedIn() {
     $isLoggedIn = false;
-    if(isset($_SESSION['Cart66AccountId']) && is_numeric($_SESSION['Cart66AccountId']) && $_SESSION['Cart66AccountId'] > 0) {
-      $isLoggedIn = $_SESSION['Cart66AccountId'];
+    if(Cart66Session::get('Cart66AccountId') && is_numeric(Cart66Session::get('Cart66AccountId')) && Cart66Session::get('Cart66AccountId') > 0) {
+      $isLoggedIn = Cart66Session::get('Cart66AccountId');
     }
     return $isLoggedIn;
   }
@@ -634,11 +634,16 @@ class Cart66Common {
   /**
    * Make sure path ends in a trailing slash by looking for trailing slash and add if necessary
    */
-  public static function scrubPath($path) {
+  public static function endSlashPath($path) {
     if(stripos(strrev($path), '/') !== 0) {
       $path .= '/';
     }
     return $path;
+  }
+  
+  public static function localTs($timestamp=null) {
+    $timestamp = isset($timestamp) ? $timestamp : time();
+    return $timestamp + (get_option( 'gmt_offset' ) * 3600 );
   }
 
   /**
@@ -662,10 +667,10 @@ class Cart66Common {
   }
 
   public function getPromoMessage() {
-    $promo = $_SESSION['Cart66Cart']->getPromotion();
+    $promo = Cart66Session::get('Cart66Cart')->getPromotion();
     $promoMsg = "none";
     if($promo) {
-      $promoMsg = $promo->code . ' (-' . CURRENCY_SYMBOL . number_format($_SESSION['Cart66Cart']->getDiscountAmount(), 2) . ')';
+      $promoMsg = $promo->code . ' (-' . CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2) . ')';
     }
     return $promoMsg;
   }

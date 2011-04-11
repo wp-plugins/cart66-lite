@@ -45,7 +45,7 @@ class Cart66CartItem {
       $qty = ceil($qty);
       $product = new Cart66Product($this->_productId);
       
-      if($product->isSubscription()) {
+      if($product->isSubscription() || $product->isMembershipProduct()) {
         // Subscriptions may only have a quantity of 1
         $qty = 1;
       }
@@ -276,6 +276,11 @@ class Cart66CartItem {
   public function isShipped() {
     $product = new Cart66Product($this->_productId);
     return $product->isShipped();
+  }
+  
+  public function isMembershipProduct() {
+    $product = new Cart66Product($this->_productId);
+    return $product->isMembershipProduct();
   }
   
   public function isSubscription() {

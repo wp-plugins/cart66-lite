@@ -173,22 +173,79 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
                   </select>
                   <span class="label_desc">Use one of the Gravity Form fields as the quantity for your product.</span>
                 </li>
-                
               <?php endif; ?>
               
-              
+              <?php if(CART66_PRO): ?>
+                <li>
+                  <label class="long">Membership Product:</label>
+                  <select name="product[is_membership_product]" id="product-membership_product">
+                    <option value='0' <?php echo $product->isMembershipProduct == 0 ? 'selected="selected"' : ''; ?> >No</option>
+                    <option value='1' <?php echo $product->isMembershipProduct == 1 ? 'selected="selected"' : ''; ?> >Yes</option>
+                  </select>
+                  <span class="label_desc">Should purchasing this product create a membership account?</span>
+                </li>
+                <li class="member_product_attrs">
+                  <label class="long" for="product[feature_level]">Feature level:</label>
+                  <input type="text" name="product[feature_level]" value="<?php echo $product->featureLevel; ?>" id="product-feature_level">
+                </li>
+                <li class="member_product_attrs">
+                  <label class="long" for="membership_duration">Duration:</label>
+                  <input type="text" name="product[billing_interval]" value="<?php echo $product->billingInterval > 0 ? $product->billingInterval : ''; ?>" id="product-billing_interval" style="width: 5em;" />
+                  <select name="product[billing_interval_unit]" id="product-billing_interval_unit">
+                    <option value="days"   <?php echo $product->billingIntervalUnit == 'days' ? 'selected="selected"' : ''; ?> >Days</option>
+                    <option value="weeks"  <?php echo $product->billingIntervalUnit == 'weeks' ? 'selected="selected"' : ''; ?> >Weeks</option>
+                    <option value="months" <?php echo $product->billingIntervalUnit == 'months' ? 'selected="selected"' : ''; ?> >Months</option>
+                    <option value="years"  <?php echo $product->billingIntervalUnit == 'years' ? 'selected="selected"' : ''; ?> >Years</option>
+                  </select>
+                  
+                  <span style="padding: 0px 10px;">or</span>
+                  <input type="checkbox" value="1" name="product[lifetime_membership]" id="product-lifetime_membership"  <?php echo $product->lifetimeMembership == 1 ? 'checked="checked"' : ''; ?>> Lifetime
+                </li>
+              <?php endif; ?>
             </ul>
           </div>
         </div>
       </div>
     
-      <div class="widgets-holder-wrap <?php echo strlen($product->download_path) ? '' : 'closed'; ?>">
+      <div class="widgets-holder-wrap <?php echo (strlen($product->download_path) || strlen($product->s3_file) ) ? '' : 'closed'; ?>">
         <div class="sidebar-name">
           <div class="sidebar-name-arrow"><br/></div>
           <h3>Digital Product Options <span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
         </div>
         <div class="widget-holder">
           <div>
+            <h4 style="padding-left: 10px;">Limit The Number Of Times This File Can Be Downloaded</h4>
+            <ul>
+              <li>
+                <label class="med" for='product[download_limit]'>Download limit:</label>
+                <input style="width: 35px;" type='text' name='product[download_limit]' id='product_download_limit' value='<?php echo $product->download_limit ?>' />
+                <span class="label_desc">Max number of times customer may download product. Enter 0 for no limit.</span>
+              </li>
+            </ul>
+            
+            <?php if(Cart66Setting::getValue('amazons3_id')): ?>
+              <h4 style="padding-left: 10px;">Deliver Digital Products With Amazon S3</h4>
+              <ul>
+                <li>
+                  <label class="med" for='product[s3_bucket]'>Bucket:</label>
+                  <input class="long" type='text' name='product[s3_bucket]' id='product_upload' value="<?php echo $product->s3_bucket ?>" />
+                  <p class="label_desc">The Amazon S3 bucket name that is holding the digital file.</p>
+                </li>
+                <li>
+                  <label class="med" for='product[s3_file]'>File:</label>
+                  <input class="long" type='text' name='product[s3_file]' id='product_upload' value="<?php echo $product->s3_file ?>" />
+                  <p class="label_desc">The Amazon S3 file name of your digital product.</p>
+                </li>
+              </ul>
+              <p style="width: 600px; padding: 0px 10px;"><a href="#" id="amazons3ForceDownload">How do I force the file to download rather than being displayed in the browser?</a></p>
+              <p id="amazons3ForceDownloadAnswer" style="width: 600px; padding: 10px; display: none;">If you want your digital product to download rather than display in 
+                the web browser, log into your Amazon S3 account and click on the file that you want to force to download and enter the following Meta Data 
+                in the file's properties:<br/>
+                Key = Content-Type | Value = application/octet-stream<br/>
+                Key = Content-Disposition | Value = attachment<br/><br/>
+                <img src="<?php echo CART66_URL; ?>/images/s3-force-download-help.png" /></p>
+            <?php  endif; ?>
+            
             <?php
               $setting = new Cart66Setting();
               $dir = Cart66Setting::getValue('product_folder');
@@ -207,6 +264,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
                 <a href='?page=cart66-settings'>settings page</a>.</p>";
               }
             ?>
+            <h4 style="padding-left: 10px;">Deliver Digital Products From Your Server</h4>
             <ul>
               <li>
                 <label class="med" for='product[upload]'>Upload product:</label>
@@ -215,7 +273,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
               </li>
               <li>
                 <label class="med" for='product[download_path]'><em>or</em> File name:</label>
-                <input style="width: 80%" type='text' name='product[download_path]' id='product_download_path' value='<?php echo $product->download_path ?>' />
+                <input class="long" type='text' name='product[download_path]' id='product_download_path' value='<?php echo $product->download_path ?>' />
                 <?php
                   if(!empty($product->download_path)) {
                     $file = $dir . DIRECTORY_SEPARATOR . $product->download_path;
@@ -229,20 +287,19 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
                   
                 ?>
               </li>
-              <li>
-                <label class="med" for='product[download_limit]'>Download limit:</label>
-                <input style="width: 35px;" type='text' name='product[download_limit]' id='product_download_limit' value='<?php echo $product->download_limit ?>' />
-                <span class="label_desc">Max number of times customer may download product. Enter 0 for no limit.</span>
-              </li>
             </ul>
             
-            <div class="description">
-            <p><strong>NOTE:</strong> There are several settings built into PHP that affect the size of the files you can upload. 
+            <div class="description" style="width: 600px; margin-left: 10px;">
+            <p><strong>NOTE: If you are delivering large digital files, please consider using Amazon S3.</strong></p>
+            <p><a href="#" id="viewLocalDeliverInfo">View local delivery information</a></p>
+            <p id="localDeliveryInfo" style="display:none;">There are several settings built into PHP that affect the size of the files you can upload. 
               These settings are set by your web host and can usually be configured for your specific needs. 
-              Please contact your web hosting company if you need help change any of the settings below.</p>
-            <p>If you need to upload a file larger than what is allowed via this form, you can FTP the file to the products folder 
-              <?php echo $dir ?> then enter the name of the file in the "File name" field above.</p>
-            <p>Max Upload Filesize: <?php echo ini_get('upload_max_filesize');?>B<br/>Max Postsize: <?php echo ini_get('post_max_size');?>B</p>
+              Please contact your web hosting company if you need help change any of the settings below.
+              <br/><br/>
+              If you need to upload a file larger than what is allowed via this form, you can FTP the file to the products folder 
+              <?php echo $dir ?> then enter the name of the file in the "File name" field above.
+              <br/><br/>
+              Max Upload Filesize: <?php echo ini_get('upload_max_filesize');?>B<br/>Max Postsize: <?php echo ini_get('post_max_size');?>B</p>
             </div>
           </div>
         </div>
@@ -254,7 +311,6 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
           <h3>Product Variations <span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
         </div>
         <div class="widget-holder">
-          <p class="description" id="subscriptionVariationDesc">For subscription products, price changes due to product variations only affect the one-time setup fee, not each recurring charge.</p>
           <div>
             <ul>
               <li>
@@ -352,6 +408,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
   jQuery(document).ready(function($) {
     
     toggleSubscriptionText();
+    toggleMembershipProductAttrs();
     
     $('.sidebar-name').click(function() {
       $(this.parentNode).toggleClass("closed");
@@ -382,7 +439,48 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
     });
     
     $('#Cart66AccountSearchField').quicksearch('table tbody tr');
+    
+    $('#product-membership_product').change(function() {
+      toggleMembershipProductAttrs();
+    });
+    
+    $('#product-lifetime_membership').click(function() {
+      toggleLifeTime();
+    });
+    
+    $('#viewLocalDeliverInfo').click(function() {
+      $('#localDeliveryInfo').toggle();
+      return false;
+    });
+    
+    $('#amazons3ForceDownload').click(function() {
+      $('#amazons3ForceDownloadAnswer').toggle();
+      return false;
+    });
+    
   });
+  
+  function toggleLifeTime() {
+    if(jQuery('#product-lifetime_membership').attr('checked')) {
+      jQuery('#product-billing_interval').val('');
+      jQuery('#product-billing_interval').attr('disabled', true);
+      jQuery('#product-billing_interval_unit').val('days');
+      jQuery('#product-billing_interval_unit').attr('disabled', true);
+    }
+    else {
+      jQuery('#product-billing_interval').attr('disabled', false);
+      jQuery('#product-billing_interval_unit').attr('disabled', false);
+    }
+  }
+  
+  function toggleMembershipProductAttrs() {
+    if(jQuery('#product-membership_product').val() == '1') {
+      jQuery('.member_product_attrs').css('display', 'block');
+    }
+    else {
+      jQuery('.member_product_attrs').css('display', 'none');
+    }
+  }
   
   function toggleSubscriptionText() {
     if(isSubscriptionProduct()) {

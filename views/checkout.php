@@ -6,10 +6,38 @@ $supportedGateways = array (
 );
 
 $errors = array();
-
+$createAccount = false;
 $gateway = $data['gateway']; // Object instance inherited from Cart66GatewayAbstract 
 
 if($_SERVER['REQUEST_METHOD'] == "POST") {
+  
+  $account = false;
+  if(Cart66Session::get('Cart66Cart')->hasMembershipProducts()) {
+    // Set up a new Cart66Account and start by pre-populating the data or load the logged in account
+    if($accountId = Cart66Common::isLoggedIn()) {
+      $account = new Cart66Account($accountId);
+    }
+    else {
+      $account = new Cart66Account();
+      if(isset($_POST['account'])) {
+        $acctData = Cart66Common::postVal('account');
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] New Account Data: " . print_r($acctData, true));
+        $account->firstName = $acctData['first_name'];
+        $account->lastName = $acctData['last_name'];
+        $account->email = $acctData['email'];
+        $account->username = $acctData['username'];
+        $account->password = md5($acctData['password']);
+        $errors = $account->validate();
+        $jqErrors = $account->getJqErrors();
+        if($acctData['password'] != $acctData['password2']) {
+          $errors[] = "Passwords do not match";
+          $jqErrors[] = 'account-password';
+          $jqErrors[] = 'account-password2';
+        }
+        if(count($errors) == 0) { $createAccount = true; } // An account should be created and the account data is valid
+      }
+    }
+  }
   
   $gatewayName = Cart66Common::postVal('cart66-gateway-name');
   if(in_array($gatewayName, $supportedGateways)) {
@@ -24,30 +52,33 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
       $gateway->setShipping(Cart66Common::postVal('shipping'));
     }
 
-    $errors = $gateway->getErrors();     // Error info for server side error code
-    $jqErrors = $gateway->getJqErrors(); // Error info for client side error code
+    if(count($errors) == 0) {
+      $errors = $gateway->getErrors();     // Error info for server side error code
+      $jqErrors = $gateway->getJqErrors(); // Error info for client side error code
+    }
     
     // Charge credit card for one time transaction using Authorize.net API
-    if(count($errors) == 0 && empty($_SESSION['Cart66InventoryWarning'])) {
+    if(count($errors) == 0 && !Cart66Session::get('Cart66InventoryWarning')) {
       $taxLocation = $gateway->getTaxLocation();
       $tax = $gateway->getTaxAmount();
-      $total = $_SESSION['Cart66Cart']->getGrandTotal() + $tax;
-      $oneTimeTotal = $total - $_SESSION['Cart66Cart']->getSubscriptionAmount();
+      $total = Cart66Session::get('Cart66Cart')->getGrandTotal() + $tax;
+      $oneTimeTotal = $total - Cart66Session::get('Cart66Cart')->getSubscriptionAmount();
       $customerId = 0;
       
       
       // Process subscription charges
-      if($_SESSION['Cart66Cart']->hasSubscriptionProducts()) {
+      /*
+      if(Cart66Session::get('Cart66Cart')->hasSubscriptionProducts()) {
         $billing = Cart66Common::postVal('billing');
         $payment = Cart66Common::postVal('payment');
         
         $account = new Cart66Account();
         
-        if(isset($_SESSION['Cart66SubscriberToken'])) {
-          $account->loadBySubscriberToken($_SESSION['Cart66SubscriberToken']);
+        if(Cart66Session::get('Cart66SubscriberToken')) {
+          $account->loadBySubscriberToken(Cart66Session::get('Cart66SubscriberToken'));
         }
         elseif(Cart66Common::isLoggedIn()) {
-          $account->load($_SESSION['Cart66AccountId']);
+          $account->load(Cart66Session::get('Cart66AccountId'));
         }
         
         $accountData = array();
@@ -68,7 +99,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           try {
             $spreedlyCard = new SpreedlyCreditCard();
             $spreedlyCard->hydrateFromCheckout();
-            $subscriptionId = $_SESSION['Cart66Cart']->getSpreedlySubscriptionId();
+            $subscriptionId = Cart66Session::get('Cart66Cart')->getSpreedlySubscriptionId();
             $account->createSpreedlySubscription($subscriptionId, $spreedlyCard);
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Just finshed creating subscription. Account data: " . print_r($account->getData(), true));
             $customerId = $account->id;
@@ -83,7 +114,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
             }
             else {
               // Set the subscriber token in the session for repeat attempts to create the subscription
-              $_SESSION['Cart66SubscriberToken'] = $account->subscriberToken;
+              Cart66Session::set('Cart66SubscriberToken', $account->subscriberToken);
             }
           }
           
@@ -94,6 +125,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Account validation failed. " . print_r($errors, true));
         }
       }
+      */
 
       if(count($errors) == 0) {
         
@@ -114,13 +146,21 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           // Set order status based on Cart66 settings
           $statusOptions = Cart66Common::getOrderStatusOptions();
           $status = $statusOptions[0];
+          
+          // Check for account creation
+          $accountId = 0;
+          if($createAccount) { $account->save(); }
+          if($mp = Cart66Session::get('Cart66Cart')->getMembershipProduct()) { 
+            $account->attachMembershipProduct($mp, $account->firstName, $account->lastName);
+            $accountId = $account->id;
+          }
 
           // Save the order locally
-          $orderId = $gateway->saveOrder($total, $tax, $transactionId, $status, $customerId);
+          $orderId = $gateway->saveOrder($total, $tax, $transactionId, $status, $accountId);
 
           // Send buyer to receipt page
-          unset($_SESSION['Cart66SubscriberToken']);
-          $_SESSION['order_id'] = $orderId;
+          Cart66Session::drop('Cart66SubscriberToken');
+          Cart66Session::set('order_id', $orderId);
           $receiptLink = Cart66Common::getPageLink('store/receipt');
           header("Location: " . $receiptLink);
         }
@@ -142,9 +182,9 @@ if(count($errors)) {
 }
 
 // Show inventory warning if there is one
-if(!empty($_SESSION['Cart66InventoryWarning'])) {
-  echo $_SESSION['Cart66InventoryWarning'];
-  unset($_SESSION['Cart66InventoryWarning']);
+if(Cart66Session::get('Cart66InventoryWarning')) {
+  echo Cart66Session::get('Cart66InventoryWarning');
+  Cart66Session::drop('Cart66InventoryWarning');
 }
 
 
