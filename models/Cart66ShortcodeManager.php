@@ -146,17 +146,19 @@ class Cart66ShortcodeManager {
   }
 
   public function payPalExpressCheckout($attrs) {
-    if(Cart66Session::get('Cart66Cart')->hasSpreedlySubscriptions()) {
+    $cart = Cart66Session::get('Cart66Cart');
+    
+    if($cart->hasSpreedlySubscriptions()) {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering PayPal Express checkout form because the cart contains Spreedly subscriptions");
       $errorMessage = "<p class='Cart66Error'>Spreedly subscriptions cannot be processed through PayPal Express Checkout</p>";
       return $errorMessage;
     }
     else {
-      if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+      if($cart->getGrandTotal() > 0 || $cart->hasPayPalSubscriptions()) {
         $view = Cart66Common::getView('views/paypal-expresscheckout.php', $attrs);
         return $view;
       }
-      elseif(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+      elseif($cart->countItems() > 0) {
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of PayPal Pro Express Checkout because the cart value is $0.00");
         return $this->manualCheckout();
       }

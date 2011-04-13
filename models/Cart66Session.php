@@ -219,12 +219,14 @@ class Cart66Session {
 	 */
 	protected function _getDomain() {
 	  $domain = $_SERVER['SERVER_NAME'];
-	  if(substr_count($domain, '.') > 1) {
+/*
+    if(substr_count($domain, '.') > 1) {
       $domain = substr($domain, strpos($domain, '.'));
     }
     if($domain[0] != '.') {
       $domain = '.' . $domain;
     }
+*/
     return $domain;
 	}
 	

@@ -82,6 +82,10 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.1.1 =
+* Fixed: Problem where database sessions would not persist for some international domains such as example.com.au
+* Fixed: Problem where the Cart66 dialog box would occasionally show a 404 File Not Found error
+
 = 1.1 =
 * New: Amazon S3 integration. Sell digital products and delivery them through Amazon S3.
 * New: Database backed session management. This resolves the unpleasant "incomplete object" errors caused when other plugins start a session before the Cart66 plugin is loaded. 
