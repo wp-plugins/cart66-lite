@@ -10,7 +10,7 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>Cart66</title>
-	<link type="text/css" rel="stylesheet" href="<?php echo plugins_url()."/cart66"; ?>/js/cart66.css" />
+	<link type="text/css" rel="stylesheet" href="<?php echo CART66_URL; ?>/js/cart66.css" />
 	<script language="javascript" type="text/javascript" src="<?php echo $tinyURI; ?>/tiny_mce_popup.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo $tinyURI; ?>/utils/mctabs.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo $tinyURI; ?>/utils/form_utils.js"></script>
