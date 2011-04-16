@@ -111,7 +111,7 @@ class Cart66 {
       }
       
       add_action('wp_head', array($this, 'displayVersionInfo'));
-      add_action('shutdown', 'Cart66Session::touch');
+      add_action('shutdown', array('Cart66Session', 'touch'));
     }
 
     // ================================================================

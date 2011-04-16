@@ -3,7 +3,7 @@
 Plugin Name: Cart66 Lite
 Plugin URI: http://www.cart66.com
 Description: Wordpress Shopping Cart
-Version: 1.1.1
+Version: 1.1.2
 Author: Reality 66
 Author URI: http://www.Reality66.com
 
@@ -28,7 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 if(!class_exists('Cart66')) {
   ob_start();
   define("CART66_PATH", plugin_dir_path( __FILE__ ) ); // e.g. /var/www/example.com/wordpress/wp-content/plugins/cart66
-  define("CART66_URL", rtrim(plugin_dir_url( __FILE__ ), '/') ); // e.g. http://example.com/wordpress/wp-content/plugins/cart66
+  // define("CART66_URL", rtrim(plugin_dir_url( __FILE__ ), '/') ); // e.g. http://example.com/wordpress/wp-content/plugins/cart66
+  define('CART66_URL', plugins_url() . '/' . basename(dirname(__FILE__)));
 
   require_once(CART66_PATH. "/models/Cart66CartWidget.php");
   require_once(CART66_PATH. "/models/Cart66.php");
@@ -36,7 +37,7 @@ if(!class_exists('Cart66')) {
   
   define("CART66_ORDER_NUMBER", false);
   define("CART66_PRO", false);
-  define('CART66_VERSION_NUMBER', '1.1.1');
+  define('CART66_VERSION_NUMBER', '1.1.2');
   define("WPCURL", Cart66Common::getWpContentUrl());
   define("WPURL", Cart66Common::getWpUrl());
 

@@ -63,6 +63,9 @@ class Cart66Cart {
     $this->_updateQuantitiesFromPost();
     $this->_setCustomFieldInfoFromPost();
     $this->_setPromoFromPost();
+    
+    Cart66Session::touch();
+    do_action('cart66_after_update_cart', $this);
   }
   
   public function addItem($id, $qty=1, $optionInfo='', $formEntryId=0) {
@@ -104,14 +107,20 @@ class Cart66Cart {
           $this->_items[] = $newItem;
         }
       }
+      
+      Cart66Session::touch();
+      do_action('cart66_after_add_to_cart', $product, $qty);
     }
     
   }
   
   public function removeItem($itemIndex) {
     if(isset($this->_items[$itemIndex])) {
+      $product = $this->_items[$itemIndex]->getProduct();
       $this->_items[$itemIndex]->detachAllForms();
       unset($this->_items[$itemIndex]);
+      Cart66Session::touch();
+      do_action('cart66_after_remove_item', $this, $product);
     }
   }
   
@@ -367,6 +376,7 @@ class Cart66Cart {
         $this->_promotion = $promotion;
         $this->_promoStatus = 1;
       }
+      Cart66Session::touch();
     }
     else {
       $this->_promoStatus = -1;
@@ -454,7 +464,12 @@ class Cart66Cart {
     $orderInfo['discount_amount'] = $this->getDiscountAmount();
     $order->setInfo($orderInfo);
     $order->setItems($this->getItems());
-    return $order->save();
+    $orderId = $order->save();
+    
+    $orderInfo['id'] = $orderId;
+    do_action('cart66_after_order_saved', $orderInfo);
+    
+    return $orderId;
   }
   
   /**

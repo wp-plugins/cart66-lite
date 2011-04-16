@@ -26,6 +26,7 @@ class Cart66Session {
   public static function set($key, $value) {
     self::_init();
     self::$_userData[$key] = $value;
+    self::_save();
   }
   
   public static function drop($key) {
@@ -81,7 +82,7 @@ class Cart66Session {
   
   protected function _start() {
     $sid = isset($_COOKIE['Cart66SID']) ? $_COOKIE['Cart66SID'] : false;
-    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Starting session with id: $sid");
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Starting session with id: $sid\nREQUEST: " . $_SERVER['REQUEST_URI'] . "\nQUERY STRING: " . $_SERVER['QUERY_STRING']);
     self::_loadSession($sid);
   }
   

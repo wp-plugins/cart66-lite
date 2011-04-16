@@ -12,7 +12,7 @@ Sell digital products and/or physical products with the Cart66 WordPress ecommer
 
 Cart66 is a simple to use yet powerful ecommerce plugin for WordPress.
 
-* Sell digital products
+* Sell digital products with Amazon S3 integration
 * Sell physical products
 * Sell services
 * Manage orders
@@ -81,6 +81,10 @@ We are not able to provide anything other than community based support for Cart6
 3. Cart66 Product Management
 
 == Changelog ==
+
+= 1.1.2 =
+* New: Added hooks for easier expansion of Cart66. The hooks are cart66_after_add_to_cart, cart66_after_update_cart, cart66_after_remove_item, and cart66_after_order_saved
+* Fixed: Revised the syntax of certain callback function to comply with version of PHP prior to version 5.2.3. This resolves the "empty cart" issues some people were experiencing. 
 
 = 1.1.1 =
 * Fixed: Problem where database sessions would not persist for some international domains such as example.com.au

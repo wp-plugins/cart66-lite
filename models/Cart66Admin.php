@@ -150,7 +150,13 @@ class Cart66Admin {
         $account = new Cart66Account();
         $account->load($_REQUEST['accountId']);
         $data['plan'] = $account->getCurrentAccountSubscription(true); // Return even if plan is expired
-        $data['activeUntil'] = date('m/d/Y', strtotime($data['plan']->activeUntil));
+        if(date('Y', strtotime($data['plan']->activeUntil)) <= 1970) {
+          $data['activeUntil'] = '';
+        }
+        else {
+          $data['activeUntil'] = date('m/d/Y', strtotime($data['plan']->activeUntil));
+        }
+        
       }
 
       if($_SERVER['REQUEST_METHOD'] == 'POST' && Cart66Common::postVal('cart66-action') == 'save account') {

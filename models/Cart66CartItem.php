@@ -27,6 +27,11 @@ class Cart66CartItem {
     return $this->_productId;
   }
   
+  public function getProduct() {
+    $product = new Cart66Product($this->_productId);
+    return $product;
+  }
+  
   public function setOptionInfo($value) {
     $this->_optionInfo = $value;
   }
