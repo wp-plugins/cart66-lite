@@ -92,12 +92,12 @@ abstract class Cart66GatewayAbstract {
 
   public function setBilling($b) {
     if(!(isset($b['state']) && !empty($b['state']))) {
-      $b['state'] = trim($b['state-text']);
+      $b['state'] = trim($b['state_text']);
     }
-    unset($b['state-text']);
+    unset($b['state_text']);
     
     $this->_billing = $b;
-    $skip = array('address2', 'billing-state-text');
+    $skip = array('address2', 'billing-state_text');
     foreach($b as $key => $value) {
       if(!in_array($key, $skip)) {
         $value = trim($value);
@@ -128,7 +128,7 @@ abstract class Cart66GatewayAbstract {
         $this->_jqErrors[] = "payment-$key";
       }
     }
-    if(strlen($p['cardNumber']) < 13) {
+    if(strlen($p['cardNumber']) > 0 && strlen($p['cardNumber']) < 13) {
       $this->_errors['Payment Card Number'] = 'Invalid credit card number';
       $this->_jqErrors[] = "payment-cardNumber";
     } 
@@ -136,7 +136,7 @@ abstract class Cart66GatewayAbstract {
     // For subscription accounts
     if(isset($p['password'])) {
       if($p['password'] != $p['password2']) {
-        $this->_errors['Password'] = "Passwords do not match";
+        $this->_errors['Password'] = __("Passwords do not match","cart66");
         $this->_jqErrors[] = 'payment-password';
       }
     }
@@ -144,12 +144,12 @@ abstract class Cart66GatewayAbstract {
 
   public function setShipping($s) {
     if(!(isset($s['state']) && !empty($s['state']))) {
-      $s['state'] = trim($s['state-text']);
+      $s['state'] = trim($s['state_text']);
     }
-    unset($s['state-text']);
+    unset($s['state_text']);
     
     $this->_shipping = $s;
-    $skip = array('address2', 'shipping-state-text');
+    $skip = array('address2', 'shipping-state_text');
     foreach($s as $key => $value) {
       if(!in_array($key, $skip)) {
         $value = trim($value);
@@ -188,6 +188,21 @@ abstract class Cart66GatewayAbstract {
     );
     return $taxLocation;
   }
+  
+  /**
+   * Return the last $lenght digits of the credit card number or false 
+   * if the number is not set or is shorter than the requested length.
+   * 
+   * @param int (optional) The number of digits to return
+   * @return int | false
+   */
+  public function getCardNumberTail($length=4) {
+    $tail = false;
+    if(isset($this->_payment['cardNumber']) && strlen($this->_payment['cardNumber']) >= $length) {
+      $tail = substr($this->_payment['cardNumber'], -1 * $length);
+    }
+    return $tail;
+  }
 
   /**
    * Return true if the order should be taxed
@@ -214,7 +229,7 @@ abstract class Cart66GatewayAbstract {
     if(!isset($this->_taxRate)) {
       $this->isTaxed();
     }
-    $taxShipping = ($this->tax_shipping == 1) ? true : false;
+    $taxShipping = (isset($this->tax_shipping) && $this->tax_shipping == 1) ? true : false;
     return $taxShipping;
   }
 

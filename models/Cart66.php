@@ -111,6 +111,7 @@ class Cart66 {
       }
       
       add_action('wp_head', array($this, 'displayVersionInfo'));
+      add_action('template_redirect', array($this, 'dontCacheMeBro'));
       add_action('shutdown', array('Cart66Session', 'touch'));
     }
 
@@ -215,6 +216,7 @@ class Cart66 {
     require_once(CART66_PATH . "/models/Cart66CartItem.php");
     require_once(CART66_PATH . "/models/Cart66Cart.php");
     require_once(CART66_PATH . "/models/Cart66CartWidget.php");
+    require_once(CART66_PATH . "/models/Cart66CheckoutThrottle.php");
     require_once(CART66_PATH . "/models/Cart66Exception.php");
     require_once(CART66_PATH . "/models/Cart66TaxRate.php");
     require_once(CART66_PATH . "/models/Cart66Order.php");
@@ -239,6 +241,7 @@ class Cart66 {
       require_once(CART66_PATH . "/pro/models/Cart66PayPalSubscription.php");
       require_once(CART66_PATH . "/pro/models/Cart66Ups.php");
       require_once(CART66_PATH . "/pro/models/Cart66Usps.php");
+      require_once(CART66_PATH . "/pro/models/Cart66MailChimp.php");
       
       // Load Constant Contact classes
       if(Cart66Setting::getValue('constantcontact_username')) {
@@ -272,14 +275,14 @@ class Cart66 {
   }
   
   public function initCurrencySymbols() {
-    $cs = Cart66Setting::getValue('currency_symbol');
+    $cs = Cart66Setting::getValue('CART66_CURRENCY_SYMBOL');
     $cs = $cs ? $cs : '$';
-    $cst = Cart66Setting::getValue('currency_symbol_text');
+    $cst = Cart66Setting::getValue('CART66_CURRENCY_SYMBOL_text');
     $cst = $cst ? $cst : '$';
     $ccd = Cart66Setting::getValue('currency_code');
     $ccd = $ccd ? $ccd : 'USD';
-    define("CURRENCY_SYMBOL", $cs);
-    define("CURRENCY_SYMBOL_TEXT", $cst);
+    define("CART66_CURRENCY_SYMBOL", $cs);
+    define("CART66_CURRENCY_SYMBOL_TEXT", $cst);
     define("CURRENCY_CODE", $ccd);
   }
   
@@ -309,8 +312,46 @@ class Cart66 {
     	$adminCss = CART66_URL . '/admin/admin-styles.css';
       echo "<link rel='stylesheet' type='text/css' href='$adminCss' />\n";
 
-      $uiCss = CART66_URL . '/views/jquery-ui-1.7.1.custom.css';
+      $uiCss = CART66_URL . '/admin/jquery-ui-1.7.1.custom.css';
       echo "<link rel='stylesheet' type='text/css' href='$uiCss' />\n";
+    }
+  }
+  
+  public function dontCacheMeBro() {
+    if(!IS_ADMIN) {
+      global $post;
+      $sendHeaders = false;
+      if($disableCaching = Cart66Setting::getValue('disable_caching')) {
+        if($disableCaching === '1') {
+          $cartPage = get_page_by_path('store/cart');
+          $checkoutPage = get_page_by_path('store/checkout');
+          $cartPages = array($checkoutPage->ID, $cartPage->ID);
+          if( isset( $post->ID ) && in_array($post->ID, $cartPages) ) {
+            $sendHeaders = true;
+            //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] set to send no cache headers for cart pages");
+          }
+          else {
+            if(!isset($post->ID)) {
+              Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] The POST ID is not set");
+            }
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not a cart page! Therefore need to set the headers to disable cache");
+          }
+        }
+        elseif($disableCaching === '2') {
+          $sendHeaders = true;
+        }
+      }
+      
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Disable caching is: $disableCaching");
+      
+      if($sendHeaders) {
+        // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Sending no cache headers");
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Cache-Control: no-store, no-cache, must-revalidate');
+        header('Cache-Control: post-check=0, pre-check=0', FALSE);
+        header('Pragma: no-cache');
+      }
+      
     }
   }
 
@@ -351,6 +392,11 @@ class Cart66 {
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
       global $post;
       $checkoutPage = get_page_by_path('store/checkout');
+      
+      if(!Cart66Setting::getValue('use_live_rates')) {
+        Cart66Session::drop('Cart66LiveRates');
+      }
+      
       if( isset( $post->ID ) && $post->ID == $checkoutPage->ID) {
         if(Cart66Session::get('Cart66LiveRates') && get_class(Cart66Session::get('Cart66LiveRates')) == 'Cart66LiveRates') {
           if(!Cart66Session::get('Cart66LiveRates')->hasValidShippingService()) {
@@ -397,6 +443,7 @@ class Cart66 {
 
     if(!Cart66Session::get('Cart66Cart')) {
       Cart66Session::set('Cart66Cart', new Cart66Cart());
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Creating a new Cart66Cart OBJECT for the database session.");
     }
 
     if(isset($_POST['task'])) {
@@ -497,7 +544,9 @@ class Cart66 {
   public function drawFeatureLevelMetaBox($post) {
     if(CART66_PRO) {
       $plans = array();
-
+      $featureLevels = array();
+      $data = array();
+      
       // Load feature levels defined in Spreedly if available
       if(class_exists('SpreedlySubscription')) {
         $sub = new SpreedlySubscription();
@@ -703,11 +752,9 @@ class Cart66 {
 
     if($_SERVER['REQUEST_METHOD'] == 'POST' && Cart66Common::postVal('cart66-action') == 'export_csv') {
       require_once(CART66_PATH . "/models/Cart66Exporter.php");
-      $start = Cart66Common::postVal('start_date');
-      $end = Cart66Common::postVal('end_date');
-
-      $start = $_POST['start_date'];
-      $end = $_POST['end_date'];
+      $start = str_replace(';', '', $_POST['start_date']);
+      $end = str_replace(';', '', $_POST['end_date']);
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Date parameters for report: START $start and END $end");
       $report = Cart66Exporter::exportOrders($start, $end);
 
       header('Content-Type: application/csv'); 

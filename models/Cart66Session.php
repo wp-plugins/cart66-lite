@@ -5,7 +5,12 @@ class Cart66Session {
   protected static $_maxLifetime;
   protected static $_userData;
   protected static $_data;
+  protected static $_validRequest;
   
+  public function __construct() {
+    self::$_validRequest = true;
+    self::_init();
+  }
   
   public static function setMaxLifetime($minutes) {
     if(is_numeric($minutes)) {
@@ -18,21 +23,22 @@ class Cart66Session {
   
   public static function touch() {
     if(self::$_data['id'] > 0) {
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Touching the session: " . self::$_data['session_id']);
+      // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Touching the session: " . self::$_data['session_id']);
       self::_save();
     }
   }
   
-  public static function set($key, $value) {
+  public static function set($key, $value, $forceSave=false) {
     self::_init();
     self::$_userData[$key] = $value;
-    self::_save();
+    if($forceSave) { self::_save(); }
   }
   
-  public static function drop($key) {
+  public static function drop($key, $forceSave=false) {
     self::_init();
     if(isset(self::$_userData[$key])) {
       unset(self::$_userData[$key]);
+      if($forceSave) { self::_save(); }
     }
   }
   
@@ -81,9 +87,26 @@ class Cart66Session {
   
   
   protected function _start() {
-    $sid = isset($_COOKIE['Cart66SID']) ? $_COOKIE['Cart66SID'] : false;
-    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Starting session with id: $sid\nREQUEST: " . $_SERVER['REQUEST_URI'] . "\nQUERY STRING: " . $_SERVER['QUERY_STRING']);
-    self::_loadSession($sid);
+    self::$_validRequest = true;
+    
+    // Do not start sessions for requests to these file extensions
+    $url = array_shift(explode('?', $_SERVER['REQUEST_URI']));
+    if(strpos(basename($url), '.')) {
+      $ext = strtolower(end(explode('.', basename($url))));
+      $ignoreList = array('png', 'jpg', 'jpeg', 'css', 'gif', 'js', 'txt', 'mp3', 'wma', 'swf', 'fla', 'zip');
+      if(in_array($ext, $ignoreList)) {
+        self::$_validRequest = false;
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not starting session for this request: $url");
+      }
+    }
+    
+    if(self::$_validRequest) {
+      $sid = isset($_COOKIE['Cart66SID']) ? $_COOKIE['Cart66SID'] : false;
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] ***************************************************\n" .
+        "Starting session with Cart66SID: $sid\nREQUEST: " . $_SERVER['REQUEST_URI'] . "\nQUERY STRING: " . $_SERVER['QUERY_STRING']);
+      self::_loadSession($sid);
+    }
+    
   }
   
   
@@ -100,23 +123,26 @@ class Cart66Session {
     $loaded = false;
     
     if($sessionId) {
-      //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Trying to load session: $sessionId");
       $sql = "select * from $tableName where session_id = %s order by id desc";
       $sql = $wpdb->prepare($sql, $sessionId);
       $data = $wpdb->get_row($sql, ARRAY_A);
       if($data && self::_isValid($data)) {
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Restoring session user data");
         self::$_userData = unserialize($data['user_data']);
         unset($data['user_data']);
         self::$_data = $data;
         $loaded = true;
       }
-      
+    }
+    else {
+      $sessionId = "No Session Id Provided";
     }
     
     if(!$loaded) {
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Session is not loaded");
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] _loadSession() was unable to load the session id: $sessionId");
       self::_newSession();
+    }
+    else {
+      // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Successfully loaded session: $sessionId");
     }
     
   }
@@ -129,11 +155,12 @@ class Cart66Session {
    */
   protected static function _newSession() {
     Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Creating a new session");
+    $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'noUserAgent';
     $data = array(
       'id' => null,
       'session_id' => self::_newSessionId(),
       'ip_address' => $_SERVER['REMOTE_ADDR'],
-      'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+      'user_agent' => $userAgent,
       'last_activity' => date('Y-m-d H:i:s', Cart66Common::localTs()),
       'user_data' => serialize(self::$_userData)
     );
@@ -157,7 +184,7 @@ class Cart66Session {
     if($data['id'] > 0) {
       $expireTs = strtotime('-' . self::$_maxLifetime . ' minutes', Cart66Common::localTs());
       $lastActiveTs = strtotime($data['last_activity'], Cart66Common::localTs());
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] $lastActiveTs > $expireTs Last activity: " . $data['last_activity']);
+      // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] $lastActiveTs > $expireTs Last activity: " . $data['last_activity']);
       $isActive = $lastActiveTs > $expireTs;
     }
     return $isActive;
@@ -219,15 +246,8 @@ class Cart66Session {
 	 * @return string
 	 */
 	protected function _getDomain() {
-	  $domain = $_SERVER['SERVER_NAME'];
-/*
-    if(substr_count($domain, '.') > 1) {
-      $domain = substr($domain, strpos($domain, '.'));
-    }
-    if($domain[0] != '.') {
-      $domain = '.' . $domain;
-    }
-*/
+	  $url = parse_url( strtolower( get_bloginfo('wpurl') ) );
+    $domain = $url['host'];
     return $domain;
 	}
 	
@@ -247,11 +267,16 @@ class Cart66Session {
    * Set the last activity date and serialize the user data before 
    */
 	protected static function _save() {
-	  self::$_data['user_data'] = serialize(self::$_userData);
-	  self::$_data['last_activity'] = date('Y-m-d H:i:s', Cart66Common::localTs());
-	  //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Saving Session User Data: " . print_r(self::$_userData, true));
-	  //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Saving Session Data: " . print_r(self::$_data, true));
-    self::$_data['id'] > 0 ? self::_update() : self::_insert();
+	  if(self::$_validRequest) {
+	    self::$_data['user_data'] = serialize(self::$_userData);
+  	  self::$_data['last_activity'] = date('Y-m-d H:i:s', Cart66Common::localTs());
+  	  //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Saving Session User Data: " . print_r(self::$_userData, true));
+      self::$_data['id'] > 0 ? self::_update() : self::_insert();
+	  }
+	  else {
+	    $reqInfo = "\nCart66SID: $sid\nREQUEST: " . $_SERVER['REQUEST_URI'] . "\nQUERY STRING: " . $_SERVER['QUERY_STRING'];
+	    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not saving session because the request is being ignored $reqInfo");
+	  }
 	}
 	
 	

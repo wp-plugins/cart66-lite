@@ -111,6 +111,15 @@ span.label_desc {
   font-size: 11px;
 }
 
+.Cart66AccountSearchWrapper{
+	float:left;
+	margin-right:10px;
+}
+
+.Cart66AccountRowCount{
+	padding:2px 0px 0px 0px;
+}
+
 .Cart66AccountNote {
   display: none;
   position: fixed;

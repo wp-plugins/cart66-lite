@@ -10,9 +10,11 @@ $createAccount = false;
 $gateway = $data['gateway']; // Object instance inherited from Cart66GatewayAbstract 
 
 if($_SERVER['REQUEST_METHOD'] == "POST") {
+  $cart = Cart66Session::get('Cart66Cart');
+  
   
   $account = false;
-  if(Cart66Session::get('Cart66Cart')->hasMembershipProducts()) {
+  if($cart->hasMembershipProducts() || $cart->hasSpreedlySubscriptions()) {
     // Set up a new Cart66Account and start by pre-populating the data or load the logged in account
     if($accountId = Cart66Common::isLoggedIn()) {
       $account = new Cart66Account($accountId);
@@ -30,7 +32,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
         $errors = $account->validate();
         $jqErrors = $account->getJqErrors();
         if($acctData['password'] != $acctData['password2']) {
-          $errors[] = "Passwords do not match";
+          $errors[] = __("Passwords do not match","cart66");
           $jqErrors[] = 'account-password';
           $jqErrors[] = 'account-password2';
         }
@@ -40,6 +42,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
   }
   
   $gatewayName = Cart66Common::postVal('cart66-gateway-name');
+  Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] CHECKOUT: with gateway: $gatewayName");
+  
   if(in_array($gatewayName, $supportedGateways)) {
     $gateway->validateCartForCheckout();
     $gateway->setBilling(Cart66Common::postVal('billing'));
@@ -57,42 +61,37 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
       $jqErrors = $gateway->getJqErrors(); // Error info for client side error code
     }
     
-    // Charge credit card for one time transaction using Authorize.net API
-    if(count($errors) == 0 && !Cart66Session::get('Cart66InventoryWarning')) {
+    if(count($errors) == 0 || 1) {
+      // Calculate final billing amounts
       $taxLocation = $gateway->getTaxLocation();
       $tax = $gateway->getTaxAmount();
       $total = Cart66Session::get('Cart66Cart')->getGrandTotal() + $tax;
-      $oneTimeTotal = $total - Cart66Session::get('Cart66Cart')->getSubscriptionAmount();
-      $customerId = 0;
+      $subscriptionAmt = Cart66Session::get('Cart66Cart')->getSubscriptionAmount();
+      $oneTimeTotal = $total - $subscriptionAmt;
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Tax: $tax | Total: $total | Subscription Amount: $subscriptionAmt | One Time Total: $oneTimeTotal");
+
+      // Throttle checkout attempts
+      if(!Cart66Session::get('Cart66CheckoutThrottle')) {
+        Cart66Session::set('Cart66CheckoutThrottle', Cart66CheckoutThrottle::getInstance(), true);
+      }
+
+      if(!Cart66Session::get('Cart66CheckoutThrottle')->isReady($gateway->getCardNumberTail(), $oneTimeTotal)) {
+        $errors[] = "You must wait " . Cart66Session::get('Cart66CheckoutThrottle')->getTimeRemaining() . " more seconds before trying to checkout again.";
+      }
+    }
+    
+    
+    // Charge credit card for one time transaction using Authorize.net API
+    if(count($errors) == 0 && !Cart66Session::get('Cart66InventoryWarning')) {
       
+      // =============================
+      // = Start Spreedly Processing =
+      // =============================
       
-      // Process subscription charges
-      /*
-      if(Cart66Session::get('Cart66Cart')->hasSubscriptionProducts()) {
-        $billing = Cart66Common::postVal('billing');
-        $payment = Cart66Common::postVal('payment');
+      if(Cart66Session::get('Cart66Cart')->hasSpreedlySubscriptions()) {
         
-        $account = new Cart66Account();
-        
-        if(Cart66Session::get('Cart66SubscriberToken')) {
-          $account->loadBySubscriberToken(Cart66Session::get('Cart66SubscriberToken'));
-        }
-        elseif(Cart66Common::isLoggedIn()) {
-          $account->load(Cart66Session::get('Cart66AccountId'));
-        }
-        
-        $accountData = array();
-        $accountData['billing_first_name'] = $billing['firstName'];
-        $accountData['billing_last_name'] = $billing['lastName'];
-        $accountData['email'] = $payment['email'];
-        
-        if(isset($payment['password']) && !empty($payment['password'])) {
-          $accountData['password'] = md5($payment['password']);
-        }
-        
-        $account->setData($accountData); // Merge form field values 
-        
-        if($account->validate()) {
+        $accountErrors = $account->validate();
+        if(count($accountErrors) == 0) {
           $account->save(); // Save account data locally which will create an account id and/or update local values
           Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Account data validated and saved for account id: " . $account->id);
           
@@ -100,15 +99,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
             $spreedlyCard = new SpreedlyCreditCard();
             $spreedlyCard->hydrateFromCheckout();
             $subscriptionId = Cart66Session::get('Cart66Cart')->getSpreedlySubscriptionId();
-            $account->createSpreedlySubscription($subscriptionId, $spreedlyCard);
-            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Just finshed creating subscription. Account data: " . print_r($account->getData(), true));
-            $customerId = $account->id;
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] About to create a new spreedly account subscription: Account ID: $account->id | Subscription ID: $subscriptionId");
+            $accountSubscription = new Cart66AccountSubscription();
+            $accountSubscription->createSpreedlySubscription($account->id, $subscriptionId, $spreedlyCard);
           }
           catch(SpreedlyException $e) {
-            $account->refresh();
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Failed to checkout: " . $e->getCode() . ' ' . $e->getMessage());
             $errors['spreedly failed'] = $e->getMessage();
-            if(empty($account->subscriberToken)) {
+            $accountSubscription->refresh();
+            if(empty($accountSubscription->subscriberToken)) {
               Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] About to delete local account after spreedly failure: " . print_r($account->getData(), true));
               $account->deleteMe();
             }
@@ -125,12 +124,20 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Account validation failed. " . print_r($errors, true));
         }
       }
-      */
-
+      
+      // ===========================
+      // = End Spreedly Processing =
+      // ===========================
+       
+      
+       
       if(count($errors) == 0) {
         
         // Look for constant contact opt-in
         if(CART66_PRO) { include(CART66_PATH . "/pro/Cart66ConstantContactOptIn.php"); }
+        
+        // Look for mailchimp opt-in
+        if(CART66_PRO) { include(CART66_PATH . "/pro/Cart66MailChimpOptIn.php"); }
         
         $gatewayName = get_class($gateway);
         $gateway->initCheckout($oneTimeTotal);
@@ -176,11 +183,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
 } // End if POST
 
 
-// Show errors
-if(count($errors)) {
-  echo Cart66Common::showErrors($errors);
-}
-
 // Show inventory warning if there is one
 if(Cart66Session::get('Cart66InventoryWarning')) {
   echo Cart66Session::get('Cart66InventoryWarning');
@@ -204,8 +206,16 @@ $p = $gateway->getPayment();
 $b = $gateway->getBilling();
 $s = $gateway->getShipping();
 
+$billingCountryCode =  (isset($b['country']) && !empty($b['country'])) ? $b['country'] : Cart66Common::getHomeCountryCode();
+$shippingCountryCode = (isset($s['country']) && !empty($s['country'])) ? $s['country'] : Cart66Common::getHomeCountryCode();
+
 // Include the HTML markup for the checkout form
-include(CART66_PATH . '/views/checkout-form.php');
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+  include_once(CART66_PATH . '/views/checkout-form.php');
+}
+else {
+  include(CART66_PATH . '/views/checkout-form.php');
+}
 
 // Include the client side javascript validation                 
-include(CART66_PATH . '/views/client/checkout.php'); 
+include_once(CART66_PATH . '/views/client/checkout.php'); 

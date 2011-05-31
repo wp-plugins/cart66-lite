@@ -23,8 +23,8 @@ $order = $data['order'];
         </td>
         <td style="text-align: center;"><?php echo $item->quantity ?></td>
 
-        <td style="text-align: right;"><?php echo CURRENCY_SYMBOL ?><?php echo number_format($item->product_price, 2); ?></td>
-        <td style="text-align: right;"><?php echo CURRENCY_SYMBOL ?><?php echo number_format($item->product_price * $item->quantity, 2) ?></td>
+        <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($item->product_price, 2); ?></td>
+        <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($item->product_price * $item->quantity, 2) ?></td>
       </tr>
       <?php
         if(!empty($item->form_entry_ids)) {
@@ -53,27 +53,27 @@ $order = $data['order'];
       
       <tr>
         <td colspan="3" style="text-align: right;"><strong>Sub Total</strong></td>
-        <td style="text-align: right;"><?php echo CURRENCY_SYMBOL ?><?php echo number_format($order->subtotal, 2); ?></td>
+        <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->subtotal, 2); ?></td>
       </tr>
       
       <?php if($order->discount_amount > 0): ?>
         <tr>
           <td colspan="3" style="text-align: right;"><strong>Discount</strong></td>
-          <td style="text-align: right;">-<?php echo CURRENCY_SYMBOL ?><?php echo number_format($order->discountAmount, 2); ?></td>
+          <td style="text-align: right;">-<?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->discountAmount, 2); ?></td>
         </tr>
       <?php endif; ?>
 
       <?php if($order->shipping_method != 'None'): ?>
       <tr>
         <td colspan="3" style="text-align: right;"><strong>Shipping</strong></td>
-        <td style="text-align: right;"><?php echo CURRENCY_SYMBOL ?><?php echo number_format($order->shipping, 2); ?></td>
+        <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->shipping, 2); ?></td>
       </tr>
       <?php endif; ?>
       
       <?php if($order->tax > 0): ?>
         <tr>
           <td colspan="3" style="text-align: right;"><strong>Tax</strong></td>
-          <td style="text-align: right;"><?php echo CURRENCY_SYMBOL ?><?php echo number_format($order->tax, 2); ?></td>
+          <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->tax, 2); ?></td>
         </tr>
       <?php endif; ?>
       
@@ -92,7 +92,7 @@ $order = $data['order'];
       
       <tr>
         <td colspan="3" style="text-align: right;"><strong>Total</strong></td>
-        <td style="text-align: right;"><?php echo CURRENCY_SYMBOL ?><?php echo number_format($order->total, 2); ?></td>
+        <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->total, 2); ?></td>
       </tr>
       
     </table>

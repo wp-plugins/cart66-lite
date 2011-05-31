@@ -19,9 +19,9 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
 <h2>Cart66 Promotions</h2>
 <div class='wrap'>
   <p style='width: 400px;'>You may create promotion codes (coupon codes) to reduce the total cost 
-    of your customer's purchase by either a specific money amount (i.e. <?php echo CURRENCY_SYMBOL ?>10) or a percentage (i.e. 10%). 
+    of your customer's purchase by either a specific money amount (i.e. <?php echo CART66_CURRENCY_SYMBOL ?>10) or a percentage (i.e. 10%). 
     You may also set a minimum order amount that must be reached before the promotion code may be 
-    used. For example, you may create a promotion for 10% off all orders over <?php echo CURRENCY_SYMBOL ?>50.</p>
+    used. For example, you may create a promotion for 10% off all orders over <?php echo CART66_CURRENCY_SYMBOL ?>50.</p>
   <p style='width: 400px;'>NOTE: Promotion code discounts do not affect shipping costs.</p>
   
   <form action="" method='post'>
@@ -30,25 +30,25 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
     
     <ul>
       <li>
-        <label class="med" for='promo[code]'>Promotion code:</label>
-        <input type='text' name='promo[code]' id='promo_code' style='width: 225px;' value='<?php echo $promo->code ?>' />
+        <label class="med" for="promo-code">Promotion code:</label>
+        <input type='text' name='promo[code]' id='promo-code' style='width: 225px;' value='<?php echo $promo->code ?>' />
       </li>
       <li>
-        <label class="med" for='promo[type]'>Type of promotion:</label>
-        <select name='promo[type]' id='promo_type'>
-          <option value='dollar' <?php if($promo->type == 'dollar') { echo 'selected'; } ?>>Money Amount</option>
-          <option value='percentage' <?php if($promo->type == 'percentage') { echo 'selected'; } ?>>Percentage</option>
+        <label class="med" for="promo-type">Type of promotion:</label>
+        <select name="promo[type]" id="promo-type">
+          <option value="dollar" <?php if($promo->type == 'dollar') { echo 'selected'; } ?>>Money Amount</option>
+          <option value="percentage" <?php if($promo->type == 'percentage') { echo 'selected'; } ?>>Percentage</option>
         </select>
       </li>
       <li>
-        <label class="med" for='promo[amount]'>Amount:</label>
-        <span id="dollarSign"><?php echo CURRENCY_SYMBOL ?></span>
-        <input type='text' style="width: 75px;" name='promo[amount]' value='<?php echo $promo->amount ?>'> 
+        <label class="med" for="promo-amount">Amount:</label>
+        <span id="dollarSign"><?php echo CART66_CURRENCY_SYMBOL ?></span>
+        <input type="text" style="width: 75px;" name="promo[amount]" id="promo-amount" value="<?php echo $promo->amount ?>"> 
         <span id="percentSign">%</span>
       </li>
       <li>
-        <label class="med" for='promo[min_order]'>Minimum order:</label>
-        <?php echo CURRENCY_SYMBOL ?> <input type='text' style="width: 75px;" name='promo[min_order]' value='<?php echo $promo->minOrder ?>'>
+        <label class="med" for="promo-min_order">Minimum order:</label>
+        <?php echo CART66_CURRENCY_SYMBOL ?> <input type="text" style="width: 75px;" id="promo-min_order" name="promo[min_order]" value="<?php echo $promo->minOrder ?>">
         <p class='label_desc'>Leave blank to apply this promotion to all orders.</p>
       </li>
       <li>

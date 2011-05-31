@@ -82,6 +82,18 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.1.3 =
+* New: Added checks to prevent double charging a customer if they double click, or rapidly click, the complete order button during checkout
+* New: Added feature to optionally send http headers to prevent pages from being cached by web browsers. This feature is found in the error logging and debugging box of the Cart66 Settings panel
+* New: Added feature to override the price with your own text description of the price when defining products.
+* New: Added Malaysian Ringgit to lis of available PayPal Currency options
+* New: Added Pakistan to the country list
+* Updated: Improved security for Amazon S3 account credentials
+* Updated: Improved session management to handle situations when the server name and host name are different.
+* Updated: Changed name of constant CURRENCY_SYMBOL to CART66_CURRENCY_SYMBOL to help prevent conflicts
+* Updated: Optimized HTML and CSS to make it easier for theme developers to modify the Cart66 presentation elements
+* Fixed problem where blank zip codes (such as for international order) could have sales tax charged under certain circumstances
+
 = 1.1.2 =
 * New: Added hooks for easier expansion of Cart66. The hooks are cart66_after_add_to_cart, cart66_after_update_cart, cart66_after_remove_item, and cart66_after_order_saved
 * Fixed: Revised the syntax of certain callback function to comply with version of PHP prior to version 5.2.3. This resolves the "empty cart" issues some people were experiencing. 

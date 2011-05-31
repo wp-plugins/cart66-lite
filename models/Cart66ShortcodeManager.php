@@ -16,7 +16,7 @@ class Cart66ShortcodeManager {
         <span id="Cart66scCartCount"><?php echo $cart->countItems(); ?></span>
         <span id="Cart66scCartCountText"><?php echo $cart->countItems() > 1 ? ' items' : ' item' ?></span> 
         <span id="Cart66scCartCountDash">&ndash;</span>
-        <span id="Cart66scCartPrice"><?php echo CURRENCY_SYMBOL . 
+        <span id="Cart66scCartPrice"><?php echo CART66_CURRENCY_SYMBOL . 
           number_format($cart->getSubTotal() - $cart->getDiscountAmount(), 2); ?>
         </span></a>
         <a id="Cart66scViewCart" href='<?php echo get_permalink($cartPage->ID) ?>'>View Cart</a>
@@ -93,7 +93,7 @@ class Cart66ShortcodeManager {
   }
 
   public function paypalCheckout($attrs) {
-    if(!Cart66Session::get('Cart66Cart')->hasSubscriptionProducts()) {
+    if(!Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() && !Cart66Session::get('Cart66Cart')->hasMembershipProducts()) {
       if(Cart66Session::get('Cart66Cart')->getGrandTotal()) {
         $view = Cart66Common::getView('views/paypal-checkout.php', $attrs);
         return $view;
@@ -105,6 +105,11 @@ class Cart66ShortcodeManager {
   }
 
   public function manualCheckout($attrs=null) {
+    $gatewayName = Cart66Common::postVal('cart66-gateway-name');
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66ManualGateway') {
+      return;
+    }
+    
     if(!Cart66Session::get('Cart66Cart')->hasSubscriptionProducts()) {
       require_once(CART66_PATH . "/gateways/Cart66ManualGateway.php");
       $manual = new Cart66ManualGateway();
@@ -117,11 +122,24 @@ class Cart66ShortcodeManager {
   }
 
   public function authCheckout($attrs) {
+    $gatewayName = Cart66Common::postVal('cart66-gateway-name');
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66AuthorizeNet') {
+      return;
+    }
+    
     if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
       require_once(CART66_PATH . "/pro/gateways/Cart66AuthorizeNet.php");
-      $authnet = new Cart66AuthorizeNet();
-      $view = $this->_buildCheckoutView($authnet);
-      return $view;
+      
+      if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+        $authnet = new Cart66AuthorizeNet();
+        $view = $this->_buildCheckoutView($authnet);
+        return $view;
+      }
+      elseif(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of Authorize.net Checkout because the cart value is $0.00");
+        return $this->manualCheckout();
+      }
+
     }
     else {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering Authorize.net checkout form because the cart contains a PayPal subscription");
@@ -129,7 +147,12 @@ class Cart66ShortcodeManager {
   }
 
   public function payPalProCheckout($attrs) {
-    if(!Cart66Session::get('Cart66Cart')->hasSubscriptionProducts()) {
+    $gatewayName = Cart66Common::postVal('cart66-gateway-name');
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66PayPalPro') {
+      return;
+    }
+    
+    if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
       if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
         $paypal = new Cart66PayPalPro();
         $view = $this->_buildCheckoutView($paypal);
@@ -246,7 +269,6 @@ class Cart66ShortcodeManager {
         exit();
       }
       else {
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Login failed: " . $_POST['login']['email'] . ' -- ' . $_POST['login']['password']);
         $view .= "<p class='Cart66Error'>Login failed</p>";
       }
     }
@@ -294,7 +316,6 @@ class Cart66ShortcodeManager {
     if(Cart66Common::isLoggedIn()) {
       $data = array();
       $account = new Cart66Account(Cart66Session::get('Cart66AccountId'));
-      
       if(isset($_POST['cart66-task']) && $_POST['cart66-task'] == 'account-update') {
         $login = $_POST['login'];
         if($login['password'] == $login['password2']) {
@@ -326,9 +347,10 @@ class Cart66ShortcodeManager {
       $data['url'] = false;
       
       if($account->isSpreedlyAccount()) {
+        $accountSub = $account->getCurrentAccountSubscription();
         $text = isset($attrs['text']) ? $attrs['text'] : 'Manage your subscription.';
         $returnUrl = isset($attrs['return']) ? $attrs['return'] : null;
-        $url = $account->getSubscriptionManagementLink($returnUrl);
+        $url = $accountSub->getSubscriptionManagementLink($returnUrl);
         $data['url'] = $url;
         $data['text'] = $text;
       }

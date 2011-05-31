@@ -49,7 +49,7 @@ class Cart66PayPalStandard {
       $referrer = false;
       $deliveryMethod = $pp['custom'];
       if(strpos($deliveryMethod, '|') !== false) {
-        list($deliveryMethod, $referrer, $gfData) = explode('|', $deliveryMethod);
+        list($deliveryMethod, $referrer, $gfData, $coupon) = explode('|', $deliveryMethod);
       }
       
       // Parse Gravity Forms ids
@@ -66,6 +66,12 @@ class Cart66PayPalStandard {
       $discount = 0;
       if(isset($pp['discount'])) {
         $discount = $pp['discount'];
+      }
+      
+      // Look for coupon code
+      $coupon_code = "none";
+      if(isset($coupon) && $coupon!="") {
+        $coupon_code = $coupon;
       }
 
       $data = array(
@@ -88,6 +94,7 @@ class Cart66PayPalStandard {
         'tax' => $pp['tax'],
         'subtotal' => $subtotal,
         'total' => $pp['mc_gross'],
+        'coupon' => $coupon_code,
         'discount_amount' => $discount,
         'trans_id' => $pp['txn_id'],
         'ordered_on' => date('Y-m-d H:i:s'),

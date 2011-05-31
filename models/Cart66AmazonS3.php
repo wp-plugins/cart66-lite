@@ -9,9 +9,8 @@ class Cart66AmazonS3 {
   
   public static function prepareS3Url($bucket, $file, $duration='5 minutes') {
 
-    $awsKeyId = 'AKIAJNOCYELGZ2HVDRFA';                         // this is the non-secret key ID.
-    $awsSecretKey = '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'; // this is the SECRET access key!
-
+    $awsKeyId = Cart66Setting::getValue('amazons3_id');
+    $awsSecretKey = Cart66Setting::getValue('amazons3_key');
 
     $file = rawurlencode($file); 
     $file = str_replace('%2F', '/', $file);

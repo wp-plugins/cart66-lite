@@ -45,7 +45,9 @@ class Cart66Exporter {
     $orderColSql = implode(',', array_keys($orderHeaders));
     $out  = $orderColHeaders . ",Item Number,Description,Quantity,Product Price\n";
     
-    $sql = "SELECT $orderColSql from $orders where ordered_on >= '$start' AND ordered_on < '$end' order by ordered_on";
+    $sql = "SELECT $orderColSql from $orders where ordered_on >= %s AND ordered_on < %s order by ordered_on";
+    $sql = $wpdb->prepare($sql, $start, $end);
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] SQL: $sql");
     $selectedOrders = $wpdb->get_results($sql, ARRAY_A);
     
     foreach($selectedOrders as $o) {

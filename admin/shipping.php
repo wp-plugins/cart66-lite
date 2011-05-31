@@ -157,7 +157,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
           }
           else {
             $direction = $factor > 0 ? 'added to' : 'subtracted from';
-            echo CURRENCY_SYMBOL . number_format(abs($factor), 2) . " will be $direction all rates";
+            echo CART66_CURRENCY_SYMBOL . number_format(abs($factor), 2) . " will be $direction all rates";
           }
           
         }
@@ -173,7 +173,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
         <option value="percentage">Tweak by percentage</option>
         <option value="fixed">Tweak by fixed amount</option>
       </select>
-      <span id="currency" style="display:none;">&nbsp;<?php echo CURRENCY_SYMBOL; ?></span>
+      <span id="currency" style="display:none;">&nbsp;<?php echo CART66_CURRENCY_SYMBOL; ?></span>
       <input type="text" name="rate_tweak_factor" style="width: 5em;" />
       <span id="percentSign" style="display:none;">%</span>
       <input type='submit' name='submit' class="button-primary" style='width: 60px; margin-top: 10px; margin-left: 20px; margin-right: 20px;' value='Save' />
@@ -301,14 +301,14 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
       
         <li>
           <label class="med">Default rate:</label>
-          <span><?php echo CURRENCY_SYMBOL ?></span>
+          <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
           <input type="text" name="shipping_method[default_rate]" value="<?php echo $method->default_rate ?>" style='width: 80px;'/>
           <span class="label_desc">Rate if only one item is ordered</span>
         </li>
 
         <li>
           <label class="med">Default bunde rate:</label>
-          <span><?php echo CURRENCY_SYMBOL ?></span>
+          <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
           <input type="text" name="shipping_method[default_bundle_rate]" value="<?php echo $method->default_bundle_rate ?>" style='width: 80px;'/>
           <span class="label_desc">Rate for each additional item</span>
         </li>
@@ -341,8 +341,8 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
       <?php foreach($methods as $m): ?>
         <tr>
           <td><?php echo $m->name ?></td>
-          <td><?php echo CURRENCY_SYMBOL ?><?php echo number_format($m->default_rate, 2); ?></td>
-          <td><?php echo CURRENCY_SYMBOL ?><?php echo number_format($m->default_bundle_rate, 2); ?></td>
+          <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($m->default_rate, 2); ?></td>
+          <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($m->default_bundle_rate, 2); ?></td>
           <td>
            <a href='?page=cart66-shipping&task=edit_method&id=<?php echo $m->id ?>'>Edit</a> | 
            <a class='delete' href='?page=cart66-shipping&task=delete_method&id=<?php echo $m->id ?>'>Delete</a>
@@ -380,12 +380,12 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
           </li>
           <li>
             <label class="med">Shipping rate:</label>
-            <span><?php echo CURRENCY_SYMBOL ?></span>
+            <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
             <input type="text" style="width: 80px;" name="rate[shipping_rate]" value="<?php echo $rate->shipping_rate ?>" />
           </li>
           <li>
             <label class="med">Shipping bundle rate:</label>
-            <span><?php echo CURRENCY_SYMBOL ?></span>
+            <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
             <input type="text" style="width: 80px;" name="rate[shipping_bundle_rate]" value="<?php echo $rate->shipping_bundle_rate ?>" />
           </li>
           <li>
@@ -424,8 +424,8 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
         <tr>
           <td><?php echo $product->item_number ?> <?php echo $product->name ?></td>
           <td><?php echo $method->name ?></td>
-          <td><?php echo CURRENCY_SYMBOL ?><?php echo number_format($r->shipping_rate, 2); ?></td>
-          <td><?php echo CURRENCY_SYMBOL ?><?php echo number_format($r->shipping_bundle_rate, 2); ?></td>
+          <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($r->shipping_rate, 2); ?></td>
+          <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($r->shipping_bundle_rate, 2); ?></td>
           <td>
            <a href='?page=cart66-shipping&task=edit_rate&id=<?php echo $r->id ?>'>Edit</a> | 
            <a class='delete' href='?page=cart66-shipping&task=delete_rate&id=<?php echo $r->id ?>'>Delete</a>
@@ -469,22 +469,22 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
       <input type='hidden' name='rule[id]' value='<?php echo $rule->id ?>' />
       <ul>
         <li>
-          <label for='rule[cart_amount]'>Minimum cart amount:</label>
-          <span><?php echo CURRENCY_SYMBOL ?></span>
-          <input type='text' name='rule[min_amount]' id='cart_amount' style='width: 80px;' value='<?php echo $rule->minAmount ?>' />
+          <label for="rule-min_amount">Minimum cart amount:</label>
+          <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
+          <input type='text' name='rule[min_amount]' id='rule-min_amount' style='width: 80px;' value='<?php echo $rule->minAmount ?>' />
         </li>
         <li>
           <label class="med">Shipping method:</label>
-          <select name='rule[shipping_method_id]'>
+          <select name="rule[shipping_method_id]">
             <?php foreach($method->getModels(null, 'name') as $m): ?>
               <option value="<?php echo $m->id; ?>"><?php echo $m->name ?></option>
             <?php endforeach; ?>
           </select>
         </li>
         <li>
-          <label class="med" for='rule[cost]'>Shipping cost:</label>
-          <span><?php echo CURRENCY_SYMBOL ?></span>
-          <input type='text' name='rule[shipping_cost]' style='width: 80px;' value='<?php echo $rule->shippingCost ?>'>
+          <label class="med" for="rule-shipping_cost">Shipping cost:</label>
+          <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
+          <input type="text" id="rule-shipping_cost" name="rule[shipping_cost]" style='width: 80px;' value='<?php echo $rule->shippingCost ?>'>
         </li>
         <li>
           <label class="med">&nbsp;</label>
@@ -518,9 +518,9 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
               $method->load($rule->shipping_method_id);
             ?>
            <tr>
-             <td><?php echo CURRENCY_SYMBOL ?><?php echo $rule->min_amount ?></td>
+             <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $rule->min_amount ?></td>
              <td><?php echo $method->name ?></td>
-             <td><?php echo CURRENCY_SYMBOL ?><?php echo $rule->shipping_cost ?></td>
+             <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $rule->shipping_cost ?></td>
              <td>
                <a href='?page=cart66-shipping&task=edit&id=<?php echo $rule->id ?>'>Edit</a> | 
                <a class='delete' href='?page=cart66-shipping&task=delete&id=<?php echo $rule->id ?>'>Delete</a>

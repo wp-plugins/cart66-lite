@@ -91,7 +91,7 @@ foreach($orderRows as $row) {
   <tr>
     <td><?php echo $row->trans_id ?></td>
     <td><?php echo $row->bill_first_name ?> <?php echo $row->bill_last_name?></td>
-    <td><?php echo CURRENCY_SYMBOL ?><?php echo $row->total ?></td>
+    <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $row->total ?></td>
     <td><?php echo date('m/d/Y', strtotime($row->ordered_on)) ?></td>
     <td><?php echo $row->shipping_method ?></td>
     <td><?php echo $row->status ?></td>

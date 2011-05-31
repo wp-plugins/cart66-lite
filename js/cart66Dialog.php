@@ -50,7 +50,7 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
   	      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] subscription price in dialog: $subPrice");
   	    }
   	    else {
-  	      $prices .= '"' . htmlspecialchars($p->getPriceDescription()) .'", ';
+  	      $prices .= '"' . htmlspecialchars(strip_tags($p->getPriceDescription())) .'", ';
   	    }
   	    
   	    
@@ -183,6 +183,13 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 	  preview();
 	  $jq("input").change(function(){preview();});
 	  $jq("input").click(function(){preview();});
+	  
+	  $jq(".smallText").click(function(){
+	    $jq(".gfProductMessage").show();
+	  })
+	  $jq(".closeMessage").click(function(){
+	    $jq(".gfProductMessage").hide();
+	  })
 	})
 	
 	//-->
@@ -204,6 +211,24 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
     padding: 5px;
     border-spacing: 0px;
   }
+  .smallText{
+    font-size:11px;
+    text-decoration:underline;
+    cursor:pointer;
+  }
+  .gfProductMessage{
+    display:none;
+    position:absolute;
+    background-color:#fff;
+    border:1px solid;
+    font-size:12px;
+    padding:0px 15px;
+    width:430px;
+    margin:-10px 0px 0px 0px;
+  }
+  .closeMessage{
+    font-size:14px;
+  }
 	</style>
 </head>
 <body id="cart66" onLoad="tinyMCEPopup.executeOnLoad('init();');" style="display: none">
@@ -216,17 +241,27 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 	</div>
 	<div class="panel_wrapper">
 		<div id="panel" class="panel current">
+		  <div class="gfProductMessage">
+			  <p>When using a Cart66 product attached to a Gravity Form it is important to use the Gravity Form shortcode and not the Cart66 one. If you do use the Cart66 [add_to_cart ] shortcode, the product is not added to the cart. To prevent confusion ONLY the non-Gravity Forms products are displayed in this dropdown.</p>
+			  
+			  <p>To add the Gravity Form product, simply use the Gravity Forms button to insert the form and Cart66 will do the rest.</p>
+			  
+			  <p align="center" class="mceActionPanel">
+			    <input type="button" id="closeMessage" value="<?php  _e('OK'); ?>" class="closeMessage button" />
+			  </p>
+			</div>
 			<table border="0" cellspacing="0" cellpadding="2">
 				<tr>
-					<td class="phplabel"><label for="productName"><?php  _e('Your products:'); ?></label></td>
-					<td class="phpinput"><select id="productName" name="productName" onchange="preview();"><?php  echo $options; ?></select>
+					<td class="phplabel"><label for="productName"><?php  _e('Your products'); ?>:</label></td>
+					<td class="phpinput"><select id="productName" name="productName" onchange="preview();"><?php  echo $options; ?></select><br>
+					<span class="smallText">Looking for a Gravity Form product?</span>
 				</tr>
 				<tr>
-				  <td class="phplabel"><label for="productStyle"><?php  _e('CSS style:'); ?></label></td>
+				  <td class="phplabel"><label for="productStyle"><?php  _e('CSS style'); ?>:</label></td>
 				  <td class="phpinput"><input id="productStyle" name="productStyle" size="34"></td>
 				</tr>
 				<tr>
-				  <td class="phplabel"><label for="showPrice"><?php  _e('Show price:'); ?></label></td>
+				  <td class="phplabel"><label for="showPrice"><?php  _e('Show price'); ?>:</label></td>
           <td class="phpinput">
             <input type='radio' style="border: none;" id="showPrice" name="showPrice" value='yes' checked> Yes
             <input type='radio' style="border: none;" id="showPrice" name="showPrice" value='no'> No
@@ -234,11 +269,11 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
           </td>
 				</tr>
 				<tr>
-				  <td class="phplabel"><label for="buttonImage"><?php  _e('Button path:'); ?></label></td>
+				  <td class="phplabel"><label for="buttonImage"><?php  _e('Button path'); ?>:</label></td>
 				  <td class="phpinput"><input id="buttonImage" name="buttonImage" size="34"></td>
 				</tr>
 				<tr>
-				  <td class="phplabel" valign="top"><label for="buttonImage"><?php  _e('Preview:'); ?></label></td>
+				  <td class="phplabel" valign="top"><label for="buttonImage"><?php  _e('Preview'); ?>:</label></td>
 				  <td class="" valign="top" id="buttonPreview"> 
 				  </td>
 				</tr>

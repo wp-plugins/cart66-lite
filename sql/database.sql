@@ -87,7 +87,7 @@ create table if not exists `[prefix]tax_rates` (
   `state` varchar(20) not null,
   `zip_low` mediumint unsigned not null default 0,
   `zip_high` mediumint unsigned not null default 0,
-  `rate` decimal(8,2) not null,
+  `rate` decimal(8,3) not null,
   `tax_shipping` tinyint(1) not null default 0,
   primary key(`id`)
 );

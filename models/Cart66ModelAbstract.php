@@ -31,6 +31,11 @@ abstract class Cart66ModelAbstract extends Cart66BaseModelAbstract {
     return false;
   }
   
+  /**
+   * Reset all the values to those that are stored in the database
+   * 
+   * @return void
+   */
   public function refresh() {
     $id = $this->id;
     if(is_numeric($id) && $id > 0) {
@@ -48,7 +53,7 @@ abstract class Cart66ModelAbstract extends Cart66BaseModelAbstract {
   /**
    * Return an array of models
    */
-  public function getModels($where=null, $orderBy=null) {
+  public function getModels($where=null, $orderBy=null, $limit=null) {
     $models = array();
     global $wpdb;
     if(isset($where)) {
@@ -57,7 +62,10 @@ abstract class Cart66ModelAbstract extends Cart66BaseModelAbstract {
     if(isset($orderBy)) {
       $orderBy = ' ' . $orderBy;
     }
-    $sql = 'SELECT id FROM ' . $this->_tableName . $where . $orderBy;
+    if(isset($limit)) {
+      $limit = ' limit ' . $limit;
+    }
+    $sql = 'SELECT id FROM ' . $this->_tableName . $where . $orderBy . $limit;
     // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] " . get_class($this) . " getModels: $sql");
     $ids = $wpdb->get_col($sql);
     foreach($ids as $id) {
@@ -70,11 +78,12 @@ abstract class Cart66ModelAbstract extends Cart66BaseModelAbstract {
   /**
    * Return the first matching model or false if no model could be found.
    */
-  public function getOne($where, $orderBy=null) {
+  public function getOne($where='where id>0', $orderBy=null) {
     $model = false;
-    $models = $this->getModels($where, $orderBy);
+    $models = $this->getModels($where, $orderBy, 1);
     if(count($models)) {
       $model = $models[0];
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Get one is returning: " . count($models));
     }
     return $model;
   }

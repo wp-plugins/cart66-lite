@@ -106,8 +106,7 @@
       <input type="hidden" name="upload" value="1" />
       <input type="hidden" name="no_shipping" value="2" />
       <input type="hidden" name="currency_code" value="<?php echo CURRENCY_CODE; ?>" id="currency_code" />
-      <input type="hidden" name="custom" value="<?php echo $shippingMethod ?>|<?php echo $aff;  ?>|<?php echo $gfIds ?>" />
-      
+      <input type="hidden" name="custom" value="<?php echo $shippingMethod ?>|<?php echo $aff;  ?>|<?php echo $gfIds ?>|<?php if(Cart66Session::get('Cart66Cart')->getPromotion()) { echo Cart66Session::get('Cart66Cart')->getPromotion()->code; } ?>" />
       <?php if($shipping > 0): ?>
         <input type='hidden' name='handling_cart' value='<?php echo $shipping ?>' />
       <?php endif;?>
@@ -127,5 +126,5 @@
 <?php endif; ?>
 
   <?php else: ?>
-    <p>You must configure your payment settings</p>
+    <p><?php _e( 'You must configure your payment settings' , 'cart66' ); ?></p>
   <?php endif; ?>

@@ -14,7 +14,7 @@ class Cart66ButtonManager {
       $price = '';
       $showPrice = isset($attrs['showprice']) ? strtolower($attrs['showprice']) : 'yes';
       if($showPrice == 'yes' || $showPrice == 'only') {
-        $price = CURRENCY_SYMBOL . number_format($product->price, 2);
+        $price = CART66_CURRENCY_SYMBOL . number_format($product->price, 2);
         
         // Check for subscription pricing
         if($product->isSubscription()) {
@@ -31,7 +31,9 @@ class Cart66ButtonManager {
               $price =  $product->getRecurringPriceSummary();
             }
           }
-          
+        }
+        else {
+          $price = $product->getPriceDescription();
         }
         
       }

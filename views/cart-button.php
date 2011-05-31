@@ -6,21 +6,21 @@
 ?>
 
 <?php if($data['showPrice'] == 'only'): ?>
-  <p class="Cart66Price" <?php echo $style; ?>>Price: <?php echo $data['price'] ?></p>
+  <p class="Cart66Price" <?php echo $style; ?>><?php _e( 'Price' , 'cart66' ); ?>: <?php echo $data['price'] ?></p>
 <?php else: ?>
   <form id='cartButtonForm_<?php echo $id ?>' class="Cart66CartButton" method="post" action="<?php echo Cart66Common::getPageLink('store/cart'); ?>" <?php echo $data['style']; ?>>
     <input type='hidden' name='task' id="task_<?php echo $id ?>" value='addToCart' />
     <input type='hidden' name='cart66ItemId' value='<?php echo $data['product']->id; ?>' />
     
     <?php if($data['showPrice'] == 'yes'): ?> 
-      <span class="Cart66Price">Price: <?php echo $data['price'] ?></span>
+      <span class="Cart66Price"><?php _e( 'Price' , 'cart66' ); ?>: <?php echo $data['price'] ?></span>
     <?php endif; ?>
     
     <?php if($data['product']->isAvailable()): ?>
       <?php echo $data['productOptions'] ?>
     
       <?php if($data['product']->recurring_interval > 0 && !CART66_PRO): ?>
-          <div class='Cart66ProRequired'><a href='http://www.cart66.com'>Cart66 Professional</a> is required to sell subscriptions</div>
+          <div class='Cart66ProRequired'><a href='http://www.cart66.com'><?php _e( 'Cart66 Professional' , 'cart66' ); ?></a> <?php _e( 'is required to sell subscriptions' , 'cart66' ); ?></div>
       <?php else: ?>
         <?php if($data['addToCartPath']): ?> 
           <input type='image' value='Add To Cart' src='<?php echo $data['addToCartPath'] ?>' class='purAddToCart' name='addToCart_<?php echo $id ?>' id='addToCart_<?php echo $id ?>'/>
@@ -30,7 +30,7 @@
       <?php endif; ?>
     
     <?php else: ?>
-      <span class='Cart66OutOfStock'>Out of stock</span>
+      <span class='Cart66OutOfStock'><?php _e( 'Out of stock' , 'cart66' ); ?></span>
     <?php endif; ?>
     
     <?php if($trackInventory): ?>

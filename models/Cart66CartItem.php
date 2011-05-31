@@ -206,6 +206,9 @@ class Cart66CartItem {
       if($this->isPayPalSubscription()) {
         $price = $product->getCheckoutPrice();
       }
+      elseif($this->isSpreedlySubscription()) {
+        $price = $product->getCheckoutPrice();
+      }
       else {
         $price = $product->price + $this->_priceDifference;
       }
@@ -220,6 +223,10 @@ class Cart66CartItem {
       if($product->isPayPalSubscription()) {
         $product = new Cart66PayPalSubscription($product->id);
         $priceDescription = $product->getPriceDescription($product->offerTrial > 0, '(trial)');
+      }
+      elseif($product->isSpreedlySubscription()) {
+        $product = new Cart66Product($product->id);
+        $priceDescription =  $product->getPriceDescription();
       }
       else {
         $priceDescription = $product->getPriceDescription($this->_priceDifference);

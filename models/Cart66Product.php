@@ -337,7 +337,7 @@ class Cart66Product extends Cart66ModelAbstract {
       foreach($opts as $opt) {
         $opt = str_replace('+$', '+ $', $opt);
         $opt = trim($opt);
-        $optDisplay = str_replace('$', CURRENCY_SYMBOL, $opt);
+        $optDisplay = str_replace('$', CART66_CURRENCY_SYMBOL, $opt);
         $select .= "\n\t<option value=\"" . htmlentities($opt) . "\">$optDisplay</option>";
       }
       $select .= "\n</select>";
@@ -365,6 +365,7 @@ class Cart66Product extends Cart66ModelAbstract {
    * Return the shipping rate for this product for the given shipping method
    */
   public function getShippingPrice($methodId) {
+    $methodId = (isset($methodId) && is_numeric($methodId)) ? $methodId : 0;
     // Look to see if there is a specific setting for this product and the given shipping method
     $ratesTable = Cart66Common::getTableName('shipping_rates');
     $sql = "SELECT shipping_rate from $ratesTable where product_id = " . $this->id . " and shipping_method_id = $methodId";
@@ -379,6 +380,7 @@ class Cart66Product extends Cart66ModelAbstract {
   }
   
   public function getBundleShippingPrice($methodId) {
+    $methodId = (isset($methodId) && is_numeric($methodId)) ? $methodId : 0;
     $ratesTable = Cart66Common::getTableName('shipping_rates');
     $shippingMethods = Cart66Common::getTableName('shipping_methods');
     
@@ -463,6 +465,19 @@ class Cart66Product extends Cart66ModelAbstract {
     return $subscriptions;
   }
   
+  public static function getSpreedlyProducts() {
+    global $wpdb;
+    $subscriptions = array();
+    $product = new Cart66Product();
+    $products = $product->getModels("where spreedly_subscription_id > 0");
+    foreach($products as $p) {
+      if($p->isSpreedlySubscription()) {
+        $subscriptions[] = $p;
+      }
+    }
+    return $subscriptions;
+  }
+  
   public static function getMembershipProducts() {
     global $wpdb;
     $memberships = array();
@@ -483,10 +498,9 @@ class Cart66Product extends Cart66ModelAbstract {
    * true then a detailed price summary of all attached subscriptions
    * is returned.
    * 
-   * @param $showAll boolean (optional)
    * @return string
    */
-  public function getRecurringPriceSummary($showAll=false) {
+  public function getRecurringPriceSummary() {
     $priceSummary = "No recurring pricing";
     $paypalPriceSummary = false;
     $spreedlyPriceSummary = false;
@@ -494,35 +508,16 @@ class Cart66Product extends Cart66ModelAbstract {
     if($this->isPayPalSubscription()) {
       if(class_exists('Cart66PayPalSubscription')) {
         $subscription = new Cart66PayPalSubscription($this->id);
-        $paypalPriceSummary = $subscription->getPriceDescription();
+        $priceSummary = $subscription->getPriceDescription();
       }
     }
-    
-    if($this->isSpreedlySubscription()) {
+    elseif($this->isSpreedlySubscription()) {
       if(class_exists('SpreedlySubscription')) {
         if($this->isSubscription()) {
           $subscription = new SpreedlySubscription();
           $subscription->load($this->spreedlySubscriptionId);
-          $spreedlyPriceSummary = $subscription->getPriceDescription();
+          $priceSummary = $subscription->getPriceDescription();
         }
-      }
-    }
-    
-    if($showAll) {
-      if($paypalPriceSummary) {
-        $priceSummary = "PayPal: $paypalPriceSummary";
-      }
-      if($spreedlyPriceSummary) {
-        $priceSummary = $paypalPriceSummary ? "$priceSummary<br/>" : '';
-        $priceSummary .= "Spreedly: $spreedlyPriceSummary";
-      }
-    }
-    else {
-      if($paypalPriceSummary) {
-        $priceSummary = $paypalPriceSummary;
-      }
-      elseif($spreedlyPriceSummary) {
-        $priceSummary .= $spreedlyPriceSummary;
       }
     }
     
@@ -741,7 +736,7 @@ class Cart66Product extends Cart66ModelAbstract {
           $_POST['product']['download_path'] = $filename;
         }
         else {
-          $this->addError('File Upload', 'Unable to upload file');
+          $this->addError('File Upload', __("Unable to upload file","cart66"));
           $msg = "Could not upload file from $src to $path\n". print_r($_FILES, true);
           throw new Cart66Exception($msg, 66101);
         }
@@ -801,7 +796,7 @@ class Cart66Product extends Cart66ModelAbstract {
         $price = $this->price + $priceDifference;
 
         if($price > 0) {
-          $priceDescription = CURRENCY_SYMBOL . number_format($price, 2);
+          $priceDescription = CART66_CURRENCY_SYMBOL . number_format($price, 2);
         }
 
         if($this->hasFreeTrial()) {
@@ -813,7 +808,7 @@ class Cart66Product extends Cart66ModelAbstract {
         }
         
         $proRated = $this->getProRateInfo();
-        if($proRated->amount > 0) {
+        if(is_object($proRated) && $proRated->amount > 0) {
           $proRatedInfo = $proRated->description . ':&nbsp;' . $proRated->money;
           $priceDescription .= '<br/>' . $proRatedInfo;
         }
@@ -830,7 +825,13 @@ class Cart66Product extends Cart66ModelAbstract {
         }
       }
       else {
-        $priceDescription = CURRENCY_SYMBOL . number_format($this->price + $priceDifference, 2);
+        // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Product custom price description: $this->priceDes");
+        if(!empty($this->priceDescription)) {
+          $priceDescription = $this->priceDescription;
+        }
+        else {
+          $priceDescription = CART66_CURRENCY_SYMBOL . number_format($this->price + $priceDifference, 2);
+        }
       }
     }
     return $priceDescription;
@@ -849,7 +850,7 @@ class Cart66Product extends Cart66ModelAbstract {
   public function getProRateInfo() {
     $data = false;
     if($this->isSpreedlySubscription()) {
-      if(Cart66Common::isLoggedIn()) {
+      if(Cart66Common::isLoggedIn() && Cart66Session::get('Cart66Cart')) {
         if($subscriptionId = Cart66Session::get('Cart66Cart')->getSpreedlySubscriptionId()) {
           try {
             $invoiceData = array(
@@ -865,7 +866,7 @@ class Cart66Product extends Cart66ModelAbstract {
             $data = new stdClass();
             $data->description = $invoice->invoiceData->{'line-items'}->{'line-item'}[1]->description;
             $data->amount = $this->_creditAmount;
-            $data->money = CURRENCY_SYMBOL . number_format($this->_creditAmount, 2);
+            $data->money = CART66_CURRENCY_SYMBOL . number_format($this->_creditAmount, 2);
 
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] PRICE DESCRIPTON CREDIT: $proRated");
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Spreedly Invoice: " . print_r($invoice->invoiceData, true));

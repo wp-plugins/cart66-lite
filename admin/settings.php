@@ -196,12 +196,12 @@ else {
               </li>
               <li>
                 <label style="display: inline-block; width: 120px; text-align: right;">Currency symbol:</label>
-                <input type="text" name="currency_symbol" value="<?php echo htmlentities(Cart66Setting::getValue('currency_symbol'));  ?>" id="currency_symbol">
+                <input type="text" name="CART66_CURRENCY_SYMBOL" value="<?php echo htmlentities(Cart66Setting::getValue('CART66_CURRENCY_SYMBOL'));  ?>" id="CART66_CURRENCY_SYMBOL">
                 <span class="description">Use the HTML entity such as &amp;pound; for &pound; British Pound Sterling or &amp;euro; for &euro; Euro</span>
               </li>
               <li>
                 <label style="display: inline-block; width: 120px; text-align: right;">Currency character:</label>
-                <input type="text" name="currency_symbol_text" value="<?php echo Cart66Setting::getValue('currency_symbol_text'); ?>" id="currency_symbol_text">
+                <input type="text" name="CART66_CURRENCY_SYMBOL_text" value="<?php echo Cart66Setting::getValue('CART66_CURRENCY_SYMBOL_text'); ?>" id="CART66_CURRENCY_SYMBOL_text">
                 <span class="description">Do NOT use the HTML entity. This is the currency character used for the email receipts.</span>
               </li>
               <li>
@@ -213,9 +213,9 @@ else {
               </li>
               
               <li id="eligible_countries_block">
-                <label style="display: inline-block; width: 120px; text-align: right;" for='countries[]'>Ship to countries:</label>
+                <label style="display: inline-block; width: 120px; text-align: right;" for="countries">Ship to countries:</label>
                 <div style="float: none; margin: -10px 0px 20px 125px;">
-                <select name="countries[]" class="multiselect" multiple="multiple">
+                <select id="countries" name="countries[]" class="multiselect" multiple="multiple">
                   <?php
                     $countryList = Cart66Setting::getValue('countries');
                     $countryList = $countryList ? explode(',', $countryList) : array();
@@ -231,7 +231,7 @@ else {
                 </select>
                 </div>
               </li>
-              <li><label style="display: inline-block; width: 120px; text-align: right;" for='auth_force_ssl]'>Use SSL:</label>
+              <li><label style="display: inline-block; width: 120px; text-align: right;">Use SSL:</label>
               <?php
                 $force = Cart66Setting::getValue('auth_force_ssl');
                 if(!$force) { $force = 'no'; }
@@ -242,12 +242,12 @@ else {
               </li>
               
               <?php if(CART66_PRO): ?>
-                <li><label style="display: inline-block; width: 120px; text-align: right;" for='track_inventory'>Track inventory:</label>
+                <li><label style="display: inline-block; width: 120px; text-align: right;" for="track_inventory">Track inventory:</label>
                 <?php
                   $track = Cart66Setting::getValue('track_inventory');
                 ?>
-                <input type='radio' name='track_inventory' value="1" style='width: auto;' <?php if($track == '1') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'>Yes</label>
-                <input type='radio' name='track_inventory' value="0" style='width: auto;' <?php if($track == '0') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'>No</label>
+                <input type="radio" name="track_inventory" value="1" style="width: auto;" <?php if($track == '1') { echo "checked='checked'"; } ?>><label style="width: auto; padding-left: 5px;">Yes</label>
+                <input type="radio" name="track_inventory" value="0" style="width: auto;" <?php if($track == '0') { echo "checked='checked'"; } ?>><label style="width: auto; padding-left: 5px;">No</label>
                   <p style="width: 450px;" class="label_desc">This feature uses ajax. If you have javascript errors in your theme clicking Add To Cart buttons will not add products to the cart.</p>
                 </li>
               <?php endif; ?>
@@ -284,8 +284,8 @@ else {
           <form action="" method='post'>
             <input type='hidden' name='cart66-action' value="save rate" />
             <ul>
-              <li><label for='tax[state]' style='width: auto;'>State:</label>
-                <select name='tax[state]' id='tax_state'>
+              <li><label for="tax-state" style="width: auto;">State:</label>
+                <select name='tax[state]' id="tax-state">
                   <option value="">&nbsp;</option>
                   <option value="All Sales">All Sales</option>
                   <optgroup label="United States">
@@ -359,10 +359,10 @@ else {
                 </select>
               
                 <span style="width: auto; text-align: center; padding: 0px 10px;">or</span>
-                <label for='tax[zip]' style='width:auto;'>Zip:</label>
-                <input type='text' value="" name='tax[zip]' size="14" />
-                <label for='tax[rate]' style='width:auto; padding-left: 5px;'>Rate:</label>
-                <input type='text' value="" name='tax[rate]' style='width: 55px;' /> %
+                <label for="tax-zip" style='width:auto;'>Zip:</label>
+                  <input type='text' value="" id="tax-zip" name='tax[zip]' size="14" />
+                <label for="tax-rate" style='width:auto; padding-left: 5px;'>Rate:</label>
+                  <input type='text' value="" id="tax-rate" name='tax[rate]' style='width: 55px;' /> %
                 <select name='tax[tax_shipping]'>
                   <option value="0">Don't tax shipping</option>
                   <option value="1">Tax shipping</option>
@@ -550,7 +550,7 @@ else {
                 value="<?php echo Cart66Setting::getValue('auth_trans_key'); ?>" />
               </li>
               
-              <li><label style="display: inline-block; width: 120px; text-align: right;" for="auth[auth_card_types]">Accept Cards:</label>
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for="">Accept Cards:</label>
               <input type="checkbox" name="auth_card_types[]" value="mastercard" style='width: auto;' 
                 <?php echo in_array('mastercard', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Mastercard</label>
               <input type="checkbox" name="auth_card_types[]" value="visa" style='width: auto;'
@@ -718,7 +718,7 @@ else {
         <h3>Status Options<span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
       </div>
       <div class="widget-holder">
-        <p class="description">Define the order status options to suite your business needs. For example, you may want to have new, complete, and canceled.</p>
+        <p class="description">Define the order status options to suit your business needs. For example, you may want to have new, complete, and canceled.</p>
         <div>
           <form id="statusOptionForm" class="ajaxSettingForm" action="" method='post'>
             <input type='hidden' name='action' value="save_settings" />
@@ -809,7 +809,6 @@ else {
     </div>
     
     <!-- Spreedly Settings -->
-    <!--
     <a href="#" name="spreedly"></a>
     <div class="widgets-holder-wrap <?php echo Cart66Setting::getValue('spreedly_shortname') ? '' : 'closed'; ?>">
       <div class="sidebar-name">
@@ -819,6 +818,7 @@ else {
       <div class="widget-holder">
         <p class="description">Configure your Spreedly account information to sell subscriptions.</p>
         <div>
+          <?php if(CART66_PRO): ?>
           <form id="spreedlyOptionForm" class="ajaxSettingForm" action="" method='post'>
             <input type='hidden' name='action' value='save_settings' />
             <input type='hidden' name='_success' value='Your Spreedly settings have been saved.'>
@@ -844,10 +844,14 @@ else {
               <input type='submit' name='submit' class="button-primary" style='width: 60px;' value='Save' /></li>
             </ul>
           </form>
+          <?php else: ?>
+            <p><a href="http://www.spreedly.com">Spreedly</a> handles everything you need to make money - 
+              initial signup, upgrades, cancellations, etc. - so you can build your business and not a billing system.
+            <p class="description">This feature is only available in <a href="http://cart66.com">Cart66 Professional</a>.</p>
+          <?php endif; ?>
         </div>
       </div>
     </div>
-    -->
     
     <!-- Amazon S3 Settings -->
     <a href="#" name="amazons3"></a>
@@ -901,9 +905,9 @@ else {
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='constantcontact_password'>Password:</label>
               <input type='text' name='constantcontact_password' id='constantcontact_password' value="<?php echo Cart66Setting::getValue('constantcontact_password'); ?>" />
               
-              <li><label style="display: inline-block; width: 120px; text-align: right; margin-top: 0px;" for='receipt_intro'>Opt-in Message:</label>
+              <li><label style="display: inline-block; width: 120px; text-align: right; margin-top: 0px;" for='constantcontact_opt_in_message'>Opt-in Message:</label>
               <br/><textarea style="width: 375px; height: 140px; margin-left: 125px; margin-top: -20px;" 
-              name='opt_in_message'><?php echo Cart66Setting::getValue('opt_in_message'); ?></textarea>
+              name='constantcontact_opt_in_message'><?php echo Cart66Setting::getValue('constantcontact_opt_in_message'); ?></textarea>
               <p style="margin-left: 125px;" class="description">Provide a message to tell your buyers what your newsletter is about.<br/>For example, you might want to say something like
                 "Yes! I would like to subscribe to:"</p></li>
                 
@@ -947,6 +951,98 @@ else {
               an industry leader in email marketing. Constant Contact provides email marketing software that makes it easy to 
               create professional HTML email campaigns with no tech skills.</p>
             <p class="description">This feature is only available in <a href="http://cart66.com">Cart66 Professional</a>.</p>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+    
+    
+    <!-- MailChimp Settings -->
+    <a href="#" name="mailchimp"></a>
+    <div class="widgets-holder-wrap <?php echo Cart66Setting::getValue('mailchimp_apikey') ? '' : 'closed'; ?>">
+      <div class="sidebar-name">
+        <div class="sidebar-name-arrow"><br/></div>
+        <h3>MailChimp Settings<span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
+      </div>
+      <div class="widget-holder">
+        <?php if(CART66_PRO): ?>
+        <div class="widget-logo" style="float:right;">
+              <a href="http://eepurl.com/dtQBb" target="_blank">
+                <img src="http://gallery.mailchimp.com/089443193dd93823f3fed78b4/images/MC_MonkeyReward_06.png" align="left" alt="Powered by MailChimp">
+              </a>
+        </div>
+        <?php endif; ?>
+        <p class="description">
+          Configure your <a href="http://eepurl.com/dtQBb" target="_blank">Mail Chimp</a> account information so your buyers can opt in to your newsletter.
+        </p>
+        <div>
+          <?php if(CART66_PRO): ?>
+          <form id="mailchimp" class="ajaxSettingForm" action="" method='post'>
+            <input type='hidden' name='action' value="save_settings" />
+            <input type='hidden' name='_success' value="Your MailChimp settings have been saved.">
+            <input type="hidden" name="mailchimp_list_ids" value="" />
+            <ul>
+              <li>
+                <label style="display: inline-block; width: 150px; text-align: right;" for='mailchimp_apikey'>MailChimp API Key:</label>
+                <input type='text' name='mailchimp_apikey' id='mailchimp_apikey' value="<?php echo Cart66Setting::getValue('mailchimp_apikey'); ?>" size="60" />
+                 <p style="margin-left: 155px;" class="description">Need an API key? Find out how to get one <a href="http://kb.mailchimp.com/article/where-can-i-find-my-api-key/" title="Where can I find my API Key?" target="_blank">here.</a></p>
+              </li>
+              <li><label style="display: inline-block; width: 150px; text-align: right; margin-top: 0px;" for='mailchimp_opt_in_message'>Opt-in Message:</label>
+              <br/><textarea style="width: 375px; height: 140px; margin-left: 155px; margin-top: -20px;" 
+              name='mailchimp_opt_in_message'><?php echo Cart66Setting::getValue('mailchimp_opt_in_message'); ?></textarea>
+              <p style="margin-left: 155px;" class="description">Provide a message to tell your buyers what your newsletter is about.<br/>For example, you might want to say something like
+                "Yes! I would like to subscribe to:"</p></li>
+                
+              <li><label style="display: inline-block; width: 150px; text-align: right; margin-top: 0px;" for='mailchimp_doubleoptin'>Double Opt-In:</label>
+                  
+                  <input type='radio' name='mailchimp_doubleoptin' id='mailchimp_doubleoptin' value="true" <?php 
+                  $doubleOptin = Cart66Setting::getValue('mailchimp_doubleoptin');
+                  echo (empty($doubleOptin) ||  $doubleOptin == true) ? 'checked="checked"' : '' ?> /> Send a Double Opt-In email
+                  
+                  <input type='radio' name='mailchimp_doubleoptin' id='mailchimp_doubleoptin' value="no-optin" <?php 
+                  $doubleOptin = Cart66Setting::getValue('mailchimp_doubleoptin');
+                  echo ($doubleOptin=="no-optin") ? 'checked="checked"' : '' ?> /> Don't send a Double Opt-In email
+                  <p style="margin-left: 155px;" class="description">Send a double opt-in confirmation message. <strong>Abusing this may cause your account to be suspended.</strong> <a href="http://blog.mailchimp.com/opt-in-vs-confirmed-opt-in-vs-double-opt-in/" target="blank">Read more about Opt-Ins</a></p>
+              </li>
+              <li>
+                <label style="display: inline-block; width: 150px; text-align: right;" >Show Lists:</label>
+                <div style="width: 600px; display: block; margin-left: 155px; margin-top: -1.25em;">
+                  <?php
+                    $mcLists = false;
+                    if($mailChimpKey = Cart66Setting::getValue('mailchimp_apikey')) {
+                      $mc = new Cart66MailChimp($mailChimpKey);
+                      $mcLists = $mc->getLists();
+                    }
+                    
+                    if(is_array($mcLists)){
+                      $mcSavedListIds = array();
+                      if($mcSavedLists = Cart66Setting::getValue('mailchimp_list_ids')) {
+                        $mcSavedListIds = explode('~', $mcSavedLists);
+                      }
+                      
+                      foreach ($mcLists as $list){
+                    		$checked = '';
+                        $val = $list['id'] . '::' . $list['name'];
+                        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] looking for: $val in " . print_r($mcSavedListIds, true));
+                        if(in_array($val, $mcSavedListIds)) {
+                          $checked = 'checked="checked"';
+                        }
+                        echo '<input type="checkbox" name="mailchimp_list_ids[]" value="' . $val . '" ' . $checked . '> ' . $list['name'] . ' - ' . $list['stats']['member_count'] . ' Members' . '<br />';
+                    		
+                    	}
+                    }
+                    else{
+                      echo '<p class="description">You do not have any lists<br>' . $mcLists . '</p>';
+                    }
+                  ?>
+                </div>
+                <div style="clear:both;">&nbsp;</div>
+              </li>
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+            </ul>
+            
+          </form>  
           <?php endif; ?>
         </div>
       </div>
@@ -1070,7 +1166,7 @@ else {
             <input type='hidden' name='_success' value="The cart images setting has been saved.">
             <ul>
               
-              <li><label style="display: inline-block; width: 150px; text-align: right;" for='styles[url]'>URL to image directory:</label>
+              <li><label style="display: inline-block; width: 150px; text-align: right;" for="cart_images_url">URL to image directory:</label>
               <input type='text' name='cart_images_url' id='cart_images_url' style='width: 375px;' 
               value="<?php echo Cart66Setting::getValue('cart_images_url'); ?>" /></li>
 
@@ -1138,6 +1234,16 @@ else {
                 <span class="label_desc">Send transactions to <a href='https://developer.paypal.com'>PayPal's developer sandbox</a>.</span>
               </li>
               
+              <li>
+                <label style="display: inline-block; width: 220px; text-align: right;" for='styles_url'>Disable caching:</label>
+                <select name='disable_caching' id='disable_caching' style="width: 150px;">
+                  <option value="0">never</option>
+                  <option value="1" <?php echo Cart66Setting::getValue('disable_caching') == 1 ? 'selected="selected"' : '' ?>>on cart pages</option>
+                  <option value="2" <?php echo Cart66Setting::getValue('disable_caching') == 2 ? 'selected="selected"' : '' ?>>on all pages</option>
+                </select>
+                <span class="label_desc">Send HTTP headers to prevent pages from being cached by web browsers.</span>
+              </li>
+              
               <li style="background-color: #eee; border: 1px solid #933; margin: 10px 50px; padding: 10px;">
                 <label style="display: inline-block; width: 220px; text-align: right;" for='styles_url'>Delete database when uninstalling:</label>
                 <input type='checkbox' name='uninstall_db' id='uninstall_db' value="1" <?php echo Cart66Setting::getValue('uninstall_db') ? 'checked="checked"' : '' ?> />
@@ -1173,7 +1279,7 @@ else {
                   <?php
                     global $wpdb; 
                   ?>
-                  Cart66 Version: <?php echo CART66_VERSION_NUMBER; ?><br>
+                  Cart66 <?php if(CART66_PRO){ echo " Pro"; } ?> Version: <?php echo Cart66Setting::getValue('version');?><br>
                   WP Version: <?php echo get_bloginfo("version"); ?><br>
                   PHP Version: <?php echo phpversion(); ?><br>
                   Session Save Path: <?php echo ini_get("session.save_path"); ?><br>
@@ -1199,7 +1305,8 @@ else {
                               $wpdb->prefix."cart66_inventory",
                               $wpdb->prefix."cart66_accounts",
                               $wpdb->prefix."cart66_account_subscriptions",
-                              $wpdb->prefix."cart66_pp_recurring_payments"
+                              $wpdb->prefix."cart66_pp_recurring_payments",
+                              $wpdb->prefix."cart66_sessions"
                               );
                               $matched_tables = $wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix."cart66_%'","ARRAY_N");
                               if(empty($matched_tables)){
@@ -1223,6 +1330,9 @@ else {
                               }
                           ?><br>
 									Current Dir: <?php echo getcwd(); ?><br>
+									WP Url: <?php echo get_bloginfo('wpurl'); ?><br>
+  								Server Name: <?php echo $_SERVER['SERVER_NAME']; ?><br>
+  								Cookie Domain: <?php $cookieDomain = parse_url( strtolower( get_bloginfo('wpurl') ) ); echo $cookieDomain['host']; ?><br>
              </div>
            </li>
           </ul>

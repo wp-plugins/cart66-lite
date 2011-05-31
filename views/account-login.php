@@ -7,32 +7,30 @@
     <input type="hidden" name="redirect" value="<?php echo $data['redirect'] ?>">
     <ul>
       <li>
-        <label class="" for="login[username]">Username:</label>
+        <label class="" for="login-username"><?php _e( 'Username' , 'cart66' ); ?>:</label>
         <input type="text" id="login-username" name="login[username]" value="" />
       </li>
       <li>
-        <label class="" for="login[password]">Password:</label>
+        <label class="" for="login-password"><?php _e( 'Password' , 'cart66' ); ?>:</label>
         <input type="password" id="login-password" name="login[password]" value="" />
       </li>
       <li>
-        <label class="" for"submit">&nbsp;</label>
+        <label class="" for="submit">&nbsp;</label>
         <input type="submit" name="submit" value="Enter" class="Cart66ButtonPrimary" />
-        <a href='#' id='forgotLink'>Forgot my password</a>
+        <a href='#' id='forgotLink'><?php _e( 'Forgot my password' , 'cart66' ); ?></a>
       </li>
     </ul>
   </form>
 
   <form id="Cart66ForgotPassword" class="phorm2" action="" method='post'>
     <input type="hidden" name="cart66-task" value="account-reset" />
-    <p class='Cart66Note'>Enter your username and we will send you a new password.<br/> 
-      The email will be sent to the email address you used for your account.</p>
+    <p class='Cart66Note'><?php _e( 'Enter your username and we will send you a new password.<br/> The email will be sent to the email address you used for your account' , 'cart66' ); ?>.</p>
     <ul>
       <li>
-        <label class="" for="login[username]">Username:</label>
+        <label class="" for="login-username"><?php _e( 'Username' , 'cart66' ); ?>:</label>
         <input type="text" id="login-username" name="login[username]" value="" />
       </li>
       <li>
-        <label class="" for"submit">&nbsp;</label>
         <input type="submit" name="submit" value="Send New Password" class="Cart66ButtonPrimary" />
       </li>
     </ul>

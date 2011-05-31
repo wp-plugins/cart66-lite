@@ -22,7 +22,7 @@ class Cart66Ajax {
             $value = '';
           }
         }
-        elseif($key == 'enable_logging') {
+        elseif($key == 'enable_logging' && $value == '1') {
           try {
             Cart66Log::createLogFile();
           }

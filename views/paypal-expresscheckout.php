@@ -6,9 +6,9 @@ $signature = Cart66Setting::getValue('paypalpro_api_signature');
 if(!($username && $password && $signature)) {
   $settingsOk = false;
   ?>
-  <div id='cart66Errors'>
-    <p><strong>PayPal Express Checkout Is Not Configured</strong></p>
-    <p>In order to use PayPal Express Checkout you must enter your PayPal API username, password and signature in the Cart66 Settings Panel</p>
+  <div class='Cart66Error'>
+    <p><strong><?php _e( 'PayPal Express Checkout Is Not Configured' , 'cart66' ); ?></strong></p>
+    <p><?php _e( 'In order to use PayPal Express Checkout you must enter your PayPal API username, password and signature in the Cart66 Settings Panel' , 'cart66' ); ?></p>
   </div>
   <?php
 }
@@ -137,13 +137,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-action'] == 'paypalexp
 ?>
 
 <?php if($settingsOk): ?>
-<?php  
-if(!isset($data['style'])) {
-  $data['style'] = "clear:both; float: right; margin: 10px 10px 0px 0px;";
-}
-?>
-<form action="" method='post' style="<?php echo $data['style']; ?>">
+<form action="" method='post' id="paypalexpresscheckout">
   <input type='hidden' name='cart66-action' value='paypalexpresscheckout'>
-  <input type="image" id='PayPalExpressCheckoutButton' src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="left" style="margin-right:7px;" value="PayPal Express Checkout" />
+  <input type="image" id='PayPalExpressCheckoutButton' src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" value="PayPal Express Checkout" name="PayPal Express Checkout" />
 </form>
 <?php endif; ?>

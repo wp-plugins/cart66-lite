@@ -1,21 +1,25 @@
-/* Remove dotted border from around links after they are clicked */
-a:active { outline: none; }
-a:focus { outline: none; }
+/* @override 
+	http://pro.cart66/wp-content/plugins/cart66-pro/cart66.css?ver=1.1
+	http://pro.cart66/wp-content/plugins/cart66/cart66.css?ver=1.1
+*/
 
 #viewCartTable {
   margin: 12px 0px 12px 0px;
   border: 1px solid #CCCCCC;
   width: 100%;
   clear: both;
+  border-collapse: collapse;
 }
-
+#viewCartTable th {
+	  border-bottom: 1px solid #CCCCCC;
+	}
 #viewCartTable td,
 #viewCartTable th {
   padding: 5px 5px 5px 5px;
   margin: 0px;
-  border-bottom: 1px solid #CCCCCC;
   vertical-align: middle;
   line-height: 1.5em;
+  text-align: left;
 }
 
 #viewCartTable th {
@@ -23,14 +27,17 @@ a:focus { outline: none; }
   vertical-align: middle;
 }
 
-#viewCartTable td.noBorder {
-  border:none;
+#viewCartTable td.noBorder, #viewCartTable tr.subtotal, #viewCartTable tr.subtotal td, #viewCartTable tr.shipping td, #viewCartTable tr.tax td, #viewCartTable tr.total td, .noBorder td {
+	border-top: none !important;
+  border:none !important;
 }
-
-#viewCartTable td.navRow {
-
-}
-
+.alignRight {
+	text-align: right !important;
+	}
+.alignLeft {text-align: left !important;}
+.strong {
+	font-weight: bold !important;
+	}
 #viewCartTableNav {
   margin: 0px;
   width: 100%;
@@ -38,9 +45,13 @@ a:focus { outline: none; }
   display: table;
 }
 
-#viewCartTableNav .Cart66ButtonPrimary {
 
-}
+#continueShopping, #checkoutShopping {
+	display: inline-block;
+	}
+#checkoutShopping {
+	float: right;
+	}
 
 #viewCartTable a, 
 #viewCartTable tbody,
@@ -66,7 +77,7 @@ input[type=submit] {
   width: 145px; 
 }
 
-#cart66Errors {
+.Cart66Error {
   background-color: #FEE;
   border: 1px solid red;
   width: 500px;
@@ -79,7 +90,7 @@ input[type=submit] {
 
 #Cart66ReceiptExpectation { margin-top: 7px; font-style: italic;}
 
-#Cart66NewsletterList .Cart66CheckboxList {
+.Cart66NewsletterList .Cart66CheckboxList, #Cart66ExpressReview ul {
   margin: 0;
   padding: 0;
   list-style-type: none;
@@ -88,7 +99,7 @@ input[type=submit] {
 
 .purAddToCart {
   vertical-align: middle; 
-  width: auto !important; 
+  width: auto; 
   margin: 7px 0px;
   border: none !important;
 }
@@ -162,7 +173,6 @@ input[type=submit] {
   font-weight:normal; 
   color:#B33; 
   font-size:11px; 
-  font-family:arial;
   background-color: #FEE;
   border: 2px solid #B33;
   padding: 3px;
@@ -244,38 +254,30 @@ input[type=submit] {
 
 .Cart66ButtonPrimary, 
 .Cart66ButtonSecondary {
-  font-family: helvetica,arial;
-  font-size: 12px;
-  font-weight: normal;
   display: inline-block;
-  padding: 0px 1.5em;
-  margin: 0px 5px 5px 5px !important;
-  width: auto !important;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 1em;
   border: 1px solid #454545;
-  height: 24px;
-  line-height: 1.2em;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
   cursor: pointer;
-  overflow: visible;
-  background-image: url(images/btn-bg.png);
-  background-repeat: repeat-x;
   background-color: #445e67;
-  color: #FFFFFF;
+  color: #fff !important;
 }
-
 .Cart66ButtonSecondary {
   background-color: #2C3538;
 }
-
+#couponCode, #updateCart {
+	display: block;
+	float: right;
+	margin: 0;
+	clear: both;
+	}
 a.Cart66ButtonPrimary, 
 a.Cart66ButtonSecondary {
-  display: inline-block;
   text-decoration: none;
-  height: 24px;
-  padding: 0px 1.5em;
-  line-height: 2em;
   color: #FFFFFF;
 }
 
@@ -314,7 +316,9 @@ a.Cart66ButtonSecondary {
   border: 1px solid red;
   background-color: #FEE;
 }
-
+#ccInfo ul {
+    margin:0;
+}
 .phorm2 ul {
   margin: 0px;
   padding: 0px;
@@ -334,7 +338,9 @@ a.Cart66ButtonSecondary {
   margin-top: 3px;
   margin-right: 3px;
 }
-
+.phorm2 ul li input {
+	margin:0;
+	}
 .phorm2 ul li label.short {
   width: 80px;
 }
@@ -358,11 +364,6 @@ a.Cart66ButtonSecondary {
 
 .phorm2 ul.shortLabels li p.description {
   margin-left: 90px;
-}
-
-.phorm2 ul li h3 {
-  margin: 8px 0px 0px 0px !important;
-  padding: 0px;
 }
 
 .phorm2 .button {
@@ -389,6 +390,10 @@ a.Cart66ButtonSecondary {
   margin-bottom: 2px !important;
 }
 
+.state_text_field {
+  display: none;
+}
+
 /* Gravity Forms Cart View Styles */
 table .entry-details {
   width: 100%;
@@ -410,4 +415,86 @@ table .entry-details tbody {
 td .entry-view-field-value {
   padding-left: 25px !important;
   border: none !important;
+}
+
+#ccInfo input[type=text], #accountInfo input[type=text], #accountInfo input[type=password] {
+	width: 45%;
+	}
+#ccInfo #payment-securityId {
+    width: 30px;
+}
+
+#paypalexpresscheckout {
+    clear:both;
+    float: right;
+    margin: 10px 10px 0px 0px;
+}
+#PayPalExpressCheckoutButton {
+    margin-right:7px;
+    text-align: left;
+}
+/* checkout-form.php */
+#payment-cardExpirationYear {
+    margin:0;
+}
+li .description {
+    color: #757575;
+}
+.hidden {
+	visibility: hidden;
+	}
+
+.noBottomBorder {
+	border-bottom: none;
+	}
+span.subscriptionOrMembership {
+	padding: 0px 1px 0px 10px; display: inline-block; width: 35px; background-color: transparent;
+	}
+.itemQuantity {
+	width: 35px; margin-left: 5px;
+	}
+
+.promoMessage {
+	color: red;
+	}
+
+#emptyCartMsg {
+	text-align: center;
+	}
+
+#set_shipping_zip_row th, #shipping_to_row th {
+	text-align: right;
+	}
+.haveCoupon {
+	margin-bottom: 0 !important;
+	padding: 0;
+	}
+.haveCoupon input {
+	margin-bottom: 0;
+	}
+.phorm2 h2 {
+	clear: none;
+	}
+    #billingInfo, #shippingInfo  {
+        float: left;
+        width: 51%;
+    }
+    #Cart66ExpressReview {
+		overflow: hidden;
+	}
+    #Cart66ExpressReview #shippingInfo {
+		float: none;
+		margin-left: 51%;
+		width: auto;
+	}
+	#createAccountDiv {
+		margin-top: 20px;
+	}
+    #paymentInfo, #accountInfo, #Cart66CheckoutButtonDiv {
+        float: none;
+        width: auto;
+        margin-left: 51%;
+    }
+#shippingAddress {
+    display: none;
 }

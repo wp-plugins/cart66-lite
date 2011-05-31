@@ -61,7 +61,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     if($account !== false && $account->id < 1) {
       $errors = $account->validate();
       if($acctData['password'] != $acctData['password2']) {
-        $errors[] = "Passwords do not match";
+        $errors[] = __("Passwords do not match","cart66");
       }
       if(count($errors) == 0) {
         $createAccount = true;
@@ -79,6 +79,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
       
       // Look for constant contact opt-in
       if(CART66_PRO) { include(CART66_PATH . "/pro/Cart66ConstantContactOptIn.php"); }
+      if(CART66_PRO) { include(CART66_PATH . "/pro/Cart66MailChimpOptIn.php"); }
       
       if($itemAmount > 0 || $shipping > 0) {
         // Send shipping as the item amount if the item amount is $0.00 otherwise paypal will refuse the transaction
@@ -142,7 +143,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           $promo = Cart66Session::get('Cart66Cart')->getPromotion();
           $promoMsg = "none";
           if($promo) {
-            $promoMsg = $promo->code . ' (-' . CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2) . ')';
+            $promoMsg = $promo->code . ' (-' . CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2) . ')';
           }
 
           list($shipFirstName, $shipLastName) = split(' ', $details['SHIPTONAME'], 2);
@@ -235,44 +236,39 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
 <?php echo do_shortcode('[cart mode="read" tax="'. $tax .'"]'); ?>
 
 <?php if(isset($details['EMAIL'])): ?>
-  <table id="Cart66ExpressReview" border="0" cellpadding="0" cellspacing="0">
-    <tr>
-      <td valign="top">
-        <p>
-          <strong>Billing Information</strong><br/>
-          <?php echo $details['FIRSTNAME'] ?> <?php echo $details['LASTNAME'] ?><br/>
-          <?php echo "PayPal Status: " . $details['PAYERSTATUS'] ?><br/>
+  <div id="Cart66ExpressReview">
+	<div id="billingInfo">
+        <ul id="billingAddress">
+          <li class="title"><strong>Billing Information</strong></li>
+          <link><?php echo $details['FIRSTNAME'] ?> <?php echo $details['LASTNAME'] ?></li>
+          <li><?php echo "PayPal Status: " . $details['PAYERSTATUS'] ?></li>
           <?php if(isset($details['PHONENUM'])): ?>
-            Phone: <?php echo $details['PHONENUM'] ?><br/>
+          <li>Phone: <?php echo $details['PHONENUM'] ?></li>
           <?php endif; ?>
-          Email: <?php echo $details['EMAIL'] ?>
-        </p>
-      </td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-      <td>
+          <li>Email: <?php echo $details['EMAIL'] ?></li>
+        </ul>
+	</div><!-- #billingInfo -->
         <?php if($delivery != "Download"): ?>
-          <p>
-            <strong>Shipping Information</strong><br/>
-          <?php echo $details['SHIPTONAME'] ?><br/>
-          <?php echo $details['SHIPTOSTREET'] ?><br/>
+	<div id="shippingInfo">
+		<ul>
+          <li class="title"><strong>Shipping Information</strong></li>
+          <li><?php echo $details['SHIPTONAME'] ?></li>
+          <li><?php echo $details['SHIPTOSTREET'] ?></li>
     
           <?php if(!empty($details['SHIPTOSTREET2'])): ?>
-            <?php echo $details['SHIPTOSTREET2'] ?><br/>
+            <li><?php echo $details['SHIPTOSTREET2'] ?></li>
           <?php endif; ?>
     
-          <?php echo $details['SHIPTOCITY'] ?> <?php echo $details['SHIPTOSTATE'] ?>, <?php echo $details['SHIPTOZIP'] ?>
+          <li><?php echo $details['SHIPTOCITY'] ?> <?php echo $details['SHIPTOSTATE'] ?>, <?php echo $details['SHIPTOZIP'] ?></li>
     
           <?php if(!empty($details['SHIPTOCOUNTRYCODE'])): ?>
-            <?php echo $details['SHIPTOCOUNTRYCODE'] ?>
+            <li><?php echo $details['SHIPTOCOUNTRYCODE'] ?></li>
           <?php endif; ?>
-          </p>
+		</ul>
+		</div><!-- #shippingInfo -->
         <?php else: ?>
-          &nbsp;
         <?php endif; ?>
-      </td>
-    </tr>
-  </table>
-    
+</div>    
   <?php 
   if(isset($errors) && count($errors) > 0) {
     echo Cart66Common::showErrors($errors, 'Unable to create account');
@@ -309,43 +305,88 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
           echo "<p id='Cart66OptInMessage'>$optInMessage</p>";
         
           $lists = explode('~', $lists);
-          echo '<ul id="Cart66NewsletterList">';
+          echo '<ul class="Cart66NewsletterList">';
           foreach($lists as $list) {
             list($id, $name) = explode('::', $list);
             echo "<li><input class=\"Cart66CheckboxList\" type=\"checkbox\" name=\"constantcontact_subscribe_ids[]\" value=\"$id\" /> $name</li>";
           }
-          echo '<li><label style="width: auto;">Email:</label><input type="text" name="constantcontact_email" value="' . $details['EMAIL'] . '" /></li>';
+          echo '<li><label for="constantcontact_email">Email:</label><input type="text" id="constantcontact_email" name="constantcontact_email" value="' . $details['EMAIL'] . '" /></li>';
           echo '</ul>';
           
           echo '<input type="hidden" name="constantcontact_first_name" value="' . $details['FIRSTNAME'] . '" />';
           echo '<input type="hidden" name="constantcontact_last_name"  value="' . $details['LASTNAME'] . '" />';
         ?>
     <?php endif; ?>
+    
+    <?php if($lists = Cart66Setting::getValue('mailchimp_list_ids')): ?>
+      <li>
+        <?php
+          if(!$optInMessage = Cart66Setting::getValue('mailchimp_opt_in_message')) {
+            $optInMessage = 'Yes, I would like to subscribe to:';
+          }
+          echo "<p>$optInMessage</p>";
+          $lists = explode('~', $lists);
+          echo '<ul class="Cart66NewsletterList MailChimpList">';
+          foreach($lists as $list) {
+            list($id, $name) = explode('::', $list);
+            echo "<li><input class=\"Cart66CheckboxList\" type=\"checkbox\" name=\"mailchimp_subscribe_ids[]\" value=\"$id\" /> $name</li>";
+          }
+          
+          echo '<li><label for="mailchimp_email">Email:</label><input type="text" id="mailchimp_email" name="mailchimp_email" value="' . $details['EMAIL'] . '" /></li>';
+          echo '</ul>';
+          
+          echo '<input type="hidden" name="mailchimp_first_name" value="' . $details['FIRSTNAME'] . '" />';
+          echo '<input type="hidden" name="mailchimp_last_name"  value="' . $details['LASTNAME'] . '" />';
+          echo '</ul>';
+          
+        
+        
+          if(isset($_POST['mailchimp_subscribe_ids']) && !empty($_POST['mailchimp_subscribe_ids'])){
+              ?>
+              <script type="text/javascript" charset="utf-8">
+                jQuery(document).ready(function($){
+                  <?php
+                  foreach($_POST['mailchimp_subscribe_ids'] as $id) {
+                    ?>
+                    $(".MailChimpList input[value=<?php echo $id; ?>]").attr('checked','true');
+                  <?php 
+                  }
+
+                  ?>
+                })
+              </script>
+        <?php
+          }
+        ?>
+      </li>
+    <?php endif; ?>
       
 
-    <?php if($account->id < 1 && (Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() || Cart66Session::get('Cart66Cart')->hasMembershipProducts()) ): ?>
+    <?php if($account !== false && $account->id < 1 && (Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() || Cart66Session::get('Cart66Cart')->hasMembershipProducts()) ): ?>
+	<div id="createAccountDiv">
+		<h3><?php _e( 'Create Your Account' , 'cart66' ); ?></h3>
+	</div>
     <ul>    
-      <li><h3>Create Your Account</h3></li>
       <li>
-        <label for="account-first_name">First name:</label><input type="text" name="account[first_name]" value="<?php echo $account->firstName ?>" id="account-first_name">
+        <label for="account-first_name"><?php _e( 'First name' , 'cart66' ); ?>:</label><input type="text" name="account[first_name]" value="<?php echo $account->firstName ?>" id="account-first_name">
       </li>
       <li>
-        <label for="account-last_name">Last name:</label><input type="text" name="account[last_name]" value="<?php echo $account->lastName ?>" id="account-last_name">
+        <label for="account-last_name"><?php _e( 'Last name' , 'cart66' ); ?>:</label><input type="text" name="account[last_name]" value="<?php echo $account->lastName ?>" id="account-last_name">
       </li>
       <li>
-        <label for="account-email">Email:</label><input type="text" name="account[email]" value="<?php echo $account->email ?>" id="account-email">
+        <label for="account-email"><?php _e( 'Email' , 'cart66' ); ?>:</label><input type="text" name="account[email]" value="<?php echo $account->email ?>" id="account-email">
       </li>
       <li>
-        <label for="account-username">Username:</label><input type="text" name="account[username]" value="<?php echo $account->username ?>" id="account-username">
+        <label for="account-username"><?php _e( 'Username' , 'cart66' ); ?>:</label><input type="text" name="account[username]" value="<?php echo $account->username ?>" id="account-username">
       </li>
       <li>
-        <label for="account-password">Password:</label><input type="password" name="account[password]" value="" id="account-password">
+        <label for="account-password"><?php _e( 'Password' , 'cart66' ); ?>:</label><input type="password" name="account[password]" value="" id="account-password">
       </li>
       <li>
-        <label for="account-password2">Repeat Password:</label><input type="password" name="account[password2]" value="" id="account-password2">
+        <label for="account-password2"><?php _e( 'Repeat Password' , 'cart66' ); ?>:</label><input type="password" name="account[password2]" value="" id="account-password2">
       </li>
       <li>
-        <label>&nbsp;</label>
+        <label class="hidden"><?php _e( 'Complete Order' , 'cart66' ); ?></label>
         <?php
           $cartImgPath = Cart66Setting::getValue('cart_images_url');
           if($cartImgPath) {
@@ -353,15 +394,15 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
               $cartImgPath .= '/';
             }
             $completeImgPath = $cartImgPath . 'complete-order.png';
-            echo "<input type='image' style='width:auto; height:auto; padding: 10px 0px 10px 0px;' src='$completeImgPath' value='Complete Order' />";
+            echo "<input type='image' src='$completeImgPath' value='Complete Order' />";
           }
           else {
-            echo "<input type='submit' class='Cart66ButtonPrimary' style='' value='Complete Order' />";
+            echo "<input type='submit' class='Cart66ButtonPrimary' value='Complete Order' />";
           }
         ?>
-        <p id="Cart66ReceiptExpectation">Your receipt will be on the next page and also emailed to you.</p>
       </li>
     </ul>
+    <p id="Cart66ReceiptExpectation"><?php _e( 'Your receipt will be on the next page and also emailed to you' , 'cart66' ); ?>.</p>
   <?php else: ?>
     <?php 
       $cartImgPath = Cart66Setting::getValue('cart_images_url');
@@ -370,13 +411,13 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
           $cartImgPath .= '/';
         }
         $completeImgPath = $cartImgPath . 'complete-order.png';
-        echo "<input type='image' style='width:auto; height:auto; padding: 10px 0px 10px 0px;' src='$completeImgPath' value='Complete Order' />";
+        echo "<input type='image' src='$completeImgPath' value='Complete Order' />";
       }
       else {
-        echo "<input type='submit' class='Cart66ButtonPrimary' style='' value='Complete Order' />";
+        echo "<input type='submit' class='Cart66ButtonPrimary' value='Complete Order' />";
       }
     ?>
-    <p id="Cart66ReceiptExpectation">Your receipt will be on the next page and also emailed to you.</p>
+    <p id="Cart66ReceiptExpectation"><?php _e( 'Your receipt will be on the next page and also emailed to you' , 'cart66' ); ?>.</p>
   <?php endif; ?>
     
     

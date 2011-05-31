@@ -10,7 +10,7 @@ class Cart66Promotion extends Cart66ModelAbstract {
     $amount = 'not set';
     if($this->id > 0) {
       if($this->type == 'dollar') {
-        $amount = CURRENCY_SYMBOL . number_format($this->amount, 2, '.', ',') . ' off';
+        $amount = CART66_CURRENCY_SYMBOL . number_format($this->amount, 2, '.', ',') . ' off';
       }
       elseif($this->type == 'percentage') {
         $amount = number_format($this->amount, 0) . '% off';
@@ -22,7 +22,7 @@ class Cart66Promotion extends Cart66ModelAbstract {
   public function getMinOrderDescription() {
     $min = $this->minOrder;
     if($min > 0) {
-      $min = CURRENCY_SYMBOL . $min;
+      $min = CART66_CURRENCY_SYMBOL . $min;
     }
     else {
       $min = "Apply to all orders";

@@ -15,7 +15,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-task'] == 'save-invent
     setTimeout('$jq("#Cart66SuccessBox").fadeOut(800);', 1000);
   });
   </script>
-  <div id='Cart66SuccessBox' style='width: 300px;'><p class='Cart66Success'>Inventory updated</p></div>
+  <div id='Cart66SuccessBox' style='width: 300px;'><p class='Cart66Success'><?php _e( 'Inventory updated' , 'cart66' ); ?></p></div>
   <?php
 }
 
