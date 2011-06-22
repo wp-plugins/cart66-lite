@@ -1,0 +1,526 @@
+# Copyright (C) 2011 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: cart66 v1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-05-18 17:06-0500\n"
+"PO-Revision-Date: 2011-05-18 17:09-0500\n"
+"Last-Translator: Bobby Smith <bobby@reality66.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: ../cart66-pro/admin/inventory.php:18
+msgid "Inventory updated"
+msgstr "Inventario actualizado"
+
+#: ../cart66-pro/gateways/Cart66GatewayAbstract.php:139
+msgid "Passwords do not match"
+msgstr "Las contraseñas no coinciden"
+
+#: ../cart66-pro/js/cart66Dialog.php:238
+msgid "Pick a product"
+msgstr "Escoja un producto"
+
+#: ../cart66-pro/js/cart66Dialog.php:239
+msgid "Shortcode Reference"
+msgstr "Shortcode Referencia"
+
+#: ../cart66-pro/js/cart66Dialog.php:250
+msgid "OK"
+msgstr "OK"
+
+#: ../cart66-pro/js/cart66Dialog.php:255
+msgid "Your products"
+msgstr "Sus productos"
+
+#: ../cart66-pro/js/cart66Dialog.php:260
+msgid "CSS style"
+msgstr "CSS estilo"
+
+#: ../cart66-pro/js/cart66Dialog.php:264
+msgid "Show price"
+msgstr "Mostrar precios"
+
+#: ../cart66-pro/js/cart66Dialog.php:272
+msgid "Button path"
+msgstr "Botón de ruta"
+
+#: ../cart66-pro/js/cart66Dialog.php:276
+msgid "Preview"
+msgstr "Prevista"
+
+#: ../cart66-pro/js/cart66Dialog.php:437
+msgid "Insert"
+msgstr "Insertar"
+
+#: ../cart66-pro/js/cart66Dialog.php:440
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../cart66-pro/models/Cart66.php:364
+msgid "Orders"
+msgstr "Órdenes"
+
+#: ../cart66-pro/models/Cart66.php:365
+msgid "Products"
+msgstr "Productos"
+
+#: ../cart66-pro/models/Cart66.php:366
+msgid "PayPal Subscriptions"
+msgstr "PayPal Suscripciones"
+
+#: ../cart66-pro/models/Cart66.php:367
+msgid "Inventory"
+msgstr "Inventario"
+
+#: ../cart66-pro/models/Cart66.php:368
+msgid "Promotions"
+msgstr "Promociones"
+
+#: ../cart66-pro/models/Cart66.php:369
+msgid "Shipping"
+msgstr "Envío"
+
+#: ../cart66-pro/models/Cart66.php:370
+msgid "Settings"
+msgstr "Configuración"
+
+#: ../cart66-pro/models/Cart66.php:371
+msgid "Reports"
+msgstr "Informes"
+
+#: ../cart66-pro/models/Cart66.php:372
+msgid "Accounts"
+msgstr "Cuentas"
+
+#: ../cart66-pro/models/Cart66.php:539
+#: ../cart66-pro/models/Cart66.php:540
+msgid "Feature Levels"
+msgstr "Función Niveles"
+
+#: ../cart66-pro/models/Cart66CartWidget.php:63
+msgid "Title"
+msgstr "Título"
+
+#: ../cart66-pro/models/Cart66Common.php:701
+msgid "We're sorry.<br/>Your order could not be completed for the following reasons"
+msgstr "Lo sentimos.<br/>Su pedido no se pudo completar por las siguientes razones"
+
+#: ../cart66-pro/models/Cart66Product.php:737
+msgid "Unable to upload file"
+msgstr "No se puede cargar el archivo"
+
+#: ../cart66-pro/pro/models/Cart66Account.php:311
+#, fuzzy
+msgid "Username required"
+msgstr "Nombre de usuario"
+
+#: ../cart66-pro/pro/models/Cart66Account.php:324
+#, fuzzy
+msgid "Username unavailable"
+msgstr "Recepción no está disponible"
+
+#: ../cart66-pro/pro/models/Cart66Account.php:341
+msgid "Email address is invalid"
+msgstr "Dirección de correo electrónico no es válido"
+
+#: ../cart66-pro/pro/models/Cart66Account.php:357
+msgid "Account password is required"
+msgstr "Contraseña de la cuenta se requiere"
+
+#: ../cart66-pro/pro/models/Cart66PayPalSubscription.php:13
+msgid "Item number is required"
+msgstr "Número del artículo se requiere"
+
+#: ../cart66-pro/pro/models/Cart66PayPalSubscription.php:22
+msgid "The item number must be unique"
+msgstr "El número del artículo debe ser único"
+
+#: ../cart66-pro/pro/models/Cart66PayPalSubscription.php:27
+msgid "Subscription name is required"
+msgstr "Se requiere el nombre de Suscripción"
+
+#: ../cart66-pro/pro/models/Cart66PayPalSubscription.php:31
+#, fuzzy
+msgid "Feature level is required"
+msgstr "Función Niveles"
+
+#: ../cart66-pro/pro/models/Cart66PayPalSubscription.php:35
+msgid "The price must be greater than zero"
+msgstr "El precio debe ser mayor que cero"
+
+#: ../cart66-pro/pro/models/Cart66PayPalSubscription.php:39
+msgid "The billing interval must be a number greater than zero"
+msgstr "El intervalo de facturación debe ser un número mayor que cero"
+
+#: ../cart66-pro/views/account-info.php:13
+msgid "Update Your Account Information"
+msgstr "Actualice su información de la cuenta"
+
+#: ../cart66-pro/views/account-info.php:15
+#: ../cart66-pro/views/checkout-form.php:42
+#: ../cart66-pro/views/checkout-form.php:111
+#: ../cart66-pro/views/paypal-express.php:371
+msgid "First name"
+msgstr "Nombre"
+
+#: ../cart66-pro/views/account-info.php:19
+#: ../cart66-pro/views/checkout-form.php:47
+#: ../cart66-pro/views/checkout-form.php:116
+#: ../cart66-pro/views/paypal-express.php:374
+msgid "Last name"
+msgstr "Apellido"
+
+#: ../cart66-pro/views/account-info.php:23
+#: ../cart66-pro/views/checkout-form.php:239
+#: ../cart66-pro/views/paypal-express.php:377
+#: ../cart66-pro/views/receipt.php:129
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: ../cart66-pro/views/account-info.php:27
+#: ../cart66-pro/views/account-login.php:10
+#: ../cart66-pro/views/account-login.php:30
+#: ../cart66-pro/views/paypal-express.php:380
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: ../cart66-pro/views/account-info.php:31
+msgid "Update Your Password"
+msgstr "Actualización de la contraseña"
+
+#: ../cart66-pro/views/account-info.php:32
+msgid "Leave blank to keep current password"
+msgstr "Deja en blanco para mantener la contraseña actual"
+
+#: ../cart66-pro/views/account-info.php:35
+#: ../cart66-pro/views/account-login.php:14
+#: ../cart66-pro/views/paypal-express.php:383
+msgid "Password"
+msgstr "Contraseña"
+
+#: ../cart66-pro/views/account-info.php:37
+msgid "Enter a new password"
+msgstr "Introduzca una nueva contraseña"
+
+#: ../cart66-pro/views/account-login.php:20
+msgid "Forgot my password"
+msgstr "Olvidé mi contraseña"
+
+#: ../cart66-pro/views/account-login.php:27
+msgid "Enter your username and we will send you a new password.<br/> The email will be sent to the email address you used for your account"
+msgstr "Introduzca su nombre de usuario y le enviaremos una nueva contraseña.<br/> El correo electrónico será enviado a la dirección de correo electrónico que utilizó para su cuenta"
+
+#: ../cart66-pro/views/cart-button.php:9
+#: ../cart66-pro/views/cart-button.php:16
+msgid "Price"
+msgstr "Precio"
+
+#: ../cart66-pro/views/cart-button.php:23
+msgid "Cart66 Professional"
+msgstr "Cart66 Profesional"
+
+#: ../cart66-pro/views/cart-button.php:23
+msgid "is required to sell subscriptions"
+msgstr "está obligado a vender suscripciones"
+
+#: ../cart66-pro/views/cart-button.php:33
+msgid "Out of stock"
+msgstr "Fuera de stock"
+
+#: ../cart66-pro/views/cart-sidebar.php:14
+msgid "View Cart"
+msgstr "Ver el carro"
+
+#: ../cart66-pro/views/cart-sidebar.php:16
+msgid "Check out"
+msgstr "Echa un vistazo"
+
+#: ../cart66-pro/views/cart-sidebar.php:19
+msgid "Your cart is empty"
+msgstr "Su cesta está vacía"
+
+#: ../cart66-pro/views/cart.php:48
+msgid "Inventory Restriction"
+msgstr "Inventario de restricción"
+
+#: ../cart66-pro/views/cart.php:60
+msgid "Please Provide Your Zip Code"
+msgstr "Incluya su código postal"
+
+#: ../cart66-pro/views/cart.php:61
+msgid "Before you can checkout, please provide the zip code for where we will be shipping your order and click"
+msgstr "Antes de pago puede, por favor indicar el código postal del lugar donde vamos a enviar su pedido y haga clic en"
+
+#: ../cart66-pro/views/cart.php:61
+msgid "Calculate Shipping"
+msgstr "Calcular el envío"
+
+#: ../cart66-pro/views/cart.php:69
+msgid "No Shipping Service Selected"
+msgstr "No hay servicio de envío seleccionado"
+
+#: ../cart66-pro/views/cart.php:70
+msgid "We cannot process your order because you have not selected a shipping method. If there are no shipping services available, we may not be able to ship to your location"
+msgstr "No podemos procesar su solicitud porque no se ha seleccionado un método de envío. Si no hay servicios de transporte disponibles, no puede ser capaz de enviar a su ubicación"
+
+#: ../cart66-pro/views/cart.php:78
+msgid "Too Many Subscriptions"
+msgstr "Demasiado Suscripciones Muchos"
+
+#: ../cart66-pro/views/cart.php:79
+msgid "Only one subscription may be purchased at a time"
+msgstr "Sólo una suscripción se pueden comprar en un tiempo"
+
+#: ../cart66-pro/views/cart.php:93
+msgid "Your current subscription will be canceled when you purchase your new subscription"
+msgstr "Su suscripción actual se cancela cuando la compra de su nueva suscripción"
+
+#: ../cart66-pro/views/cart.php:105
+#: ../cart66-pro/views/receipt.php:169
+#: ../cart66-pro/views/receipt_print_version.php:136
+msgid "Product"
+msgstr "Producto"
+
+#: ../cart66-pro/views/cart.php:106
+#: ../cart66-pro/views/receipt.php:170
+#: ../cart66-pro/views/receipt_print_version.php:137
+msgid "Quantity"
+msgstr "Cantidad"
+
+#: ../cart66-pro/views/cart.php:108
+#: ../cart66-pro/views/receipt.php:171
+#: ../cart66-pro/views/receipt_print_version.php:138
+msgid "Item Price"
+msgstr "Precio del artículo"
+
+#: ../cart66-pro/views/cart.php:109
+#: ../cart66-pro/views/receipt.php:172
+#: ../cart66-pro/views/receipt_print_version.php:139
+msgid "Item Total"
+msgstr "Total del artículo"
+
+#: ../cart66-pro/views/cart.php:152
+msgid "Show Details"
+msgstr "Mostrar detalles"
+
+#: ../cart66-pro/views/cart.php:172
+#: ../cart66-pro/views/cart.php:231
+msgid "Shipping to"
+msgstr "La entrega a"
+
+#: ../cart66-pro/views/cart.php:205
+msgid "Enter Your Zip Code"
+msgstr "Ingrese su código postal"
+
+#: ../cart66-pro/views/cart.php:231
+msgid "via"
+msgstr "con"
+
+#: ../cart66-pro/views/cart.php:257
+#: ../cart66-pro/views/cart.php:268
+msgid "Shipping Method"
+msgstr "Método de envío"
+
+#: ../cart66-pro/views/cart.php:284
+msgid "Update Total"
+msgstr "Actualización Total"
+
+#: ../cart66-pro/views/cart.php:289
+#: ../cart66-pro/views/receipt.php:218
+#: ../cart66-pro/views/receipt_print_version.php:185
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#: ../cart66-pro/views/cart.php:305
+msgid "Coupon"
+msgstr "Cupón"
+
+#: ../cart66-pro/views/cart.php:314
+#: ../cart66-pro/views/receipt.php:242
+#: ../cart66-pro/views/receipt_print_version.php:209
+msgid "Tax"
+msgstr "Impuestos"
+
+#: ../cart66-pro/views/cart.php:323
+msgid "Do you have a coupon?"
+msgstr "¿Tienes un cupón?"
+
+#: ../cart66-pro/views/cart.php:325
+msgid "Apply Coupon"
+msgstr "Aplicar Cupón"
+
+#: ../cart66-pro/views/cart.php:334
+#: ../cart66-pro/views/receipt.php:249
+#: ../cart66-pro/views/receipt_print_version.php:216
+msgid "Total"
+msgstr "Total"
+
+#: ../cart66-pro/views/cart.php:351
+#: ../cart66-pro/views/cart.php:376
+msgid "Continue Shopping"
+msgstr "Continuar Compras"
+
+#: ../cart66-pro/views/cart.php:365
+#: ../cart66-pro/views/checkout-form.php:311
+msgid "Checkout"
+msgstr "Pedido"
+
+#: ../cart66-pro/views/checkout-form.php:33
+#: ../cart66-pro/views/checkout-form.php:100
+msgid "Shipping Address"
+msgstr "Dirección de envío"
+
+#: ../cart66-pro/views/checkout-form.php:35
+msgid "Order Information"
+msgstr "Información del pedido"
+
+#: ../cart66-pro/views/checkout-form.php:38
+msgid "Billing Address"
+msgstr "Dirección de facturación"
+
+#: ../cart66-pro/views/checkout-form.php:52
+#: ../cart66-pro/views/checkout-form.php:121
+msgid "Address"
+msgstr "Dirección"
+
+#: ../cart66-pro/views/checkout-form.php:57
+msgid "Address 2"
+msgstr "Dirección 2"
+
+#: ../cart66-pro/views/checkout-form.php:62
+#: ../cart66-pro/views/checkout-form.php:131
+msgid "City"
+msgstr "Ciudad"
+
+#: ../cart66-pro/views/checkout-form.php:66
+#: ../cart66-pro/views/checkout-form.php:136
+msgid "State"
+msgstr "Estado"
+
+#: ../cart66-pro/views/checkout-form.php:82
+#: ../cart66-pro/views/checkout-form.php:152
+msgid "Zip code"
+msgstr "Código postal"
+
+#: ../cart66-pro/views/checkout-form.php:87
+#: ../cart66-pro/views/checkout-form.php:157
+msgid "Country"
+msgstr "País"
+
+#: ../cart66-pro/views/checkout-form.php:103
+msgid "Same as billing address"
+msgstr "Igual que la dirección de facturación"
+
+#: ../cart66-pro/views/checkout-form.php:173
+#: ../cart66-pro/views/receipt.php:125
+#: ../cart66-pro/views/receipt_print_version.php:95
+msgid "Contact Information"
+msgstr "Información de Contacto"
+
+#: ../cart66-pro/views/checkout-form.php:175
+msgid "Payment Information"
+msgstr "Información sobre el pago"
+
+#: ../cart66-pro/views/checkout-form.php:189
+msgid "Card Number"
+msgstr "Número de tarjeta"
+
+#: ../cart66-pro/views/checkout-form.php:194
+msgid "Expiration"
+msgstr "Expiración"
+
+#: ../cart66-pro/views/checkout-form.php:227
+msgid "Security ID"
+msgstr "Id. de seguridad"
+
+#: ../cart66-pro/views/checkout-form.php:229
+msgid "Security code on back of card"
+msgstr "Código de seguridad en la parte posterior de la tarjeta"
+
+#: ../cart66-pro/views/checkout-form.php:234
+#: ../cart66-pro/views/receipt.php:127
+msgid "Phone"
+msgstr "Teléfono"
+
+#: ../cart66-pro/views/checkout-form.php:327
+msgid "Your receipt will be on the next page and also immediately emailed to you. <strong>We respect your privacy!</strong>"
+msgstr "Su recepción será en la siguiente página y también de inmediato por correo electrónico. <strong>Respetamos su privacidad!</strong>"
+
+#: ../cart66-pro/views/paypal-checkout.php:129
+msgid "You must configure your payment settings"
+msgstr "Usted debe configurar su configuración de pago"
+
+#: ../cart66-pro/views/paypal-express.php:367
+msgid "Create Your Account"
+msgstr "Crea tu cuenta"
+
+#: ../cart66-pro/views/paypal-express.php:386
+msgid "Repeat Password"
+msgstr "Repita la contraseña"
+
+#: ../cart66-pro/views/paypal-express.php:389
+msgid "Complete Order"
+msgstr "Completar orden"
+
+#: ../cart66-pro/views/paypal-express.php:405
+#: ../cart66-pro/views/paypal-express.php:420
+msgid "Your receipt will be on the next page and also emailed to you"
+msgstr "Su recepción será en la siguiente página y también enviado por correo electrónico"
+
+#: ../cart66-pro/views/paypal-expresscheckout.php:10
+msgid "PayPal Express Checkout Is Not Configured"
+msgstr "PayPal Express Checkout No Está Configurado"
+
+#: ../cart66-pro/views/paypal-expresscheckout.php:11
+msgid "In order to use PayPal Express Checkout you must enter your PayPal API username, password and signature in the Cart66 Settings Panel"
+msgstr "Utilizar PayPal Express Checkout debe ingresar su nombre de usuario API de PayPal, contraseña y firma en el panel de Configuración de Cart66"
+
+#: ../cart66-pro/views/receipt.php:107
+#: ../cart66-pro/views/receipt_print_version.php:77
+msgid "Billing Information"
+msgstr "Información de facturación"
+
+#: ../cart66-pro/views/receipt.php:130
+msgid "Date"
+msgstr "Fecha"
+
+#: ../cart66-pro/views/receipt.php:139
+#: ../cart66-pro/views/receipt_print_version.php:108
+msgid "Shipping Information"
+msgstr "Información del envío"
+
+#: ../cart66-pro/views/receipt.php:157
+#: ../cart66-pro/views/receipt_print_version.php:125
+msgid "Delivery via"
+msgstr "Entrega a través de"
+
+#: ../cart66-pro/views/receipt.php:234
+#: ../cart66-pro/views/receipt_print_version.php:201
+msgid "Discount"
+msgstr "Descuento"
+
+#: ../cart66-pro/views/receipt.php:254
+msgid "Printer Friendly Receipt"
+msgstr "Versión para imprimir recibos"
+
+#: ../cart66-pro/views/receipt.php:294
+msgid "Receipt not available"
+msgstr "Recepción no está disponible"
+
+#: ../cart66-pro/views/receipt_print_version.php:12
+msgid "Your Receipt"
+msgstr "Su Recibo"
+
+#: ../cart66-pro/views/receipt_print_version.php:70
+msgid "Order Number"
+msgstr "Número de pedido"
+

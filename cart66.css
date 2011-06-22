@@ -1,6 +1,5 @@
 /* @override 
-	http://pro.cart66/wp-content/plugins/cart66-pro/cart66.css?ver=1.1
-	http://pro.cart66/wp-content/plugins/cart66/cart66.css?ver=1.1
+	http://pro.cart66/wp-content/plugins/cart66-pro/cart66.css?ver=1.1.3
 */
 
 #viewCartTable {
@@ -97,12 +96,6 @@ input[type=submit] {
 }
 
 
-.purAddToCart {
-  vertical-align: middle; 
-  width: auto; 
-  margin: 7px 0px;
-  border: none !important;
-}
 
 .Cart66CartButton {
   /* text-align: center; */
@@ -252,11 +245,12 @@ input[type=submit] {
 
 /* Cart66 Button CSS */
 
-.Cart66ButtonPrimary, 
-.Cart66ButtonSecondary {
+.Cart66ButtonPrimary, .Cart66ButtonSecondary, #content .Cart66ButtonPrimary, 
+#content .Cart66ButtonSecondary, .Cart66CartButton .purAddToCart {
   display: inline-block;
-  height: 20px;
+  font-size: 12px;
   line-height: 20px;
+  height: 20px;
   padding: 0 1em;
   border: 1px solid #454545;
   -webkit-border-radius: 5px;
@@ -269,6 +263,9 @@ input[type=submit] {
 .Cart66ButtonSecondary {
   background-color: #2C3538;
 }
+#Cart66CheckoutButtonDiv .Cart66ButtonPrimary {
+	margin: 20px 30px;
+	}
 #couponCode, #updateCart {
 	display: block;
 	float: right;
@@ -319,6 +316,9 @@ a.Cart66ButtonSecondary {
 #ccInfo ul {
     margin:0;
 }
+#ccInfo li {
+	clear: none;
+	}
 .phorm2 ul {
   margin: 0px;
   padding: 0px;

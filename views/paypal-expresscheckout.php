@@ -52,59 +52,16 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-action'] == 'paypalexp
   
   // Set payment information
   $payment = array(
-    'PAYMENTREQUEST_0_AMT' => $total,
-    'PAYMENTREQUEST_0_CURRENCYCODE' => CURRENCY_CODE,
-    'PAYMENTREQUEST_0_ITEMAMT' => $itemTotal,
-    'PAYMENTREQUEST_0_SHIPPINGAMT' => $shipping,
-    'PAYMENTREQUEST_0_NOTIFYURL' => $ipnUrl
+    'AMT' => $total,
+    'CURRENCYCODE' => CURRENCY_CODE,
+    'ITEMAMT' => $itemTotal,
+    'SHIPPINGAMT' => $shipping,
+    'NOTIFYURL' => $ipnUrl
   );
   $pp->setPaymentDetails($payment);
   
   // Add cart items to PayPal
-  $items = Cart66Session::get('Cart66Cart')->getItems(); // An array of Cart66CartItem objects
-  foreach($items as $i) {
-    if($i->isPayPalSubscription()) {
-      $plan = $i->getPayPalSubscription();
-      $itemData = array(
-        'BILLINGAGREEMENTDESCRIPTION' => $plan->name . ' ' . str_replace('&nbsp;', ' ', strip_tags($plan->getPriceDescription($plan->offerTrial > 0, '(trial)'))),
-      );
-      $pp->addItem($itemData);
-      
-      $chargeAmount = $i->getProductPrice();
-      if($chargeAmount > 0) {
-        $itemData = array(
-          'NAME' => $i->getFullDisplayName(),
-          'AMT' => $chargeAmount,
-          'NUMBER' => $i->getItemNumber(),
-          'QTY' => $i->getQuantity()
-        );
-      }
-      $pp->addItem($itemData);
-    }
-    else {
-      $itemData = array(
-        'NAME' => $i->getFullDisplayName(),
-        'AMT' => $i->getProductPrice(),
-        'NUMBER' => $i->getItemNumber(),
-        'QTY' => $i->getQuantity()
-      );
-      $pp->addItem($itemData);
-    }
-  }
-  
-  // Add a coupon discount if needed
-  $discount = number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2, '.', '');
-  
-  if($discount > 0) {
-    $negDiscount = 0 - $discount;
-    $itemData = array(
-      'NAME' => 'Discount',
-      'AMT' => $negDiscount,
-      'NUMBER' => 'DSC',
-      'QTY' => 1
-    );
-    $pp->addItem($itemData);
-  }
+  $pp->populatePayPalCartItems();
   
   // Set Express Checkout URLs
   $returnPage = get_page_by_path('store/express');

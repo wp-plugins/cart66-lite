@@ -5,7 +5,7 @@ class Cart66ButtonManager {
    * Return the HTML for rendering the add to cart buton for the given product id
    */
   public static function getCartButton(Cart66Product $product, $attrs) {
-    $view = "<p>Could not load product information</p>";
+    $view = "<p>" . __("Could not load product information","cart66") . "</p>";
     if($product->id > 0) {
 
       // Set CSS style if available

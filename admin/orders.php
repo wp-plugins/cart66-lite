@@ -27,7 +27,7 @@
     <input type='text' name='search'>
     <input type='submit' class='button-secondary' value='Search' style='width: auto;'>
     <br/>
-    <p style="float: left; color: #999; font-size: 11px; margin-top: 0;">Search by last name, email, or order number</p>
+    <p style="float: left; color: #999; font-size: 11px; margin-top: 0;"><?php _e( 'Search by last name, email, or order number' , 'cart66' ); ?></p>
   </form>
   
   <?php
@@ -36,7 +36,7 @@
     if(strlen($stats) >= 1 ) {
       $stats = explode(',', $stats);
   ?>
-      <p style="float: left; clear: both; margin-top:0; padding-top: 0;">Filter Orders:
+      <p style="float: left; clear: both; margin-top:0; padding-top: 0;"><?php _e( 'Filter Orders' , 'cart66' ); ?>:
         <?php
           foreach($stats as $s) {
             $s = trim($s);
@@ -57,31 +57,31 @@
   <?php
     }
     else {
-      echo "<p style=\"float: left; clear: both; color: #999; font-size: 11px; both; margin-top:0; padding-top: 0;\">
-        You should consider setting order status options such as new and complete on the 
-        <a href='?page=cart66-settings'>Cart66 Settings page</a>.</p>";
+      echo "<p style=\"float: left; clear: both; color: #999; font-size: 11px; both; margin-top:0; padding-top: 0;\">" .
+        __("You should consider setting order status options such as new and complete on the 
+        <a href='?page=cart66-settings'>Cart66 Settings page</a>.","cart66") . "</p>";
     }
   
   ?>
   
   <?php if(isset($search)): ?>
-    <p style='float:left; clear: both;'><strong>Search String:</strong> <?php echo Cart66Common::postVal('search'); ?></p>
+    <p style='float:left; clear: both;'><strong><?php _e( 'Search String' , 'cart66' ); ?>:</strong> <?php echo Cart66Common::postVal('search'); ?></p>
   <?php endif; ?>
 </div>
 
 <table class="widefat" style="width: auto;">
 <thead>
   <tr>
-    <th colspan="8">Search: <input type="text" name="Cart66AccountSearchField" value="" id="Cart66AccountSearchField" /></th>
+    <th colspan="8"><?php _e( 'Search' , 'cart66' ); ?>: <input type="text" name="Cart66AccountSearchField" value="" id="Cart66AccountSearchField" /></th>
   </tr>
 	<tr>
-	  <th>Order Number</th>
-		<th>Name</th>
-		<th>Amount</th>
-		<th>Date</th>
-    <th>Delivery</th>
-		<th>Status</th>
-		<th>Actions</th>
+	  <th><?php _e( 'Order Number' , 'cart66' ); ?></th>
+		<th><?php _e( 'Name' , 'cart66' ); ?></th>
+		<th><?php _e( 'Amount' , 'cart66' ); ?></th>
+		<th><?php _e( 'Date' , 'cart66' ); ?></th>
+    <th><?php _e( 'Delivery' , 'cart66' ); ?></th>
+		<th><?php _e( 'Status' , 'cart66' ); ?></th>
+		<th><?php _e( 'Actions' , 'cart66' ); ?></th>
 	</tr>
 </thead>
 <?php
@@ -96,8 +96,8 @@ foreach($orderRows as $row) {
     <td><?php echo $row->shipping_method ?></td>
     <td><?php echo $row->status ?></td>
     <td>
-      <a href='?page=cart66_admin&task=view&id=<?php echo $row->id ?>'>View</a> | 
-      <a class='delete' href='?page=cart66_admin&task=delete&id=<?php echo $row->id ?>'>Delete</a>
+      <a href='?page=cart66_admin&task=view&id=<?php echo $row->id ?>'><?php _e( 'View' , 'cart66' ); ?></a> | 
+      <a class='delete' href='?page=cart66_admin&task=delete&id=<?php echo $row->id ?>'><?php _e( 'Delete' , 'cart66' ); ?></a>
     </td>
     
   </tr>

@@ -1,7 +1,9 @@
 <?php
 
 class Cart66ShortcodeManager {
-
+  
+  public $manualIsOn;
+  
   /**
    * Short code for displaying shopping cart including the number of items in the cart and links to view cart and checkout
    */
@@ -93,97 +95,114 @@ class Cart66ShortcodeManager {
   }
 
   public function paypalCheckout($attrs) {
-    if(!Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() && !Cart66Session::get('Cart66Cart')->hasMembershipProducts()) {
-      if(Cart66Session::get('Cart66Cart')->getGrandTotal()) {
-        $view = Cart66Common::getView('views/paypal-checkout.php', $attrs);
-        return $view;
-      }
-      else {
-        return $this->manualCheckout();
+    if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+      if(!Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() && !Cart66Session::get('Cart66Cart')->hasMembershipProducts()) {
+        if(Cart66Session::get('Cart66Cart')->getGrandTotal()) {
+          $view = Cart66Common::getView('views/paypal-checkout.php', $attrs);
+          return $view;
+        }
+        else {
+          return $this->manualCheckout();
+        }
       }
     }
   }
 
   public function manualCheckout($attrs=null) {
-    $gatewayName = Cart66Common::postVal('cart66-gateway-name');
-    if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66ManualGateway') {
+    
+    if($this->manualIsOn=="active"){
       return;
     }
     
-    if(!Cart66Session::get('Cart66Cart')->hasSubscriptionProducts()) {
-      require_once(CART66_PATH . "/gateways/Cart66ManualGateway.php");
-      $manual = new Cart66ManualGateway();
-      $view = $this->_buildCheckoutView($manual);
+    if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+      $gatewayName = Cart66Common::postVal('cart66-gateway-name');
+      if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66ManualGateway') {
+        return;
+      }
+      
+      if(!Cart66Session::get('Cart66Cart')->hasSubscriptionProducts()) {
+        require_once(CART66_PATH . "/gateways/Cart66ManualGateway.php");
+        $manual = new Cart66ManualGateway();
+        $view = $this->_buildCheckoutView($manual);
+        $this->manualIsOn = "active";
+      }
+      else {
+        $view = "<p>Unable to sell subscriptions using the manual checkout gateway.</p>";
+      }
+      
+      return $view;
     }
-    else {
-      $view = "<p>Unable to sell subscriptions using the manual checkout gateway.</p>";
-    }
-    return $view;
   }
 
   public function authCheckout($attrs) {
-    $gatewayName = Cart66Common::postVal('cart66-gateway-name');
-    if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66AuthorizeNet') {
-      return;
-    }
-    
-    if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
-      require_once(CART66_PATH . "/pro/gateways/Cart66AuthorizeNet.php");
-      
-      if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
-        $authnet = new Cart66AuthorizeNet();
-        $view = $this->_buildCheckoutView($authnet);
-        return $view;
-      }
-      elseif(Cart66Session::get('Cart66Cart')->countItems() > 0) {
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of Authorize.net Checkout because the cart value is $0.00");
-        return $this->manualCheckout();
+    if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+      $gatewayName = Cart66Common::postVal('cart66-gateway-name');
+      if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66AuthorizeNet') {
+        return ($gatewayName == "Cart66ManualGateway") ? $this->manualCheckout() : "";
       }
 
-    }
-    else {
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering Authorize.net checkout form because the cart contains a PayPal subscription");
+      if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
+        require_once(CART66_PATH . "/pro/gateways/Cart66AuthorizeNet.php");
+
+        if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+          $authnet = new Cart66AuthorizeNet();
+          $view = $this->_buildCheckoutView($authnet);
+          return $view;
+        }
+        elseif(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of Authorize.net Checkout because the cart value is $0.00");
+          return $this->manualCheckout();
+        }
+
+      }
+      else {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering Authorize.net checkout form because the cart contains a PayPal subscription");
+      }
     }
   }
 
   public function payPalProCheckout($attrs) {
-    $gatewayName = Cart66Common::postVal('cart66-gateway-name');
-    if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66PayPalPro') {
-      return;
-    }
-    
-    if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
-      if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
-        $paypal = new Cart66PayPalPro();
-        $view = $this->_buildCheckoutView($paypal);
-        return $view;
+    if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+      $gatewayName = Cart66Common::postVal('cart66-gateway-name');
+      if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66PayPalPro') {
+        return ($gatewayName == "Cart66ManualGateway") ? $this->manualCheckout() : "";
       }
-      elseif(Cart66Session::get('Cart66Cart')->countItems() > 0) {
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of PayPal Pro Checkout because the cart value is $0.00");
-        return $this->manualCheckout();
+
+      if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
+        if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+          $paypal = new Cart66PayPalPro();
+          $view = $this->_buildCheckoutView($paypal);
+          return $view;
+        }
+        elseif(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of PayPal Pro Checkout because the cart value is $0.00");
+          return $this->manualCheckout();
+        }
       }
-    }
-    else {
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering PayPal Pro checkout form because the cart contains a PayPal subscription");
+      else {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering PayPal Pro checkout form because the cart contains a PayPal subscription");
+      }
     }
   }
 
   public function payPalExpressCheckout($attrs) {
-    $cart = Cart66Session::get('Cart66Cart');
-    
-    if($cart->hasSpreedlySubscriptions()) {
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering PayPal Express checkout form because the cart contains Spreedly subscriptions");
-      $errorMessage = "<p class='Cart66Error'>Spreedly subscriptions cannot be processed through PayPal Express Checkout</p>";
-      return $errorMessage;
-    }
-    else {
-      if($cart->getGrandTotal() > 0 || $cart->hasPayPalSubscriptions()) {
-        $view = Cart66Common::getView('views/paypal-expresscheckout.php', $attrs);
-        return $view;
+    if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+      $cart = Cart66Session::get('Cart66Cart');
+
+      if($cart->hasSpreedlySubscriptions()) {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering PayPal Express checkout form because the cart contains Spreedly subscriptions");
+        $errorMessage = "<p class='Cart66Error'>Spreedly subscriptions cannot be processed through PayPal Express Checkout</p>";
+        return $errorMessage;
       }
-      elseif($cart->countItems() > 0) {
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of PayPal Pro Express Checkout because the cart value is $0.00");
-        return $this->manualCheckout();
+      else {
+        if($cart->getGrandTotal() > 0 || $cart->hasPayPalSubscriptions()) {
+          $view = Cart66Common::getView('views/paypal-expresscheckout.php', $attrs);
+          return $view;
+        }
+        elseif($cart->countItems() > 0) {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of PayPal Pro Express Checkout because the cart value is $0.00");
+          return $this->manualCheckout();
+        }
       }
     }
   }

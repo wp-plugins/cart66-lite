@@ -103,7 +103,7 @@ abstract class Cart66GatewayAbstract {
         $value = trim($value);
         if($value == '') {
           $keyName = ucwords(preg_replace('/([A-Z])/', " $1", $key));
-          $this->_errors['Billing ' . $keyName] = "Billing $keyName required";
+          $this->_errors['Billing ' . $keyName] = __('Billing ','cart66') . $keyName . __(' required','cart66');
           $this->_jqErrors[] = "billing-$key";
         }
       }
@@ -124,12 +124,12 @@ abstract class Cart66GatewayAbstract {
       $value = trim($value);
       if($value == '') {
         $keyName = preg_replace('/([A-Z])/', " $1", $key);
-        $this->_errors['Payment ' . $keyName] = "Payment $keyName required";
+        $this->_errors['Payment ' . $keyName] = __('Payment ','cart66') . $keyName . __(' required','cart66');
         $this->_jqErrors[] = "payment-$key";
       }
     }
     if(strlen($p['cardNumber']) > 0 && strlen($p['cardNumber']) < 13) {
-      $this->_errors['Payment Card Number'] = 'Invalid credit card number';
+      $this->_errors['Payment Card Number'] = __('Invalid credit card number','cart66');
       $this->_jqErrors[] = "payment-cardNumber";
     } 
 
@@ -155,7 +155,7 @@ abstract class Cart66GatewayAbstract {
         $value = trim($value);
         if($value == '') {
           $keyName = preg_replace('/([A-Z])/', " $1", $key);
-          $this->_errors['Shipping ' . $keyName] = "Shipping $keyName Required";
+          $this->_errors['Shipping ' . $keyName] = __('Shipping ','cart66') . $keyName . __(' required','cart66');
           $this->_jqErrors[] = "shipping-$key";
         }
       }
@@ -221,7 +221,7 @@ abstract class Cart66GatewayAbstract {
       return $isTaxed;
     }
     else {
-      throw new Exception('Unable to determine tax rate because shipping data is unavailable');
+      throw new Exception(__('Unable to determine tax rate because shipping data is unavailable','cart66'));
     }
   }
 
@@ -297,7 +297,7 @@ abstract class Cart66GatewayAbstract {
     $isValid = true;
     $itemCount = Cart66Session::get('Cart66Cart')->countItems();
     if($itemCount < 1) {
-      $this->_errors['Invalid Cart'] = "There must be at least one item in the cart.";
+      $this->_errors['Invalid Cart'] = __('There must be at least one item in the cart.','cart66');
       $isValid = false;
     }
     return $isValid;

@@ -24,7 +24,7 @@
 
   <form id="Cart66ForgotPassword" class="phorm2" action="" method='post'>
     <input type="hidden" name="cart66-task" value="account-reset" />
-    <p class='Cart66Note'><?php _e( 'Enter your username and we will send you a new password.<br/> The email will be sent to the email address you used for your account' , 'cart66' ); ?>.</p>
+    <p class='Cart66Note'><?php _e( 'Enter your username and we will send you a new password.<br/> The email will be sent to the email address you used for your account.' , 'cart66' ); ?></p>
     <ul>
       <li>
         <label class="" for="login-username"><?php _e( 'Username' , 'cart66' ); ?>:</label>

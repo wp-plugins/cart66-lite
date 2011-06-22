@@ -1,21 +1,25 @@
 <?php
-$account = new Cart66Account();
-if($accountId = Cart66Common::isLoggedIn()) {
-  $account = new Cart66Account($accountId);
-  $name = $account->firstName . '&nbsp;' . $account->lastName;
-  echo "<h3 class=\"loggedInAs\">You Are Logged In As $name</h3>";
-  $logout = Cart66Common::appendQueryString('cart66-task=logout');
-  echo "<p class=\"loggedInWrongMsg\">If you are not $name <a href='$logout'>Log out</a></p>";
-  
-  if(empty($b['firstName'])) {
-    $b['firstName'] = $account->billingFirstName;
-    $b['lastName'] = $account->billingLastName;
-  }
-  
-  if(empty($p['email'])) {
-    $p['email'] = $account->email;
+$account = false;
+if(CART66_PRO) {
+  $account = new Cart66Account();
+  if($accountId = Cart66Common::isLoggedIn()) {
+    $account = new Cart66Account($accountId);
+    $name = $account->firstName . '&nbsp;' . $account->lastName;
+    echo "<h3 class=\"loggedInAs\">You Are Logged In As $name</h3>";
+    $logout = Cart66Common::appendQueryString('cart66-task=logout');
+    echo "<p class=\"loggedInWrongMsg\">If you are not $name <a href='$logout'>Log out</a></p>";
+
+    if(empty($b['firstName'])) {
+      $b['firstName'] = $account->billingFirstName;
+      $b['lastName'] = $account->billingLastName;
+    }
+
+    if(empty($p['email'])) {
+      $p['email'] = $account->email;
+    }
   }
 }
+
 
 // Show errors
 if(count($errors)) {
@@ -319,9 +323,9 @@ if(count($errors)) {
               }
             ?>
             <?php if($cartImgPath): ?>
-              <input id="Cart66CheckoutButton" type="image" src='<?php echo $completeImgPath ?>' value="Complete Order" name="Comoplete Order"/>
+              <input id="Cart66CheckoutButton" type="image" src='<?php echo $completeImgPath ?>' value="Complete Order" name="Complete Order"/>
             <?php else: ?>
-              <input id="Cart66CheckoutButton" class="Cart66ButtonPrimary" type="submit"  value="Complete Order" name="Comoplete Order"/>
+              <input id="Cart66CheckoutButton" class="Cart66ButtonPrimary" type="submit"  value="Complete Order" name="Complete Order"/>
             <?php endif; ?>
 
             <p class="description"><?php _e( 'Your receipt will be on the next page and also immediately emailed to you. <strong>We respect your privacy!</strong>' , 'cart66' ); ?></p>

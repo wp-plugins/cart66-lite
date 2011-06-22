@@ -16,7 +16,7 @@
   <a id="Cart66WidgetCheckout" href='<?php echo get_permalink($data['checkoutPage']->ID) ?>'><?php _e( 'Check out' , 'cart66' ); ?></a>
     </div>
   <?php else: ?>
-    <p id="Cart66WidgetCartEmpty"><?php _e( 'Your cart is empty' , 'cart66' ); ?>.</p>
+    <p id="Cart66WidgetCartEmpty"><?php _e( 'Your cart is empty.' , 'cart66' ); ?></p>
   <?php endif; ?>
 
 <?php echo $data['afterWidget']; ?>

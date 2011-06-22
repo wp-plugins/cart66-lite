@@ -169,7 +169,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           Cart66Session::drop('Cart66SubscriberToken');
           Cart66Session::set('order_id', $orderId);
           $receiptLink = Cart66Common::getPageLink('store/receipt');
-          header("Location: " . $receiptLink);
+          $newOrder = new Cart66Order($orderId);
+          $receiptVars = strpos($receiptLink, '?') ? '&' : '?';
+          $receiptVars .= "ouid=" . $newOrder->ouid . "&n=1";
+          header("Location: " . $receiptLink . $receiptVars);
         }
         else {
           // Attempt to discover reason for transaction failure

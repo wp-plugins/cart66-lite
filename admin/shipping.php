@@ -120,19 +120,19 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
 
   <?php if(CART66_PRO): ?>
   <div style="padding: 10px; 25px; width: 580px; background-color: #EEE; border: 1px solid #CCC; -moz-border-radius: 5px; -webkit-border-radius: 5px;">
-    <h3>Live Shipping Rates</h3>
+    <h3><?php _e( 'Live Shipping Rates' , 'cart66' ); ?></h3>
   
-    <p>Using live shipping rates overrides all other types of shipping settings.</p>
+    <p><?php _e( 'Using live shipping rates overrides all other types of shipping settings.' , 'cart66' ); ?></p>
   
     <?php if(Cart66Setting::getValue('use_live_rates')): ?>
       <form action="" method="post">
-        <p>Live shipping rates are enabled.</p>
+        <p><?php _e( 'Live shipping rates are enabled.' , 'cart66' ); ?></p>
         <input type='hidden' name='cart66-action' value='disable live rates' />
         <input type="submit" name="submit" value="Disable Live Shipping Rates" id="submit" class="button-secondary" />
       </form>
     <?php else: ?>
       <form action="" method="post">
-        <p>Live shipping rates are not enabled.</p>
+        <p><?php _e( 'Live shipping rates are not enabled.' , 'cart66' ); ?></p>
         <input type='hidden' name='cart66-action' value='enable live rates' />
         <input type="submit" name="submit" value="Enable Live Shipping Rates" id="submit" class="button-primary" />
       </form>
@@ -145,7 +145,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
     <h3>Rate Tweaker</h3>
     
     <p style="border: 1px solid #CCC; background-color: #eee; padding: 5px; width: 590px; -moz-border-radius: 5px; -webkit-border-radius: 5px;">
-      <strong>Current Tweak Factor:</strong> 
+      <strong><?php _e( 'Current Tweak Factor' , 'cart66' ); ?>:</strong> 
       <?php
         if(Cart66Setting::getValue('rate_tweak_factor')) {
           $type = Cart66Setting::getValue('rate_tweak_type');
@@ -170,44 +170,42 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
     <form action="" method="post">
       <input type="hidden" name="cart66-action" value="save rate tweak" />
       <select name="rate_tweak_type" id="rate_tweak_type">
-        <option value="percentage">Tweak by percentage</option>
-        <option value="fixed">Tweak by fixed amount</option>
+        <option value="percentage"><?php _e( 'Tweak by percentage' , 'cart66' ); ?></option>
+        <option value="fixed"><?php _e( 'Tweak by fixed amount' , 'cart66' ); ?></option>
       </select>
       <span id="currency" style="display:none;">&nbsp;<?php echo CART66_CURRENCY_SYMBOL; ?></span>
       <input type="text" name="rate_tweak_factor" style="width: 5em;" />
       <span id="percentSign" style="display:none;">%</span>
       <input type='submit' name='submit' class="button-primary" style='width: 60px; margin-top: 10px; margin-left: 20px; margin-right: 20px;' value='Save' />
-      <a id="whatIsRateTweaker" href="#" class='what_is'>What is this?</a>
+      <a id="whatIsRateTweaker" href="#" class='what_is'><?php _e( 'What is this?' , 'cart66' ); ?></a>
     </form>
     
     <div id="whatIsRateTweaker_answer" style="display: none; border: 1px solid #eee; background-color: #fff; padding: 0px 10px; width: 590px; margin-top: 10px; -moz-border-radius: 5px; -webkit-border-radius: 5px;">
-      <h3>How The Rate Tweaker Works</h3>
-      <p>The rate tweaker provides a way to adjust the live rate quotes by increasing or decreasing all of the calculated rates by a specified amount. 
-        You may choose to modify the rates by a percentage amount or by fixed amount. Enter a positive value to increase the calculated rates or negative value to reduce them. 
-        The rate tweaker will never reduce shipping rates below zero.</p>
-      <p>For example, if you want to increase all the calculated rates by 15% select "Tweak by percentage" and enter 15 in the text field then click "Save"</p>
-      <p>If you want to take $5.00 off all the shipping rates select "Tweak by fixed amount" and enter -5 in the text field then click "Save"</p>
-      <p>To stop using the rate tweaker, enter 0 and click "save"</p>
+      <h3><?php _e( 'How The Rate Tweaker Works' , 'cart66' ); ?></h3>
+      <p><?php _e( 'The rate tweaker provides a way to adjust the live rate quotes by increasing or decreasing all of the calculated rates by a specified amount. You may choose to modify the rates by a percentage amount or by fixed amount. Enter a positive value to increase the calculated rates or negative value to reduce them. The rate tweaker will never reduce shipping rates below zero.' , 'cart66' ); ?></p>
+      <p><?php _e( 'For example, if you want to increase all the calculated rates by 15% select "Tweak by percentage" and enter 15 in the text field then click "Save"' , 'cart66' ); ?></p>
+      <p><?php _e( 'If you want to take $5.00 off all the shipping rates select "Tweak by fixed amount" and enter -5 in the text field then click "Save"' , 'cart66' ); ?></p>
+      <p><?php _e( 'To stop using the rate tweaker, enter 0 and click "save"' , 'cart66' ); ?></p>
     </div>
     
     <br/><br/>
     
-    <h3 style="clear: both;">USPS Shipping Account Information</h3>
-    <p>If you intend to use United States Postal Service real-time shipping quotes please provide your USPS account information.<br/>This feature requires a <strong>production USPS account.</strong> A test account will not work.</p>
+    <h3 style="clear: both;"><?php _e( 'USPS Shipping Account Information' , 'cart66' ); ?></h3>
+    <p><?php _e( 'If you intend to use United States Postal Service real-time shipping quotes please provide your USPS account information.<br/>This feature requires a <strong>production USPS account.</strong> A test account will not work.' , 'cart66' ); ?></p>
     <form action="" method='post'>
       <input type='hidden' name='cart66-action' value='save usps account info' />
       <ul>
         <li>
-          <label class="med">Webtools username:</label>
+          <label class="med"><?php _e( 'Webtools username' , 'cart66' ); ?>:</label>
           <input type='text' name='ups[usps_username]' id='usps_username' value='<?php echo Cart66Setting::getValue('usps_username'); ?>' />
         </li>
         <li>
-          <label class="med">Ship from zip:</label>
+          <label class="med"><?php _e( 'Ship from zip' , 'cart66' ); ?>:</label>
           <input type='text' name='ups[usps_ship_from_zip]' id='usps_ship_from_zip' value='<?php echo Cart66Setting::getValue('usps_ship_from_zip'); ?>' />
         </li>
         <li>
-          <p>Select the USPS shipping methods you would like to offer to your customers.</p>
-          <label class="med">&nbsp;</label> <a href="#" id="usps_clear_all">Clear All</a> | <a href="#" id="usps_select_all">Select All</a>
+          <p><?php _e( 'Select the USPS shipping methods you would like to offer to your customers.' , 'cart66' ); ?></p>
+          <label class="med">&nbsp;</label> <a href="#" id="usps_clear_all">Clear All</a> | <a href="#" id="usps_select_all"><?php _e( 'Select All' , 'cart66' ); ?></a>
         </li>
         <li>
           <?php
@@ -230,34 +228,34 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
       </ul>
     </form>
     
-    <h3 style="clear: both;">UPS Shipping Account Information</h3>
-    <p>If you intend to use UPS real-time shipping quotes please provide your UPS account information.</p>
+    <h3 style="clear: both;"><?php _e( 'UPS Shipping Account Information' , 'cart66' ); ?></h3>
+    <p><?php _e( 'If you intend to use UPS real-time shipping quotes please provide your UPS account information.' , 'cart66' ); ?></p>
     <form action="" method='post'>
       <input type='hidden' name='cart66-action' value='save ups account info' />
       <ul>
         <li>
-          <label class="med">Username:</label>
+          <label class="med"><?php _e( 'Username' , 'cart66' ); ?>:</label>
           <input type='text' name='ups[ups_username]' id='ups_username' value='<?php echo Cart66Setting::getValue('ups_username'); ?>' />
         </li>
         <li>
-          <label class="med">Password:</label>
+          <label class="med"><?php _e( 'Password' , 'cart66' ); ?>:</label>
           <input type='text' name='ups[ups_password]' id='ups_password' value='<?php echo Cart66Setting::getValue('ups_password'); ?>' />
         </li>
         <li>
-          <label class="med">API Key:</label>
+          <label class="med"><?php _e( 'API Key' , 'cart66' ); ?>:</label>
           <input type='text' name='ups[ups_apikey]' id='ups_apikey' value='<?php echo Cart66Setting::getValue('ups_apikey'); ?>' />
         </li>
         <li>
-          <label class="med">Account number:</label>
+          <label class="med"><?php _e( 'Account number' , 'cart66' ); ?>:</label>
           <input type='text' name='ups[ups_account]' id='ups_account' value='<?php echo Cart66Setting::getValue('ups_account'); ?>' />
         </li>
         <li>
-          <label class="med">Ship from zip:</label>
+          <label class="med"><?php _e( 'Ship from zip' , 'cart66' ); ?>:</label>
           <input type='text' name='ups[ups_ship_from_zip]' id='ups_ship_from_zip' value='<?php echo Cart66Setting::getValue('ups_ship_from_zip'); ?>' />
         </li>
         <li>
-          <p>Select the UPS shipping methods you would like to offer to your customers.</p>
-          <label class="med">&nbsp;</label> <a href="#" id="ups_clear_all">Clear All</a> | <a href="#" id="ups_select_all">Select All</a>
+          <p><?php _e( 'Select the UPS shipping methods you would like to offer to your customers.' , 'cart66' ); ?></p>
+          <label class="med">&nbsp;</label> <a href="#" id="ups_clear_all"><?php _e( 'Clear All' , 'cart66' ); ?></a> | <a href="#" id="ups_select_all"><?php _e( 'Select All' , 'cart66' ); ?></a>
         </li>
         <li>
           <?php
@@ -282,11 +280,10 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
   
   <?php else: ?>
   
-    <h3 style="clear: both;">Shipping Methods</h3>
-
-    <p style="width: 400px;">Create the shipping methods you will offer your customers. If no shipping
+    <h3 style="clear: both;"><?php _e( 'Shipping Methods' , 'cart66' ); ?></h3>
+    <p style="width: 400px;"><?php _e( 'Create the shipping methods you will offer your customers. If no shipping
     price is defined for a product, the default rates entered here will be used
-    to calculate shipping costs.</p> 
+    to calculate shipping costs.' , 'cart66' ); ?></p> 
 
     <form action="" method='post'>
       <input type='hidden' name='cart66-action' value='save shipping method' />
@@ -294,29 +291,29 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
     
       <ul>
         <li>
-          <label class="med">Shipping method:</label>
+          <label class="med"><?php _e( 'Shipping method' , 'cart66' ); ?>:</label>
           <input type="text" name="shipping_method[name]" value="<?php echo $method->name ?>" />
           <span class="label_desc">ex. FedEx Ground</span>
         </li>
       
         <li>
-          <label class="med">Default rate:</label>
+          <label class="med"><?php _e( 'Default rate' , 'cart66' ); ?>:</label>
           <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
           <input type="text" name="shipping_method[default_rate]" value="<?php echo $method->default_rate ?>" style='width: 80px;'/>
-          <span class="label_desc">Rate if only one item is ordered</span>
+          <span class="label_desc"><?php _e( 'Rate if only one item is ordered' , 'cart66' ); ?></span>
         </li>
 
         <li>
           <label class="med">Default bunde rate:</label>
           <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
           <input type="text" name="shipping_method[default_bundle_rate]" value="<?php echo $method->default_bundle_rate ?>" style='width: 80px;'/>
-          <span class="label_desc">Rate for each additional item</span>
+          <span class="label_desc"><?php _e( 'Rate for each additional item' , 'cart66' ); ?></span>
         </li>
 
         <li>
           <label class="med">&nbsp;</label>
           <?php if($method->id > 0): ?>
-          <a href='?page=cart66-shipping' class='button-secondary linkButton' style="">Cancel</a>
+          <a href='?page=cart66-shipping' class='button-secondary linkButton' style=""><?php _e( 'Cancel' , 'cart66' ); ?></a>
           <?php endif; ?>
           <input type='submit' name='submit' class="button-primary" style='width: 60px;' value='Save' />
         </li>
@@ -331,9 +328,9 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
     <table class="widefat" style='width: 600px;'>
     <thead>
       <tr>
-    		<th>Shipping Method</th>
-    		<th>Default rate</th>
-    		<th>Default bundle rate</th>
+    		<th><?php _e( 'Shipping Method' , 'cart66' ); ?></th>
+    		<th><?php _e( 'Default rate' , 'cart66' ); ?></th>
+    		<th><?php _e( 'Default bundle rate' , 'cart66' ); ?></th>
         <th>&nbsp;</th>
     	</tr>
     </thead>
@@ -344,8 +341,8 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
           <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($m->default_rate, 2); ?></td>
           <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($m->default_bundle_rate, 2); ?></td>
           <td>
-           <a href='?page=cart66-shipping&task=edit_method&id=<?php echo $m->id ?>'>Edit</a> | 
-           <a class='delete' href='?page=cart66-shipping&task=delete_method&id=<?php echo $m->id ?>'>Delete</a>
+           <a href='?page=cart66-shipping&task=edit_method&id=<?php echo $m->id ?>'><?php _e( 'Edit' , 'cart66' ); ?></a> | 
+           <a class='delete' href='?page=cart66-shipping&task=delete_method&id=<?php echo $m->id ?>'><?php _e( 'Delete' , 'cart66' ); ?></a>
           </td>
         </tr>
       <?php endforeach; ?>
@@ -353,9 +350,9 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
     </table>
     <?php endif; ?>
 
-    <h3 style="clear: both;">Product Shipping Prices</h3>
+    <h3 style="clear: both;"><?php _e( 'Product Shipping Prices' , 'cart66' ); ?></h3>
 
-    <p style="width: 400px;">The shipping prices you set up here override the default shipping prices for the shipping methods above.</p>
+    <p style="width: 400px;"><?php _e( 'The shipping prices you set up here override the default shipping prices for the shipping methods above.' , 'cart66' ); ?></p>
 
     <?php if(count($method->getModels()) && count($product->getModels())): ?>
       <form action="" method='post'>
@@ -363,7 +360,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
         <input type="hidden" name="rate[id]" value="<?php echo $rate->id ?>" id="rate-id" />
         <ul>
           <li>
-            <label class="med">Product:</label>
+            <label class="med"><?php _e( 'Product' , 'cart66' ); ?>:</label>
             <select name='rate[product_id]'>
               <?php foreach($product->getModels(null, 'order by name') as $p): ?>
                 <option value="<?php echo $p->id; ?>" <?php echo ($p->id == $rate->product_id) ? 'selected="selected"' : '' ?>><?php echo $p->name ?> (<?php echo $p->item_number ?>)</option>
@@ -371,7 +368,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
             </select>
           </li>
           <li>
-            <label class="med">Shipping method:</label>
+            <label class="med"><?php _e( 'Shipping method' , 'cart66' ); ?>:</label>
             <select name='rate[shipping_method_id]'>
               <?php foreach($method->getModels("where carrier = ''", 'order by name') as $m): ?>
                 <option value="<?php echo $m->id; ?>" <?php echo ($m->id == $rate->shipping_method_id) ? 'selected="selected"' : '' ?>><?php echo $m->name ?></option>
@@ -379,7 +376,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
             </select>
           </li>
           <li>
-            <label class="med">Shipping rate:</label>
+            <label class="med"><?php _e( 'Shipping rate' , 'cart66' ); ?>:</label>
             <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
             <input type="text" style="width: 80px;" name="rate[shipping_rate]" value="<?php echo $rate->shipping_rate ?>" />
           </li>
@@ -398,7 +395,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
         </ul>
       </form>
     <?php else: ?>
-      <p style="color: red;">You must enter at least one shipping method and at least one product for these setting to appear.</p>
+      <p style="color: red;"><?php _e( 'You must enter at least one shipping method and at least one product for these setting to appear.' , 'cart66' ); ?></p>
     <?php endif; ?>
 
     <?php
@@ -408,10 +405,10 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
     <table class="widefat" style='width: auto;'>
     <thead>
       <tr>
-    		<th>Product</th>
-    		<th>Shippig method</th>
-    		<th>Rate</th>
-    		<th>Bundle rate</th>
+    		<th><?php _e( 'Product' , 'cart66' ); ?></th>
+    		<th><?php _e( 'Shipping method' , 'cart66' ); ?></th>
+    		<th><?php _e( 'Rate' , 'cart66' ); ?></th>
+    		<th><?php _e( 'Bundle rate' , 'cart66' ); ?></th>
         <th>&nbsp;</th>
     	</tr>
     </thead>
@@ -427,27 +424,27 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
           <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($r->shipping_rate, 2); ?></td>
           <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($r->shipping_bundle_rate, 2); ?></td>
           <td>
-           <a href='?page=cart66-shipping&task=edit_rate&id=<?php echo $r->id ?>'>Edit</a> | 
-           <a class='delete' href='?page=cart66-shipping&task=delete_rate&id=<?php echo $r->id ?>'>Delete</a>
+           <a href='?page=cart66-shipping&task=edit_rate&id=<?php echo $r->id ?>'><?php _e( 'Edit' , 'cart66' ); ?></a> | 
+           <a class='delete' href='?page=cart66-shipping&task=delete_rate&id=<?php echo $r->id ?>'><?php _e( 'Delete' , 'cart66' ); ?></a>
           </td>
         </tr>
       <?php endforeach; ?>
     </tbody>
     </table>
     <?php endif; ?>
-    <h3 style="clear: both;">Cart Price Shipping Rates</h3>
+    <h3 style="clear: both;"><?php _e( 'Cart Price Shipping Rates' , 'cart66' ); ?></h3>
 
-    <p style='width: 400px;'>You can set the shipping cost based on the total cart value. For example, you 
+    <p style='width: 400px;'><?php _e( 'You can set the shipping cost based on the total cart value. For example, you 
       may want to offer free shipping on orders over $50. To do that set minimum cart amount to $50 and the
-      shipping cost to $0.</p> 
-    <p style='width: 400px;'>You can also set up tiered shipping costs based on the cart amount. For example,
+      shipping cost to $0.' , 'cart66' ); ?></p> 
+    <p style='width: 400px;'><?php _e( 'You can also set up tiered shipping costs based on the cart amount. For example,
       if you want to charge $10 shipping on orders between $0 - $24.99 and $5 shipping on orders between $25 - $49.99
-      and free shipping on orders $50 or more you would set that up with three shipping rules as follows.</p>
+      and free shipping on orders $50 or more you would set that up with three shipping rules as follows.' , 'cart66' ); ?></p>
     
     <table style='width: 400px; margin-bottom: 20px;'>
       <tr>
-        <th style='text-align: left;'>Minimum cart amount</th>
-        <th style='text-align: left;'>Shipping cost</th>
+        <th style='text-align: left;'><?php _e( 'Minimum cart amount' , 'cart66' ); ?></th>
+        <th style='text-align: left;'><?php _e( 'Shipping cost' , 'cart66' ); ?></th>
       </tr>
       <tr>
         <td>$0</td>
@@ -469,12 +466,12 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
       <input type='hidden' name='rule[id]' value='<?php echo $rule->id ?>' />
       <ul>
         <li>
-          <label for="rule-min_amount">Minimum cart amount:</label>
+          <label for="rule-min_amount"><?php _e( 'Minimum cart amount' , 'cart66' ); ?>:</label>
           <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
           <input type='text' name='rule[min_amount]' id='rule-min_amount' style='width: 80px;' value='<?php echo $rule->minAmount ?>' />
         </li>
         <li>
-          <label class="med">Shipping method:</label>
+          <label class="med"><?php _e( 'Shipping method' , 'cart66' ); ?>:</label>
           <select name="rule[shipping_method_id]">
             <?php foreach($method->getModels(null, 'name') as $m): ?>
               <option value="<?php echo $m->id; ?>"><?php echo $m->name ?></option>
@@ -482,21 +479,21 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
           </select>
         </li>
         <li>
-          <label class="med" for="rule-shipping_cost">Shipping cost:</label>
+          <label class="med" for="rule-shipping_cost"><?php _e( 'Shipping cost' , 'cart66' ); ?>:</label>
           <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
           <input type="text" id="rule-shipping_cost" name="rule[shipping_cost]" style='width: 80px;' value='<?php echo $rule->shippingCost ?>'>
         </li>
         <li>
           <label class="med">&nbsp;</label>
           <?php if($rule->id > 0): ?>
-          <a href='?page=cart66-shipping' class='button-secondary linkButton' style="">Cancel</a>
+          <a href='?page=cart66-shipping' class='button-secondary linkButton' style=""><?php _e( 'Cancel' , 'cart66' ); ?></a>
           <?php endif; ?>
           <input type='submit' name='submit' class="button-primary" style='width: 60px;' value='Save' />
         </li>
       </ul>
     </form>
     <?php else: ?>
-      <p style='color: red;'>You must have entered at least one shipping method before you can configure these settings.</p>
+      <p style='color: red;'><?php _e( 'You must have entered at least one shipping method before you can configure these settings.' , 'cart66' ); ?></p>
     <?php endif; ?>
   
     <?php
@@ -506,10 +503,10 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
       <table class="widefat" style='width: auto;'>
         <thead>
         	<tr>
-        		<th>Minimum cart amount</th>
-        		<th>Shipping method</th>
-        		<th>Shipping cost</th>
-        		<th>Actions</th>
+        		<th><?php _e( 'Minimum cart amount' , 'cart66' ); ?></th>
+        		<th><?php _e( 'Shipping method' , 'cart66' ); ?></th>
+        		<th><?php _e( 'Shipping cost' , 'cart66' ); ?></th>
+        		<th><?php _e( 'Actions' , 'cart66' ); ?></th>
         	</tr>
         </thead>
         <tbody>
@@ -522,8 +519,8 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
              <td><?php echo $method->name ?></td>
              <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $rule->shipping_cost ?></td>
              <td>
-               <a href='?page=cart66-shipping&task=edit&id=<?php echo $rule->id ?>'>Edit</a> | 
-               <a class='delete' href='?page=cart66-shipping&task=delete&id=<?php echo $rule->id ?>'>Delete</a>
+               <a href='?page=cart66-shipping&task=edit&id=<?php echo $rule->id ?>'><?php _e( 'Edit' , 'cart66' ); ?></a> | 
+               <a class='delete' href='?page=cart66-shipping&task=delete&id=<?php echo $rule->id ?>'><?php _e( 'Delete' , 'cart66' ); ?></a>
              </td>
            </tr>
           <?php endforeach; ?>

@@ -82,6 +82,12 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.1.4 =
+* NEW: Define user roles to control access to the Cart66 admin screens
+* NEW: Support for translation files
+* NEW: Italian translation files included (Thank you Roberto Lioniello!)
+* Fixed: Cart66Account class not found error during checkout with $0.00 cart total or when using the Manual Checkout payment gateway.
+
 = 1.1.3 =
 * New: Added checks to prevent double charging a customer if they double click, or rapidly click, the complete order button during checkout
 * New: Added feature to optionally send http headers to prevent pages from being cached by web browsers. This feature is found in the error logging and debugging box of the Cart66 Settings panel

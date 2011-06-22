@@ -29,12 +29,12 @@ if(isset($data['message'])) {
     </li>
     <li>
       <h3><?php _e( 'Update Your Password' , 'cart66' ); ?></h3>
-      <p><?php _e( 'Leave blank to keep current password' , 'cart66' ); ?>.</p>
+      <p><?php _e( 'Leave blank to keep current password.' , 'cart66' ); ?></p>
     </li>
     <li>
       <label class="short" for="login-password"><?php _e( 'Password' , 'cart66' ); ?>:</label>
       <input type="password" id="login-password" name="login[password]" value="" />
-      <p class="description"><?php _e( 'Enter a new password' , 'cart66' ); ?>.</p>
+      <p class="description"><?php _e( 'Enter a new password.' , 'cart66' ); ?></p>
     </li>
     <li>
       <label class="short" for="login-password2">&nbsp;</label>

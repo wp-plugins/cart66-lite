@@ -4,17 +4,17 @@ $order = $data['order'];
 ?>
 <div class='wrap'>
   <div id="order" style="width: 600px; padding: 10px 10px 10px 10px; border: 1px solid #CCCCCC; background-color: #FFF;">
-    <h3 style="float: right;">Order Number: <?php echo $order->trans_id ?></h3>
+    <h3 style="float: right;"><?php _e( 'Order Number' , 'cart66' ); ?>: <?php echo $order->trans_id ?></h3>
 
     <h3><?php echo $order->first_name ?> <?php echo $order->last_name ?></h3>
     <h3>Date: <?php echo date('n/j/Y g:i a', strtotime($order->ordered_on)); ?></h3>
 
     <table border="0" cellspacing="0" cellpadding="0" style="width: 100%;" id="Cart66OrderViewTable">
       <tr>
-        <th colspan="2" style="text-align: left;">Product</th>
-        <th style="text-align: center;">Quantity</th>
-        <th style="text-align: right;">Price</th>
-        <th style="text-align: right;">Total</th>
+        <th colspan="2" style="text-align: left;"><?php _e( 'Product' , 'cart66' ); ?></th>
+        <th style="text-align: center;"><?php _e( 'Quantity' , 'cart66' ); ?></th>
+        <th style="text-align: right;"><?php _e( 'Price' , 'cart66' ); ?></th>
+        <th style="text-align: right;"><?php _e( 'Total' , 'cart66' ); ?></th>
       </tr>
       <?php foreach($order->getItems() as $item): ?>
       <tr>
@@ -39,7 +39,7 @@ $order = $data['order'];
               }
             }
             else {
-              echo "<tr><td colspan='5' style='color: #955;'>This order requires Gravity Forms in order to view all of the order information</td></tr>";
+              echo "<tr><td colspan='5' style='color: #955;'>" . __("This order requires Gravity Forms in order to view all of the order information","cart66") . "</td></tr>";
             }
             
           }
@@ -82,7 +82,7 @@ $order = $data['order'];
           <td colspan='4'>&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="2" style="text-align: right; background-color: #EEE;"><strong>Coupon</strong></td>
+          <td colspan="2" style="text-align: right; background-color: #EEE;"><strong><?php _e( 'Coupon' , 'cart66' ); ?></strong></td>
           <td colspan="2" style="text-align: right; background-color: #EEE;"><?php echo $order->coupon ?></td>
         </tr>
         <tr>
@@ -91,7 +91,7 @@ $order = $data['order'];
       <?php endif; ?>
       
       <tr>
-        <td colspan="3" style="text-align: right;"><strong>Total</strong></td>
+        <td colspan="3" style="text-align: right;"><strong><?php _e( 'Total' , 'cart66' ); ?></strong></td>
         <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->total, 2); ?></td>
       </tr>
       
@@ -101,8 +101,8 @@ $order = $data['order'];
 
     <table border="0" cellspacing="0" cellpadding="5" style="width:100%;">
       <tr>
-        <th style="text-align: left;">Billing Information</th>
-        <th style="text-align: left;">Contact Information</th>
+        <th style="text-align: left;"><?php _e( 'Billing Information' , 'cart66' ); ?></th>
+        <th style="text-align: left;"><?php _e( 'Contact Information' , 'cart66' ); ?></th>
       </tr>
       <tr>
         <td valign="top">
@@ -122,7 +122,7 @@ $order = $data['order'];
       <?php if($order->shipping_method != 'None' && $order->hasShippingInfo()): ?>
         
         <tr>
-          <th style="text-align: left;"><br/>Shipping Information</th>
+          <th style="text-align: left;"><br/><?php _e( 'Shipping Information' , 'cart66' ); ?></th>
           <th style="text-align: left;">&nbsp;</th>
         </tr>
         <tr>
@@ -156,12 +156,12 @@ $order = $data['order'];
 
     echo $link.$order->ouid ;
   
-  ?>" target="_blank">View Receipt Online</a></p>
+  ?>" target="_blank"><?php _e( 'View Receipt Online' , 'cart66' ); ?></a></p>
 <div class="wrap" style="margin-top: 30px;">
   <form class="phorm" action="" method='post'>
     <input type='hidden' name='task' value='update order status' />
     <input type='hidden' name='order_id' value="<?php echo $order->id ?>">
-    <label style='width: auto;'>Order Status:</label>
+    <label style='width: auto;'><?php _e( 'Order Status' , 'cart66' ); ?>:</label>
     <select name="status" id='status' style=''>
       <?php
         $setting = new Cart66Setting();
@@ -177,6 +177,6 @@ $order = $data['order'];
 </div>
 
 <div class="wrap" style='float: left; clear: both;'>
-  <p><a href='?page=cart66_admin'>&lt;&lt;&nbsp;&nbsp;Back To Orders</a></p>
+  <p><a href='?page=cart66_admin'>&lt;&lt;&nbsp;&nbsp;<?php _e( 'Back To Orders' , 'cart66' ); ?></a></p>
 </div>
   

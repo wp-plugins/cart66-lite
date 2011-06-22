@@ -356,6 +356,7 @@ class Cart66Common {
        'AU'=>'Australia',
        'AT'=>'Austria',
        'BS'=>'Bahamas',
+       'BB'=>'Barbados',
        'BE'=>'Belgium',
        'BR'=>'Brazil',
        'BG'=>'Bulgaria',
@@ -746,7 +747,7 @@ _script_here_
   public static function getEmailReceiptMessage($order) {
     $product = new Cart66Product();
     
-    $msg = "ORDER NUMBER: " . $order->trans_id . "\n\n";
+    $msg = __("ORDER NUMBER","cart66") . ": " . $order->trans_id . "\n\n";
     $hasDigital = false;
     foreach($order->getItems() as $item) {
       $product->load($item->product_id);
@@ -755,12 +756,12 @@ _script_here_
       }
       $price = $item->product_price * $item->quantity;
       // $msg .= "Item: " . $item->item_number . ' ' . $item->description . "\n";
-      $msg .= "Item: " . $item->description . "\n";
+      $msg .= __("Item","cart66") . ": " . $item->description . "\n";
       if($item->quantity > 1) {
-        $msg .= "Quantity: " . $item->quantity . "\n";
+        $msg .= __("Quantity","cart66") . ": " . $item->quantity . "\n";
       }
-      $msg .= "Item Price: " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price, 2) . "\n";
-      $msg .= "Item Total: " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price * $item->quantity, 2) . "\n\n";
+      $msg .= __("Item Price","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price, 2) . "\n";
+      $msg .= __("Item Total","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price * $item->quantity, 2) . "\n\n";
       
       if($product->isGravityProduct()) {
         $msg .= Cart66GravityReader::displayGravityForm($item->form_entry_ids, true);
@@ -768,21 +769,21 @@ _script_here_
     }
 
     if($order->shipping_method != 'None' && $order->shipping_method != 'Download') {
-      $msg .= "Shipping: " . CART66_CURRENCY_SYMBOL_TEXT . $order->shipping . "\n";
+      $msg .= __("Shipping","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . $order->shipping . "\n";
     }
 
     if(!empty($order->coupon) && $order->coupon != 'none') {
-      $msg .= "Coupon: " . $order->coupon . "\n";
+      $msg .= __("Coupon","cart66") . ": " . $order->coupon . "\n";
     }
 
     if($order->tax > 0) {
-      $msg .= "Tax: " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->tax, 2) . "\n";
+      $msg .= __("Tax","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->tax, 2) . "\n";
     }
 
-    $msg .= "\nTOTAL: " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->total, 2) . "\n";
+    $msg .= "\n" . __("TOTAL","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->total, 2) . "\n";
 
     if($order->shipping_method != 'None' && $order->shipping_method != 'Download') {
-      $msg .= "\n\nSHIPPING INFORMATION\n\n";
+      $msg .= "\n\n" . __("SHIPPING INFORMATION","cart66") . "\n\n";
 
       $msg .= $order->ship_first_name . ' ' . $order->ship_last_name . "\n";
       $msg .= $order->ship_address . "\n";
@@ -791,11 +792,11 @@ _script_here_
       }
       $msg .= $order->ship_city . ' ' . $order->ship_state . ' ' . $order->ship_zip . "\n" . $order->ship_country . "\n";
 
-      $msg .= "\nDelivery via: " . $order->shipping_method . "\n";
+      $msg .= "\n" . __("Delivery via","cart66") . ": " . $order->shipping_method . "\n";
     }
 
 
-    $msg .= "\n\nBILLING INFORMATION\n\n";
+    $msg .= "\n\n" . __("BILLING INFORMATION","cart66") . "\n\n";
 
     $msg .= $order->bill_first_name . ' ' . $order->bill_last_name . "\n";
     $msg .= $order->bill_address . "\n";
@@ -806,11 +807,11 @@ _script_here_
 
     if(!empty($order->phone)) {
       $phone = self::formatPhone($order->phone);
-      $msg .= "\nPhone: $phone\n";
+      $msg .= "\n" . __("Phone","cart66") . ": $phone\n";
     }
     
     if(!empty($order->email)) {
-      $msg .= 'Email: ' . $order->email . "\n";
+      $msg .= __("Email","cart66") . ': ' . $order->email . "\n";
     }
 
     $receiptPage = get_page_by_path('store/receipt');
@@ -823,10 +824,10 @@ _script_here_
     }
 
     if($hasDigital) {
-      $msg .= "\nDOWNLOAD LINK\nClick the link below to download your order.\n$link";
+      $msg .= "\n" . __('DOWNLOAD LINK','cart66') . "\n" . __('Click the link below to download your order.','cart66') . "\n$link";
     }
     else {
-      $msg .= "\nVIEW RECEIPT ONLINE\nClick the link below to view your receipt online.\n$link";
+      $msg .= "\n" . __('VIEW RECEIPT ONLINE','cart66') . "\n" . __('Click the link below to view your receipt online.','cart66') . "\n$link";
     }
     
     $setting = new Cart66Setting();

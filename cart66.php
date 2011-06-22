@@ -3,7 +3,7 @@
 Plugin Name: Cart66 Lite
 Plugin URI: http://www.cart66.com
 Description: Wordpress Shopping Cart
-Version: 1.1.3
+Version: 1.1.4
 Author: Reality 66
 Author URI: http://www.Reality66.com
 
@@ -37,10 +37,14 @@ if(!class_exists('Cart66')) {
   
   define("CART66_ORDER_NUMBER", false);
   define("CART66_PRO", false);
-  define('CART66_VERSION_NUMBER', '1.1.3');
+  define('CART66_VERSION_NUMBER', '1.1.4');
   define("WPCURL", Cart66Common::getWpContentUrl());
   define("WPURL", Cart66Common::getWpUrl());
 
+  
+  if(CART66_PRO) {
+    require_once(CART66_PATH. "/pro/models/Cart66ProCommon.php");
+  }
 
   // IS_ADMIN is true when the dashboard or the administration panels are displayed
   if(!defined("IS_ADMIN")) {

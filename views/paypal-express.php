@@ -88,6 +88,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           $shipping = 0;
         }
         
+        $pp->populatePayPalCartItems();
+        
         Cart66Common::log("Preparing DoExpressCheckout:\nToken: $token\nPayerID: $payerId\nItem Amount: $itemAmount\nShipping: $shipping\nTax: $tax");
         $response = $pp->DoExpressCheckout($token, $payerId, $itemAmount, $shipping, $tax);
       }
@@ -187,10 +189,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           }
 
           $orderId = Cart66Session::get('Cart66Cart')->storeOrder($orderInfo);  
-
-          $receiptPage = get_page_by_path('store/receipt');
           Cart66Session::set('order_id', $orderId);
-          header("Location: " . get_permalink($receiptPage->ID));
+          $receiptLink = Cart66Common::getPageLink('store/receipt');
+          $newOrder = new Cart66Order($orderId);
+          header("Location: " . $receiptLink . "?ouid=" . $newOrder->ouid . "&n=1");
         } 
         else {
           $paymentProfileError = $profileResponse['L_SHORTMESSAGE0'] . ': ' . $profileResponse['L_LONGMESSAGE0'];
@@ -402,7 +404,7 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
         ?>
       </li>
     </ul>
-    <p id="Cart66ReceiptExpectation"><?php _e( 'Your receipt will be on the next page and also emailed to you' , 'cart66' ); ?>.</p>
+    <p id="Cart66ReceiptExpectation"><?php _e( 'Your receipt will be on the next page and also emailed to you.' , 'cart66' ); ?></p>
   <?php else: ?>
     <?php 
       $cartImgPath = Cart66Setting::getValue('cart_images_url');
@@ -417,7 +419,7 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
         echo "<input type='submit' class='Cart66ButtonPrimary' value='Complete Order' />";
       }
     ?>
-    <p id="Cart66ReceiptExpectation"><?php _e( 'Your receipt will be on the next page and also emailed to you' , 'cart66' ); ?>.</p>
+    <p id="Cart66ReceiptExpectation"><?php _e( 'Your receipt will be on the next page and also emailed to you.' , 'cart66' ); ?></p>
   <?php endif; ?>
     
     

@@ -488,6 +488,7 @@ class Cart66Cart {
     else {
       $total = $this->getNonSubscriptionAmount() + $this->getShippingCost() - $this->getDiscountAmount();
     }
+    $total = ($total < 0) ? 0 : $total;
     return $total; 
   }
   

@@ -27,5 +27,5 @@ if(CART66_PRO) {
   require_once(CART66_PATH . "/pro/admin/inventory.php");
 }
 else {
-  echo '<p class="description">This feature is only available in <a href="http://cart66.com">Cart66 Professional</a></p>';
+    echo '<p class="description">' . __("Account functionality is only available in <a href='http://cart66.com'>Cart66 Professional</a>","cart66") . '</p>';
 }

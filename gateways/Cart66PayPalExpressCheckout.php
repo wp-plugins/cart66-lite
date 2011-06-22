@@ -196,10 +196,57 @@ class Cart66PayPalExpressCheckout extends Cart66GatewayAbstract {
     );
     $nvp = $this->_buildNvpStr();
     
-    Cart66Common::log("Do Express Checkout Request NVP: " . str_replace('&', "\n", $nvp));
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Do Express Checkout Request NVP: " . str_replace('&', "\n", $nvp));
     
     $result = $this->_decodeNvp($this->_sendRequest($this->_apiEndPoint, $nvp));
     return $result;
+  }
+  
+  public function populatePayPalCartItems() {
+    $items = Cart66Session::get('Cart66Cart')->getItems(); // An array of Cart66CartItem objects
+    foreach($items as $i) {
+      if($i->isPayPalSubscription()) {
+        $plan = $i->getPayPalSubscription();
+        $itemData = array(
+          'BILLINGAGREEMENTDESCRIPTION' => $plan->name . ' ' . str_replace('&nbsp;', ' ', strip_tags($plan->getPriceDescription($plan->offerTrial > 0, '(trial)'))),
+        );
+        $this->addItem($itemData);
+
+        $chargeAmount = $i->getProductPrice();
+        if($chargeAmount > 0) {
+          $itemData = array(
+            'NAME' => $i->getFullDisplayName(),
+            'AMT' => $chargeAmount,
+            'NUMBER' => $i->getItemNumber(),
+            'QTY' => $i->getQuantity()
+          );
+        }
+        $this->addItem($itemData);
+      }
+      else {
+        $itemData = array(
+          'NAME' => $i->getFullDisplayName(),
+          'AMT' => $i->getProductPrice(),
+          'NUMBER' => $i->getItemNumber(),
+          'QTY' => $i->getQuantity()
+        );
+        $this->addItem($itemData);
+      }
+    }
+
+    // Add a coupon discount if needed
+    $discount = number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2, '.', '');
+
+    if($discount > 0) {
+      $negDiscount = 0 - $discount;
+      $itemData = array(
+        'NAME' => 'Discount',
+        'AMT' => $negDiscount,
+        'NUMBER' => 'DSC',
+        'QTY' => 1
+      );
+      $this->addItem($itemData);
+    }
   }
   
   protected function _buildNvpStr() {
@@ -245,13 +292,16 @@ class Cart66PayPalExpressCheckout extends Cart66GatewayAbstract {
       // Look for non-subscription products
       foreach($this->_items as $itemInfo) {
         if(!isset($itemInfo['BILLINGAGREEMENTDESCRIPTION'])) {
-          $params[] = 'L_PAYMENTREQUEST_0_NAME' . $counter . '=' . urlencode($itemInfo['NAME']);
-          $params[] = 'L_PAYMENTREQUEST_0_AMT' . $counter . '=' . urlencode(number_format($itemInfo['AMT'], 2, '.', ''));
-          $params[] = 'L_PAYMENTREQUEST_0_NUMBER' . $counter . '=' . urlencode($itemInfo['NUMBER']);
-          $params[] = 'L_PAYMENTREQUEST_0_QTY' . $counter . '=' . urlencode($itemInfo['QTY']);
+          $params[] = 'L_NAME' . $counter . '=' . urlencode($itemInfo['NAME']);
+          $params[] = 'L_AMT' . $counter . '=' . urlencode(number_format($itemInfo['AMT'], 2, '.', ''));
+          $params[] = 'L_NUMBER' . $counter . '=' . urlencode($itemInfo['NUMBER']);
+          $params[] = 'L_QTY' . $counter . '=' . urlencode($itemInfo['QTY']);
           $counter++;
         }
       }
+    }
+    else {
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not adding information about individual products because this items array is empty: " . print_r($this->_items, true));
     }
     
     $nvp = implode('&', $params);

@@ -1,4 +1,4 @@
-<?php 
+ <?php 
 Cart66Session::get('Cart66Cart')->resetPromotionStatus();
 $items = Cart66Session::get('Cart66Cart')->getItems();
 $shippingMethods = Cart66Session::get('Cart66Cart')->getShippingMethods();
@@ -67,7 +67,7 @@ if(count($items)): ?>
 <?php elseif(Cart66Session::get('Cart66ShippingWarning')): ?>
   <div id="Cart66ShippingWarning" class="Cart66Unavailable">
     <h2><?php _e( 'No Shipping Service Selected' , 'cart66' ); ?></h2>
-    <p><?php _e( 'We cannot process your order because you have not selected a shipping method. If there are no shipping services available, we may not be able to ship to your location' , 'cart66' ); ?>.</p>
+    <p><?php _e( 'We cannot process your order because you have not selected a shipping method. If there are no shipping services available, we may not be able to ship to your location.' , 'cart66' ); ?></p>
     <?php Cart66Session::drop('Cart66ShippingWarning'); ?>
     <input type="button" name="close" value="Ok" id="close" class="Cart66ButtonSecondary modalClose" />
   </div>
@@ -76,7 +76,7 @@ if(count($items)): ?>
 <?php if(Cart66Session::get('Cart66SubscriptionWarning')): ?>
   <div id="Cart66SubscriptionWarning" class="Cart66Unavailable">
     <h2><?php _e( 'Too Many Subscriptions' , 'cart66' ); ?></h2>
-    <p><?php _e( 'Only one subscription may be purchased at a time' , 'cart66' ); ?>.</p>
+    <p><?php _e( 'Only one subscription may be purchased at a time.' , 'cart66' ); ?></p>
     <?php 
       Cart66Session::drop('Cart66SubscriptionWarning');
     ?>
@@ -90,13 +90,12 @@ if(count($items)): ?>
     if($sub = $account->getCurrentAccountSubscription()) {
       if($sub->isPayPalSubscription()) {
         ?>
-        <p id="Cart66SubscriptionChangeNote"><?php _e( 'Your current subscription will be canceled when you purchase your new subscription' , 'cart66' ); ?>.</p>
+        <p id="Cart66SubscriptionChangeNote"><?php _e( 'Your current subscription will be canceled when you purchase your new subscription.' , 'cart66' ); ?></p>
         <?php
       }
     }
   } 
 ?>
-
 
 <form id='Cart66CartForm' action="" method="post">
   <input type='hidden' name='task' value='updateCart'>
@@ -266,8 +265,7 @@ if(count($items)): ?>
         </tr>
         <?php elseif(!$fullMode): ?>
         <tr>
-          <th colspan='2' class="alignRight"><?php _e( 'Shipping Method' , 'cart66' ); ?>:</th>
-          <th colspan='3' align="left">
+          <th colspan='5' class="alignRight"><?php _e( 'Shipping Method' , 'cart66' ); ?>: 
             <?php 
               $method = new Cart66ShippingMethod(Cart66Session::get('Cart66Cart')->getShippingMethodId());
               echo $method->name;
@@ -372,7 +370,7 @@ if(count($items)): ?>
   <div id="emptyCartMsg">
   <h3>Your Cart Is Empty</h3>
   <?php if($cartImgPath): ?>
-    <p><a href='<?php echo Cart66Session::get('Cart66LastPage'); ?>' title="Continue Shopping"><img alt="Continue Shopping" class="continueShoppingImg" src='<?php echo $continueShoppingImg ?>' /></a>
+    <p><a href='<?php echo Cart66Session::get('Cart66LastPage'); ?>' title="Continue Shopping" class="Cart66CartContinueShopping"><img alt="Continue Shopping" class="continueShoppingImg" src='<?php echo $continueShoppingImg ?>' /></a>
   <?php else: ?>
     <p><a href='<?php echo Cart66Session::get('Cart66LastPage'); ?>' class="Cart66ButtonSecondary" title="Continue Shopping"><?php _e( 'Continue Shopping' , 'cart66' ); ?></a>
   <?php endif; ?>

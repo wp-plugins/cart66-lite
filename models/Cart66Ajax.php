@@ -5,7 +5,7 @@ class Cart66Ajax {
     $error = '';
     foreach($_REQUEST as $key => $value) {
       if($key[0] != '_' && $key != 'action' && $key != 'submit') {
-        if(is_array($value)) {
+        if(is_array($value) && $key != 'admin_page_roles') {
           $value = implode('~', $value);
         }
 
@@ -33,6 +33,10 @@ class Cart66Ajax {
         }
         elseif($key == 'constantcontact_list_ids') {
           
+        }
+        elseif($key == 'admin_page_roles') {
+          $value = serialize($value);
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Saving Admin Page Roles: " . print_r($value,true));
         }
 
         Cart66Setting::setValue($key, trim(stripslashes($value)));

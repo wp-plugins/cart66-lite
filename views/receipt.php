@@ -12,9 +12,9 @@ if(isset($_GET['ouid'])) {
     exit();
   }
 }
-elseif(Cart66Session::get('order_id')) {
-  $order = new Cart66Order(Cart66Session::get('order_id'));
-  Cart66Session::get('order_id');
+if($_GET['n'] == 1) {
+  $order = new Cart66Order();
+  $order->loadByOuid($_GET['ouid']);
   
   // Begin processing affiliate information
   if(Cart66Session::get('ap_id')) {
@@ -264,7 +264,7 @@ if(CART66_PRO) {
   //Disable mail headers if the WP Mail SMTP plugin is in use.
   //if(function_exists('wp_mail_smtp_activate')) { $headers = null; }
   
-  if(!isset($_GET['ouid'])) {
+  if($_GET['n'] == 1) {
     $isSent = Cart66Common::mail($to, $subject, $msg, $headers);
     if(!$isSent) {
       Cart66Common::log("Mail not sent to: $to");
