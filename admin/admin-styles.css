@@ -153,6 +153,14 @@ span.label_desc {
   display: none;
 }
 
+.failedDebug{
+	color:#ff0000;
+}
+
+.cart66S3BucketRestrictions{
+	margin-left:140px;
+	color:#ff0000;
+}
 /********************************************************
  * Table css
  ********************************************************/

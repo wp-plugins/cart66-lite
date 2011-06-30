@@ -82,6 +82,20 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.1.5 =
+* NEW: Italian translation added
+* NEW: cURL test added to debug options
+* NEW: Debug problems highlighted in red
+* NEW: State and zip code labels now change to "Province/Post Code" for non-US countries
+* NEW: Amazon S3 bucket name validation
+* NEW: Added validation for ship-to country list
+* Updated: Receipt emails now get sent from checkout, not receipt page to prevent duplicate emails
+* Updated: Zip code and country validation moved to wp_head
+* Updated: Shipping/Billing state and zip code classes now have their own labels
+* Fixed: Problem with the state drop-down when the home country was not the United States
+* Fixed: Improved receipt url syntax for Express Checkout
+* Fixed: Corrected misspelling in the login input css id
+
 = 1.1.4 =
 * NEW: Define user roles to control access to the Cart66 admin screens
 * NEW: Support for translation files

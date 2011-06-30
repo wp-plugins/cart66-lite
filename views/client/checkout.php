@@ -29,6 +29,16 @@
         $jq('#' + frm + ' select[name="' + kind + '[state]"]').append('<option value="' + code + '">' + states[st][code] + '</option>');
       }
     }
+    
+    switch(st){
+      case "US":
+        $jq('.' + kind + '-state_label').html("State: ");
+        $jq('.' + kind + '-zip_label').html("Zip code: ");
+      break;
+      default:
+        $jq('.' + kind + '-state_label').html("Province: ");
+        $jq('.' + kind + '-zip_label').html("Post code: ");
+    }
   }
   
   function initStateField(frm, kind, country) {
@@ -38,6 +48,8 @@
       $jq('#' + frm + ' select[name="' + kind + '[state]"]').hide(); 
       $jq('#' + frm + ' input[name="' + kind + '[state_text]"]').show();
     }
+    
+    setState(frm,kind);
   }
   
   $jq = jQuery.noConflict();

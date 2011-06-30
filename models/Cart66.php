@@ -120,6 +120,7 @@ class Cart66 {
       if(CART66_PRO) {
         add_action('wp_head', array($this, 'checkInventoryOnCheckout'));
         add_action('wp_head', array($this, 'checkShippingMethodOnCheckout'));
+        add_action('wp_head', array($this, 'checkZipOnCheckout'));
         add_action('template_redirect', array($this, 'protectSubscriptionPages'));
         add_filter('wp_list_pages_excludes', array($this, 'hideStorePages'));
         add_filter('wp_list_pages_excludes', array($this, 'hidePrivatePages'));
@@ -379,7 +380,7 @@ class Cart66 {
     $pageRoles = Cart66Setting::getValue('admin_page_roles');
     $pageRoles = unserialize($pageRoles);
     
-    add_menu_page('Cart66', 'Cart66', 'manage_options', 'cart66_admin', null, $icon);
+    add_menu_page('Cart66', 'Cart66', $pageRoles['orders'], 'cart66_admin', null, $icon);
     add_submenu_page('cart66_admin', __('Orders', 'cart66'), __('Orders', 'cart66'), $pageRoles['orders'], 'cart66_admin', array('Cart66Admin', 'ordersPage'));
     add_submenu_page('cart66_admin', __('Products', 'cart66'), __('Products', 'cart66'), $pageRoles['products'], 'cart66-products', array('Cart66Admin', 'productsPage'));
     add_submenu_page('cart66_admin', __('PayPal Subscriptions', 'cart66'), __('PayPal Subscriptions', 'cart66'), $pageRoles['paypal-subscriptions'], 'cart66-paypal-subscriptions', array('Cart66Admin', 'paypalSubscriptions'));
@@ -428,6 +429,37 @@ class Cart66 {
         }
       }
     }
+  }
+  
+  public function checkZipOnCheckout() {
+    if(CART66_PRO && $_SERVER['REQUEST_METHOD'] == 'GET') {
+      if(Cart66Setting::getValue('use_live_rates')) {
+        global $post;
+        $checkoutPage = get_page_by_path('store/checkout');
+        if( isset( $post->ID ) && $post->ID == $checkoutPage->ID) {
+          $cartPage = get_page_by_path('store/cart');
+          $link = get_permalink($cartPage->ID);
+          $sendBack = false;
+          
+          if(!Cart66Session::get('cart66_shipping_zip')) {
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Live rate warning: No shipping zip in session");
+            Cart66Session::set('Cart66ZipWarning', true);
+            $sendBack = true;
+          }
+          elseif(!Cart66Session::get('cart66_shipping_country_code')) {
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Live rate warning: No shipping country code in session");
+            Cart66Session::set('Cart66ShippingWarning', true);
+            $sendBack = true;
+          }
+          
+          if($sendBack) {
+            wp_redirect($link);
+            exit();
+          }
+          
+        } // End if checkout page
+      } // End if using live rates
+    } // End if GET
   }
   
   /**

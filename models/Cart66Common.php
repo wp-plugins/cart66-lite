@@ -253,6 +253,50 @@ class Cart66Common {
     return wp_mail($to, $subject, $msg, $headers);
   }
   
+  /**
+   * Send email receipt and copies thereof.
+   * Return true if all the emails that were supposed to be sent got sent.
+   * Note that just because the email was sent does not mean the receipient received it.
+   * All sorts of things can go awry after the email leaves the server before it is in the
+   * recipient's inbox. 
+   * 
+   * @param int $orderId
+   * @return bool
+   */
+  public static function sendEmailReceipts($orderId) {
+    $isSent = false;
+    $newOrder = new Cart66Order($orderId);
+    $msg = self::getEmailReceiptMessage($newOrder);
+    $to = $newOrder->email;
+    $subject = Cart66Setting::getValue('receipt_subject');
+    $headers = 'From: '. Cart66Setting::getValue('receipt_from_name') .' <' . Cart66Setting::getValue('receipt_from_address') . '>' . "\r\n\\";
+    $msgIntro = Cart66Setting::getValue('receipt_intro');
+
+    if($newOrder) {
+      $isSent = self::mail($to, $subject, $msg, $headers);
+      if(!$isSent) {
+        self::log("Mail not sent to: $to");
+      }
+
+      $others = Cart66Setting::getValue('receipt_copy');
+      if($others) {
+        $list = explode(',', $others);
+        $msg = "THIS IS A COPY OF THE RECEIPT\n\n$msg";
+        foreach($list as $e) {
+          $e = trim($e);
+          $isSent = wp_mail($e, $subject, $msg, $headers);
+          if(!$isSent) {
+            self::log("Mail not sent to: $e");
+          }
+          else {
+            self::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Receipt also mailed to: $e");
+          }
+        }
+      } 
+    }
+    return $isSent;
+  }
+  
   public static function randomString($numChars = 7) {
 		$letters = "";
 		mt_srand((double)microtime()*1000000);

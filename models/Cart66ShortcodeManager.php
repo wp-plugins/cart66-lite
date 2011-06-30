@@ -64,7 +64,7 @@ class Cart66ShortcodeManager {
       
 
       $data = array(
-        'url' => $cartLink . $joinChar . "task=add-to-cart-anchor&cart66ItemId=${id}${options}",
+        'url' => $cartLink . $joinChar . "task=add-to-cart-anchor&cart66ItemId=${id}${urlOptions}",
         'text' => $content,
         'class' => $class
       );

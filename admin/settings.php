@@ -1395,16 +1395,19 @@ else {
                   ?>
                   Cart66 <?php if(CART66_PRO){ echo " Pro"; } ?> Version: <?php echo Cart66Setting::getValue('version');?><br>
                   WP Version: <?php echo get_bloginfo("version"); ?><br>
-                  WPMU: <?php echo (!defined('MULTISITE') || !MULTISITE) ? "False" : "True";  ?><br>
+                  WPMU: <?php echo Cart66Setting::validateDebugValue((!defined('MULTISITE') || !MULTISITE) ? "False" : "True", "False");  ?><br>
                   PHP Version: <?php echo phpversion(); ?><br>
                   Session Save Path: <?php echo ini_get("session.save_path"); ?><br>
                   MySQL Version: <?php echo $wpdb->db_version();?><br>
                   MySQL Mode: <?php 
                                   $mode = $wpdb->get_row("SELECT @@SESSION.sql_mode as Mode"); 
                                   if(empty($mode->Mode)){
-                                      echo "Normal";
+                                      $sqlMode = "Normal";
                                   }
-                                  echo $mode->Mode; ?><br>
+                                  else{
+                                      $sqlMode = $mode->Mode;
+                                  }
+                                  echo Cart66Setting::validateDebugValue($sqlMode,"Normal"); ?><br>
                   Table Prefix: <?php echo $wpdb->prefix; ?><br>
                   Tables: <?php 
                               $required_tables = array($wpdb->prefix."cart66_products",
@@ -1425,7 +1428,7 @@ else {
                               );
                               $matched_tables = $wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix."cart66_%'","ARRAY_N");
                               if(empty($matched_tables)){
-                                echo "All Tables Are Missing!";
+                                $tableStatus = "All Tables Are Missing!";
                               }
                               else {
                                 foreach($matched_tables as $key=>$table){
@@ -1434,20 +1437,39 @@ else {
 
                                 $diff = array_diff($required_tables,$cart_tables);
                                 if(!empty($diff)){
-                                  echo "Missing tables: ";
+                                  $tableStatus = "Missing tables: ";
                                   foreach($diff as $key=>$table){
-                                    echo "$table  ";
+                                    $tableStatus .= "$table  ";
                                   }
                                 }
                                 else{
-                                  echo "All Tables Present";
+                                  $tableStatus = "All Tables Present";
                                 }
                               }
+                              echo Cart66Setting::validateDebugValue($tableStatus,"All Tables Present");
                           ?><br>
 									Current Dir: <?php echo getcwd(); ?><br>
 									WP Url: <?php echo get_bloginfo('wpurl'); ?><br>
   								Server Name: <?php echo $_SERVER['SERVER_NAME']; ?><br>
   								Cookie Domain: <?php $cookieDomain = parse_url( strtolower( get_bloginfo('wpurl') ) ); echo $cookieDomain['host']; ?><br>
+  								Curl Test: <?php
+  								$cart66CurlTest = (isset($_GET['cart66_curl_test'])) ? $_GET['cart66_curl_test'] : false;
+  								if($cart66CurlTest == "run"){
+  								  $ch = curl_init();
+                    curl_setopt($ch,CURLOPT_URL,"https://cart66.com/curl-test.php");
+                    curl_setopt($ch, CURLOPT_POST, 1); 
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch,CURLOPT_POSTFIELDS,"curl_check=validate");
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); 
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+                    $result = curl_exec($ch);
+                    curl_close($ch);
+                    echo ($result == "PASS") ? "PASSED" : "FAILED";
+  								}
+  								else{
+  								  echo "<a href='admin.php?page=cart66-settings&cart66_curl_test=run'>Run Test</a>";
+  								}
+  								?><br>
              </div>
            </li>
           </ul>

@@ -25,7 +25,7 @@ if(isset($data['message'])) {
     </li>
     <li>
       <label class="short" for="login-username"><?php _e( 'Username' , 'cart66' ); ?>:</label>
-      <input type="text" id="login-email" name="login[username]" value="<?php echo $data['account']->username ?>" />
+      <input type="text" id="login-username" name="login[username]" value="<?php echo $data['account']->username ?>" />
     </li>
     <li>
       <h3><?php _e( 'Update Your Password' , 'cart66' ); ?></h3>

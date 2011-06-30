@@ -44,4 +44,15 @@ class Cart66Setting {
     return empty($value) ? false : $value;
   }
   
+  public static function validateDebugValue($value, $expected){
+    if($value != $expected){
+      // test failed
+      $output = "<span class='failedDebug'>" . $value . "</span>";
+    }
+    else{
+      $output = $value;
+    }
+    return $output;
+  }
+  
 }

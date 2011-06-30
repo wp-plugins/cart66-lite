@@ -165,11 +165,16 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           // Save the order locally
           $orderId = $gateway->saveOrder($total, $tax, $transactionId, $status, $accountId);
 
-          // Send buyer to receipt page
+          
           Cart66Session::drop('Cart66SubscriberToken');
           Cart66Session::set('order_id', $orderId);
           $receiptLink = Cart66Common::getPageLink('store/receipt');
           $newOrder = new Cart66Order($orderId);
+          
+          // Send email receipts
+          Cart66Common::sendEmailReceipts($orderId);
+          
+          // Send buyer to receipt page
           $receiptVars = strpos($receiptLink, '?') ? '&' : '?';
           $receiptVars .= "ouid=" . $newOrder->ouid . "&n=1";
           header("Location: " . $receiptLink . $receiptVars);

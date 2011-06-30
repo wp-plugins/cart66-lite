@@ -230,22 +230,6 @@ if(count($items)): ?>
                   $selectedRate = $liveRates->getSelected();
                   echo __("Shipping to", "cart66") . " " . Cart66Session::get('cart66_shipping_zip') . " " . __("via","cart66") . " " . $selectedRate->service;
                 }
-                else {
-                  $cartPage = get_page_by_path('store/cart');
-                  $link = get_permalink($cartPage->ID);
-                  
-                  if(!Cart66Session::get('cart66_shipping_zip')) {
-                    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Live rate warning: No shipping zip in session");
-                    Cart66Session::set('Cart66ZipWarning', true);
-                  }
-                  elseif(!Cart66Session::get('cart66_shipping_country_code')) {
-                    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Live rate warning: No shipping country code in session");
-                    Cart66Session::set('Cart66ShippingWarning', true);
-                  }
-                  
-                  wp_redirect($link);
-                  exit();
-                }
               ?>
             </th>
           </tr>

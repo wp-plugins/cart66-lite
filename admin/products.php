@@ -208,7 +208,6 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
                     <span style="padding: 0px 10px;"><?php _e( 'or' , 'cart66' ); ?></span>
                     <input type="checkbox" value="1" name="product[lifetime_membership]" id="product-lifetime_membership"  <?php echo $product->lifetimeMembership == 1 ? 'checked="checked"' : ''; ?>> <?php _e( 'Lifetime' , 'cart66' ); ?>
                   </li>
-                </ul>
               <?php endif; ?>
             </ul>
           </div>
@@ -231,13 +230,16 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
               </li>
             </ul>
             
-            <?php if(Cart66Setting::getValue('amazons3_id')): ?>
+            <?php if(Cart66Setting::getValue('amazons3_id')): ?>              
               <h4 style="padding-left: 10px;"><?php _e( 'Deliver Digital Products With Amazon S3' , 'cart66' ); ?></h4>
               <ul>
                 <li>
-                  <label for="product-s3_bucket" class="med"><?php _e( 'Bucket' , 'cart66' ); ?>:</label>
+                  <label for="product-s3_bucket" class="med bucketNameLabel"><?php _e( 'Bucket' , 'cart66' ); ?>:</label>
                   <input class="long" type='text' name='product[s3_bucket]' id='product-s3_bucket' value="<?php echo $product->s3_bucket ?>" />
                   <p class="label_desc"><?php _e( 'The Amazon S3 bucket name that is holding the digital file.' , 'cart66' ); ?></p>
+                  <div>
+                    <ul class="cart66S3BucketRestrictions"></ul>
+                  </div>
                 </li>
                 <li>
                   <label class="med" for='product-s3_file'><?php _e( 'File' , 'cart66' ); ?>:</label>
@@ -500,6 +502,12 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
       return false;
     });
     
+    validateS3BucketName();  
+    $("#product-s3_bucket, #product-s3_file").blur(function(){
+       validateS3BucketName();        
+    })
+    
+    
   });
   
   function toggleLifeTime() {
@@ -554,6 +562,70 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
       return true;
     }
     return false;
+  }
+  
+  function bucketError(message){
+    jQuery(".bucketNameLabel").css('color','#ff0000');
+    // check for existing message
+    if(jQuery(".cart66S3BucketRestrictions").html().indexOf(message) == -1){
+      jQuery(".cart66S3BucketRestrictions").append("<li>" + message + "</li>");
+    }
+  }
+  
+  function validateS3BucketName(){
+    var rawBucket = jQuery("#product-s3_bucket").val();
+  
+    // clear errors
+    jQuery(".cart66S3BucketRestrictions li").remove();
+    jQuery(".bucketNameLabel").css('color','#000');
+    
+    // no underscores
+    if(rawBucket.indexOf('_') != -1){
+      bucketError("Bucket names should NOT contain underscores (_).");
+    }
+    
+    // not empty if there's a file name
+    // proper length
+    if(rawBucket == "" && jQuery("#product-s3_file").val() != ""){
+      bucketError("If you have a file name, you'll need a bucket.");
+    } 
+    else if(rawBucket.length > 0 && (rawBucket.length < 3 || rawBucket.length > 63) ){
+      bucketError("Bucket names should be between 3 and 63 characters long.")
+    }
+    
+    // dont end with a dash
+    if(rawBucket.substring(rawBucket.length-1,rawBucket.length) == "-"){
+      bucketError("Bucket names should NOT end with a dash.");
+    }
+    
+    // dont have dashes next to periods
+    if(rawBucket.indexOf('.-') != -1 || rawBucket.indexOf('-.') != -1){
+      bucketError("Dashes cannot appear next to periods. For example, “my-.bucket.com” and “my.-bucket” are invalid names.");
+    }
+    
+    // no uppercase characters allowed
+    // only letters, numbers, periods or dashes
+    i=0;
+    while(i <= rawBucket.length){
+      if (rawBucket.charCodeAt(i) > 64 && rawBucket.charCodeAt(i) < 90) {
+      	bucketError("Bucket names should NOT contain UPPERCASE letters.");
+      }
+      if (rawBucket != "" && !rawBucket.match(/[0-9\.\-a-z]/g) ){
+        bucketError("Bucket names may only contain lower case letters, numbers, periods or hyphens.");
+      }
+      i++;
+    }
+    
+    // must start with letter or number
+    if(rawBucket != "" && !rawBucket.substring(0,1).match(/[a-z0-9]/g) ){
+      bucketError("Bucket names must begin with a number or letter.");
+    }
+    
+    // cannot be an ip address
+    if(rawBucket != "" && rawBucket.match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g) ){
+      bucketError("Bucket names cannot be an IP address");
+    }
+    
   }
   
 </script>

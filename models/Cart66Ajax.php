@@ -21,6 +21,9 @@ class Cart66Ajax {
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] country list value: $value");
             $value = '';
           }
+          if(empty($value) && !empty($_REQUEST['international_sales'])){
+            $error = "Please select at least one country to ship to.";
+          }
         }
         elseif($key == 'enable_logging' && $value == '1') {
           try {

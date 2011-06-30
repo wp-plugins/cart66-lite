@@ -20,6 +20,9 @@ if(CART66_PRO) {
   }
 }
 
+if(empty($b['country'])){
+   $b['country'] = Cart66Common::getHomeCountryCode();
+}
 
 // Show errors
 if(count($errors)) {
@@ -67,7 +70,7 @@ if(count($errors)) {
             <input type="text" id="billing-city" name="billing[city]" value="<?php Cart66Common::showValue($b['city']); ?>">
           </li>
 
-          <li><label for="billing-state_text" class="short"><?php _e( 'State' , 'cart66' ); ?>:</label>
+          <li><label for="billing-state_text" class="short billing-state_label"><?php _e( 'State' , 'cart66' ); ?>:</label>
             <input type="text" name="billing[state_text]" value="<?php Cart66Common::showValue($b['state']); ?>" id="billing-state_text" class="state_text_field" />
             <select id="billing-state" class="required" title="State billing address" name="billing[state]">
               <option value="0">&nbsp;</option>
@@ -83,7 +86,7 @@ if(count($errors)) {
           </li>
 
           <li>
-            <label for="billing-zip"><?php _e( 'Zip code' , 'cart66' ); ?>:</label>
+            <label for="billing-zip" class="billing-zip_label"><?php _e( 'Zip code' , 'cart66' ); ?>:</label>
             <input type="text" id="billing-zip" name="billing[zip]" value="<?php Cart66Common::showValue($b['zip']); ?>">
           </li>
 
@@ -137,11 +140,10 @@ if(count($errors)) {
           </li>
 
           <li>
-            <label for="shipping-state_text" class="short"><?php _e( 'State' , 'cart66' ); ?>:</label>
+            <label for="shipping-state_text" class="short shipping-state_label"><?php _e( 'State' , 'cart66' ); ?>:</label>
             <input type="text" name="shipping[state_text]" value="<?php Cart66Common::showValue($s['state']); ?>" id="shipping-state_text" class="state_text_field" />
             <select id="shipping-state" class="shipping_countries required" title="State shipping address" name="shipping[state]">
-              <option value="0">&nbsp;</option>
-              <option value="0">&nbsp;</option>
+              <option value="0">&nbsp;</option>              
               <?php
                 $zone = Cart66Common::getZones($shippingCountryCode);
                 foreach($zone as $code => $name) {
@@ -153,7 +155,7 @@ if(count($errors)) {
           </li>
 
           <li>
-            <label for="shipping-zip"><?php _e( 'Zip code' , 'cart66' ); ?>:</label>
+            <label for="shipping-zip" class="shipping-zip_label"><?php _e( 'Zip code' , 'cart66' ); ?>:</label>
             <input type="text" id="shipping-zip" name="shipping[zip]" value="<?php Cart66Common::showValue($s['zip']); ?>">
           </li>
 

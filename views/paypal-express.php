@@ -192,7 +192,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           Cart66Session::set('order_id', $orderId);
           $receiptLink = Cart66Common::getPageLink('store/receipt');
           $newOrder = new Cart66Order($orderId);
-          header("Location: " . $receiptLink . "?ouid=" . $newOrder->ouid . "&n=1");
+          
+          // Send email receipts
+          Cart66Common::sendEmailReceipts($orderId);
+          
+          // Send buyer to receipt page
+          $receiptVars = strpos($receiptLink, '?') ? '&' : '?';
+          $receiptVars .= "ouid=" . $newOrder->ouid . "&n=1";
+          header("Location: " . $receiptLink . $receiptVars);
         } 
         else {
           $paymentProfileError = $profileResponse['L_SHORTMESSAGE0'] . ': ' . $profileResponse['L_LONGMESSAGE0'];

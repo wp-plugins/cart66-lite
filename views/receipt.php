@@ -254,39 +254,6 @@ if(CART66_PRO) {
 <p><a href='#' id="print_version"><?php _e( 'Printer Friendly Receipt' , 'cart66' ); ?></a></p>
 
 <?php
-  $msg = Cart66Common::getEmailReceiptMessage($order);
-  $setting = new Cart66Setting();
-  $to = $order->email;
-  $subject = Cart66Setting::getValue('receipt_subject');
-  $headers = 'From: '. Cart66Setting::getValue('receipt_from_name') .' <' . Cart66Setting::getValue('receipt_from_address') . '>' . "\r\n\\";
-  $msgIntro = Cart66Setting::getValue('receipt_intro');
-  
-  //Disable mail headers if the WP Mail SMTP plugin is in use.
-  //if(function_exists('wp_mail_smtp_activate')) { $headers = null; }
-  
-  if($_GET['n'] == 1) {
-    $isSent = Cart66Common::mail($to, $subject, $msg, $headers);
-    if(!$isSent) {
-      Cart66Common::log("Mail not sent to: $to");
-    }
-    
-    $others = Cart66Setting::getValue('receipt_copy');
-    if($others) {
-      $list = explode(',', $others);
-      $msg = "THIS IS A COPY OF THE RECEIPT\n\n$msg";
-      foreach($list as $e) {
-        $e = trim($e);
-        $isSent = wp_mail($e, $subject, $msg, $headers);
-        if(!$isSent) {
-          Cart66Common::log("Mail not sent to: $e");
-        }
-        else {
-          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Receipt also mailed to: $e");
-        }
-      }
-    } 
-  }
-  
   // Erase the shopping cart from the session at the end of viewing the receipt
   Cart66Session::drop('Cart66Cart');
 ?>
