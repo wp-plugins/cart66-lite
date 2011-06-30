@@ -1,7 +1,7 @@
-=== Cart66 Lite ===
+=== Cart66 Lite :: Ecommerce Shopping Cart Plugin For Your Online Store ===
 Contributors: reality66
 Donate link: http://cart66.com
-Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales
+Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales, shopping cart
 Requires at least: 2.8
 Tested up to: 3.1
 Stable tag: 1.1.5
@@ -26,6 +26,10 @@ Cart66 is a simple to use yet powerful ecommerce plugin for WordPress.
 * Set your currency
 * Customizable email receipts
 * Affiliate platform integration
+
+[vimeo http://vimeo.com/23207481]
+
+Some features in the video, such as the integration with Gravity Forms, are only available in Cart66 Professional.
 
 Checkout using
 
