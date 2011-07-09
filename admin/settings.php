@@ -1470,6 +1470,10 @@ else {
   								  echo "<a href='admin.php?page=cart66-settings&cart66_curl_test=run'>Run Test</a>";
   								}
   								?><br>
+  								Write Permissions: <?php 
+  								  $isWritable = (is_writable(CART66_PATH)) ? "Writable" : "Not Writable";
+  								  echo Cart66Setting::validateDebugValue($isWritable,"Writable");
+  								?><br>
              </div>
            </li>
           </ul>

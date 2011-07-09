@@ -35,12 +35,8 @@ if(count($errors)) {
 <div id="ccInfo">
 	<div id="billingInfo">
         <ul id="billingAddress" class="shortLabels" >
-          <?php if($gatewayName == 'Cart66ManualGateway'): ?>
-            <?php if(Cart66Session::get('Cart66Cart')->requireShipping()): ?>
-              <li><h2><?php _e( 'Shipping Address' , 'cart66' ); ?></h2></li>
-            <?php else: ?>
-              <li><h2><?php _e( 'Order Information' , 'cart66' ); ?></h2></li>
-            <?php endif; ?>
+          <?php if($gatewayName == 'Cart66ManualGateway' && !Cart66Session::get('Cart66Cart')->requireShipping()): ?>
+            <li><h2><?php _e( 'Order Information' , 'cart66' ); ?></h2></li>
           <?php else: ?>
             <li><h2><?php _e( 'Billing Address' , 'cart66' ); ?></h2></li>
           <?php endif; ?>
@@ -101,7 +97,7 @@ if(count($errors)) {
         </ul>
 	</div><!-- #billingInfo -->
    
-    <?php if(Cart66Session::get('Cart66Cart')->requireShipping() && $gatewayName != 'Cart66ManualGateway'): ?>
+  <?php if(Cart66Session::get('Cart66Cart')->requireShipping()): ?>
 	<div id="shippingInfo">
         <ul id="shippingAddressCheckbox">
           <li><h2><?php _e( 'Shipping Address' , 'cart66' ); ?></h2></li>

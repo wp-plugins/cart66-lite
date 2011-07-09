@@ -13,8 +13,7 @@ if(!($username && $password && $signature)) {
   <?php
 }
 
-
-if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-action'] == 'paypalexpresscheckout') {
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cart66-action']) && $_POST['cart66-action'] == 'paypalexpresscheckout') {
   // Set up the PayPal object
   $pp = new Cart66PayPalExpressCheckout();
   

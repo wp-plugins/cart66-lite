@@ -249,7 +249,7 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
 	<div id="billingInfo">
         <ul id="billingAddress">
           <li class="title"><strong>Billing Information</strong></li>
-          <link><?php echo $details['FIRSTNAME'] ?> <?php echo $details['LASTNAME'] ?></li>
+          <li><?php echo $details['FIRSTNAME'] ?> <?php echo $details['LASTNAME'] ?></li>
           <li><?php echo "PayPal Status: " . $details['PAYERSTATUS'] ?></li>
           <?php if(isset($details['PHONENUM'])): ?>
           <li>Phone: <?php echo $details['PHONENUM'] ?></li>

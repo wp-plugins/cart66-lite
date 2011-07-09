@@ -46,6 +46,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
   
   if(in_array($gatewayName, $supportedGateways)) {
     $gateway->validateCartForCheckout();
+    
     $gateway->setBilling(Cart66Common::postVal('billing'));
     $gateway->setPayment(Cart66Common::postVal('payment'));
     

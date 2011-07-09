@@ -238,7 +238,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
                   <input class="long" type='text' name='product[s3_bucket]' id='product-s3_bucket' value="<?php echo $product->s3_bucket ?>" />
                   <p class="label_desc"><?php _e( 'The Amazon S3 bucket name that is holding the digital file.' , 'cart66' ); ?></p>
                   <div>
-                    <ul class="cart66S3BucketRestrictions"></ul>
+                    <ul class="cart66S3BucketRestrictions" style="margin-left:140px;color:#ff0000;"></ul>
                   </div>
                 </li>
                 <li>
@@ -606,11 +606,11 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
     // no uppercase characters allowed
     // only letters, numbers, periods or dashes
     i=0;
-    while(i <= rawBucket.length){
+    while(i <= rawBucket.length-1){
       if (rawBucket.charCodeAt(i) > 64 && rawBucket.charCodeAt(i) < 90) {
       	bucketError("Bucket names should NOT contain UPPERCASE letters.");
       }
-      if (rawBucket != "" && !rawBucket.match(/[0-9\.\-a-z]/g) ){
+      if (rawBucket != "" && !rawBucket.charAt(i).match(/[a-z0-9\.\-]/g) ){
         bucketError("Bucket names may only contain lower case letters, numbers, periods or hyphens.");
       }
       i++;
@@ -618,7 +618,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
     
     // must start with letter or number
     if(rawBucket != "" && !rawBucket.substring(0,1).match(/[a-z0-9]/g) ){
-      bucketError("Bucket names must begin with a number or letter.");
+      bucketError("Bucket names must begin with a number or a lower-case letter.");
     }
     
     // cannot be an ip address

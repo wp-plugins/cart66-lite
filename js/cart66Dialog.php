@@ -22,8 +22,9 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 	tinyMCEPopup.onInit.add( function(){window.setTimeout(function(){$jq('#productName').focus();},500);} );
 
 	<?php
-	$prices = '';
-	$types=''; $options='';
+	$prices = array();
+	$types = array(); 
+	$options='';
 	$products = $product->getModels("where id>0", "order by name");
 	if(count($products)):
 	  $i=0;
@@ -40,17 +41,17 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
           $type='item';
           $description = '(# '.$p->itemNumber.')';
         }
-
-  	    $types .= '"' . htmlspecialchars($type) . '", ';
+        
+  	    $types[] = htmlspecialchars($type);
   	    
   	    if(CART66_PRO && $p->isPayPalSubscription()) {
   	      $sub = new Cart66PayPalSubscription($p->id);
   	      $subPrice = strip_tags($sub->getPriceDescription($sub->offerTrial > 0, '(trial)'));
-  	      $prices .= '"' . htmlspecialchars($subPrice) . '", ';
+  	      $prices[] = htmlspecialchars($subPrice);
   	      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] subscription price in dialog: $subPrice");
   	    }
   	    else {
-  	      $prices .= '"' . htmlspecialchars(strip_tags($p->getPriceDescription())) .'", ';
+  	      $prices[] = htmlspecialchars(strip_tags($p->getPriceDescription()));
   	    }
   	    
   	    
@@ -62,26 +63,32 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 	else:
 	  $options .= '<option value="">No products</option>';
 	endif;
-	//$types = substr($types,0,-1);
-	echo 'var prodtype=new Array('.$types.'"");';
-	echo 'var prodprices=new Array('.$prices.'"");';
-	?>
+	 
+	 $prodTypes = implode("\",\"",$types);
+	 $prodPrices = implode("\",\"", $prices);
+  ?>
+  
+  var prodtype = new Array("<?php echo $prodTypes; ?>");
+  var prodprices = new Array("<?php echo $prodPrices; ?>");
+  
+ 
 
 	function init() {
 		mcTabs.displayTab('tab', 'panel');
 	}
 	
 	function preview(){
-	  var productIndex = $jq("#productName").attr('selectedIndex');
+	   	
+	  var productIndex = jQuery("#productNameSelector option:selected").index();
 	  
 	  var price = "<p style='margin-top:2px;'><label id='priceLabel'>"+prodprices[productIndex]+"</label></p>";
-	  if($jq("input[@name='showPrice']:checked").val()=="no"){
+	  if(jQuery("input[@name='showPrice']:checked").val()=="no"){
 	    price = "";
 	  }
 	  
 	  var style = "";
-	  if($jq("#productStyle").val()!="") {
-	    style = $jq("#productStyle").val();
+	  if(jQuery("#productStyle").val()!="") {
+	    style = jQuery("#productStyle").val();
 	  }
 	  
     <?php 
@@ -105,7 +112,7 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
     <?php endif; ?>
 
 	  if($jq("#buttonImage").val()!=""){
-	    button = "<img src='"+$jq("#buttonImage").val()+"' title='Add to Cart' alt='Cart66 Add To Cart Button'>";
+	    button = "<img src='"+jQuery("#buttonImage").val()+"' title='Add to Cart' alt='Cart66 Add To Cart Button'>";
 	  } 
     
     if($jq("input[@name='showPrice']:checked").val()=="only"){
@@ -114,11 +121,11 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
     
     var prevBox = "<div style='"+style+"'>"+price+button+"</div>";
 	  
-	  $jq("#buttonPreview").html(prevBox);
+	  jQuery("#buttonPreview").html(prevBox);
 	}
 
 	function insertProductCode() {
-		prod  = $jq("#productName").val();
+		prod  = jQuery("#productNameSelector option:selected").val();
 
     showPrice = $jq("input[@name='showPrice']:checked").val();
     if(showPrice == 'no') {
@@ -136,7 +143,7 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
       buttonImage = 'img="' + $jq("#buttonImage").val() + '"';
     }
 
-		type =  prodtype[$jq("#productName").attr("selectedIndex")];
+		type =  prodtype[jQuery("#productNameSelector option:selected").index()];
 		if($jq("#productStyle").val()!=""){
 		  style  = 'style="'+$jq("#productStyle").val()+'"';
 		}
@@ -179,16 +186,21 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 	  tinyMCEPopup.close();
 	}
 	
-	$jq(document).ready(function(){
+	jQuery(document).ready(function(){
 	  preview();
-	  $jq("input").change(function(){preview();});
-	  $jq("input").click(function(){preview();});
+	  jQuery("input").change(function(){preview();});
+	  jQuery("input").click(function(){preview();});
 	  
-	  $jq(".smallText").click(function(){
-	    $jq(".gfProductMessage").show();
+	  
+	  jQuery(".smallText").click(function(){
+	    jQuery(".gfProductMessage").show();
 	  })
-	  $jq(".closeMessage").click(function(){
-	    $jq(".gfProductMessage").hide();
+	  jQuery(".closeMessage").click(function(){
+	    jQuery(".gfProductMessage").hide();
+	  })
+	  
+	  jQuery("#productNameSelector").change(function(){
+	    preview();
 	  })
 	})
 	
@@ -252,8 +264,8 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 			</div>
 			<table border="0" cellspacing="0" cellpadding="2">
 				<tr>
-					<td class="phplabel"><label for="productName"><?php  _e('Your products'); ?>:</label></td>
-					<td class="phpinput"><select id="productName" name="productName" onchange="preview();"><?php  echo $options; ?></select><br>
+					<td class="phplabel"><label for="productNameSelector"><?php  _e('Your products'); ?>:</label></td>
+					<td class="phpinput"><select id="productNameSelector" name="productName"><?php echo $options; ?></select><br>
 					<span class="smallText">Looking for a Gravity Form product?</span>
 				</tr>
 				<tr>

@@ -3,7 +3,7 @@ Contributors: reality66
 Donate link: http://cart66.com
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales, shopping cart
 Requires at least: 2.8
-Tested up to: 3.1
+Tested up to: 3.2
 Stable tag: 1.1.5
 
 Sell digital products and/or physical products with the Cart66 WordPress ecommerce shopping cart plugin.
@@ -85,6 +85,13 @@ We are not able to provide anything other than community based support for Cart6
 3. Cart66 Product Management
 
 == Changelog ==
+
+= 1.1.6 =
+* Updated: Enhancements for WordPress 3.2 compatibility
+* Fixed: jQuery compatibility issues in WordPress 3.2
+* Fixed: PayPal Subscriptions trial period toggle
+* Fixed: Manual Checkout form validation
+* Fixed: Express Checkout html typo
 
 = 1.1.5 =
 * NEW: Italian translation added

@@ -113,12 +113,12 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
     return confirm('Are you sure you want to delete this item?');
   });
 
-  $jq('#promo_type').change(function () {
+  $jq('#promo-type').change(function () {
     setPromoSign();
   }); 
 
   function setPromoSign() {
-    var v = $jq('#promo_type').val();
+    var v = $jq('#promo-type').val();
     if(v == 'percentage') {
       $jq('#dollarSign').hide();
       $jq('#percentSign').show();
