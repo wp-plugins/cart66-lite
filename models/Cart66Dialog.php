@@ -244,8 +244,7 @@ class Cart66Dialog {
         	$shortcodes_system = array(
         	 'express' => __('Listens for PayPal Express callbacks <br/>Belongs on system page store/express', 'cart66'),
         	 'ipn' => __('PayPal Instant Payment Notification <br/>Belongs on system page store/ipn', 'cart66'),
-        	 'receipt' => __('Shows the customer\'s receipt after a successful sale <br/>Belongs on system page store/receipt', 'cart66'),
-        	 'spreedly_listener' => __('Listens for spreedly account changes <br/>Belongs on system page store/spreedly', 'cart66')
+        	 'receipt' => __('Shows the customer\'s receipt after a successful sale <br/>Belongs on system page store/receipt', 'cart66'),        	 
         	);
         	$shortcodes = array(
         	 'add_to_cart item=&quot;&quot;' => __('Create add to cart button', 'cart66'),
@@ -279,6 +278,7 @@ class Cart66Dialog {
           	 'show_to' => __('Show content only to members with the listed feature levels - opposite of [hide_from]', 'cart66'),
           	);
           	$shortcodes = array_merge($shortcodes, $shortcodes_pro);
+          	$shortcodes_system['spreedly_listener'] = __('Listens for spreedly account changes <br/>Belongs on system page store/spreedly', 'cart66');
         	}
         	ksort($shortcodes);
         	?>
