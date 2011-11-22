@@ -1,5 +1,5 @@
 /* @override 
-	http://pro.cart66/wp-content/plugins/cart66-pro/cart66.css?ver=1.1.3
+	http://pro.cart66/wp-content/plugins/cart66-gh/cart66.css?ver=1.2.3
 */
 
 #viewCartTable {
@@ -51,7 +51,28 @@
 #checkoutShopping {
 	float: right;
 	}
-
+#Cart66CheckoutReplacementText {
+	width: 50%;
+	margin: 10px auto;
+	font-weight: bold;
+	}
+.Cart66TermsOfServiceWrapper {
+	width: 50%;
+	margin: 0 auto;
+	border: 1px solid #cccccc;
+	background-color: #efefef;
+	}
+	.Cart66TermsOfServiceWrapper div {
+	margin: 10px;
+	}
+	.Cart66TermsOfServiceWrapper .Cart66AcceptTermsButton {
+	display: block;
+	width: 200px;
+	margin: 20px auto;
+	}
+	.Cart66TermsTitle {
+		font-style: italic;
+	}
 #viewCartTable a, 
 #viewCartTable tbody,
 #viewCartTable img,
@@ -440,9 +461,9 @@ td .entry-view-field-value {
 li .description {
     color: #757575;
 }
-.hidden {
+.Cart66Hidden {
 	visibility: hidden;
-	}
+}
 
 .noBottomBorder {
 	border-bottom: none;
@@ -454,10 +475,6 @@ span.subscriptionOrMembership {
 	width: 35px; margin-left: 5px;
 	}
 
-.promoMessage {
-	color: red;
-	}
-
 #emptyCartMsg {
 	text-align: center;
 	}
@@ -465,10 +482,20 @@ span.subscriptionOrMembership {
 #set_shipping_zip_row th, #shipping_to_row th {
 	text-align: right;
 	}
-.haveCoupon {
-	margin-bottom: 0 !important;
+.haveCoupon, .promoMessage {
+	margin-bottom: 0;
 	padding: 0;
 	}
+.promoMessage {
+	float: right;
+	clear: both;
+	margin: 5px 0;
+	padding: 5px 10px;
+	color: #746e0a;
+	border: 1px dashed #d7cc1c;
+	background-color: #fefbbc;
+	}
+
 .haveCoupon input {
 	margin-bottom: 0;
 	}
@@ -495,6 +522,56 @@ span.subscriptionOrMembership {
         width: auto;
         margin-left: 51%;
     }
-#shippingAddress {
-    display: none;
+    /* because IE7 misbehaves */
+    *:first-child+html #billingInfo{margin:0 -1% 0 0 ;}
+    *:first-child+html #shippingInfo{clear:both;}
+    
+	#shippingAddress {
+	    display: none;
+	}
+
+/* TOS Styles */
+.Cart66ShortcodeTOS{}
+.Cart66CartTOS{}
+.Cart66TermsOfServiceWrapper{
+	clear:both;
+	padding:10px 0px
 }
+.Cart66TermsTitle{}
+.Cart66TermsText{}
+.Cart66TermsAcceptance{}
+.Cart66AcceptTermsButton{}
+
+/* Advanced widget styles */
+.Cart66AdvancedWidgetCartTable {
+	width: 100%;
+	}
+.Cart66AdvancedWidgetCartTable td, .Cart66AdvancedWidgetCartTable th, .Cart66AdvancedWidgetCartTable tbody {
+	border: none;
+	}
+.Cart66AdvancedWidgetCartTable tr {
+	border-bottom: 1px solid #efefef;
+	}
+	.Cart66AdvancedWidgetCartTable .Cart66ShippingToRow {
+		border-bottom: none;
+	}
+.Cart66AdvancedWidgetCartTable .Cart66SubtotalRow {
+	border: none;
+	line-height: 35px;
+	height: 35px;
+	text-align: right;
+	font-weight: bold;
+	}
+.Cart66ProductTitle, .Cart66ProductSubtotal {
+	font-weight: bold;
+	}
+.Cart66QuanPrice {
+	display: block;
+	font-style: italic;
+	}
+.Cart66ProductSubtotalColumn, .Cart66ShippingRow td {
+	text-align: right;
+	}
+.Cart66WidgetViewCartCheckout {
+	text-align: center;
+	}

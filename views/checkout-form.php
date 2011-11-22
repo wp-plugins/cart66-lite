@@ -31,7 +31,7 @@ if(count($errors)) {
 ?>
 
 <form action="" method='post' id="<?php echo $gatewayName ?>_form" class="phorm2<?php if(Cart66Session::get('Cart66Cart')->requireShipping() && $gatewayName != 'Cart66ManualGateway'): echo ' shipping'; endif; ?><?php if($lists = Cart66Setting::getValue('constantcontact_list_ids')): echo ' constantcontact'; endif; ?><?php if($lists = Cart66Setting::getValue('mailchimp_list_ids')): echo ' mailchimp'; endif; ?><?php if(Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() || Cart66Session::get('Cart66Cart')->hasMembershipProducts()): echo ' subscription'; endif; ?>">
-  <input type="hidden" name="cart66-gateway-name" value="<?php echo $gatewayName ?>">
+  <input type="hidden" name="cart66-gateway-name" value="<?php echo $gatewayName ?>"/>
 <div id="ccInfo">
 	<div id="billingInfo">
         <ul id="billingAddress" class="shortLabels" >
@@ -57,7 +57,7 @@ if(count($errors)) {
           </li>
 
           <li>
-            <label for="billing-address2" id="billing-address2-label" class="hidden"><?php _e( 'Address 2' , 'cart66' ); ?>:</label>
+            <label for="billing-address2" id="billing-address2-label" class="Cart66Hidden"><?php _e( 'Address 2' , 'cart66' ); ?>:</label>
             <input type="text" id="billing-address2" name="billing[address2]" value="<?php Cart66Common::showValue($b['address2']); ?>">
           </li>
 
@@ -284,17 +284,19 @@ if(count($errors)) {
                 if(isset($_POST['mailchimp_subscribe_ids']) && !empty($_POST['mailchimp_subscribe_ids'])){
                     ?>
                     <script type="text/javascript" charset="utf-8">
-                      jQuery(document).ready(function($){
-                        <?php
-                        foreach($_POST['mailchimp_subscribe_ids'] as $id) {
-                          ?>
-                          $(".MailChimpList input[value=<?php echo $id; ?>]").attr('checked','true');
-                        <?php 
-                        }
+                      (function($){
+                        $(document).ready(function(){
+                          <?php
+                          foreach($_POST['mailchimp_subscribe_ids'] as $id) {
+                            ?>
+                            $(".MailChimpList input[value=<?php echo $id; ?>]").attr('checked','true');
+                          <?php 
+                          }
 
-                        ?>
-                      })
-                    </script>
+                          ?>
+                        })
+                      })(jQuery);
+                    </script> 
               <?php
                 }
               ?>
@@ -310,7 +312,7 @@ if(count($errors)) {
 	        <?php endif; ?>
 			
           <div id="Cart66CheckoutButtonDiv">
-            <label for="Cart66CheckoutButton" class="hidden"><?php _e( 'Checkout' , 'cart66' ); ?></label>
+            <label for="Cart66CheckoutButton" class="Cart66Hidden"><?php _e( 'Checkout' , 'cart66' ); ?></label>
             <?php
               $cartImgPath = Cart66Setting::getValue('cart_images_url');
               if($cartImgPath) {
@@ -321,9 +323,9 @@ if(count($errors)) {
               }
             ?>
             <?php if($cartImgPath): ?>
-              <input id="Cart66CheckoutButton" type="image" src='<?php echo $completeImgPath ?>' value="Complete Order" name="Complete Order"/>
+              <input id="Cart66CheckoutButton" type="image" src='<?php echo $completeImgPath ?>' value="<?php _e( 'Complete Order' , 'cart66' ); ?>" name="Complete Order"/>
             <?php else: ?>
-              <input id="Cart66CheckoutButton" class="Cart66ButtonPrimary" type="submit"  value="Complete Order" name="Complete Order"/>
+              <input id="Cart66CheckoutButton" class="Cart66ButtonPrimary Cart66CompleteOrderButton" type="submit"  value="<?php _e( 'Complete Order' , 'cart66' ); ?>" name="Complete Order"/>
             <?php endif; ?>
 
             <p class="description"><?php _e( 'Your receipt will be on the next page and also immediately emailed to you. <strong>We respect your privacy!</strong>' , 'cart66' ); ?></p>

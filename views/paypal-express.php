@@ -142,11 +142,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
             $status = trim($opts[0]);
           }
           $transId = isset($response['TRANSACTIONID']) ? $response['TRANSACTIONID'] : '';
-          $promo = Cart66Session::get('Cart66Cart')->getPromotion();
+          $promo = Cart66Session::get('Cart66PromotionCode');
           $promoMsg = "none";
           if($promo) {
-            $promoMsg = $promo->code . ' (-' . CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2) . ')';
+            $promoMsg = $promo->code . ' (-' . CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Promotion')->getDiscountAmount(Cart66Session::get('Cart66Cart')), 2) . ')';
           }
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Details:\n" . print_r($details,true));
 
           list($shipFirstName, $shipLastName) = split(' ', $details['SHIPTONAME'], 2);
           $orderInfo['ship_first_name'] = $shipFirstName;
@@ -156,6 +157,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           $orderInfo['ship_city'] = $details['SHIPTOCITY'];
           $orderInfo['ship_state'] = $details['SHIPTOSTATE'];
           $orderInfo['ship_zip'] = $details['SHIPTOZIP'];
+          $orderInfo['ship_country'] = $details['SHIPTOCOUNTRYNAME'];
 
           $orderInfo['bill_first_name'] = $details['FIRSTNAME'];
           $orderInfo['bill_last_name'] = $details['LASTNAME'];
@@ -198,7 +200,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           
           // Send buyer to receipt page
           $receiptVars = strpos($receiptLink, '?') ? '&' : '?';
-          $receiptVars .= "ouid=" . $newOrder->ouid . "&n=1";
+          $receiptVars .= "ouid=" . $newOrder->ouid;
           header("Location: " . $receiptLink . $receiptVars);
         } 
         else {
@@ -353,17 +355,19 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
           if(isset($_POST['mailchimp_subscribe_ids']) && !empty($_POST['mailchimp_subscribe_ids'])){
               ?>
               <script type="text/javascript" charset="utf-8">
-                jQuery(document).ready(function($){
-                  <?php
-                  foreach($_POST['mailchimp_subscribe_ids'] as $id) {
-                    ?>
-                    $(".MailChimpList input[value=<?php echo $id; ?>]").attr('checked','true');
-                  <?php 
-                  }
+                (function($){
+                  $(document).ready(function(){
+                    <?php
+                    foreach($_POST['mailchimp_subscribe_ids'] as $id) {
+                      ?>
+                      $(".MailChimpList input[value=<?php echo $id; ?>]").attr('checked','true');
+                    <?php 
+                    }
 
-                  ?>
-                })
-              </script>
+                    ?>
+                  })
+                })(jQuery);
+              </script> 
         <?php
           }
         ?>
@@ -395,7 +399,7 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
         <label for="account-password2"><?php _e( 'Repeat Password' , 'cart66' ); ?>:</label><input type="password" name="account[password2]" value="" id="account-password2">
       </li>
       <li>
-        <label class="hidden"><?php _e( 'Complete Order' , 'cart66' ); ?></label>
+        <label class="Cart66Hidden"><?php _e( 'Complete Order' , 'cart66' ); ?></label>
         <?php
           $cartImgPath = Cart66Setting::getValue('cart_images_url');
           if($cartImgPath) {
@@ -423,7 +427,7 @@ elseif(isset($_GET['token']) || isset($_GET['PayerID'])) {
         echo "<input type='image' src='$completeImgPath' value='Complete Order' />";
       }
       else {
-        echo "<input type='submit' class='Cart66ButtonPrimary' value='Complete Order' />";
+        echo "<input type='submit' class='Cart66ButtonPrimary Cart66CompleteOrderButton' value='Complete Order' />";
       }
     ?>
     <p id="Cart66ReceiptExpectation"><?php _e( 'Your receipt will be on the next page and also emailed to you.' , 'cart66' ); ?></p>

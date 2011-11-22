@@ -31,7 +31,7 @@ $order = $data['order'];
           $entries = explode(',', $item->form_entry_ids);
           $wpurl = get_bloginfo('wpurl');
           foreach($entries as $entryId) {
-            if(class_exists(RGFormsModel)) {
+            if(class_exists('RGFormsModel')) {
               if(RGFormsModel::get_lead($entryId)) {
                 $formId = Cart66GravityReader::getGravityFormIdForEntry($entryId);
                 echo "<tr><td colspan='5'>" . Cart66GravityReader::displayGravityForm($entryId) . "</td></tr>";

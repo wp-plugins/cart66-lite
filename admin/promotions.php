@@ -1,9 +1,24 @@
 <?php
 $promo = new Cart66Promotion();
+$errorMessage = false;
+
+
 if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-action'] == 'save promotion') {
-  $promo->setData($_POST['promo']);
-  $promo->save();
-  $promo->clear();
+  try {
+    $promo->load($_POST['promo']['id']);
+    $promo->setData($_POST['promo']);
+    $promo->save();
+    $promo->clear();
+  }
+  catch(Cart66Exception $e) {
+    $errorCode = $e->getCode();
+    if($errorCode == 66301) {
+      // Promotion save failed
+      $errors = $promo->getErrors();
+      $errorMessage = Cart66Common::showErrors($errors, "<p><b>" . __("The promotion could not be saved for the following reasons","cart66") . ":</b></p>");
+    }
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Promotion save failed ($errorCode): " . strip_tags($errorMessage));
+  }
 }
 elseif(isset($_GET['task']) && $_GET['task'] == 'edit' && isset($_GET['id']) && $_GET['id'] > 0) {
   $id = Cart66Common::getVal('id');
@@ -16,118 +31,260 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
   $promo->clear();
 }
 ?>
+
+
 <h2>Cart66 Promotions</h2>
-<div class='wrap'>
-  <p style='width: 400px;'><?php _e( 'You may create promotion codes (coupon codes) to reduce the total cost 
-    of your customer\'s purchase by either a specific money amount' , 'cart66' ); ?> (i.e. <?php echo CART66_CURRENCY_SYMBOL ?>10) or a percentage (i.e. 10%). 
-    <?php _e( 'You may also set a minimum order amount that must be reached before the promotion code may be 
-    used. For example, you may create a promotion for 10% off all orders over' , 'cart66' ); ?> <?php echo CART66_CURRENCY_SYMBOL ?>50.</p>
-  <p style='width: 400px;'><?php _e( 'NOTE: Promotion code discounts do not affect shipping costs.' , 'cart66' ); ?></p>
-  
-  <form action="" method='post'>
-    <input type='hidden' name='cart66-action' value='save promotion' />
-    <input type='hidden' name='promo[id]' value='<?php echo $promo->id ?>' />
+<div class='wrap' id="promotions">
+<?php if($errorMessage): ?>
+<div class="errormsg"><?php echo $errorMessage ?></div>
+<?php endif; ?>
+
+  <div id="widgets-left">
+    <div id="available-widgets">
     
-    <ul>
-      <li>
-        <label class="med" for="promo-code"><?php _e( 'Promotion code' , 'cart66' ); ?>:</label>
-        <input type='text' name='promo[code]' id='promo-code' style='width: 225px;' value='<?php echo $promo->code ?>' />
-      </li>
-      <li>
-        <label class="med" for="promo-type"><?php _e( 'Type of promotion' , 'cart66' ); ?>:</label>
-        <select name="promo[type]" id="promo-type">
-          <option value="dollar" <?php if($promo->type == 'dollar') { echo 'selected'; } ?>><?php _e( 'Money Amount' , 'cart66' ); ?></option>
-          <option value="percentage" <?php if($promo->type == 'percentage') { echo 'selected'; } ?>><?php _e( 'Percentage' , 'cart66' ); ?></option>
-        </select>
-      </li>
-      <li>
-        <label class="med" for="promo-amount"><?php _e( 'Amount' , 'cart66' ); ?>:</label>
-        <span id="dollarSign"><?php echo CART66_CURRENCY_SYMBOL ?></span>
-        <input type="text" style="width: 75px;" name="promo[amount]" id="promo-amount" value="<?php echo $promo->amount ?>"> 
-        <span id="percentSign">%</span>
-      </li>
-      <li>
-        <label class="med" for="promo-min_order"><?php _e( 'Minimum order' , 'cart66' ); ?>:</label>
-        <?php echo CART66_CURRENCY_SYMBOL ?> <input type="text" style="width: 75px;" id="promo-min_order" name="promo[min_order]" value="<?php echo $promo->minOrder ?>">
-        <p class='label_desc'><?php _e( 'Leave blank to apply this promotion to all orders.' , 'cart66' ); ?></p>
-      </li>
-      <li>
-        <label class="med">&nbsp;</label>
-        <?php if($promo->id > 0): ?>
-          <a href='?page=cart66-promotions' class='button-secondary linkButton' style=""><?php _e( 'Cancel' , 'cart66' ); ?></a>
-        <?php endif; ?>
-        <input type='submit' name='submit' class="button-primary" style='width: 60px;' value='Save' />
-      </li>
-    </ul>
-    
-  </form>
-  
+      <div class="widgets-holder-wrap">
+        <div class="sidebar-name">
+          <div class="sidebar-name-arrow"><br/></div>
+          <h3><?php _e( 'Promotion' , 'cart66' ); ?> <span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
+        </div>
+        <div class="widget-holder">
+          <div>
+            <form action="" method='post'>
+              <input type='hidden' name='cart66-action' value='save promotion' />
+              <input type='hidden' name='promo[id]' value='<?php echo $promo->id ?>' />
+              <ul>
+                <li>
+                  <label class="long" for="promo-name"><?php _e( 'Promotion name' , 'cart66' ); ?>:</label>
+                  <input type='text' name='promo[name]' id='promo-name' value='<?php echo ($promo->name) ? $promo->name : $promo->getCodeAt(); ?>' />
+                  <span class="label_desc"><?php _e('Promotion name required', 'cart66'); ?>.</span>
+                </li>
+                <li>
+                  <label class="long" for="promo-code"><?php _e( 'Promotion code' , 'cart66' ); ?>:</label>
+                  <input type='text' class="large" name='promo[code]' id='promo-code' value='<?php echo $promo->getCode(false,true); ?>' />
+                  <span class="label_desc"><?php _e('Unique promotion code required', 'cart66'); ?>.</span>
+                </li>
+                <li>
+                  <label class="long" for="promo-type"><?php _e( 'Type of promotion' , 'cart66' ); ?>:</label>
+                  <select name="promo[type]" class="promo-type" id="promo-type">
+                    <option value="dollar" <?php if($promo->type == 'dollar') { echo 'selected'; } ?>><?php _e( 'Money Amount' , 'cart66' ); ?></option>
+                    <option value="percentage" <?php if($promo->type == 'percentage') { echo 'selected'; } ?>><?php _e( 'Percentage' , 'cart66' ); ?></option>
+                  </select>
+                  <span class="label_desc"><?php _e('Select if this promotion will be applied using a specific dollar amount or a percentage of the total', 'cart66'); ?>.</span>
+                </li>
+                  <li>
+                    <label class="long" for="promo-apply_to"><?php _e( 'Apply to' , 'cart66' ); ?>:</label>
+                    <select name="promo[apply_to]" class="promo-apply_to" id="promo-apply_to">
+                      <option value="products" <?php if($promo->apply_to == 'products') { echo 'selected'; } ?>><?php _e( 'Products' , 'cart66' ); ?></option>
+                      <option value="shipping" <?php if($promo->apply_to == 'shipping') { echo 'selected'; } ?>><?php _e( 'Shipping' , 'cart66' ); ?></option>
+                      <option value="total" <?php if($promo->apply_to == 'total') { echo 'selected'; } ?>><?php _e( 'Cart Total' , 'cart66' ); ?></option>
+                    </select>
+                    <span class="label_desc"><?php _e('Select if this promotion will apply to specific products, shipping or the entire cart total', 'cart66'); ?>.</span>
+                  </li>
+                <li>
+                  <label class="long" for="promo-amount"><?php _e( 'Amount' , 'cart66' ); ?>:</label>
+                  <span id="dollarSign"><?php echo CART66_CURRENCY_SYMBOL ?></span>
+                  <input type="text" name="promo[amount]" id="promo-amount" value="<?php echo $promo->amount ?>"> 
+                  <span id="percentSign">%</span>
+                  <span class="label_desc"><?php _e('Set the promotion amount', 'cart66'); ?>.</span>
+                </li>
+                <li>
+                  <label class="long" for="promo-min_order"><?php _e( 'Minimum order' , 'cart66' ); ?>:</label>
+                  <?php echo CART66_CURRENCY_SYMBOL ?> <input type="text" id="promo-min_order" name="promo[min_order]" value="<?php echo $promo->minOrder ?>">
+                  <span class="label_desc"><?php _e('Set the minimum amount required for this promotion to apply', 'cart66'); ?>.</span>
+                </li>
+                <li>
+                  <div class="desc">Required Quantity:</div>
+                  <div class="dateRange">
+                  <div class="group">
+                    <label for="promo-min_quantity"><?php _e( 'Minimum quantity' , 'cart66' ); ?>:</label>
+                    <input type="text" id="promo-min_quantity" name="promo[min_quantity]" value="<?php echo ($promo->minQuantity == null) ? "" : $promo->minQuantity; ?>">
+                  </div>
+                  <div class="group">
+                    <label for="promo-max_quantity"><?php _e( 'Maximum quantity' , 'cart66' ); ?>:</label>
+                    <input type="text" id="promo-max_quantity" name="promo[max_quantity]" value="<?php echo ($promo->maxQuantity == null) ? "" : $promo->maxQuantity; ?>">
+                  </div>
+                  <span class="label_desc"><?php _e('Set the minimum and/or maximum quantity required for this promotion to apply', 'cart66'); ?>.</span>
+                  </div>
+                </li>
+                <li>
+                  <div class="desc">Date range:</div>
+                  <div class="dateRange">
+                  <div class="group">
+                  <label for="from"><?php _e( 'From' , 'cart66' ); ?></label>
+                  <input type='text' name='promo[effective_from]' id='from' class='from' value='<?php echo (!empty($promo->effective_from) && $promo->effective_from != "0000-00-00 00:00:00") ? date("m/d/Y h:i a",strtotime($promo->effective_from)) : ''; ?>' />
+                  </div>
+                    <div class="group">
+                  <label for="to"><?php _e( 'To' , 'cart66' ); ?></label>
+                  <input type='text' name='promo[effective_to]' id='to' class='to' value='<?php echo (!empty($promo->effective_to) && $promo->effective_to != "0000-00-00 00:00:00") ? date("m/d/Y h:i a",strtotime($promo->effective_to)) : ''; ?>' />
+                  </div>
+                    <span class="label_desc"><?php _e('Select the date and time that this promotion will start and end. You may leave either blank', 'cart66'); ?>.</span>
+                  </div>
+                </li>
+                <li>
+                  <label class="long" for="promo-maximum_redemptions"><?php _e( 'Maximum redemptions' , 'cart66' ); ?>:</label>
+                  <input type='text' name='promo[maximum_redemptions]' id='promo-maximum_redemptions' value='<?php echo ($promo->maximum_redemptions == 0) ? "" : $promo->maximum_redemptions; ?>' />  
+                  <?php if($promo->id > 0): ?>
+                  <?php _e( 'Used' , 'cart66' ); ?>:</label>
+                      <strong><?php 
+                      if($promo->redemptions != null) {
+                        echo $promo->redemptions; ?> <?php echo ($promo->redemptions == 1) ? 'time' : 'times';
+                      } else {
+                        echo __('Never', 'cart66'); 
+                      } ?></strong>
+                  <?php endif; ?>
+                  
+                  <span class="label_desc"><?php _e('Set the maximum number of times this promotion can be redeemed', 'cart66'); ?>.</span>
+                </li>
+                <li>
+                  <label class="long" for="promo-max_uses_per_order"><?php _e( 'Maximum redemptions per order' , 'cart66' ); ?>:</label>
+                  <input type='text' name='promo[max_uses_per_order]' id='promo-max_uses_per_order' value='<?php echo ($promo->max_uses_per_order == 0) ? "" : $promo->max_uses_per_order; ?>' />
+                  <span class="label_desc"><?php _e('Set the maximum number of times this promotion can be redeemed per order', 'cart66'); ?>.</span>
+                </li>
+                <li>
+                  <label class="long" for="promo-products"><?php _e( 'Eligible Products' , 'cart66' ); ?>:</label>
+                  <input type="text" id="promo-products" name="promo[products]" value='<?php echo $promo->products ?>' />
+                  <input type='hidden' name='promo-products-hidden' id="promo-products-hidden" value='<?php echo $promo->products ?>' /><br />
+                  <p class="label_desc"><?php _e('Enter the names of products in your inventory that this promotion will be applied to.  You can enter as many products as you want.  If you want this promotion to apply to all orders, leave this field blank.  If you have selected to apply this promotion to shipping or the cart total, this promotion will only apply if the products in this list match the products in the cart.', 'cart66'); ?></p>
+                </li>
+                <li>
+                  <div class="desc">Additional settings:</div>
+                  <div class="collection checkbox">
+                    <input type="hidden" name='promo[enable]' value="" />  
+                    <input type="checkbox" name='promo[enable]' id='promo-enable' value="1" <?php echo ($promo->enable == '1' || !isset($promo->id)) ? 'checked="checked"' : ''; ?> />
+                    <label for="promo-enable"><?php _e( 'Enable' , 'cart66' ); ?>?</label>
+                    <span class="label_desc"><?php _e('Do you want this promotion to be valid', 'cart66'); ?>?</span>
+                    <input type="hidden" name='promo[auto_apply]' value="" />  
+                    <input type="checkbox" name='promo[auto_apply]' id='promo-auto_apply' value="1" <?php echo ($promo->auto_apply == '1') ? 'checked="checked"' : ''; ?> />
+                    <label for="promo-auto_apply"><?php _e( 'Auto Apply' , 'cart66' ); ?>?</label>
+                    <span class="label_desc"><?php _e('Do you want this promotion to automatically apply when all conditions are met? (no user input required)', 'cart66'); ?></span>
+                    </div>
+                  </li>
+
+                </li>
+                <li>
+                  <div class="buttons">
+                  <?php if($promo->id > 0): ?>
+                    <a href='?page=cart66-promotions' class='button-secondary linkButton'><?php _e( 'Cancel' , 'cart66' ); ?></a>
+                  <?php endif; ?>
+                  <input type='submit' name='submit' class="button-primary" value='Save' />
+                  </div>
+                </li>
+              </ul>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <?php
   $promos = $promo->getModels();
   if(count($promos)):
   ?>
-  <table class="widefat" style="margin-top: 20px;">
+  <table class="promo-rows widefat">
   <thead>
+    <tr>
+      <th colspan="9"><?php _e( 'Search' , 'cart66' ); ?>: <input type="text" name="Cart66AccountSearchField" value="" id="Cart66AccountSearchField" /></th>
+    </tr>
   	<tr>
-  		<th><?php _e( 'Promotion code' , 'cart66' ); ?></th>
+  		<th><?php _e( 'Name' , 'cart66' ); ?></th>
+  		<th><?php _e( 'Code' , 'cart66' ); ?></th>
   		<th><?php _e( 'Amount' , 'cart66' ); ?></th>
   		<th><?php _e( 'Minimum Order' , 'cart66' ); ?></th>
+  		<th><?php _e( 'Enabled' , 'cart66' ); ?></th>
+  		<th><?php _e( 'Effective' , 'cart66' ); ?></th>
+  		<th><?php _e( 'Used' , 'cart66' ); ?></th>
+  		<th><?php _e( 'Apply To' , 'cart66' ); ?></th>
   		<th><?php _e( 'Actions' , 'cart66' ); ?></th>
   	</tr>
   </thead>
   <tfoot>
       <tr>
-    		<th><?php _e( 'Promotion code' , 'cart66' ); ?></th>
+    		<th><?php _e( 'Name' , 'cart66' ); ?></th>
+    		<th><?php _e( 'Code' , 'cart66' ); ?></th>
     		<th><?php _e( 'Amount' , 'cart66' ); ?></th>
     		<th><?php _e( 'Minimum Order' , 'cart66' ); ?></th>
+    		<th><?php _e( 'Enabled' , 'cart66' ); ?></th>
+    		<th><?php _e( 'Effective' , 'cart66' ); ?></th>
+    		<th><?php _e( 'Used' , 'cart66' ); ?></th>
+    		<th><?php _e( 'Apply To' , 'cart66' ); ?></th>
     		<th><?php _e( 'Actions' , 'cart66' ); ?></th>
     	</tr>
   </tfoot>
   <tbody>
     <?php foreach($promos as $p): ?>
-     <tr>
-       <td><?php echo $p->code ?></td>
-       <td><?php echo $p->getAmountDescription() ?></td>
-       <td><?php echo $p->getMinOrderDescription() ?></td>
-       <td>
-         <a href='?page=cart66-promotions&task=edit&id=<?php echo $p->id ?>'><?php _e( 'Edit' , 'cart66' ); ?></a> | 
-         <a class='delete' href='?page=cart66-promotions&task=delete&id=<?php echo $p->id ?>'><?php _e( 'Delete' , 'cart66' ); ?></a>
-       </td>
-     </tr>
+    <tr>
+      <td><a href='?page=cart66-promotions&task=edit&id=<?php echo $p->id ?>'><?php echo $p->name ?></a></td>
+      <td><?php echo $p->getCodeAt(); ?></td>
+      <td><?php echo $p->getAmountDescription() ?></td>
+      <td><?php echo $p->getMinOrderDescription() ?></td>
+      <td><?php echo $p->enable == 1 ? 'Yes' : 'No'; ?></td>
+      <td><?php echo $p->effectiveDates() ?></td>
+      <td><?php echo ($p->redemptions < 1) ? __('Never', 'cart66') : ( ($p->redemptions == 1) ? $p->redemptions . ' time' : $p->redemptions . ' times') ?></td>
+      <td>
+        <?php echo ($p->apply_to == 'products') ? "Products" : ( ($p->apply_to == 'shipping') ? "Shipping" : "Cart Total" ); ?>
+      </td>
+      <td>
+        <a href='?page=cart66-promotions&task=edit&id=<?php echo $p->id ?>'><?php _e( 'Edit' , 'cart66' ); ?></a> | 
+        <a class='delete' href='?page=cart66-promotions&task=delete&id=<?php echo $p->id ?>'><?php _e( 'Delete' , 'cart66' ); ?></a>
+      </td>
+    </tr>
     <?php endforeach; ?>
   </tbody>
   </table>
   <?php endif; ?>
 </div>
-  
-<script type="text/javascript" charset="utf-8">
-//<![CDATA[
 
-  $jq = jQuery.noConflict();
-
-  $jq('document').ready(function() {
-    setPromoSign();
-  });
-  
-  $jq('.delete').click(function() {
-    return confirm('Are you sure you want to delete this item?');
-  });
-
-  $jq('#promo-type').change(function () {
-    setPromoSign();
-  }); 
-
-  function setPromoSign() {
-    var v = $jq('#promo-type').val();
-    if(v == 'percentage') {
-      $jq('#dollarSign').hide();
-      $jq('#percentSign').show();
+<script type="text/javascript">
+/* <![CDATA[ */
+  (function($){
+    $(document).ready(function(){
+      $('#promo-products').tokenInput(productSearchUrl, { theme: 'facebook', hintText: 'Type in a product name',
+        onReady: function() { 
+          var data = {
+            action: 'loadPromotionProducts',
+            productId: $('#promo-products-hidden').val()
+          };
+          $.post(ajaxurl + '?action=loadPromotionProducts', data, function(results) {
+            for(var i=0; i<results.length; i++) {
+              var item = results[i];
+              if ((item.id) !== '') {
+                $('#promo-products').tokenInput('add', {id: item.id, name: item.name});
+              }
+            }
+          }, 'json');
+        } 
+      });
+      $(".promo-rows tr:nth-child(even)").css("background-color", "#fff");
+      $('.delete').click(function() {
+        return confirm('Are you sure you want to delete this item?');
+      });
+      setPromoSign();
+      $('#promo-type').change(function () {
+        setPromoSign();
+      });
+      function setPromoSign() {
+        var v = $('#promo-type').val();
+        if(v == 'percentage') {
+          $('#dollarSign').hide();
+          $('#percentSign').show();
+        }
+        else {
+          $('#dollarSign').show();
+          $('#percentSign').hide();
+        }
+      }
+      $('.sidebar-name').click(function() {
+        $(this.parentNode).toggleClass("closed");
+      });
+      $(".from").datetimepicker({ changeMonth: true, numberOfMonths: 2, ampm: true})
+      $(".to").datetimepicker({ changeMonth: true, numberOfMonths: 2, ampm: true, hour: 23, minute: 59 })
+      $('#Cart66AccountSearchField').quicksearch('table tbody tr');
+    })
+    function productSearchUrl() {
+      var url = ajaxurl + '?action=promotionProductSearch';
+      return url;
     }
-    else {
-      $jq('#dollarSign').show();
-      $jq('#percentSign').hide();
-    }
-  }
-
-//]]>
+  })(jQuery);
+/* ]]> */
 </script>

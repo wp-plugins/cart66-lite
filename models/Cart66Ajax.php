@@ -1,6 +1,33 @@
 <?php
 class Cart66Ajax {
   
+  public static function promotionProductSearch() {
+    global $wpdb;
+    $search = Cart66Common::getVal('q');
+    $product = new Cart66Product();
+    $tableName = Cart66Common::getTableName('products');
+    $products = $wpdb->get_results("SELECT id, name from $tableName WHERE name LIKE '%%%$search%%' ORDER BY id ASC LIMIT 10");
+    $data = array();
+    foreach($products as $p) {
+      $data[] = array('id' => $p->id, 'name' => $p->name);
+    }
+    echo json_encode($data);
+    die();
+  }
+  
+  public static function loadPromotionProducts() {
+    $productId = Cart66Common::postVal('productId');
+    $product = new Cart66Product();
+    $ids = explode(',', $productId);
+    $selected = array();
+    foreach($ids as $id) {
+      $product->load($id);
+      $selected[] = array('id' => $id, 'name' => $product->name);
+    }
+    echo json_encode($selected);
+    die();
+  }
+  
   public static function saveSettings() {
     $error = '';
     foreach($_REQUEST as $key => $value) {
@@ -48,7 +75,7 @@ class Cart66Ajax {
           $versionInfo = Cart66ProCommon::getVersionInfo();
           if(!$versionInfo) {
             Cart66Setting::setValue('order_number', '');
-            $error = '<span style="color: red;">Invalid Order Number</span>';
+            $error = '<span style="color: red;">' . __( 'Invalid Order Number' , 'cart66' ) . '</span>';
           }
         }
       }
@@ -56,7 +83,7 @@ class Cart66Ajax {
 
     if($error) {
       $result[0] = 'Cart66ErrorModal';
-      $result[1] = "<strong style='color: red;'>Warning</strong><br/>$error";
+      $result[1] = "<strong style='color: red;'>" . __("Warning","cart66") . "</strong><br/>$error";
     }
     else {
       $result[0] = 'Cart66SuccessModal';

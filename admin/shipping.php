@@ -24,7 +24,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     foreach($_POST['ups'] as $key => $value) {
       Cart66Setting::setValue($key, $value);
     }
-    $methods = $_POST['ups_methods'];
+    $methods = (isset($_POST['ups_methods'])) ? $_POST['ups_methods'] : false;
     $codes = array();
     if(is_array($methods)) {
       foreach($methods as $methodData) {
@@ -115,7 +115,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
   $rate->clear();
 }
 ?>
-<h2>Cart66 Settings</h2>
+<h2>Cart66 Shipping</h2>
 <div class='wrap'>
 
   <?php if(CART66_PRO): ?>
@@ -252,6 +252,20 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
         <li>
           <label class="med"><?php _e( 'Ship from zip' , 'cart66' ); ?>:</label>
           <input type='text' name='ups[ups_ship_from_zip]' id='ups_ship_from_zip' value='<?php echo Cart66Setting::getValue('ups_ship_from_zip'); ?>' />
+        </li>        
+        <li>
+          <label class="med"><?php _e( 'Pickup Type' , 'cart66' ); ?>:</label>
+          <select name='ups[ups_pickup_code]' id='ups_pickup_code'>
+            <option value="03">Drop Off</option>
+            <option value="01">Daily Pickup</option>
+        <!--<option value="11">Suggested Retail Rates</option>
+            <option value="06">One Time Pickup</option> -->
+          </select>
+        </li>
+        <li>
+          <label class="med"><?php _e( 'Commercial Only' , 'cart66' ); ?>:</label>
+          <input type="hidden" name='ups[ups_only_ship_commercial]' value='' />
+          <input type='checkbox' name='ups[ups_only_ship_commercial]' id='ups_only_ship_commercial' value='1' <?php echo (Cart66Setting::getValue('ups_only_ship_commercial')) ? "checked='checked'" : ""; ?> /> Check this box if you only ship to commercial addresses.
         </li>
         <li>
           <p><?php _e( 'Select the UPS shipping methods you would like to offer to your customers.' , 'cart66' ); ?></p>
@@ -512,11 +526,12 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
         <tbody>
           <?php foreach($rules as $rule): ?>
             <?php 
+              $method = new Cart66ShippingMethod();
               $method->load($rule->shipping_method_id);
             ?>
            <tr>
              <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $rule->min_amount ?></td>
-             <td><?php echo $method->name ?></td>
+             <td><?php echo ($method->name) ? $method->name : "<span style='color:red;'>Please select a method</span>"; ?></td>
              <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $rule->shipping_cost ?></td>
              <td>
                <a href='?page=cart66-shipping&task=edit&id=<?php echo $rule->id ?>'><?php _e( 'Edit' , 'cart66' ); ?></a> | 
@@ -533,56 +548,55 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
   
 </div>
 
-<script type='text/javascript'>
-  $jq = jQuery.noConflict();
-  
-  $jq(document).ready(function() {
-    
-    $jq('#ups_clear_all').click(function() {
-      $jq('.ups_shipping_options').attr('checked', false);
-      return false;
-    });
-    
-    $jq('#ups_select_all').click(function() {
-      $jq('.ups_shipping_options').attr('checked', true);
-      return false;
-    });
-    
-    $jq('#usps_clear_all').click(function() {
-      $jq('.usps_shipping_options').attr('checked', false);
-      return false;
-    });
-    
-    $jq('#usps_select_all').click(function() {
-      $jq('.usps_shipping_options').attr('checked', true);
-      return false;
-    });
-    
-    setRateTweakerSymbol();
-    
-    $jq('#rate_tweak_type').change(function() {
+<script type="text/javascript">
+  (function($){
+    $(document).ready(function(){
+      $('#ups_clear_all').click(function() {
+        $('.ups_shipping_options').attr('checked', false);
+        return false;
+      });
+
+      $('#ups_select_all').click(function() {
+        $('.ups_shipping_options').attr('checked', true);
+        return false;
+      });
+
+      $('#usps_clear_all').click(function() {
+        $('.usps_shipping_options').attr('checked', false);
+        return false;
+      });
+
+      $('#usps_select_all').click(function() {
+        $('.usps_shipping_options').attr('checked', true);
+        return false;
+      });
+      
+      $('#ups_pickup_code').val("<?php echo Cart66Setting::getValue('ups_pickup_code'); ?>");
+      
       setRateTweakerSymbol();
+
+      $('#rate_tweak_type').change(function() {
+        setRateTweakerSymbol();
+      });
+    })
+    $('.what_is').click(function() {
+      $('#' + $(this).attr('id') + '_answer').toggle('slow');
+      return false;
     });
-    
-  });
-  
-  $jq('.what_is').click(function() {
-    $jq('#' + $jq(this).attr('id') + '_answer').toggle('slow');
-    return false;
-  });
-  
-  $jq('.delete').click(function() {
-    return confirm('Are you sure you want to delete this entry?');
-  });
-  
-  function setRateTweakerSymbol() {
-    if($jq('#rate_tweak_type').val() == 'percentage') {
-      $jq('#percentSign').css('display', 'inline');
-      $jq('#currency').css('display', 'none');
+
+    $('.delete').click(function() {
+      return confirm('Are you sure you want to delete this entry?');
+    });
+
+    function setRateTweakerSymbol() {
+      if($('#rate_tweak_type').val() == 'percentage') {
+        $('#percentSign').css('display', 'inline');
+        $('#currency').css('display', 'none');
+      }
+      else {
+        $('#currency').css('display', 'inline');
+        $('#percentSign').css('display', 'none');
+      }
     }
-    else {
-      $jq('#currency').css('display', 'inline');
-      $jq('#percentSign').css('display', 'none');
-    }
-  }
+  })(jQuery);
 </script>

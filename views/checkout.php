@@ -2,7 +2,10 @@
 $supportedGateways = array (
   'Cart66AuthorizeNet',
   'Cart66PayPalPro',
-  'Cart66ManualGateway'
+  'Cart66ManualGateway',
+  'Cart66Eway',
+  'Cart66MerchantWarrior',
+  'Cart66PayLeap'
 );
 
 $errors = array();
@@ -11,7 +14,6 @@ $gateway = $data['gateway']; // Object instance inherited from Cart66GatewayAbst
 
 if($_SERVER['REQUEST_METHOD'] == "POST") {
   $cart = Cart66Session::get('Cart66Cart');
-  
   
   $account = false;
   if($cart->hasMembershipProducts() || $cart->hasSpreedlySubscriptions()) {
@@ -45,10 +47,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
   Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] CHECKOUT: with gateway: $gatewayName");
   
   if(in_array($gatewayName, $supportedGateways)) {
+      
     $gateway->validateCartForCheckout();
     
     $gateway->setBilling(Cart66Common::postVal('billing'));
     $gateway->setPayment(Cart66Common::postVal('payment'));
+    
     
     if(isset($_POST['sameAsBilling'])) {
       $gateway->setShipping(Cart66Common::postVal('billing'));
@@ -56,11 +60,25 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     elseif(isset($_POST['shipping'])) {
       $gateway->setShipping(Cart66Common::postVal('shipping'));
     }
+    
+    $s = $gateway->getShipping();
+    if($s['state'] && $s['zip']){
+      $taxLocation = $gateway->getTaxLocation();
+      $tax = $gateway->getTaxAmount();
+      Cart66Session::set('Cart66Tax',$tax);
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Tax PreCalculated: $".$tax);
+      //echo nl2br(print_r($taxLocation,true));
+      //echo "Tax $".$tax ."<br>";
+    }
+    
+
+      
 
     if(count($errors) == 0) {
       $errors = $gateway->getErrors();     // Error info for server side error code
       $jqErrors = $gateway->getJqErrors(); // Error info for client side error code
     }
+    
     
     if(count($errors) == 0 || 1) {
       // Calculate final billing amounts
@@ -177,7 +195,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           
           // Send buyer to receipt page
           $receiptVars = strpos($receiptLink, '?') ? '&' : '?';
-          $receiptVars .= "ouid=" . $newOrder->ouid . "&n=1";
+          $receiptVars .= "ouid=" . $newOrder->ouid;
           header("Location: " . $receiptLink . $receiptVars);
         }
         else {
@@ -220,7 +238,7 @@ $shippingCountryCode = (isset($s['country']) && !empty($s['country'])) ? $s['cou
 
 // Include the HTML markup for the checkout form
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-  include_once(CART66_PATH . '/views/checkout-form.php');
+  include_once(CART66_PATH . '/views/checkout-form.php');  
 }
 else {
   include(CART66_PATH . '/views/checkout-form.php');

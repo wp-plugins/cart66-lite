@@ -209,27 +209,31 @@ abstract class Cart66GatewayAbstract {
    *
    * @return boolean
    */
-  public function isTaxed() {
-    $s = $this->getShipping();
-    if(count($s)) {
-      $taxRate = new Cart66TaxRate();
-      $isTaxed = $taxRate->loadByZip($s['zip']);
-      if($isTaxed == false) {
-        $isTaxed = $taxRate->loadByState($s['state']);
-      }
-      $this->_taxRate = $taxRate;
-      return $isTaxed;
-    }
-    else {
-      throw new Exception(__('Unable to determine tax rate because shipping data is unavailable','cart66'));
-    }
+  public function isTaxed($isShippingTaxed=null) {
+     $s = $this->getShipping();
+     if(count($s)) {
+       $taxRate = new Cart66TaxRate();
+       $isTaxed = $taxRate->loadByZip($s['zip']);
+       if($isTaxed == false) {
+         $isTaxed = $taxRate->loadByState($s['state']);
+       }
+
+       $this->_taxRate = $taxRate;
+       $taxShipping = $taxRate->tax_shipping;
+     
+       return ($isShippingTaxed==null) ? $isTaxed : $taxShipping;
+     }
+     else {
+       throw new Exception(__('Unable to determine tax rate because shipping data is unavailable','cart66'));
+     }
   }
 
   public function taxShipping() {
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Checking for taxed shipping");
     if(!isset($this->_taxRate)) {
       $this->isTaxed();
     }
-    $taxShipping = (isset($this->tax_shipping) && $this->tax_shipping == 1) ? true : false;
+    $taxShipping = ($this->isTaxed('shipping') == 1) ? true : false;
     return $taxShipping;
   }
 

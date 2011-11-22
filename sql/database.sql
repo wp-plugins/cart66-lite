@@ -48,7 +48,7 @@ create table if not exists `[prefix]downloads` (
 
 create table if not exists `[prefix]promotions` (
   `id` int(10) unsigned not null auto_increment,
-  `code` varchar(50) not null,
+  `code` text not null,
   `type` enum('dollar','percentage') not null default 'dollar',
   `amount` decimal(8,2),
   `min_order` decimal(8,2),
@@ -123,7 +123,7 @@ create table if not exists `[prefix]orders` (
   `trans_id` varchar(25) not null,
   `shipping` decimal(8,2) not null,
   `subtotal` decimal(8,2) not null,
-  `tax` decimal(8,2) not null,
+  `tax` decimal(8,3) not null,
   `total` decimal(8,2) not null,
   `non_subscription_total` decimal(8,2) not null,
   `ordered_on` datetime,
@@ -132,6 +132,7 @@ create table if not exists `[prefix]orders` (
   `ouid` varchar(100) not null,
   `shipping_method` varchar(50),
   `account_id` int(10) unsigned not null default 0,
+  `viewed` tinyint(1) not null default '0',
   primary key(`id`)
 );
 
@@ -213,10 +214,10 @@ create table if not exists `[prefix]pp_recurring_payments` (
 create table if not exists`[prefix]sessions` (
   `id` int(10) unsigned not null auto_increment,
   `session_id` varchar(50) not null,
-  `ip_address` varchar(16) default '0' not null,
+  `ip_address` varchar(55) default '0' not null,
   `user_agent` varchar(255) not null,
   `last_activity` datetime not null,
-  `user_data` text default '' not null,
+  `user_data` longtext default '' not null,
   unique key `sid` (`session_id`),
   primary key (`id`)
 );
@@ -242,3 +243,39 @@ alter table `[prefix]products` add column `lifetime_membership` tinyint(1) not n
 alter table `[prefix]products` add column `s3_bucket` varchar(200) not null;
 alter table `[prefix]products` add column `s3_file` varchar(200) not null;
 alter table `[prefix]account_subscriptions` add column `lifetime` tinyint(1) not null default 0;
+
+-- Upgrading to Cart66 1.2.0
+
+alter table `[prefix]products` add column `min_quantity` int(10) unsigned not null default 0;
+alter table `[prefix]products` add column `is_user_price` tinyint(1) not null default 0;
+alter table `[prefix]products` add column `min_price` decimal(8,2) not null default 0;
+alter table `[prefix]products` add column `max_price` decimal(8,2) not null default 0;
+
+-- Upgrading to Cart66 1.3
+ 
+alter table `[prefix]promotions` add column `name` varchar(64) not null;
+alter table `[prefix]promotions` add column `enable` tinyint(1) not null default 1;
+alter table `[prefix]promotions` add column `apply_to` enum('products','shipping','total') not null default 'total';
+alter table `[prefix]promotions` add column `auto_apply` tinyint(3) not null default 0;
+alter table `[prefix]promotions` add column `maximum_redemptions` int(11) not null default 0;
+alter table `[prefix]promotions` add column `max_uses_per_order` int(11) not null default 0;
+alter table `[prefix]promotions` add column `min_quantity` int(11) default NULL;
+alter table `[prefix]promotions` add column `max_quantity` int(11) default NULL;
+alter table `[prefix]promotions` add column `redemptions` int(11) not null default 0;
+alter table `[prefix]promotions` add column `effective_from` datetime default null;
+alter table `[prefix]promotions` add column `effective_to` datetime default null;
+alter table `[prefix]promotions` add column `products` varchar(255) not null;
+alter table `[prefix]promotions` add column `stackable` tinyint(1) not null default 0;
+
+#add viewed column with all current orders getting a 1
+alter table `[prefix]orders` add column `viewed` tinyint(1) not null default '1';
+#set the default back to 0
+alter table `[prefix]orders` modify `viewed` tinyint(1) not null default '0';
+
+#make coupon codes text for multiple code support
+alter table `[prefix]promotions` modify `code` text;
+#update ip address to support IPV6
+alter table `[prefix]sessions` modify `ip_address` varchar(55) default '0' not null;
+
+-- Upgrading to Cart66 1.3.1
+alter table `[prefix]sessions` modify `user_data` longtext default '' not null;

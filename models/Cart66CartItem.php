@@ -54,6 +54,9 @@ class Cart66CartItem {
         // Subscriptions may only have a quantity of 1
         $qty = 1;
       }
+      elseif($product->is_user_price == 1){
+        $qty = 1;
+      }
       else {
         if($product->maxQuantity > 0) {
           // Only limit quantity when max is set to a value greater than zero
@@ -61,7 +64,12 @@ class Cart66CartItem {
             $qty = $product->maxQuantity;
           }
         }
-
+        if($product->minQuantity > 0) {
+          // Only limit quantity when min is set to a value greater than zero
+          if($product->minQuantity > $qty) {
+            $qty = $product->minQuantity;
+          }
+        }
         if($product->gravity_form_id > 0) {
           // Set quantity to zero because this is a gravity forms product with no entries
           if(count($this->_formEntryIds) == 0) {
@@ -108,12 +116,14 @@ class Cart66CartItem {
           $change = empty($value) ? '' : "<a href='' onclick='' id='change_$itemIndex'>Change</a>";
           $out = "
           <script type='text/javascript'>
-          	jQuery(document).ready(function($){
-          		$('#change_$itemIndex').click(function() {
-          		  $('#customForm_$itemIndex').toggle();
-          		  return false;
-          		});
-            });
+            (function($){
+              $(document).ready(function(){
+                $('#change_$itemIndex').click(function() {
+            		  $('#customForm_$itemIndex').toggle();
+            		  return false;
+            		});
+              })
+            })(jQuery);
           </script>
           <br/><p class=\"Cart66CustomFieldDesc\">$desc:<br/><strong>$value</strong> $change</p>
           <div id='customForm_$itemIndex' style='display: $showCustomForm;'>
@@ -140,13 +150,15 @@ class Cart66CartItem {
           $brValue = nl2br($value);
           $out = "
           <script type='text/javascript'>
-          	jQuery(document).ready(function($){
-          		$('#change_$itemIndex').click(function() {
-          		  $('#customForm_$itemIndex').toggle();
-          		  return false;
-          		});
-            });
-          </script>
+            (function($){
+              $(document).ready(function(){
+                $('#change_$itemIndex').click(function() {
+            		  $('#customForm_$itemIndex').toggle();
+            		  return false;
+            		});
+              })
+            })(jQuery);
+          </script> 
           <br/><p class=\"Cart66CustomFieldDesc\">$desc:<br/><strong>$brValue</strong><br/>$change</p>
           <div id='customForm_$itemIndex' style='display: $showCustomForm;'>
           <textarea name=\"customFieldInfo[$itemIndex]\" class=\"Cart66CustomTextarea\" id=\"custom_field_info_$itemIndex\" />$value</textarea>
@@ -209,12 +221,36 @@ class Cart66CartItem {
       elseif($this->isSpreedlySubscription()) {
         $price = $product->getCheckoutPrice();
       }
+      elseif($product->is_user_price == 1){
+        if(Cart66Session::get("userPrice_$this->_productId")){
+          // using a user-defined price
+          $userPrice = Cart66Session::get("userPrice_$this->_productId");
+          if($product->min_price > 0 && $userPrice < $product->min_price){
+            $userPrice = $product->min_price;
+          }
+          if($product->max_price > 0 && $userPrice > $product->max_price){
+            $userPrice = $product->max_price;
+          }
+          
+          $price = $userPrice;
+          
+        }
+        else{
+          $price = $product->price;
+        }
+        
+      }
       else {
         $price = $product->price + $this->_priceDifference;
       }
       return $price;
     }
     return false;
+  }
+  
+  public function getBaseProductPrice(){
+    $product = new Cart66Product($this->_productId);
+    return $product->price;
   }
   
   public function getProductPriceDescription() {
@@ -227,6 +263,21 @@ class Cart66CartItem {
       elseif($product->isSpreedlySubscription()) {
         $product = new Cart66Product($product->id);
         $priceDescription =  $product->getPriceDescription();
+      }
+      elseif($product->is_user_price == 1){
+        if(Cart66Session::get("userPrice_$this->_productId")){
+          $userPrice = Cart66Session::get("userPrice_$this->_productId");
+          if($product->min_price > 0 && $userPrice < $product->min_price){
+            $userPrice = $product->min_price;
+          }
+          if($product->max_price > 0 && $userPrice > $product->max_price){
+            $userPrice = $product->max_price;
+          }
+          $priceDescription = CART66_CURRENCY_SYMBOL.number_format($userPrice,2);
+        }
+        else{
+          $priceDescription = $product->price;
+        }
       }
       else {
         $priceDescription = $product->getPriceDescription($this->_priceDifference);

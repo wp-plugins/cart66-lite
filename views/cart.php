@@ -1,9 +1,10 @@
- <?php 
-Cart66Session::get('Cart66Cart')->resetPromotionStatus();
+<?php 
+
+
 $items = Cart66Session::get('Cart66Cart')->getItems();
 $shippingMethods = Cart66Session::get('Cart66Cart')->getShippingMethods();
 $shipping = Cart66Session::get('Cart66Cart')->getShippingCost();
-$promotion = Cart66Session::get('Cart66Cart')->getPromotion();
+$promotion = Cart66Session::get('Cart66Promotion');
 $product = new Cart66Product();
 $subtotal = Cart66Session::get('Cart66Cart')->getSubTotal();
 $discountAmount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
@@ -12,11 +13,21 @@ $checkoutPage = get_page_by_path('store/checkout');
 $setting = new Cart66Setting();
 
 // Try to return buyers to the last page they were on when the click to continue shopping
-
-if(!Cart66Session::get('Cart66LastPage')) {
-  // If the last page is not set, use the store url
+if(Cart66Setting::getValue('continue_shopping') == 1){
+  // force the last page to be store home
   $lastPage = Cart66Setting::getValue('store_url') ? Cart66Setting::getValue('store_url') : get_bloginfo('url');
   Cart66Session::set('Cart66LastPage', $lastPage);
+}
+else{
+  if(isset($_SERVER['HTTP_REFERER']) && isset($_POST['task']) && $_POST['task'] == "addToCart"){
+    $lastPage = $_SERVER['HTTP_REFERER'];
+    Cart66Session::set('Cart66LastPage', $lastPage);
+  }
+  if(!Cart66Session::get('Cart66LastPage')) {
+      // If the last page is not set, use the store url
+      $lastPage = Cart66Setting::getValue('store_url') ? Cart66Setting::getValue('store_url') : get_bloginfo('url');
+      Cart66Session::set('Cart66LastPage', $lastPage);
+  }
 }
 
 $fullMode = true;
@@ -25,8 +36,15 @@ if(isset($data['mode']) && $data['mode'] == 'read') {
 }
 
 $tax = 0;
-if(isset($data['tax']) && $data['tax'] > 0) {
-  $tax = $data['tax'];
+$taxData = false;
+if(isset($data['tax'])){
+  $taxData = $data['tax'];
+}
+if(Cart66Session::get('Cart66Tax')){
+  $taxData = Cart66Session::get('Cart66Tax');
+}
+if($taxData > 0) {
+  $tax = $taxData;
 }
 else {
   // Check to see if all sales are taxed
@@ -88,7 +106,7 @@ if(count($items)): ?>
   if($accountId = Cart66Common::isLoggedIn()) {
     $account = new Cart66Account($accountId);
     if($sub = $account->getCurrentAccountSubscription()) {
-      if($sub->isPayPalSubscription()) {
+      if($sub->isPayPalSubscription() && Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
         ?>
         <p id="Cart66SubscriptionChangeNote"><?php _e( 'Your current subscription will be canceled when you purchase your new subscription.' , 'cart66' ); ?></p>
         <?php
@@ -98,20 +116,28 @@ if(count($items)): ?>
 ?>
 
 <form id='Cart66CartForm' action="" method="post">
-  <input type='hidden' name='task' value='updateCart'>
+  <input type='hidden' name='task' value='updateCart' />
   <table id='viewCartTable'>
+    <colgroup>
+      <col class="col1" />
+      <col class="col2" />
+      <col class="col3" />
+      <col class="col4" />
+    </colgroup>
+  <thead>
     <tr>
       <th><?php _e('Product','cart66') ?></th>
-      <th colspan="1"><?php _e( 'Quantity' , 'cart66' ); ?></th>
-      <th>&nbsp;</th>
+      <th><?php _e( 'Quantity' , 'cart66' ); ?></th>
       <th><?php _e( 'Item Price' , 'cart66' ); ?></th>
       <th><?php _e( 'Item Total' , 'cart66' ); ?></th>
     </tr>
-  
+  </thead>
+  <tbody>
     <?php foreach($items as $itemIndex => $item): ?>
       <?php 
         $product->load($item->getProductId());
         $price = $item->getProductPrice() * $item->getQuantity();
+        
       ?>
       <tr>
         <td <?php if($item->hasAttachedForms()) { echo "class=\"noBottomBorder\""; } ?> >
@@ -126,9 +152,9 @@ if(count($items)): ?>
               $removeItemImg = $cartImgPath . 'remove-item.png';
             }
           ?>
-        <td <?php if($item->hasAttachedForms()) { echo "class=\"noBottomBorder\""; } ?> colspan="2">
+        <td <?php if($item->hasAttachedForms()) { echo "class=\"noBottomBorder\""; } ?>>
           
-          <?php if($item->isSubscription() || $item->isMembershipProduct()): ?>
+          <?php if($item->isSubscription() || $item->isMembershipProduct() || $product->is_user_price==1): ?>
             <span class="subscriptionOrMembership"><?php echo $item->getQuantity() ?></span>
           <?php else: ?>
             <input type='text' name='quantity[<?php echo $itemIndex ?>]' value='<?php echo $item->getQuantity() ?>' class="itemQuantity"/>
@@ -140,21 +166,22 @@ if(count($items)): ?>
           
         </td>
         <?php else: ?>
-          <td <?php if($item->hasAttachedForms()) { echo "class=\"noBottomBorder\""; } ?> colspan="2"><?php echo $item->getQuantity() ?></td>
+          <td <?php if($item->hasAttachedForms()) { echo "class=\"noBottomBorder\""; } ?>><?php echo $item->getQuantity() ?></td>
         <?php endif; ?>
-        <td <?php if($item->hasAttachedForms()) { echo "class=\"noBottomBorder\""; } ?>><?php echo $item->getProductPriceDescription(); ?></td>
-        <td <?php if($item->hasAttachedForms()) { echo "class=\"noBottomBorder\""; } ?>><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($price, 2) ?></td>
+        <td <?php if($item->hasAttachedForms()) { echo "class=\"noBottomBorder\""; } ?>>&nbsp;<?php echo $item->getProductPriceDescription(); ?></td>
+        <td <?php if($item->hasAttachedForms()) { echo "class=\"noBottomBorder\""; } ?>>&nbsp;<?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($price, 2);?>
+        </td>
       </tr>
       <?php if($item->hasAttachedForms()): ?>
         <tr>
-          <td colspan="5">
+          <td colspan="4">
             <a href='#' class="showEntriesLink" rel="<?php echo 'entriesFor_' . $itemIndex ?>"><?php _e( 'Show Details' , 'cart66' ); ?> <?php #echo count($item->getFormEntryIds()); ?></a>
             <div id="<?php echo 'entriesFor_' . $itemIndex ?>" class="showGfFormData" style="display: none;">
               <?php echo $item->showAttachedForms($fullMode); ?>
             </div>
           </td>
         </tr>
-      <?php endif;?>
+      <?php endif;?>      
     <?php endforeach; ?>
   
     <?php if(Cart66Session::get('Cart66Cart')->requireShipping()): ?>
@@ -167,7 +194,7 @@ if(count($items)): ?>
           <?php if(Cart66Session::get('cart66_shipping_zip')): ?>
             <?php $zipStyle = "style='display: none;'"; ?>
             <tr id="shipping_to_row">
-              <th colspan="5" class="alignRight">
+              <th colspan="4" class="alignRight">
                 <?php _e( 'Shipping to' , 'cart66' ); ?> <?php echo Cart66Session::get('cart66_shipping_zip'); ?> 
                 <?php
                   if(Cart66Setting::getValue('international_sales')) {
@@ -202,7 +229,7 @@ if(count($items)): ?>
           <?php endif; ?>
         
           <tr id="set_shipping_zip_row" <?php echo $zipStyle; ?>>
-            <th colspan="5" class="alignRight"><?php _e( 'Enter Your Zip Code' , 'cart66' ); ?>:
+            <th colspan="4" class="alignRight"><?php _e( 'Enter Your Zip Code' , 'cart66' ); ?>:
               <input type="text" name="shipping_zip" value="" id="shipping_zip" size="5" />
               
               <?php if(Cart66Setting::getValue('international_sales')): ?>
@@ -223,7 +250,7 @@ if(count($items)): ?>
           </tr>
         <?php else:  // Cart in read mode ?>
           <tr>
-            <th colspan="5" class='alignRight'>
+            <th colspan="4" class='alignRight'>
               <?php
                 $liveRates = Cart66Session::get('Cart66Cart')->getLiveRates();
                 if($liveRates && Cart66Session::get('cart66_shipping_zip') && Cart66Session::get('cart66_shipping_country_code')) {
@@ -238,7 +265,7 @@ if(count($items)): ?>
       <?php  else: ?>
         <?php if(count($shippingMethods) > 1 && $fullMode): ?>
         <tr>
-          <th colspan='5' class="alignRight"><?php _e( 'Shipping Method' , 'cart66' ); ?>: &nbsp;
+          <th colspan='4' class="alignRight"><?php _e( 'Shipping Method' , 'cart66' ); ?>: &nbsp;
             <select name='shipping_method_id' id='shipping_method_id'>
               <?php foreach($shippingMethods as $name => $id): ?>
               <option value='<?php echo $id ?>' 
@@ -249,7 +276,7 @@ if(count($items)): ?>
         </tr>
         <?php elseif(!$fullMode): ?>
         <tr>
-          <th colspan='5' class="alignRight"><?php _e( 'Shipping Method' , 'cart66' ); ?>: 
+          <th colspan='4' class="alignRight"><?php _e( 'Shipping Method' , 'cart66' ); ?>: 
             <?php 
               $method = new Cart66ShippingMethod(Cart66Session::get('Cart66Cart')->getShippingMethodId());
               echo $method->name;
@@ -263,69 +290,83 @@ if(count($items)): ?>
     <tr class="subtotal">
       <?php if($fullMode): ?>
       <td>&nbsp;</td>
-      <td colspan='2'>
-        <input type='submit' name='updateCart' value='<?php _e( 'Update Total' , 'cart66' ); ?>' class="Cart66ButtonSecondary" />
+      <td>
+        <input type='submit' name='updateCart' value='<?php _e( 'Update Total' , 'cart66' ); ?>' class="Cart66UpdateTotalButton Cart66ButtonSecondary" />
       </td>
       <?php else: ?>
-        <td colspan='3'>&nbsp;</td>
+        <td colspan='2'>&nbsp;</td>
       <?php endif; ?>
-      <td class="alignRight strong" colspan="1"><?php _e( 'Subtotal' , 'cart66' ); ?>:</td>
-      <td class='strong' colspan="1"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($subtotal, 2); ?></td>
+      <td class="alignRight strong"><?php _e( 'Subtotal' , 'cart66' ); ?>:</td>
+      <td class='strong'><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($subtotal, 2); ?></td>
     </tr>
     
     <?php if(Cart66Session::get('Cart66Cart')->requireShipping()): ?>
     <tr class="shipping">
-      <td colspan='1'>&nbsp;</td>
-      <td colspan="2">&nbsp;</td>
-      <td colspan="1" class="alignRight strong"><?php _e( 'Shipping' , 'cart66' ); ?>:</td>
-      <td colspan="1" class="strong"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $shipping ?></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td class="alignRight strong"><?php _e( 'Shipping' , 'cart66' ); ?>:</td>
+      <td class="strong"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $shipping ?></td>
     </tr>
     <?php endif; ?>
     
     <?php if($promotion): ?>
       <tr class="coupon">
-        <td colspan='2'>&nbsp;</td>
-        <td colspan="2" class="alignRight strong"><?php _e( 'Coupon' , 'cart66' ); ?>:</td>
-        <td colspan="1" class="strong"><?php echo $promotion->getAmountDescription(); ?></td>
+        <td colspan="3" class="alignRight strong"><?php _e( 'Coupon' , 'cart66' ); ?> 
+        <?php 
+          if($promotion->name){ 
+            echo "(" .$promotion->name .")"; 
+          }
+          else{
+            echo "(" . Cart66Session::get('Cart66PromotionCode') . ")";
+          }
+        ?>:</td>
+        <td class="strong">-&nbsp;<?php echo  CART66_CURRENCY_SYMBOL;
+         $promotionDiscountAmount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
+         echo number_format($promotionDiscountAmount,2); ?></td>
       </tr>
     <?php endif; ?>
     
     
     <?php if($tax > 0): ?>
       <tr class="tax">
-        <td colspan='3'>&nbsp;</td>
-        <td colspan="1" class="alignRight strong"><?php _e( 'Tax' , 'cart66' ); ?>:</td>
-        <td colspan="1" class="strong"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($tax, 2); ?></td>
+        <td colspan='2'>&nbsp;</td>
+        <td class="alignRight strong"><?php _e( 'Tax' , 'cart66' ); ?>:</td>
+        <td class="strong"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($tax, 2); ?></td>
       </tr>
     <?php endif; ?>
-    
       <tr class="total">
         <?php if(Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() > 0): ?>
-        <td class="alignRight" colspan='3'>
+        <td class="alignRight" colspan='2'>
           <?php if($fullMode && Cart66Common::activePromotions()): ?>
-            <p class="haveCoupon"><?php _e( 'Do you have a coupon?' , 'cart66' ); ?>
+            <p class="haveCoupon"><?php _e( 'Do you have a coupon?' , 'cart66' ); ?></p>
+          <?php if(Cart66Session::get('Cart66PromotionErrors')):
+                $promoErrors = Cart66Session::get('Cart66PromotionErrors');
+                    foreach($promoErrors as $type=>$error): ?>
+                    <p class="promoMessage warning"><?php echo $error; ?></p>
+              <?php endforeach;?>
+              <?php Cart66Session::get('Cart66Cart')->clearPromotion();
+                  endif; ?>
             <div id="couponCode"><input type='text' name='couponCode' value='' /></div>
-            <div id="updateCart"><input type='submit' name='updateCart' value='<?php _e( 'Apply Coupon' , 'cart66' ); ?>' class="Cart66ButtonSecondary" /></div></p>
-            <?php if(Cart66Session::get('Cart66Cart')->getPromoStatus() < 0): ?>
-              <div class="promoMessage"><?php echo Cart66Session::get('Cart66Cart')->getPromoMessage(); ?></div>
-            <?php endif; ?>
-          <?php endif; ?>&nbsp;
+            <div id="updateCart"><input type='submit' name='updateCart' value='<?php _e( 'Apply Coupon' , 'cart66' ); ?>' class="Cart66ApplyCouponButton Cart66ButtonSecondary" /></div>
+          <?php endif; ?>
         </td>
         <?php else: ?>
-          <td colspan='3'>&nbsp;</td>
+          <td colspan='2'>&nbsp;</td>
         <?php endif; ?>
-        <td colspan="1" class="alignRight strong"><?php _e( 'Total' , 'cart66' ); ?>:</td>
-        <td colspan="1" class="strong">
+        <td class="alignRight strong Cart66CartTotalLabel"><?php _e( 'Total' , 'cart66' ); ?>:</td>
+        <td class="strong">
           <?php 
             echo CART66_CURRENCY_SYMBOL;
             echo number_format(Cart66Session::get('Cart66Cart')->getGrandTotal() + $tax, 2);
           ?>
         </td>
       </tr>
+      </tbody>
   </table>
 </form>
 
   <?php if($fullMode): ?>
+    
   <div id="viewCartNav">
 	<div id="continueShopping">
         <?php if($cartImgPath): ?>
@@ -334,25 +375,53 @@ if(count($items)): ?>
           <a href='<?php echo Cart66Session::get('Cart66LastPage'); ?>' class="Cart66ButtonSecondary Cart66CartContinueShopping" title="Continue Shopping"><?php _e( 'Continue Shopping' , 'cart66' ); ?></a>
         <?php endif; ?>
 	</div>
-	<div id="checkoutShopping">
+
+	
+	  <?php	  
+  	  // dont show checkout until terms are accepted (if necessary)
+  	 if((Cart66Setting::getValue('require_terms') != 1) ||  
+  	    (Cart66Setting::getValue('require_terms') == 1 && (isset($_POST['terms_acceptance']) || Cart66Session::get("terms_acceptance")=="accepted")) ) :  
+  	    
+  	    if(Cart66Setting::getValue('require_terms') == 1){
+  	      Cart66Session::set("terms_acceptance","accepted",true);        
+  	    }
+  	    
+  	?>
         <?php
           $checkoutImg = false;
           if($cartImgPath) {
             $checkoutImg = $cartImgPath . 'checkout.png';
           }
         ?>
-
+      <div id="checkoutShopping">
         <?php if($checkoutImg): ?>
           <a id="Cart66CheckoutButton" href='<?php echo get_permalink($checkoutPage->ID) ?>'><img src='<?php echo $checkoutImg ?>' /></a>
         <?php else: ?>
           <a id="Cart66CheckoutButton" href='<?php echo get_permalink($checkoutPage->ID) ?>' class="Cart66ButtonPrimary" title="Continue to Checkout"><?php _e( 'Checkout' , 'cart66' ); ?></a>
         <?php endif; ?>
-		</div>
+    	</div>
+    <?php else: ?>
+    <div id="Cart66CheckoutReplacementText">
+        <?php echo Cart66Setting::getValue('cart_terms_replacement_text');  ?>
+    </div>
+    <?php endif; ?>
+	
+	
+	   <?php  
+
+    	if(CART66_PRO && Cart66Setting::getValue('require_terms') == 1 && (!isset($_POST['terms_acceptance']) && Cart66Session::get("terms_acceptance")!="accepted") ){
+    	    echo Cart66Common::getView("pro/views/terms.php",array("location"=>"Cart66CartTOS"));
+    	} 
+
+    	 ?>
+	
 	</div>
+	
+	
   <?php endif; ?>
 <?php else: ?>
   <div id="emptyCartMsg">
-  <h3>Your Cart Is Empty</h3>
+  <h3><?php _e('Your Cart Is Empty','cart66'); ?></h3>
   <?php if($cartImgPath): ?>
     <p><a href='<?php echo Cart66Session::get('Cart66LastPage'); ?>' title="Continue Shopping" class="Cart66CartContinueShopping"><img alt="Continue Shopping" class="continueShoppingImg" src='<?php echo $continueShoppingImg ?>' /></a>
   <?php else: ?>
@@ -360,34 +429,36 @@ if(count($items)): ?>
   <?php endif; ?>
   </div>
   <?php
-    Cart66Session::get('Cart66Cart')->clearPromotion();
+    if($promotion){
+      Cart66Session::get('Cart66Cart')->clearPromotion();
+    }
+    Cart66Session::drop("terms_acceptance");
   ?>
 <?php endif; ?>
 
-<script type="text/javascript" charset="utf-8">
-//<![CDATA[
-  $jq = jQuery.noConflict();
+<script type="text/javascript">
+/* <![CDATA[ */
+  (function($){
+    $(document).ready(function(){
+      $('#shipping_method_id').change(function() {
+        $('#Cart66CartForm').submit();
+      });
 
-  $jq('document').ready(function() {
-    $jq('#shipping_method_id').change(function() {
-      $jq('#Cart66CartForm').submit();
-    });
-    
-    $jq('#live_rates').change(function() {
-      $jq('#Cart66CartForm').submit();
-    });
-    
-    $jq('.showEntriesLink').click(function() {
-      var panel = $jq(this).attr('rel');
-      $jq('#' + panel).toggle();
-      return false;
-    });
-    
-    $jq('#change_shipping_zip_link').click(function() {
-      $jq('#set_shipping_zip_row').toggle();
-      return false;
-    });
-  });
-  
-//]]>  
+      $('#live_rates').change(function() {
+        $('#Cart66CartForm').submit();
+      });
+
+      $('.showEntriesLink').click(function() {
+        var panel = $(this).attr('rel');
+        $('#' + panel).toggle();
+        return false;
+      });
+
+      $('#change_shipping_zip_link').click(function() {
+        $('#set_shipping_zip_row').toggle();
+        return false;
+      });
+    })
+  })(jQuery);
+/* ]]> */
 </script>

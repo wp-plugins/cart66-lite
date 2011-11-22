@@ -3,6 +3,16 @@ global $wpdb;
 
 $product = new Cart66Product();
 
+if(Cart66Setting::getValue('enable_google_analytics') == 1 && Cart66Setting::getValue('use_other_analytics_plugin') == 'no'): ?>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', '<?php echo Cart66Setting::getValue("google_analytics_wpid") ?>']);
+    _gaq.push(['_trackPageview']);
+  /* ]]> */
+  </script>
+<?php endif;
+
 $order = false;
 if(isset($_GET['ouid'])) {
   $order = new Cart66Order();
@@ -12,36 +22,36 @@ if(isset($_GET['ouid'])) {
     exit();
   }
 }
-if($_GET['n'] == 1) {
-  $order = new Cart66Order();
-  $order->loadByOuid($_GET['ouid']);
-  
-  // Begin processing affiliate information
-  if(Cart66Session::get('ap_id')) {
-    $referrer = Cart66Session::get('ap_id');
-  }
-  elseif(isset($_COOKIE['ap_id'])) {
-    $referrer = $_COOKIE['ap_id'];
-  }
 
+// Process Affiliate Payments
+// Begin processing affiliate information
+if(Cart66Session::get('ap_id')) {
+  $referrer = Cart66Session::get('ap_id');
+}
+elseif(isset($_COOKIE['ap_id'])) {
+  $referrer = $_COOKIE['ap_id'];
+}
+
+if($order->viewed == 0){
+  // only process affiliate logging if this is the first time the receipt is viewed
   if (!empty($referrer)) {
     Cart66Common::awardCommission($order->id, $referrer);
   }
   // End processing affiliate information
-  
+
   // Begin iDevAffiliate Tracking
   if(CART66_PRO && $url = Cart66Setting::getValue('idevaff_url')) {
     require_once(CART66_PATH . "/pro/idevaffiliate-award.php");
   }
   // End iDevAffiliate Tracking
+  if(isset($_COOKIE['ap_id']) && $_COOKIE['ap_id']) {
+    setcookie('ap_id',$referrer, time() - 3600, "/");
+    unset($_COOKIE['ap_id']);
+  }
+  Cart66Session::drop('app_id');
 }
 
-if(isset($_COOKIE['ap_id']) && $_COOKIE['ap_id']) {
-  setcookie('ap_id',$referrer, time() - 3600, "/");
-  unset($_COOKIE['ap_id']);
-}
 
-Cart66Session::drop('app_id');
 
 if(isset($_GET['duid'])) {
   $duid = $_GET['duid'];
@@ -80,7 +90,7 @@ if(isset($_GET['duid'])) {
       
     }
     else {
-      echo "You have exceeded the maximum number of downloads for this product";
+      _e("You have exceeded the maximum number of downloads for this product","cart66");
     }
     exit();
   }
@@ -88,7 +98,7 @@ if(isset($_GET['duid'])) {
 ?>
 
 <?php  if($order !== false): ?>
-<h2>Order Number: <?php echo $order->trans_id ?></h2>
+<h2><?php _e( 'Order Number' , 'cart66' ); ?>: <?php echo $order->trans_id ?></h2>
 
 <?php 
 if(CART66_PRO) {
@@ -171,7 +181,23 @@ if(CART66_PRO) {
     <th style='text-align: left;'><?php _e( 'Item Price' , 'cart66' ); ?></th>
     <th style='text-align: left;'><?php _e( 'Item Total' , 'cart66' ); ?></th>
   </tr>
-
+  <?php if(Cart66Setting::getValue('enable_google_analytics') == 1 && $order->viewed == 0): ?>
+    <script type="text/javascript">
+      /* <![CDATA[ */
+	    _gaq.push(['_addTrans',
+	    
+	      '<?php echo $order->trans_id; ?>',
+	      '<?php echo get_bloginfo("name"); ?>',
+	      '<?php echo number_format($order->total, 2, ".", ""); ?>',
+	      '<?php echo number_format($order->tax, 2, ".", ""); ?>',
+	      '<?php echo $order->shipping; ?>',
+	      '<?php echo $order->ship_city; ?>',
+	      '<?php echo $order->ship_state; ?>',
+	      '<?php echo $order->ship_country; ?>'
+	    ]);
+	  /* ]]> */
+    </script>  
+  <?php endif;?>
   <?php foreach($order->getItems() as $item): ?>
     <?php 
       $product->load($item->product_id);
@@ -210,8 +236,28 @@ if(CART66_PRO) {
         }
       }
     ?>
+    <?php if(Cart66Setting::getValue('enable_google_analytics') == 1 && $order->viewed == 0): ?>
+      <script type="text/javascript">
+        /* <![CDATA[ */
+        _gaq.push(['_addItem',
+          '<?php echo $order->trans_id; ?>',
+          '<?php echo $product->item_number; ?>',
+          '<?php echo nl2br($item->description) ?>',
+          '', // Item Category
+          '<?php echo number_format($item->product_price, 2, ".", "") ?>',
+          '<?php echo $item->quantity ?>'
+        ]);
+        /* ]]> */
+      </script>
+    <?php endif; ?>
   <?php endforeach; ?>
-
+  <?php if(Cart66Setting::getValue('enable_google_analytics') == 1 && $order->viewed == 0): ?>
+    <script type="text/javascript">
+    /* <![CDATA[ */
+  	  _gaq.push(['_trackTrans']);
+    /* ]]> */
+    </script>
+  <?php endif; ?>
   <tr class="noBorder">
     <td colspan='1'>&nbsp;</td>
     <td colspan="1" style='text-align: center;'>&nbsp;</td>
@@ -256,6 +302,7 @@ if(CART66_PRO) {
 <?php
   // Erase the shopping cart from the session at the end of viewing the receipt
   Cart66Session::drop('Cart66Cart');
+  Cart66Session::drop('Cart66Tax');
 ?>
 <?php else: ?>
   <p><?php _e( 'Receipt not available' , 'cart66' ); ?></p>
@@ -267,18 +314,44 @@ if(CART66_PRO) {
     $printView = Cart66Common::getView('views/receipt_print_version.php', array('order' => $order));
     $printView = str_replace("\n", '', $printView);
     $printView = str_replace("'", '"', $printView);
+    ?>
+    <script type="text/javascript">
+    /* <![CDATA[ */
+      (function($){
+        $(document).ready(function(){
+          $('#print_version').click(function() {
+            myWindow = window.open('','Your_Receipt','resizable=yes,scrollbars=yes,width=550,height=700');
+            myWindow.document.open("text/html","replace");
+            myWindow.document.write(decodeURIComponent('<?php echo rawurlencode($printView); ?>' + ''));
+            return false;
+          });
+        })
+      })(jQuery);
+    /* ]]> */
+    </script> 
+  <?php
   }
-?>
-
-<script type="text/javascript">
-//<![CDATA[
-jQuery(document).ready(function($) {
-  $('#print_version').click(function() {
-    myWindow = window.open('','Your_Receipt','resizable=yes,scrollbars=yes,width=550,height=700');
-    myWindow.document.open("text/html","replace");
-    myWindow.document.write(decodeURIComponent('<?php echo rawurlencode($printView); ?>' + ''));
-    return false;
-  });
-});
-//]]>
-</script>
+  ?>
+  <?php 
+  if(Cart66Setting::getValue('enable_google_analytics') == 1): ?>
+    <?php
+      $url = admin_url('admin-ajax.php');
+      if(Cart66Common::isHttps()) {
+        $url = preg_replace('/http[s]*:/', 'https:', $url);
+      }
+      else {
+        $url = preg_replace('/http[s]*:/', 'http:', $url);
+      }
+    ?>
+    <?php if(Cart66Setting::getValue('use_other_analytics_plugin') == 'no'): ?>
+      <script type="text/javascript">
+        /* <![CDATA[ */
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+        /* ]]> */
+      </script>
+    <?php endif; ?>
+  <?php endif; ?>

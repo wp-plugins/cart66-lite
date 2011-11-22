@@ -1,0 +1,523 @@
+# Copyright (C) 2011 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: cart66 v1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-05-18 17:06-0500\n"
+"PO-Revision-Date: 2011-08-29 19:30+0100\n"
+"Last-Translator: kent <hifidunn2@hotmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: ../cart66-pro/admin/inventory.php:18
+msgid "Inventory updated"
+msgstr "Lager opdateret"
+
+#: ../cart66-pro/gateways/Cart66GatewayAbstract.php:139
+msgid "Passwords do not match"
+msgstr "Kodeord passede ikke"
+
+#: ../cart66-pro/js/cart66Dialog.php:238
+msgid "Pick a product"
+msgstr "Vælg et produkt"
+
+#: ../cart66-pro/js/cart66Dialog.php:239
+msgid "Shortcode Reference"
+msgstr "Shortcode reference"
+
+#: ../cart66-pro/js/cart66Dialog.php:250
+msgid "OK"
+msgstr "OK"
+
+#: ../cart66-pro/js/cart66Dialog.php:255
+msgid "Your products"
+msgstr "Dine produkter"
+
+#: ../cart66-pro/js/cart66Dialog.php:260
+msgid "CSS style"
+msgstr "CSS stil"
+
+#: ../cart66-pro/js/cart66Dialog.php:264
+msgid "Show price"
+msgstr "Vis pris"
+
+#: ../cart66-pro/js/cart66Dialog.php:272
+msgid "Button path"
+msgstr "Knap stil"
+
+#: ../cart66-pro/js/cart66Dialog.php:276
+msgid "Preview"
+msgstr "Forhåndsvisning"
+
+#: ../cart66-pro/js/cart66Dialog.php:437
+msgid "Insert"
+msgstr "Indsæt"
+
+#: ../cart66-pro/js/cart66Dialog.php:440
+msgid "Cancel"
+msgstr "Afbestil"
+
+#: ../cart66-pro/models/Cart66.php:364
+msgid "Orders"
+msgstr "Ordrer"
+
+#: ../cart66-pro/models/Cart66.php:365
+msgid "Products"
+msgstr "Produkter"
+
+#: ../cart66-pro/models/Cart66.php:366
+msgid "PayPal Subscriptions"
+msgstr "PayPal abonnementer"
+
+#: ../cart66-pro/models/Cart66.php:367
+msgid "Inventory"
+msgstr "Lager"
+
+#: ../cart66-pro/models/Cart66.php:368
+msgid "Promotions"
+msgstr "Kampagner"
+
+#: ../cart66-pro/models/Cart66.php:369
+msgid "Shipping"
+msgstr "Forsendelse"
+
+#: ../cart66-pro/models/Cart66.php:370
+msgid "Settings"
+msgstr "Opsætning"
+
+#: ../cart66-pro/models/Cart66.php:371
+msgid "Reports"
+msgstr "Rapporter"
+
+#: ../cart66-pro/models/Cart66.php:372
+msgid "Accounts"
+msgstr "Konti"
+
+#: ../cart66-pro/models/Cart66.php:539
+#: ../cart66-pro/models/Cart66.php:540
+msgid "Feature Levels"
+msgstr "Niveau fuktioner"
+
+#: ../cart66-pro/models/Cart66CartWidget.php:63
+msgid "Title"
+msgstr "Titel"
+
+#: ../cart66-pro/models/Cart66Common.php:701
+msgid "We're sorry.<br/>Your order could not be completed for the following reasons"
+msgstr "Vi beklager.<br/>Din ordre kunne ikke gennemføres af følgende årsag"
+
+#: ../cart66-pro/models/Cart66Product.php:737
+msgid "Unable to upload file"
+msgstr "Det var ikke muligt at uploade filen"
+
+#: ../cart66-pro/pro/models/Cart66Account.php:311
+msgid "Username required"
+msgstr "Brugernavn er obligatorisk"
+
+#: ../cart66-pro/pro/models/Cart66Account.php:324
+msgid "Username unavailable"
+msgstr "Brugernavn ikke tilgængelig"
+
+#: ../cart66-pro/pro/models/Cart66Account.php:341
+msgid "Email address is invalid"
+msgstr "Email adressen er ikke valid"
+
+#: ../cart66-pro/pro/models/Cart66Account.php:357
+msgid "Account password is required"
+msgstr "Konto kodeord er påkrævet"
+
+#: ../cart66-pro/pro/models/Cart66PayPalSubscription.php:13
+msgid "Item number is required"
+msgstr "Produktnummer er påkrævet"
+
+#: ../cart66-pro/pro/models/Cart66PayPalSubscription.php:22
+msgid "The item number must be unique"
+msgstr "Produktnummeret skal være unikt"
+
+#: ../cart66-pro/pro/models/Cart66PayPalSubscription.php:27
+msgid "Subscription name is required"
+msgstr "Abonnementsnummer er påkrævet"
+
+#: ../cart66-pro/pro/models/Cart66PayPalSubscription.php:31
+msgid "Feature level is required"
+msgstr "Funktion for niveau nødvendigt"
+
+#: ../cart66-pro/pro/models/Cart66PayPalSubscription.php:35
+msgid "The price must be greater than zero"
+msgstr "Prisen skal være højere end nul"
+
+#: ../cart66-pro/pro/models/Cart66PayPalSubscription.php:39
+msgid "The billing interval must be a number greater than zero"
+msgstr "Fakturationsintervallet skal være højere end nul"
+
+#: ../cart66-pro/views/account-info.php:13
+msgid "Update Your Account Information"
+msgstr "Opdater dine kontooplysninger"
+
+#: ../cart66-pro/views/account-info.php:15
+#: ../cart66-pro/views/checkout-form.php:42
+#: ../cart66-pro/views/checkout-form.php:111
+#: ../cart66-pro/views/paypal-express.php:371
+msgid "First name"
+msgstr "Fornavn"
+
+#: ../cart66-pro/views/account-info.php:19
+#: ../cart66-pro/views/checkout-form.php:47
+#: ../cart66-pro/views/checkout-form.php:116
+#: ../cart66-pro/views/paypal-express.php:374
+msgid "Last name"
+msgstr "Efternavn"
+
+#: ../cart66-pro/views/account-info.php:23
+#: ../cart66-pro/views/checkout-form.php:239
+#: ../cart66-pro/views/paypal-express.php:377
+#: ../cart66-pro/views/receipt.php:129
+msgid "Email"
+msgstr "E-mail"
+
+#: ../cart66-pro/views/account-info.php:27
+#: ../cart66-pro/views/account-login.php:10
+#: ../cart66-pro/views/account-login.php:30
+#: ../cart66-pro/views/paypal-express.php:380
+msgid "Username"
+msgstr "Brugernavn"
+
+#: ../cart66-pro/views/account-info.php:31
+msgid "Update Your Password"
+msgstr "Opdater dit kodeord"
+
+#: ../cart66-pro/views/account-info.php:32
+msgid "Leave blank to keep current password"
+msgstr "Hvis du ønsker at beholde det nuværende kodeord, udfyldes dette ikke"
+
+#: ../cart66-pro/views/account-info.php:35
+#: ../cart66-pro/views/account-login.php:14
+#: ../cart66-pro/views/paypal-express.php:383
+msgid "Password"
+msgstr "Kodeord"
+
+#: ../cart66-pro/views/account-info.php:37
+msgid "Enter a new password"
+msgstr "Skriv et nyt kodeord"
+
+#: ../cart66-pro/views/account-login.php:20
+msgid "Forgot my password"
+msgstr "Jeg har glemt mit kodeord"
+
+#: ../cart66-pro/views/account-login.php:27
+msgid "Enter your username and we will send you a new password.<br/> The email will be sent to the email address you used for your account"
+msgstr "Skriv dit brugernavn og vi sender dig et nyt kodeord.<br/> E-mailen sendes til den adresse der er registreret på din konto"
+
+#: ../cart66-pro/views/cart-button.php:9
+#: ../cart66-pro/views/cart-button.php:16
+msgid "Price"
+msgstr "Pris"
+
+#: ../cart66-pro/views/cart-button.php:23
+msgid "Cart66 Professional"
+msgstr "Cart66 Profesional"
+
+#: ../cart66-pro/views/cart-button.php:23
+msgid "is required to sell subscriptions"
+msgstr "Det er påkrævet at sælge abonnement"
+
+#: ../cart66-pro/views/cart-button.php:33
+msgid "Out of stock"
+msgstr "Ikke på lager"
+
+#: ../cart66-pro/views/cart-sidebar.php:14
+msgid "View Cart"
+msgstr "Se kurv"
+
+#: ../cart66-pro/views/cart-sidebar.php:16
+msgid "Check out"
+msgstr "Til betaling"
+
+#: ../cart66-pro/views/cart-sidebar.php:19
+msgid "Your cart is empty"
+msgstr "Din kurv er tom"
+
+#: ../cart66-pro/views/cart.php:48
+msgid "Inventory Restriction"
+msgstr "Lagerrestriktion"
+
+#: ../cart66-pro/views/cart.php:60
+msgid "Please Provide Your Zip Code"
+msgstr "Skriv venligst dit postnummer"
+
+#: ../cart66-pro/views/cart.php:61
+msgid "Before you can checkout, please provide the zip code for where we will be shipping your order and click"
+msgstr "Før du kan betale, bedes du skrive et postnummer, så vi kan sende din bestilling og klik på"
+
+#: ../cart66-pro/views/cart.php:61
+msgid "Calculate Shipping"
+msgstr "Beregn forsendelsesomkostninger"
+
+#: ../cart66-pro/views/cart.php:69
+msgid "No Shipping Service Selected"
+msgstr "Ingen forsendelsesmetode valgt"
+
+#: ../cart66-pro/views/cart.php:70
+msgid "We cannot process your order because you have not selected a shipping method. If there are no shipping services available, we may not be able to ship to your location"
+msgstr "Vi kan ikke færdiggøre din ordre, da du ikke har valgt forsendelsesmetode. Hvis der ikke er forsendelsesmetode tilgængelig, kan vi muligvis ikke sende til dit område."
+
+#: ../cart66-pro/views/cart.php:78
+msgid "Too Many Subscriptions"
+msgstr "For mange abonnementer"
+
+#: ../cart66-pro/views/cart.php:79
+msgid "Only one subscription may be purchased at a time"
+msgstr "Du kan kun købe et abonnement af gangen"
+
+#: ../cart66-pro/views/cart.php:93
+msgid "Your current subscription will be canceled when you purchase your new subscription"
+msgstr "Dit nuværende abonnement afmeldes, når du køber et nyt abonnement"
+
+#: ../cart66-pro/views/cart.php:105
+#: ../cart66-pro/views/receipt.php:169
+#: ../cart66-pro/views/receipt_print_version.php:136
+msgid "Product"
+msgstr "Produkt"
+
+#: ../cart66-pro/views/cart.php:106
+#: ../cart66-pro/views/receipt.php:170
+#: ../cart66-pro/views/receipt_print_version.php:137
+msgid "Quantity"
+msgstr "Antal"
+
+#: ../cart66-pro/views/cart.php:108
+#: ../cart66-pro/views/receipt.php:171
+#: ../cart66-pro/views/receipt_print_version.php:138
+msgid "Item Price"
+msgstr "Enhedspris"
+
+#: ../cart66-pro/views/cart.php:109
+#: ../cart66-pro/views/receipt.php:172
+#: ../cart66-pro/views/receipt_print_version.php:139
+msgid "Item Total"
+msgstr "Total pris"
+
+#: ../cart66-pro/views/cart.php:152
+msgid "Show Details"
+msgstr "Vis detaljer"
+
+#: ../cart66-pro/views/cart.php:172
+#: ../cart66-pro/views/cart.php:231
+msgid "Shipping to"
+msgstr "Sendes til"
+
+#: ../cart66-pro/views/cart.php:205
+msgid "Enter Your Zip Code"
+msgstr "Skriv dit postnummer"
+
+#: ../cart66-pro/views/cart.php:231
+msgid "via"
+msgstr "med"
+
+#: ../cart66-pro/views/cart.php:257
+#: ../cart66-pro/views/cart.php:268
+msgid "Shipping Method"
+msgstr "Forsendelsesmetode"
+
+#: ../cart66-pro/views/cart.php:284
+msgid "Update Total"
+msgstr "Opdater total"
+
+#: ../cart66-pro/views/cart.php:289
+#: ../cart66-pro/views/receipt.php:218
+#: ../cart66-pro/views/receipt_print_version.php:185
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#: ../cart66-pro/views/cart.php:305
+msgid "Coupon"
+msgstr "Kupon"
+
+#: ../cart66-pro/views/cart.php:314
+#: ../cart66-pro/views/receipt.php:242
+#: ../cart66-pro/views/receipt_print_version.php:209
+msgid "Tax"
+msgstr "Moms"
+
+#: ../cart66-pro/views/cart.php:323
+msgid "Do you have a coupon?"
+msgstr "Har du en kupon?"
+
+#: ../cart66-pro/views/cart.php:325
+msgid "Apply Coupon"
+msgstr "Ansøg om kupon"
+
+#: ../cart66-pro/views/cart.php:334
+#: ../cart66-pro/views/receipt.php:249
+#: ../cart66-pro/views/receipt_print_version.php:216
+msgid "Total"
+msgstr "Total"
+
+#: ../cart66-pro/views/cart.php:351
+#: ../cart66-pro/views/cart.php:376
+msgid "Continue Shopping"
+msgstr "Fortsæt indkøb"
+
+#: ../cart66-pro/views/cart.php:365
+#: ../cart66-pro/views/checkout-form.php:311
+msgid "Checkout"
+msgstr "Til betaling"
+
+#: ../cart66-pro/views/checkout-form.php:33
+#: ../cart66-pro/views/checkout-form.php:100
+msgid "Shipping Address"
+msgstr "Forsendelsesadresse"
+
+#: ../cart66-pro/views/checkout-form.php:35
+msgid "Order Information"
+msgstr "Ordreinformation"
+
+#: ../cart66-pro/views/checkout-form.php:38
+msgid "Billing Address"
+msgstr "Fakturaadresse"
+
+#: ../cart66-pro/views/checkout-form.php:52
+#: ../cart66-pro/views/checkout-form.php:121
+msgid "Address"
+msgstr "Adresse"
+
+#: ../cart66-pro/views/checkout-form.php:57
+msgid "Address 2"
+msgstr "Adresse 2"
+
+#: ../cart66-pro/views/checkout-form.php:62
+#: ../cart66-pro/views/checkout-form.php:131
+msgid "City"
+msgstr "By"
+
+#: ../cart66-pro/views/checkout-form.php:66
+#: ../cart66-pro/views/checkout-form.php:136
+msgid "State"
+msgstr "Kommune"
+
+#: ../cart66-pro/views/checkout-form.php:82
+#: ../cart66-pro/views/checkout-form.php:152
+msgid "Zip code"
+msgstr "Postnummer"
+
+#: ../cart66-pro/views/checkout-form.php:87
+#: ../cart66-pro/views/checkout-form.php:157
+msgid "Country"
+msgstr "Land"
+
+#: ../cart66-pro/views/checkout-form.php:103
+msgid "Same as billing address"
+msgstr "Samme som fakturaadresse"
+
+#: ../cart66-pro/views/checkout-form.php:173
+#: ../cart66-pro/views/receipt.php:125
+#: ../cart66-pro/views/receipt_print_version.php:95
+msgid "Contact Information"
+msgstr "Kontaktinformation"
+
+#: ../cart66-pro/views/checkout-form.php:175
+msgid "Payment Information"
+msgstr "Betalingsinformation"
+
+#: ../cart66-pro/views/checkout-form.php:189
+msgid "Card Number"
+msgstr "Kortnummer"
+
+#: ../cart66-pro/views/checkout-form.php:194
+msgid "Expiration"
+msgstr "Udløbsdato"
+
+#: ../cart66-pro/views/checkout-form.php:227
+msgid "Security ID"
+msgstr "Sikkerheds ID"
+
+#: ../cart66-pro/views/checkout-form.php:229
+msgid "Security code on back of card"
+msgstr "Sikkerhedskode fra bagsiden af kortet"
+
+#: ../cart66-pro/views/checkout-form.php:234
+#: ../cart66-pro/views/receipt.php:127
+msgid "Phone"
+msgstr "Telefon"
+
+#: ../cart66-pro/views/checkout-form.php:327
+msgid "Your receipt will be on the next page and also immediately emailed to you. <strong>We respect your privacy!</strong>"
+msgstr "Din faktura vises på næste side og sendes også til dig via e-mail. <strong>Vi respekterer privatlivets fred!</strong>"
+
+#: ../cart66-pro/views/paypal-checkout.php:129
+msgid "You must configure your payment settings"
+msgstr "Du skal konfigurere betalingsoplysninger"
+
+#: ../cart66-pro/views/paypal-express.php:367
+msgid "Create Your Account"
+msgstr "Åbn konto"
+
+#: ../cart66-pro/views/paypal-express.php:386
+msgid "Repeat Password"
+msgstr "Gentag kodeord"
+
+#: ../cart66-pro/views/paypal-express.php:389
+msgid "Complete Order"
+msgstr "Afslut ordre"
+
+#: ../cart66-pro/views/paypal-express.php:405
+#: ../cart66-pro/views/paypal-express.php:420
+msgid "Your receipt will be on the next page and also emailed to you"
+msgstr "Din faktura vises på næste side og sendes også til dig via e-mail"
+
+#: ../cart66-pro/views/paypal-expresscheckout.php:10
+msgid "PayPal Express Checkout Is Not Configured"
+msgstr "PayPal Express Checkout er ikke konfigureret"
+
+#: ../cart66-pro/views/paypal-expresscheckout.php:11
+msgid "In order to use PayPal Express Checkout you must enter your PayPal API username, password and signature in the Cart66 Settings Panel"
+msgstr "For at bruge PayPal Express Checkout skal du indtaste API brugernavn, kodeord og underskrift i Cart66 settings panel"
+
+#: ../cart66-pro/views/receipt.php:107
+#: ../cart66-pro/views/receipt_print_version.php:77
+msgid "Billing Information"
+msgstr "Fakturainformation"
+
+#: ../cart66-pro/views/receipt.php:130
+msgid "Date"
+msgstr "Dato"
+
+#: ../cart66-pro/views/receipt.php:139
+#: ../cart66-pro/views/receipt_print_version.php:108
+msgid "Shipping Information"
+msgstr "Forsendelsesoplysninger"
+
+#: ../cart66-pro/views/receipt.php:157
+#: ../cart66-pro/views/receipt_print_version.php:125
+msgid "Delivery via"
+msgstr "Forsendelse via"
+
+#: ../cart66-pro/views/receipt.php:234
+#: ../cart66-pro/views/receipt_print_version.php:201
+msgid "Discount"
+msgstr "Rabat"
+
+#: ../cart66-pro/views/receipt.php:254
+msgid "Printer Friendly Receipt"
+msgstr "Print venlig faktura"
+
+#: ../cart66-pro/views/receipt.php:294
+msgid "Receipt not available"
+msgstr "Faktura ikke tilgængelig"
+
+#: ../cart66-pro/views/receipt_print_version.php:12
+msgid "Your Receipt"
+msgstr "Din faktura"
+
+#: ../cart66-pro/views/receipt_print_version.php:70
+msgid "Order Number"
+msgstr "Ordrenummer"
+

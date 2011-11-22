@@ -74,10 +74,11 @@ class Cart66 {
     
     // Handle dynamic JS requests
     // See: http://ottopress.com/2010/dont-include-wp-load-please/ for why
-    add_filter('query_vars', array($this, 'addJsTrigger'));
-    add_action('template_redirect', array($this, 'jsTriggerCheck'));
+    add_filter('query_vars', array($this, 'addAjaxTrigger'));
+    add_action('template_redirect', array($this, 'ajaxTriggerCheck'));
     
     if(IS_ADMIN) {
+      //add_action( 'admin_notices', 'cart66_data_collection' );
       add_action('admin_head', array( $this, 'registerBasicScripts'));
 
       if(strpos($_SERVER['QUERY_STRING'], 'page=cart66') !== false) {
@@ -86,9 +87,24 @@ class Cart66 {
       }
       
       add_action('admin_menu', array($this, 'buildAdminMenu'));
-      add_action('admin_init', array($this, 'addEditorButtons'));
+      // we dont use this button anymore
+      //add_action('admin_init', array($this, 'addEditorButtons'));
       add_action('admin_init', array($this, 'forceDownload'));
       add_action('wp_ajax_save_settings', array('Cart66Ajax', 'saveSettings'));
+      add_action('wp_ajax_promotionProductSearch', array('Cart66Ajax', 'promotionProductSearch'));
+      add_action('wp_ajax_loadPromotionProducts', array('Cart66Ajax', 'loadPromotionProducts'));
+      
+      // Load Dialog Box in editor
+      add_action('media_buttons', array('Cart66Dialog', 'cart66_dialog_box'), 11);
+      add_action('admin_footer',  array('Cart66Dialog', 'add_shortcode_popup'));
+      
+      // Load Dashboard Widget
+      $pageRoles = Cart66Setting::getValue('admin_page_roles');
+      $pageRoles = unserialize($pageRoles);
+      global $current_user;
+      if(current_user_can($pageRoles['orders'])) {
+        add_action('wp_dashboard_setup', array('Cart66Dashboard', 'cart66_add_dashboard_widgets' ));
+      }
       
       if(CART66_PRO) {
         add_action('wp_ajax_update_gravity_product_quantity_field', array('Cart66Ajax', 'updateGravityProductQuantityField'));
@@ -107,20 +123,18 @@ class Cart66 {
         add_filter('pre_set_site_transient_update_plugins', array('Cart66ProCommon', 'getUpdatePluginsOption'));    //used by WP 3.0
         add_action('install_plugins_pre_plugin-information', array('Cart66ProCommon', 'showChangelog'));
       }
-      
-      // Include the jquery table quicksearch library
-      $path = CART66_URL . '/js/jquery.quicksearch.js';
-      wp_enqueue_script('quicksearch', $path, array('jquery'));
     }
     else {
       $this->initShortcodes();
       $this->initCart();
+      $order = new Cart66Order();
       add_action('wp_enqueue_scripts', array('Cart66', 'enqueueScripts'));
 
       if(CART66_PRO) {
         add_action('wp_head', array($this, 'checkInventoryOnCheckout'));
         add_action('wp_head', array($this, 'checkShippingMethodOnCheckout'));
         add_action('wp_head', array($this, 'checkZipOnCheckout'));
+        add_action('wp_head', array($this, 'checkTermsOnCheckout'));
         add_action('template_redirect', array($this, 'protectSubscriptionPages'));
         add_filter('wp_list_pages_excludes', array($this, 'hideStorePages'));
         add_filter('wp_list_pages_excludes', array($this, 'hidePrivatePages'));
@@ -130,8 +144,40 @@ class Cart66 {
       add_action('wp_head', array($this, 'displayVersionInfo'));
       add_action('template_redirect', array($this, 'dontCacheMeBro'));
       add_action('shutdown', array('Cart66Session', 'touch'));
+      
+      add_action('wp_footer', array($order, 'updateViewed'));
+      if(Cart66Setting::getValue('use_other_analytics_plugin') == 'no') {
+        add_action('wp_footer', array($order, 'addTrackingCode'));
+      }
     }
-
+    
+    
+    
+    function cart66_data_collection(){
+         global $current_screen;
+         
+         echo '<div class="updated">';
+         echo '<script type="text/javascript">
+          (function($){
+            $(document).ready(function(){
+              $("#cart66SendSurvey").click(function(){
+                $.get("http://cart66.com/survey/",function(data){
+                  alert(data)
+                })
+              })
+            })
+          })(jQuery);
+         </script>  ';
+         echo '<H3>Cart66 Usage Survey</h3>';
+         echo '<p>To improve our customer experience, Cart66 would love for you to participate in an anonymous usage survey. This data will be sent one time, and does not contain any personal or identification information.</p>';
+         echo '<p>Here\'s what is being sent:<br><br>';
+         echo Cart66Common::showReportData();
+         echo '<p><a id="cart66SendSurvey" class="button" href="#">Send</a> &nbsp;&nbsp;&nbsp; <a class="button" href="#">No thanks</a></p>';
+         echo '</div>';
+    }
+    
+    
+    
     // ================================================================
     // = Intercept query string cart66 tasks                          =
     // ================================================================
@@ -243,8 +289,12 @@ class Cart66 {
     require_once(CART66_PATH . "/models/Cart66ShippingRule.php");
     require_once(CART66_PATH . "/models/Cart66ShortcodeManager.php");
     require_once(CART66_PATH . "/models/Cart66ButtonManager.php");
+    require_once(CART66_PATH . "/models/Cart66Dashboard.php");
+    require_once(CART66_PATH . "/models/Cart66Dialog.php");
+    require_once(CART66_PATH . "/models/Cart66Updater.php");
     require_once(CART66_PATH . "/gateways/Cart66GatewayAbstract.php");
     require_once(CART66_PATH . "/gateways/Cart66PayPalExpressCheckout.php");
+    require_once(CART66_PATH . "/models/Cart66Updater.php");
     
     if(CART66_PRO) {
       require_once(CART66_PATH . "/pro/models/Cart66AccessManager.php");
@@ -305,6 +355,8 @@ class Cart66 {
   
   public function registerBasicScripts() {
     ?><script type="text/javascript">var wpurl = '<?php echo esc_js( home_url('/') ); ?>';</script><?php
+    $dashboardCss = CART66_URL . '/admin/dashboard.css';
+    echo "<link rel='stylesheet' type='text/css' href='$dashboardCss' />\n";
   }
   
   public function registerCustomScripts() {
@@ -312,12 +364,23 @@ class Cart66 {
       $path = CART66_URL . '/js/ajax-setting-form.js';
       wp_enqueue_script('ajax-setting-form', $path);
 
-      // Include jquery-multiselect and jquery-ui
+      // Include jquery-multiselect, jquery-datepicker, jquery-timepicker-addon and jquery-ui
       wp_enqueue_script('jquery');
       wp_enqueue_script('jquery-ui-core');
       wp_enqueue_script('jquery-ui-sortable');
       $path = CART66_URL . '/js/ui.multiselect.js';
       wp_enqueue_script('jquery-multiselect', $path, null, null, true);
+      $path = CART66_URL . '/js/jquery-ui.core.datepicker.slider.js';
+      wp_enqueue_script('jquery-datepicker', $path, null, null, true);
+      $path = CART66_URL . '/js/ui.timepicker.addon.js';
+      wp_enqueue_script('jquery-timepicker-addon', $path, null, null, true);
+      $path = CART66_URL . '/js/jquery.tokeninput.js';
+      wp_enqueue_script('jquery-tokeninput', $path, null, null, true);
+ 
+      // Include the jquery table quicksearch library
+      $path = CART66_URL . '/js/jquery.quicksearch.js';
+      wp_enqueue_script('quicksearch', $path, array('jquery'));
+      
     }
   }
   
@@ -431,9 +494,39 @@ class Cart66 {
     }
   }
   
+  public function checkTermsOnCheckout() {
+      if(Cart66Setting::getValue('require_terms') == 1) {
+        global $post;
+        $checkoutPage = get_page_by_path('store/checkout');
+        $cartPage = get_page_by_path('store/cart');
+        if( isset( $post->ID ) && $post->ID == $checkoutPage->ID || $post->ID == $cartPage->ID) {
+          
+          $sendBack = false;
+         
+          if($post->ID == $cartPage->ID && isset($_POST['terms_acceptance']) && $_POST['terms_acceptance'] == "I_Accept"){
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Terms are accepted, forwarding to checkout");
+            Cart66Session::set("terms_acceptance","accepted",true);
+            $link = get_permalink($checkoutPage->ID);
+            $sendBack = true;
+          }
+          elseif($post->ID == $checkoutPage->ID && (!Cart66Session::get('terms_acceptance') || Cart66Session::get('terms_acceptance') != "accepted")) {
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Terms not accepted, send back to cart");
+            $link = get_permalink($cartPage->ID);
+            $sendBack = true;
+          }
+        
+          if($sendBack) {
+            wp_redirect($link);
+            exit();
+          }
+          
+        } // End if checkout or cart page
+      } // End if require terms
+  }
+  
   public function checkZipOnCheckout() {
     if(CART66_PRO && $_SERVER['REQUEST_METHOD'] == 'GET') {
-      if(Cart66Setting::getValue('use_live_rates')) {
+      if(Cart66Setting::getValue('use_live_rates') && Cart66Session::get('Cart66Cart')->requireShipping()) {
         global $post;
         $checkoutPage = get_page_by_path('store/checkout');
         if( isset( $post->ID ) && $post->ID == $checkoutPage->ID) {
@@ -534,17 +627,20 @@ class Cart66 {
     add_shortcode('cancel_paypal_subscription',   array($sc, 'cancelPayPalSubscription'));
     add_shortcode('checkout_authorizenet',        array($sc, 'authCheckout'));
     add_shortcode('checkout_manual',              array($sc, 'manualCheckout'));
+    add_shortcode('checkout_payleap',             array($sc, 'payLeapCheckout'));
     add_shortcode('checkout_paypal',              array($sc, 'paypalCheckout'));
     add_shortcode('checkout_paypal_express',      array($sc, 'payPalExpressCheckout'));
     add_shortcode('checkout_paypal_pro',          array($sc, 'payPalProCheckout'));
     add_shortcode('clear_cart',                   array($sc, 'clearCart'));
     add_shortcode('hide_from',                    array($sc, 'hideFrom'));
+    add_shortcode('post_sale',                    array($sc, 'postSale'));
     add_shortcode('shopping_cart',                array($sc, 'shoppingCart'));
     add_shortcode('show_to',                      array($sc, 'showTo'));
     add_shortcode('subscription_name',            array($sc, 'currentSubscriptionPlanName'));
     add_shortcode('subscription_feature_level',   array($sc, 'currentSubscriptionFeatureLevel'));
     add_shortcode('zendesk_login',                array($sc, 'zendeskRemoteLogin'));
-    
+    add_shortcode('terms_of_service',             array($sc, 'termsOfService'));
+    add_shortcode('account_expiration',           array($sc, 'accountExpiration'));
     
     // System shortcodes
     add_shortcode('cart66_tests',                 array($sc, 'cart66Tests'));
@@ -552,10 +648,13 @@ class Cart66 {
     add_shortcode('ipn',                          array($sc, 'processIPN'));
     add_shortcode('receipt',                      array($sc, 'showReceipt'));
     add_shortcode('spreedly_listener',            array($sc, 'spreedlyListener'));
+    add_shortcode('checkout_eway',                array($sc, 'ewayCheckout'));
+    add_shortcode('checkout_mwarrior',            array($sc, 'mwarriorCheckout'));
+
     
     // Enable Gravity Forms hooks if Gravity Forms is available
     if(CART66_PRO && class_exists('RGForms')) {
-      add_action("gform_post_submission", array($sc, 'gravityFormToCart'));
+      add_action("gform_post_submission", array($sc, 'gravityFormToCart'), 100, 1);
     }
     
   }
@@ -563,17 +662,17 @@ class Cart66 {
   /**
    * Adds a query var trigger for the dynamic JS dialog
    */
-  public function addJsTrigger($vars) {
-    $vars[] = 'cart66dialog';
+  public function addAjaxTrigger($vars) {
+    $vars[] = 'cart66AjaxCartRequests';
     return $vars;
   }
 
   /**
    * Handles the query var trigger for the dyamic JS dialog
    */
-  public function jsTriggerCheck() {
-    if ( intval( get_query_var( 'cart66dialog' ) ) == 1 ) {
-      include( CART66_PATH . '/js/cart66Dialog.php' );
+  public function ajaxTriggerCheck() {
+    if ( intval( get_query_var( 'cart66AjaxCartRequests' ) ) == 1 ) {
+      Cart66Ajax::checkInventoryOnAddToCart();
       exit;
     }
   }

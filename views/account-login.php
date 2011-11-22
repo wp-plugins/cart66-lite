@@ -36,13 +36,15 @@
     </ul>
   </form>
   
-  <script type='text/javascript'>
-    jQuery(document).ready(function($) {
-      $('#forgotLink').click(function() {
-        $('#Cart66ForgotPassword').toggle();
-      });
-    });
-  </script>
+  <script type="text/javascript">
+    (function($){
+      $(document).ready(function(){
+        $('#forgotLink').click(function() {
+          $('#Cart66ForgotPassword').toggle();
+        });
+      })
+    })(jQuery);
+  </script> 
   
 <?php endif; ?>
 

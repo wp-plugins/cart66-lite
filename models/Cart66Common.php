@@ -93,7 +93,50 @@ class Cart66Common {
       }
     }
 
-    $filename = CART66_PATH . "/$filename"; 
+    $customView = false;
+    $themeDirectory = get_stylesheet_directory();
+    $approvedOverrideFiles = array(
+                                   "views/cart.php",
+                                   "views/cart-button.php",
+                                   "views/account-login.php",
+                                   "views/checkout-form.php",
+                                   "views/cart-sidebar.php",
+                                   "views/cart-sidebar-advanced.php",
+                                   "views/receipt.php",
+                                   "views/receipt_print_version.php",
+                                   "pro/views/terms.php"
+                             );
+    $overrideDirectory = $themeDirectory."/cart66-templates";
+    $userViewFile = $overrideDirectory."/$filename";
+    
+    //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Override: $overrideDirectory\nUser view file: $userViewFile");
+    
+    if(file_exists($userViewFile) && in_array($filename,$approvedOverrideFiles)) {
+      // File exists, make sure it's not empty
+      if(filesize($userViewFile)>10) {
+        // It's not empty
+        $customView = true;
+        $customViewPath = $userViewFile;
+      }
+      else{
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] User file was empty: $userViewFile");
+      }
+    }
+    else{
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] File exists: ".var_export(file_exists($userViewFile),true)."\n");
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Approved Override: ".var_export(in_array($filename,$approvedOverrideFiles),true));
+    }
+  
+    // Check for override and confirm we have a registered plugin
+    if($customView && CART66_PRO && self::isRegistered()) {
+      // override is present
+      $filename = $customViewPath;
+    }
+    else {
+      // no override, render standard view
+      $filename = CART66_PATH . "/$filename";
+    }
+    
     ob_start();
     include $filename;
     $contents = ob_get_contents();
@@ -192,15 +235,18 @@ class Cart66Common {
           }
           
           // Transaction if for commission is the id in th order items table
-          $txn_id = $item->id;
+          $txn_id = $order->trans_id;
           $sale_amount = $price;
           $item_id = $item->item_number;
           $buyer_email = $order->email;
+          
+          // Affiliate Royale
+          do_action('cart66_award_commission', $referrer, $sale_amount, $txn_id, $item_id, $buyer_email); 
 
           // Make sure commission has not already been granted for this transaction
           $aff_sales_table = $wpdb->prefix . "affiliates_sales_tbl";
           $txnCount = $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM $aff_sales_table where txn_id = %s", $txn_id));
-          if($txnCount < 1) {
+          if($txnCount < 1 && function_exists('wp_aff_award_commission')) {
             wp_aff_award_commission($referrer,$sale_amount,$txn_id,$item_id,$buyer_email);
           }
         }
@@ -269,9 +315,10 @@ class Cart66Common {
     $msg = self::getEmailReceiptMessage($newOrder);
     $to = $newOrder->email;
     $subject = Cart66Setting::getValue('receipt_subject');
+    
     $headers = 'From: '. Cart66Setting::getValue('receipt_from_name') .' <' . Cart66Setting::getValue('receipt_from_address') . '>' . "\r\n\\";
-    $msgIntro = Cart66Setting::getValue('receipt_intro');
-
+    $msgIntro = Cart66Setting::getValue('receipt_intro');    
+    
     if($newOrder) {
       $isSent = self::mail($to, $subject, $msg, $headers);
       if(!$isSent) {
@@ -394,6 +441,15 @@ class Cart66Common {
     return $countries[$code];
   }
 
+  public static function getLocaleCode() {
+    $localeCode = false;
+    $localeCodes = array('AU', 'AT', 'BE', 'CA', 'CH', 'CN', 'DE', 'ES', 'GB', 'FR', 'IT', 'NL', 'PL', 'US');
+    if(in_array(self::getHomeCountryCode(), $localeCodes)) {
+      $localeCode = self::getHomeCountryCode();
+    }
+    return $localeCode;
+  }
+  
   public static function getCountries($all=false) {
     $countries = array(
        'AR'=>'Argentina',
@@ -415,6 +471,7 @@ class Cart66Common {
        'DK'=>'Denmark',
        'EC'=>'Ecuador',
        'EE'=>'Estonia',
+       'EG'=>'Egypt',
        'FI'=>'Finland',
        'FR'=>'France',
        'DE'=>'Germany',
@@ -430,7 +487,9 @@ class Cart66Common {
        'IT'=>'Italy',
        'JM'=>'Jamaica',
        'JP'=>'Japan',
+       'KE'=>'Kenya',
        'LV'=>'Latvia',
+       'LS'=>'Lesotho',
        'LT'=>'Lithuania',
        'LU'=>'Luxembourg',
        'MY'=>'Malaysia',
@@ -447,6 +506,7 @@ class Cart66Common {
        'PR'=>'Puerto Rico',
        'RO'=>'Romania',
        'RU'=>'Russia',
+       'SA'=>'Saudi Arabia',
        'SG'=>'Singapore',
        'SK'=>'Slovakia',
        'SI'=>'Slovenia',
@@ -461,6 +521,7 @@ class Cart66Common {
        'TH'=>'Thailand',
        'TT'=>'Trinidad and Tobago',
        'TR'=>'Turkey',
+       'UA'=>'Ukraine',
        'AE'=>'United Arab Emirates',
        'GB'=>'United Kingdom',
        'US'=>'United States',
@@ -553,9 +614,11 @@ class Cart66Common {
 
   
   public static function getZones($code='all') {
+    $setting = new Cart66Setting();
     $zones = array();
     
     $au = array();
+    $au['0'] = '';
     $au['NSW'] = 'New South Wales';
     $au['NT'] = 'Northern Territory';
     $au['QLD'] = 'Queensland';
@@ -566,6 +629,7 @@ class Cart66Common {
     $zones['AU'] = $au;
     
     $br = array();
+    $br['0'] = '';
     $br['Acre'] = 'Acre';
 		$br['Alagoas'] = 'Alagoas';
 		$br['Amapa'] = 'Amapa';
@@ -596,6 +660,7 @@ class Cart66Common {
     $zones['BR'] = $br;
     
     $ca = array();
+    $ca['0'] = '';
     $ca['AB'] = 'Alberta';
     $ca['BC'] = 'British Columbia';
     $ca['MB'] = 'Manitoba';
@@ -612,6 +677,7 @@ class Cart66Common {
     $zones['CA'] = $ca;
     
     $us = array();
+    $us['0'] = '';
     $us['AL'] = 'Alabama';
     $us['AK'] = 'Alaska ';
     $us['AZ'] = 'Arizona';
@@ -664,6 +730,18 @@ class Cart66Common {
     $us['WI'] = 'Wisconsin';
     $us['WY'] = 'Wyoming';
     $us['AE'] = 'Armed Forces';
+    
+    if($setting->getValue('include_us_territories') == 1){
+      $us['AS'] = 'American Samoa';
+      $us['GU'] = 'Guam';
+      $us['MP'] = 'Northern Mariana Islands';
+      $us['PR'] = 'Puerto Rico';
+      $us['VI'] = 'Virgin Islands';
+      $us['FM'] = 'Federated States of Micronesia';
+      $us['MH'] = 'Marshall Islands';
+      $us['PW'] = 'Palua';
+    }
+  
     $zones['US'] = $us;
     
     switch ($code) {
@@ -737,14 +815,20 @@ class Cart66Common {
   }
 
   public function getPromoMessage() {
-    $promo = Cart66Session::get('Cart66Cart')->getPromotion();
+    $promo = Cart66Session::get('Cart66Promotion');
     $promoMsg = "none";
     if($promo) {
-      $promoMsg = $promo->code . ' (-' . CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2) . ')';
+      $promoMsg = $promo->getCode() . ' (-' . CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Promotion')->getDiscountAmount(Cart66Session::get('Cart66Cart')), 2) . ')';
     }
     return $promoMsg;
   }
-
+  
+  //increment the number of redemptions
+  public function updatePromoRedemptions() {
+    $promotion = Cart66Session::get('Cart66Promotion');
+    $promotion->updateRedemptions();
+  }
+  
   public function showErrors($errors, $message=null) {
     $out = "<div id='cart66Errors' class='Cart66Error'>";
     if(empty($message)) {
@@ -770,10 +854,11 @@ class Cart66Common {
   public function getJqErrorScript(array $jqErrors) {
     $script = '
 <script type="text/javascript">
-var $jq = jQuery.noConflict();
-$jq(document).ready(function() { 
-_script_here_ 
-});
+  (function($){
+    $(document).ready(function(){
+      _script_here_
+    })
+  })(jQuery);
 </script>';
 
     if(count($jqErrors)) {
@@ -940,6 +1025,13 @@ _script_here_
    */
   public function appendQueryString($nvPairs) {
     $url = self::getCurrentPageUrl();
+    $url .= strpos($url, '?') ? '&' : '?';
+    $url .= $nvPairs;
+    return $url;
+  }
+  
+  public function appendWurlQueryString($nvPairs) {
+    $url = get_bloginfo('wpurl');
     $url .= strpos($url, '?') ? '&' : '?';
     $url .= $nvPairs;
     return $url;
@@ -1165,5 +1257,73 @@ _script_here_
     $out = $passed ? "<font color=\"green\">SUCCESS: $func</font>\n" : "<font color=\"red\">FAILED: $func (Line: $line)\nFile: $file</font>\n";
     if(!empty($msg)) { $out .= $msg . "\n"; }
     echo $out . "\n";
+  }
+  
+  public static function showReportData(){
+    global $wpdb;
+    $orders = Cart66Common::getTableName('orders');
+    $reportData = array();
+    
+    $sql = "SELECT sum(`total`) from $orders";
+    $lifetimeTotal = $wpdb->get_var($sql);
+    $reportData[] = array("Total Sales","total_sales",$lifetimeTotal);
+    
+    $sql = "SELECT count('id') from $orders";
+    $totalOrders = $wpdb->get_var($sql);
+    $reportData[] = array("Total Orders","total_orders",$totalOrders);
+    
+    $sql = "SELECT ordered_on from $orders order by id asc LIMIT 1";
+    $firstSaleDate = $wpdb->get_var($sql);
+    $reportData[] = array("First Sale","first_sale",$firstSaleDate);
+    
+    $sql = "SELECT ordered_on from $orders order by id desc LIMIT 1";
+    $lastSaleDate = $wpdb->get_var($sql);
+    $reportData[] = array("Last Sale","last_sale",$lastSaleDate);
+    
+    $postTypes = get_post_types('','names');
+    foreach($postTypes as $postType){
+      if(!in_array($postType,array("post","page","attachment","nav_menu_item","revision"))){
+        $customPostTypes[] = $postType;
+      }
+    }
+    $customPostTypes = (empty($customPostTypes)) ? "none" : implode(',',$customPostTypes);
+    $reportData[] = array("Custom Post Types","custom_post_types",$customPostTypes);
+    
+    $output = "First Sale: " . $firstSaleDate . "<br>";
+    $output .= "Last Sale: " . $lastSaleDate . "<br>";
+    $output .= "Total Orders: " . $totalOrders . "<br>";
+    $output .= "Total Sales: " . $lifetimeTotal . "<br>";
+    $output .= "Custom Post Types: " . $customPostTypes . "<br>";
+    $output .= "WordPress Version: " . get_bloginfo("version") . "<br>";
+    $output .= (CART66_PRO) ? "Cart66 Version: Pro " . Cart66Setting::getValue('version') . "<br>" : "Cart66 Version: " .Cart66Setting::getValue('version') . "<br>";
+    $output .= "PHP Version: " . phpversion() . "<br>";
+    
+    
+    //$output .= ": " . "" . "<br>";
+    
+    return $output;
+  }
+  public static function getElapsedTime($datestamp) {
+    $output = false;
+    if(!empty($datestamp) && $datestamp != '0000-00-00 00:00:00') {
+      $totaldelay = time() - strtotime($datestamp);
+      if($days=floor($totaldelay/86400)) {
+        $totaldelay = $totaldelay % 86400;
+        $output = date('m/d/Y', strtotime($datestamp));
+      }
+      elseif($hours=floor($totaldelay/3600)) {
+        $totaldelay = $totaldelay % 3600;
+        $output = $hours . __(' hours ago', 'cart66');
+      }
+      elseif($minutes=floor($totaldelay/60)) {
+        $totaldelay = $totaldelay % 60;
+        $output = $minutes . __(' minutes ago', 'cart66');
+      }
+      elseif($seconds=floor($totaldelay/1)) {
+        $totaldelay = $totaldelay % 1;
+        $output = $seconds . __(' seconds ago', 'cart66');
+      }
+    }
+    return $output;
   }
 }

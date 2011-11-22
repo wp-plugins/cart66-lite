@@ -69,7 +69,7 @@
   <?php endif; ?>
 </div>
 
-<table class="widefat" style="width: auto;">
+<table class="widefat Cart66HighlightTable" style="width: auto;">
 <thead>
   <tr>
     <th colspan="8"><?php _e( 'Search' , 'cart66' ); ?>: <input type="text" name="Cart66AccountSearchField" value="" id="Cart66AccountSearchField" /></th>
@@ -106,12 +106,12 @@ foreach($orderRows as $row) {
 ?>
 </table>
 
-<script language='javascript'>
-  $jq = jQuery.noConflict();
-  
-  $jq('.delete').click(function() {
-    return confirm('Are you sure you want to delete this item?');
-  });
-  
-  $jq('#Cart66AccountSearchField').quicksearch('table tbody tr');
-</script>
+<script type="text/javascript">
+  (function($){
+    $('.delete').click(function() {
+      return confirm('Are you sure you want to delete this item?');
+    });
+
+    $('#Cart66AccountSearchField').quicksearch('table tbody tr');
+  })(jQuery);
+</script> 

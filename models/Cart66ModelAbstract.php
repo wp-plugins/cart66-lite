@@ -137,6 +137,9 @@ abstract class Cart66ModelAbstract extends Cart66BaseModelAbstract {
   	}
   }
   
-
+  public function __wakeup(){
+    global $wpdb;
+    $this->_db = $wpdb;
+  }
   
 }

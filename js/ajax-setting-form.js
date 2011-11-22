@@ -1,32 +1,30 @@
-var $j = jQuery.noConflict();
-
-$j(document).ready(function() {
-  
-  $j('.ajaxSettingForm').submit(function() {
-    var data = getFormData($j(this).attr('id'));
-    $j.ajax({
-        type: "POST",
-        url: ajaxurl,
-        data: data,
-        dataType: 'json',
-        success: function(result) {
-          $j('#saveResult').html("<div id='saveMessage' class='" + result[0] + "'></div>");
-          $j('#saveMessage').append("<p>" + result[1] + "</p>").hide().fadeIn(1500);
-        }
+(function($){
+  $(document).ready(function(){
+    $('.ajaxSettingForm').submit(function() {
+      var data = getFormData($(this).attr('id'));
+      $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: data,
+          dataType: 'json',
+          success: function(result) {
+            $('#saveResult').html("<div id='saveMessage' class='" + result[0] + "'></div>");
+            $('#saveMessage').append("<p>" + result[1] + "</p>").hide().fadeIn(1500).delay(5000).fadeOut(1500);
+          }
+      });
+      return false;
     });
-    setTimeout("$j('#saveMessage').hide('slow');", 5000);
-    return false;
-  });
-  
-});
+  })
+})(jQuery);
 
 function getFormData(formId) {
-  var theForm = $j('#' + formId);
+	$jq = jQuery.noConflict();
+  var theForm = $jq('#' + formId);
   var str = '';
-  $j('input:not([type=checkbox], :radio), input[type=checkbox]:checked, input:radio:checked, select, textarea', theForm).each(
+  $jq('input:not([type=checkbox], :radio), input[type=checkbox]:checked, input:radio:checked, select, textarea', theForm).each(
       function() {
-        var name = $j(this).attr('name');
-        var val = encodeURIComponent($j(this).val());
+        var name = $jq(this).attr('name');
+        var val = encodeURIComponent($jq(this).val());
         str += name + '=' + val + '&';
       }
   );

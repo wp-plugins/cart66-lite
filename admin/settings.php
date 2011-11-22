@@ -66,18 +66,19 @@ else {
 ?>
 
 <?php if(!empty($successMessage)): ?>
-  
-<script type='text/javascript'>
-  var $j = jQuery.noConflict();
 
-  $j(document).ready(function() {
-    setTimeout("$j('#Cart66SuccessBox').hide('slow')", 2000);
-  });
-  
-  <?php if($versionInfo): ?>
-    setTimeout("$j('.unregistered').hide('slow')", 1000);
-  <?php  endif; ?>
-</script>
+<script type="text/javascript">
+  (function($){
+    $(document).ready(function(){
+      $("#Cart66SuccessBox").fadeIn(1500).delay(4000).fadeOut(1500);
+    })
+    
+    <?php if($versionInfo): ?>
+      $(".unregistered").show().delay(5000).hide(1500);
+    <?php  endif; ?>
+    
+  })(jQuery);
+</script> 
   
 <div class='Cart66SuccessModal' id="Cart66SuccessBox" style=''>
   <p><strong><?php _e( 'Success' , 'cart66' ); ?></strong><br/>
@@ -191,6 +192,8 @@ else {
                     }
                   ?>
                 </select>
+                <input type="hidden" name="include_us_territories" value="">
+                <input type="checkbox" name="include_us_territories" value="1" <?php echo (Cart66Setting::getValue('include_us_territories')) ? "checked='checked'" : ""; ?>> Include US Territories
                 <p class="label_desc"><?php _e( 'Your home country will be the default country on your checkout form' , 'cart66' ); ?></p>
               </li>
               <li>
@@ -256,6 +259,47 @@ else {
                 <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" />
               </li>
 
+            </ul>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Cart and Checkout Settings -->
+    <div class="widgets-holder-wrap <?php echo (Cart66Setting::getValue('sameAsBillingOff') || Cart66Setting::getValue('userPriceLabel') || Cart66Setting::getValue('userQuantityLabel')) ? '' : 'closed'; ?>">
+      <div class="sidebar-name">
+        <div class="sidebar-name-arrow"><br/></div>
+        <h3><?php _e( 'Cart and Checkout Settings' , 'cart66' ); ?> <span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
+      </div>
+      <div class="widget-holder">
+        <p class="description"><?php _e( '' , 'cart66' ); ?></p>
+        <div>
+          <form id="cartCheckoutSettingsForm" class="ajaxSettingForm" action="" method='post'>
+            <input type='hidden' name='action' value="save_settings" />
+            <input type='hidden' name='_success' value="The cart and checkout settings have been saved.">
+            <ul>
+              <li><label style="display: inline-block; width: 120px; text-align: right;"><?php _e( 'Shipping Form' , 'cart66' ); ?>:</label>
+              <?php
+                $shippingOff = Cart66Setting::getValue('sameAsBillingOff');
+                if(!$shippingOff) { $shippingOff = 'on'; }
+              ?>
+              <input type='radio' name='sameAsBillingOff' value="" style='width: auto;' <?php if($shippingOff == 'on') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'><?php _e( 'Show "Same as Billing"' , 'cart66' ); ?></label>
+              <input type='radio' name='sameAsBillingOff' value="1" style='width: auto;' <?php if($shippingOff == '1') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'><?php _e( 'Always show the shipping form' , 'cart66' ); ?></label>
+                <p style="width: 450px;" class="label_desc"><?php _e( 'Choose whether or not to display the shipping address form on the checkout page by default.' , 'cart66' ); ?></p>
+              </li>
+              
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for='userPriceLabel'><?php _e( 'User Price Label' , 'cart66' ); ?>:</label>
+              <input type='text' name='userPriceLabel' id='userPriceLabel' style='width: 375px;' value="<?php echo Cart66Setting::getValue('userPriceLabel'); ?>" />
+              <p style="width: 450px;" class="label_desc"><?php _e( 'Defaults to "Enter an amount: "' , 'cart66' ); ?></p>
+              </li>
+              
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for='userQuantityLabel'><?php _e( 'User Quantity Label' , 'cart66' ); ?>:</label>
+              <input type='text' name='userQuantityLabel' id='userQuantityLabel' style='width: 375px;' value="<?php echo Cart66Setting::getValue('userQuantityLabel'); ?>" />
+              <p style="width: 450px;" class="label_desc"><?php _e( 'Defaults to "Quantity: "' , 'cart66' ); ?></p>
+              </li>
+
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
             </ul>
           </form>
         </div>
@@ -426,6 +470,8 @@ else {
           <form id="PayPalSettings" class="ajaxSettingForm" action="" method='post'>
             <input type='hidden' name='action' value="save_settings" />
             <input type='hidden' name='_success' value="Your PayPal settings have been saved.">
+            <input type="hidden" name="paypal_sandbox" value="" />
+
             <ul>
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='paypal_email'><?php _e( 'PayPal Email' , 'cart66' ); ?>:</label>
               <input type='text' name='paypal_email' id='paypal_email' style='width: 375px;' value="<?php echo Cart66Setting::getValue('paypal_email'); ?>" />
@@ -468,7 +514,7 @@ else {
               <p style="margin-left: 125px;" class="description"><?php _e( 'Instant Payment Notification (IPN)' , 'cart66' ); ?></p></li>
 
               <li>
-                <label style="display: inline-block; width: 120px; text-align: right;" for='paypalpro_api_username'>&nbsp;</label>
+                <label style="display: inline-block; width: 120px; text-align: right;">&nbsp;</label>
                 <strong><?php _e( 'PayPal API Settings for Express Checkout' , 'cart66' ); ?> <?php if(CART66_PRO) { echo 'and Website Payments Pro'; } ?></strong>
               </li>
               
@@ -486,13 +532,26 @@ else {
               <input type='text' name='paypalpro_api_signature' id='paypalpro_api_signature' style='width: 375px;' 
               value="<?php echo Cart66Setting::getValue('paypalpro_api_signature'); ?>" />
               </li>
+              
+              <li style="padding-top:10px;">
+                <label style="display: inline-block; width: 120px; text-align: right;">&nbsp;</label>
+                <strong><?php _e( 'Use PayPal Sandbox' , 'cart66' ); ?></strong>
+              </li>
+              
+              <li>
+                <label style="display: inline-block; width: 120px; text-align: right;" for='paypal_sandbox'>&nbsp;</label>
+                <input type='checkbox' name='paypal_sandbox' id='paypal_sandbox' value="1" 
+                  <?php echo Cart66Setting::getValue('paypal_sandbox') ? 'checked="checked"' : '' ?>
+                />
+                <span class="label_desc"><?php _e( 'Send transactions to <a href="https://developer.paypal.com">PayPal\'s developer sandbox</a>.' , 'cart66' ); ?></span>
+              </li>
 
               <li><label style="display: inline-block; width: 120px; text-align: right;">&nbsp;</label>
                 <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
                 
               <?php if(CART66_PRO): ?>
                 <li><p class='label_desc' style='color: #999'><?php _e( 'Note: The Website Payments Pro solution can only be implemented by UK, Canadian and US Merchants.' , 'cart66' ); ?>
-                  <a href="https://www.x.com/docs/DOC-1510"><?php _e( 'Learn more' , 'cart66' ); ?></a></p></li>
+                  <a href="https://www.x.com/developers/paypal/products/website-payments-pro"><?php _e( 'Learn more' , 'cart66' ); ?></a></p></li>
               <?php else: ?>
                 <li><p class='label_desc' style='color: #999'><?php _e( 'Note: The Website Payments Pro solution is only available in <a href="http://cart66.com">Cart66 Professional</a> and can only be implemented by UK, Canadian and US Merchants.' , 'cart66' ); ?></p></li>
               <?php endif; ?>
@@ -521,14 +580,33 @@ else {
           <form id="AuthorizeFormSettings" class="ajaxSettingForm" action="" method='post'>
             <input type='hidden' name='action' value="save_settings" />
             <input type='hidden' name='_success' value="Your payment gateway settings have been saved.">
+            <input type="hidden" name="eway_sandbox" value="" />
+            <input type='hidden' name='payleap_test_mode' value="" />
+            <input type='hidden' name='mwarrior_test_mode' value="" />
+
             <ul>
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='auth_url'><?php _e( 'Gateway' , 'cart66' ); ?>:</label>
                 <select name="auth_url" id="auth_url">
                   <option value="https://secure.authorize.net/gateway/transact.dll">Authorize.net</option>
                   <option value="https://test.authorize.net/gateway/transact.dll">Authorize.net Test</option>
                   <option value="https://secure.quantumgateway.com/cgi/authnet_aim.php">Quantum Gateway</option>
+                  <option value="https://www.eway.com.au/gateway_cvn/xmlpayment.asp">eWay</option>
+                  <option value="https://api.merchantwarrior.com/post/">Merchant Warrior</option>
+                  <option value="https://secure1.payleap.com/TransactServices.svc/ProcessCreditCard">PayLeap</option>
                   <option value="other"><?php _e( 'Other' , 'cart66' ); ?></option>
                 </select>
+                <p id="authorizenetTestMessage" class="description"><?php _e( 'The Authorize.net test server requires a developer test account which is different than your normal authorize.net account. You can sign up for one here: <a href="https://developer.authorize.net/testaccount/" target="_blank">https://developer.authorize.net/testaccount/' , 'cart66' ); ?></a></p>
+              </li>
+              
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for=""><?php _e( 'Accept Cards' , 'cart66' ); ?>:</label>
+                <input type="checkbox" name="auth_card_types[]" value="mastercard" style='width: auto;' 
+                <?php echo in_array('mastercard', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Mastercard</label>
+                <input type="checkbox" name="auth_card_types[]" value="visa" style='width: auto;'
+                <?php echo in_array('visa', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Visa</label>
+                <input type="checkbox" name="auth_card_types[]" value="amex" style='width: auto;'
+                <?php echo in_array('amex', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>American Express</label>
+                <input type="checkbox" name="auth_card_types[]" value="discover" style='width: auto;'
+                <?php echo in_array('discover', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Discover</label>
               </li>
               
               <li id="emulation_url_item">
@@ -536,26 +614,95 @@ else {
                 <input type='text' name='auth_url_other' id='auth_url_other' style='width: 375px;' value="<?php echo Cart66Setting::getValue('auth_url_other'); ?>" />
                 <p id="emulation_url_desc" class="description" style='margin-left: 125px;'><?php _e( 'Autorize.net AIM emulation URL' , 'cart66' ); ?></p>
               </li>
+              
 
-              <li><label style="display: inline-block; width: 120px; text-align: right;" for='auth_username'><?php _e( 'API Login ID' , 'cart66' ); ?>:</label>
+              <div id="eway_live">
+                <li>
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='eway_customer_id'><?php _e( 'eWay Customer ID' , 'cart66' ); ?>:</label>
+                  <input type='text' name='eway_customer_id' id='eway_customer_id' style='width: 375px;' value="<?php echo Cart66Setting::getValue('eway_customer_id'); ?>" />
+                </li>
+                <li>  
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='eway_sandbox'><?php _e( 'eWay Sandbox' , 'cart66' ); ?>:</label>
+                  <input type="checkbox" name="eway_sandbox" id="eway_sandbox" class="eway_sandbox" value="1" <?php echo Cart66Setting::getValue('eway_sandbox') ? 'checked="checked"' : '' ?> />
+                </li>
+                <div id="eway_sandbox_display">
+                  <p class="description"><?php _e( 'These are the settings used for test transactions with eWay.' , 'cart66' ); ?></p>
+                  <li>
+                    <label style="display: inline-block; width: 120px; text-align: right;" for='eway_sandbox_customer_id'><?php _e( 'Sandbox ID' , 'cart66' ); ?>:</label>
+                    <input type='text' name='eway_sandbox_customer_id' id='eway_sandbox_customer_id' style='width: 375px;' value="<?php echo Cart66Setting::getValue('eway_sandbox_customer_id'); ?>" />
+                  </li>
+                </div>
+              </div>
+              <div id="mwarrior_live">
+                <li>
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='mwarrior_currency'><?php _e( 'Currency' , 'cart66' ); ?>:</label>
+                  <select name="mwarrior_currency" id="mwarrior_currency">
+                    <option value="AUD">AUD</option>
+                    <option value="NZD">NZD</option>
+                  </select>
+                </li>
+                <li>
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='mwarrior_api_passphrase'><?php _e( 'API Passphrase' , 'cart66' ); ?>:</label>
+                  <input type='text' name='mwarrior_api_passphrase' id='mwarrior_api_passphrase' style='width: 375px;' value="<?php echo Cart66Setting::getValue('mwarrior_api_passphrase'); ?>" />
+                </li>
+                <li><label style="display: inline-block; width: 120px; text-align: right;" for='mwarrior_merchant_uuid'><?php _e( 'MerchantUUID' , 'cart66' ); ?>:</label>
+                <input type='text' name='mwarrior_merchant_uuid' id='mwarrior_merchant_uuid' style='width: 375px;' value="<?php echo Cart66Setting::getValue('mwarrior_merchant_uuid'); ?>" />
+                </li>
+                <li><label style="display: inline-block; width: 120px; text-align: right;" for='mwarrior_api_key'><?php _e( 'API key' , 'cart66' ); ?>:</label>
+                <input type='text' name='mwarrior_api_key' id='mwarrior_api_key' style='width: 375px;' value="<?php echo Cart66Setting::getValue('mwarrior_api_key'); ?>" />
+                </li>
+                <li>
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='mwarrior_test_mode'><?php _e( 'Test Mode' , 'cart66' ); ?>:</label>
+                  <input type="checkbox" name="mwarrior_test_mode" id="mwarrior_test_mode" class="mwarrior_test_mode" value="1" <?php echo Cart66Setting::getValue('mwarrior_test_mode') ? 'checked="checked"' : '' ?> />
+                </li>
+                <div id="mwarrior_test">
+                  <p class="description"><?php _e( 'These are the settings used for test transactions with Merchant Warrior.' , 'cart66' ); ?></p>
+                  <li>
+                    <label style="display: inline-block; width: 120px; text-align: right;" for='mwarrior_test_api_passphrase'><?php _e( 'API Passphrase' , 'cart66' ); ?>:</label>
+                    <input type='text' name='mwarrior_test_api_passphrase' id='mwarrior_test_api_passphrase' style='width: 375px;' value="<?php echo Cart66Setting::getValue('mwarrior_test_api_passphrase'); ?>" />
+                  </li>
+                  <li><label style="display: inline-block; width: 120px; text-align: right;" for='mwarrior_test_merchant_uuid'><?php _e( 'MerchantUUID' , 'cart66' ); ?>:</label>
+                  <input type='text' name='mwarrior_test_merchant_uuid' id='mwarrior_test_merchant_uuid' style='width: 375px;' value="<?php echo Cart66Setting::getValue('mwarrior_test_merchant_uuid'); ?>" />
+                  </li>
+                  <li><label style="display: inline-block; width: 120px; text-align: right;" for='mwarrior_test_api_key'><?php _e( 'API key' , 'cart66' ); ?>:</label>
+                  <input type='text' name='mwarrior_test_api_key' id='mwarrior_test_api_key' style='width: 375px;' value="<?php echo Cart66Setting::getValue('mwarrior_test_api_key'); ?>" />
+                  </li>
+                </div>
+              </div>
+              
+              <div id="payleap_live">
+                <li>
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='payleap_api_username'><?php _e( 'API Username' , 'cart66' ); ?>:</label>
+                  <input type='text' name='payleap_api_username' id='payleap_api_username' style='width: 375px;' value="<?php echo Cart66Setting::getValue('payleap_api_username'); ?>" />
+                </li>
+                <li>  
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='payleap_transaction_key'><?php _e( 'Transaction Key' , 'cart66' ); ?>:</label>
+                  <input type='text' name='payleap_transaction_key' id='payleap_transaction_key' style='width: 375px;' value="<?php echo Cart66Setting::getValue('payleap_transaction_key'); ?>" />
+                </li>
+                <li>
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='payleap_test_mode'><?php _e( 'PayLeap Test Mode' , 'cart66' ); ?>:</label>
+                  <input type="checkbox" name="payleap_test_mode" id="payleap_test_mode" value="1" <?php echo Cart66Setting::getValue('payleap_test_mode') ? 'checked="checked"' : '' ?> />
+                </li>
+                <div id="payleap_test">
+                  <p class="description"><?php _e( 'These are the settings used for test transactions with PayLeap.' , 'cart66' ); ?></p>
+                  <li>
+                    <label style="display: inline-block; width: 120px; text-align: right;" for='payleap_test_api_username'><?php _e( 'API Username' , 'cart66' ); ?>:</label>
+                    <input type='text' name='payleap_test_api_username' id='payleap_test_api_username' style='width: 375px;' value="<?php echo Cart66Setting::getValue('payleap_test_api_username'); ?>" /><br />
+                  </li>
+                  <li>
+                    <label style="display: inline-block; width: 120px; text-align: right;" for='payleap_test_transaction_key'><?php _e( 'Transaction Key' , 'cart66' ); ?>:</label>
+                    <input type='text' name='payleap_test_transaction_key' id='payleap_test_transaction_key' style='width: 375px;' value="<?php echo Cart66Setting::getValue('payleap_test_transaction_key'); ?>" />
+                  </li>
+                </div>
+              </div>
+
+              <li id="api_login_id"><label style="display: inline-block; width: 120px; text-align: right;" for='auth_username'><?php _e( 'API Login ID' , 'cart66' ); ?>:</label>
               <input type='text' name='auth_username' id='auth_username' style='width: 375px;' value="<?php echo Cart66Setting::getValue('auth_username'); ?>" />
               <p id="authnet-image" class="label_desc"><a href="http://cart66.com/system66/wp-content/uploads/authnet-api-login.jpg" target="_blank"><?php _e( 'Where can I find my Authorize.net API Login ID and Transaction Key?' , 'cart66' ); ?></a></p>
               </li>
-
-              <li><label style="display: inline-block; width: 120px; text-align: right;" for='auth_trans_key'><?php _e( 'Transaction key' , 'cart66' ); ?>:</label>
-              <input type='text' name='auth_trans_key' id='auth_trans_key' style='width: 375px;' 
-                value="<?php echo Cart66Setting::getValue('auth_trans_key'); ?>" />
-              </li>
-              
-              <li><label style="display: inline-block; width: 120px; text-align: right;" for=""><?php _e( 'Accept Cards' , 'cart66' ); ?>:</label>
-              <input type="checkbox" name="auth_card_types[]" value="mastercard" style='width: auto;' 
-                <?php echo in_array('mastercard', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Mastercard</label>
-              <input type="checkbox" name="auth_card_types[]" value="visa" style='width: auto;'
-                <?php echo in_array('visa', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Visa</label>
-              <input type="checkbox" name="auth_card_types[]" value="amex" style='width: auto;'
-                <?php echo in_array('amex', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>American Express</label>
-              <input type="checkbox" name="auth_card_types[]" value="discover" style='width: auto;'
-                <?php echo in_array('discover', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Discover</label>
+                      
+              <li id="transaction_key"><label style="display: inline-block; width: 120px; text-align: right;" for='auth_trans_key'><?php _e( 'Transaction key' , 'cart66' ); ?>:</label>
+              <input type='text' name='auth_trans_key' id='auth_trans_key' style='width: 375px;' value="<?php echo Cart66Setting::getValue('auth_trans_key'); ?>" />
               </li>
 
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
@@ -592,7 +739,7 @@ else {
             <input type='hidden' name='action' value="save_settings" />
             <input type='hidden' name='_success' value="The email receipt settings have been saved.">
             <ul>
-              
+
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='receipt_from_name'><?php _e( 'From Name' , 'cart66' ); ?>:</label>
               <input type='text' name='receipt_from_name' id='receipt_from_name' style='width: 375px;' 
               value="<?php echo Cart66Setting::getValue('receipt_from_name', true); ?>" />
@@ -609,7 +756,7 @@ else {
               <input type='text' name='receipt_subject' id='receipt_subject' style='width: 375px;' 
               value="<?php echo Cart66Setting::getValue('receipt_subject', true); ?>" />
               <p style="margin-left: 125px;" class="description"><?php _e( 'The subject of the email receipt' , 'cart66' ); ?></p></li>
-            
+
               <li><label style="display: inline-block; width: 120px; text-align: right; margin-top: 0px;" for='receipt_intro'><?php _e( 'Receipt Intro' , 'cart66' ); ?>:</label>
               <br/><textarea style="width: 375px; height: 140px; margin-left: 125px; margin-top: -20px;" 
               name='receipt_intro'><?php echo Cart66Setting::getValue('receipt_intro'); ?></textarea>
@@ -619,7 +766,7 @@ else {
               <input type='text' name='receipt_copy' id='receipt_copy' style='width: 375px;' value="<?php echo Cart66Setting::getValue('receipt_copy'); ?>" />
               <p style="margin-left: 125px;" class="description"><?php _e( 'Use commas to separate addresses.' , 'cart66' ); ?></p>
               </li>
-              
+
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
               <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
             </ul>
@@ -627,6 +774,7 @@ else {
         </div>
       </div>
     </div>
+
     
     <!-- Password Reset Email Settings -->
     <?php if(CART66_PRO): ?>
@@ -780,15 +928,18 @@ else {
       </div>
       <div class="widget-holder">
         <p class="description"><?php _e( 'This is the link to the page of your site that you consider to be the home page of your store.
-          When a customer views the items in their shopping cart this is the link used by the "continue shopping" button.
-          You might set this to be the home page of your website or, perhaps, another page within your website that you consider
-          to be the home page of the store section of your website. If you do not set a value here, the home page of your website
-          will be used.' , 'cart66' ); ?></p>
+          You can choose to have customers go back to the last page they were on when they clicked "Add to Cart" or you can force the continue shopping button to always go to the store home page.' , 'cart66' ); ?></p>
         <div>
           <form id="storeHomeForm" class="ajaxSettingForm" action="" method='post'>
             <input type='hidden' name='action' value="save_settings" />
             <input type='hidden' name='_success' value="The store home page setting has been saved.">            
             <ul>
+            
+            <li><label style="display: inline-block; width: 120px; text-align: right;" for="continue_shopping"><?php _e( 'Continue Shopping' , 'cart66' ); ?>:</label>
+            <select name='continue_shopping' id='continue_shopping'>
+                <option value="0">Send customer back to the last page</option>
+                <option value="1">Always go to the store home page</option>
+            </select></li>
               
             <li><label style="display: inline-block; width: 120px; text-align: right;" for='store_url'><?php _e( 'Store URL' , 'cart66' ); ?>:</label>
             <input type='text' name='store_url' id='store_url' style='width: 80%;' value="<?php echo Cart66Setting::getValue('store_url'); ?>" />
@@ -800,6 +951,51 @@ else {
             </ul>
           </form>
         </div>
+      </div>
+    </div>
+    
+    <!-- Google Analytics Ecommerce Tracking -->
+    <a href="#" name="googleanalytics"></a>
+    <div class="widgets-holder-wrap <?php echo Cart66Setting::getValue('enable_google_analytics') ? '' : 'closed'; ?>">
+      <div class="sidebar-name">
+        <div class="sidebar-name-arrow"><br/></div>
+        <h3><?php _e('Google Analytics Ecommerce Tracking', 'cart66'); ?><span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
+      </div>
+      <div class="widget-holder">
+        <p class="description"><?php _e('Collect transaction and purchase data for your website using the Google Analytics tracking code.  If you already use another analytics plugin, make sure you specify that here so that your site does not track the receipt page twice.', 'cart66'); ?></p>
+        <?php if(CART66_PRO): ?>
+          <div>
+            <form id="googleAnalyticsOptionsForm" class="ajaxSettingForm" action="" method='post'>
+              <input type='hidden' name='action' value='save_settings' />
+              <input type='hidden' name='_success' value='Your Google Analytics settings have been saved.'>
+              <ul>
+                <li>
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='spreedly_shortname'><?php _e( 'Enable for my site' , 'cart66' ); ?>:</label>
+                    <input type="hidden" name='enable_google_analytics' id='enable_google_analytics' value="" />  
+                    <input type="checkbox" name='enable_google_analytics' id='enable_google_analytics' value="1" <?php echo (Cart66Setting::getValue('enable_google_analytics') == 1) ? 'checked="checked"' : ''; ?> />
+                </li>
+                <li>
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='spreedly_shortname'><?php _e( 'Other plugins' , 'cart66' ); ?>:</label>
+                  <select name='use_other_analytics_plugin' id='use_other_analytics_plugin'>
+                    <option value="yes"><?php _e('Yes, I want to use Cart66 with other Google Analytics plugins', 'cart66'); ?></option>
+                    <option value="no"><?php _e('No, I want to use Cart66 to track on its own', 'cart66'); ?></option>
+                  </select>
+                </li>
+                <li id="google_analytics_product_id">
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='spreedly_shortname'><?php _e( 'Web Product ID' , 'cart66' ); ?>:</label>
+                  <input type='text' name='google_analytics_wpid' id='google_analytics_wpid' value='<?php echo Cart66Setting::getValue('google_analytics_wpid'); ?>' />
+                  <p class="description" style='margin-left: 125px;'><?php _e( 'Starts with UA-XXXXXXXX-X' , 'cart66' ); ?></p>
+                </li>
+                <li>
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
+                  <input type='submit' name='submit' class="button-primary" style='width: 60px;' value='Save' />
+                </li>
+              </ul>
+            </form>
+          </div>
+        <?php else: ?>
+          <p class="description"><?php _e( 'This feature is only available in <a href="http://cart66.com">Cart66 Professional</a>.' , 'cart66' ); ?></p>
+        <?php endif; ?>
       </div>
     </div>
     
@@ -819,8 +1015,7 @@ else {
             <ul>
               
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='spreedly_shortname'><?php _e( 'Short site name' , 'cart66' ); ?>:</label>
-              <input type='text' name='spreedly_shortname' id='spreedly_shortname' 
-              value='<?php echo Cart66Setting::getValue('spreedly_shortname'); ?>' />
+              <input type='text' name='spreedly_shortname' id='spreedly_shortname' value='<?php echo Cart66Setting::getValue('spreedly_shortname'); ?>' />
               <p class="description" style='margin-left: 125px;'><?php _e( 'Look in your spreedly account under Site Details for the short site name (Used in URLs, etc)' , 'cart66' ); ?></p>
               
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='spreedly_apitoken'><?php _e( 'API token' , 'cart66' ); ?>:</label>
@@ -955,7 +1150,7 @@ else {
       <div class="widget-holder">
         <div class="widget-logo" style="float:right;">
               <a href="http://eepurl.com/dtQBb" target="_blank">
-                <img src="http://gallery.mailchimp.com/089443193dd93823f3fed78b4/images/MC_MonkeyReward_06.png" align="left" alt="Powered by MailChimp">
+                <img src="https://cart66.com/images/MC_MonkeyReward_06.png" align="left" alt="Powered by MailChimp">
               </a>
         </div>
         <p class="description">
@@ -1092,7 +1287,7 @@ else {
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='zendesk_token'><?php _e( 'Token' , 'cart66' ); ?>:</label>
               <input type='text' name='zendesk_token' id='zendesk_token' style="width: 50%;"
               value="<?php echo Cart66Setting::getValue('zendesk_token'); ?>" />
-              <p class="description" style='margin-left: 125px;'><?php _e( 'Look in your Zendesk account under Account --> Security --> Enable Remote Authentication for the Authentication Token.' , 'cart66' ); ?></p>
+              <p class="description" style='margin-left: 125px;'><?php _e( 'Look in your Zendesk account under "Settings > Security > Authentication > Single Sign-On" for the Authentication Token.' , 'cart66' ); ?></p>
               
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='zendesk_prefix'><?php _e( 'Prefix' , 'cart66' ); ?>:</label>
               <input type='text' name='zendesk_prefix' id='zendesk_prefix' style=""
@@ -1113,6 +1308,55 @@ else {
           </form>
           <?php else: ?>
             <p class="description" style="font-style: normal; color: #333; width: 600px;"><a href="http://www.zendesk.com">Zendesk</a> <?php _e( 'is the industry leader in web-based help desk software with an elegant support ticket system and a self-service customer support platform. Agile, smart, and convenient.' , 'cart66' ); ?></p>
+            <p class="description"><?php _e( 'This feature is only available in <a href="http://cart66.com">Cart66 Professional</a>.' , 'cart66' ); ?></p>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Terms of Service -->
+    <div class="widgets-holder-wrap <?php echo Cart66Setting::getValue('require_terms') ? '' : 'closed'; ?>">
+      <div class="sidebar-name">
+        <div class="sidebar-name-arrow"><br/></div>
+        <h3><?php _e( 'Terms of Service' , 'cart66' ); ?> <span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
+      </div>
+      <div class="widget-holder">
+        <p class="description"><?php _e( 'Require customer acceptance of your terms of service.' , 'cart66' ); ?></p>
+        <div>
+          <?php if(CART66_PRO): ?>
+          <form id="cartTermsForm" class="ajaxSettingForm" action="" method='post'>
+            <input type='hidden' name='action' value="save_settings" />
+            <input type='hidden' name='_success' value="The terms of service settings have been saved." />
+            <ul>
+              <li><label style="display: inline-block; width: 150px; text-align: right;" for="require_terms"><?php _e( 'Require Terms' , 'cart66' ); ?>:</label>
+              <input type="hidden" name='require_terms' id='require_terms' value="" />  
+              <input type="checkbox" name='require_terms' id='require_terms' value="1" <?php echo (Cart66Setting::getValue('require_terms') == 1) ? 'checked="checked"' : ''; ?> />
+              </li>
+              
+              <li><label style="display: inline-block; width: 150px; text-align: right;" for="cart_terms_title"><?php _e( 'Terms Title' , 'cart66' ); ?>:</label>
+              <input type='text' name='cart_terms_title' id='cart_terms_title' style='width: 375px;' 
+              value="<?php echo Cart66Setting::getValue('cart_terms_title') ? Cart66Setting::getValue('cart_terms_title') : 'Terms of Service'; ?>" /></li>
+              
+              <li><label style="display: inline-block; width: 150px; text-align: right;" for="cart_terms_text"><?php _e( 'Terms Text' , 'cart66' ); ?>:</label>
+              <br/><textarea id="cart_terms_text" style="width: 375px; height: 140px; margin-left: 155px; margin-top: -20px;" 
+              name='cart_terms_text'><?php echo Cart66Setting::getValue('cart_terms_text'); ?></textarea></li>
+              
+              <li><label style="display: inline-block; width: 150px; text-align: right;" for="cart_terms_acceptance_label"><?php _e( 'Acceptance Label' , 'cart66' ); ?>:</label>
+              <input type='text' name='cart_terms_acceptance_label' id='cart_terms_acceptance_label' style='width: 375px;' 
+              value="<?php echo (Cart66Setting::getValue('cart_terms_acceptance_label')) ? Cart66Setting::getValue('cart_terms_acceptance_label') : __( 'I Agree, proceed to Checkout' ); ?>" /></li>
+              
+              <li><label style="display: inline-block; width: 150px; text-align: right;" for="cart_terms_replacement_text"><?php _e( 'Replacement Text' , 'cart66' ); ?>:</label>
+              <input type='text' name='cart_terms_replacement_text' id='cart_terms_replacement_text' style='width: 375px;' 
+              value="<?php echo Cart66Setting::getValue('cart_terms_replacement_text') ? Cart66Setting::getValue('cart_terms_replacement_text') : 'Please accept the terms of service to checkout.'; ?>" />
+              <p style="margin-left:155px;" class="description">Enter the text to be displayed instead of the checkout button, prior to the customer accepting the terms of service.</p>
+             </li>              
+
+              <li><label style="display: inline-block; width: 150px; text-align: right;" for='submit'>&nbsp;</label>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+            
+            </ul>
+          </form>
+          <?php else: ?>
             <p class="description"><?php _e( 'This feature is only available in <a href="http://cart66.com">Cart66 Professional</a>.' , 'cart66' ); ?></p>
           <?php endif; ?>
         </div>
@@ -1331,26 +1575,18 @@ else {
             <input type='hidden' name='action' value="save_settings" />
             <input type='hidden' name='_success' value="The logging and debugging settings have been saved.">
             <input type="hidden" name="enable_logging" value="" id="enable_logging" />
-            <input type="hidden" name="paypal_sandbox" value="" id="paypal_sandbox" />
+
             <ul>
               <li>
-                <label style="display: inline-block; width: 220px; text-align: right;" for='styles_url'><?php _e( 'Enable logging' , 'cart66' ); ?>:</label>
+                <label style="display: inline-block; width: 220px; text-align: right;" for='enable_logging'><?php _e( 'Enable logging' , 'cart66' ); ?>:</label>
                 <input type='checkbox' name='enable_logging' id='enable_logging' value="1"
                   <?php echo Cart66Setting::getValue('enable_logging') ? 'checked="checked"' : '' ?>
                 />
                 <span class="label_desc"><?php _e( 'Only enable logging when testing your site. The log file will grow quickly.' , 'cart66' ); ?></span>
               </li>
-              
+
               <li>
-                <label style="display: inline-block; width: 220px; text-align: right;" for='styles_url'><?php _e( 'Use PayPal Sandbox' , 'cart66' ); ?>:</label>
-                <input type='checkbox' name='paypal_sandbox' id='paypal_sandbox' value="1" 
-                  <?php echo Cart66Setting::getValue('paypal_sandbox') ? 'checked="checked"' : '' ?>
-                />
-                <span class="label_desc"><?php _e( 'Send transactions to <a href="https://developer.paypal.com">PayPal\'s developer sandbox</a>.' , 'cart66' ); ?></span>
-              </li>
-              
-              <li>
-                <label style="display: inline-block; width: 220px; text-align: right;" for='styles_url'><?php _e( 'Disable caching' , 'cart66' ); ?>:</label>
+                <label style="display: inline-block; width: 220px; text-align: right;" for='disable_caching'><?php _e( 'Disable caching' , 'cart66' ); ?>:</label>
                 <select name='disable_caching' id='disable_caching' style="width: 150px;">
                   <option value="0"><?php _e( 'never' , 'cart66' ); ?></option>
                   <option value="1" <?php echo Cart66Setting::getValue('disable_caching') == 1 ? 'selected="selected"' : '' ?>><?php _e( 'on cart pages' , 'cart66' ); ?></option>
@@ -1360,7 +1596,7 @@ else {
               </li>
               
               <li style="background-color: #eee; border: 1px solid #933; margin: 10px 50px; padding: 10px;">
-                <label style="display: inline-block; width: 220px; text-align: right;" for='styles_url'><?php _e( 'Delete database when uninstalling' , 'cart66' ); ?>:</label>
+                <label style="display: inline-block; width: 220px; text-align: right;" for='uninstall_db'><?php _e( 'Delete database when uninstalling' , 'cart66' ); ?>:</label>
                 <input type='checkbox' name='uninstall_db' id='uninstall_db' value="1" <?php echo Cart66Setting::getValue('uninstall_db') ? 'checked="checked"' : '' ?> />
                 <p style="padding: 10px;" class="description"><?php _e( '<strong>WARNING:</strong> Cart66 Lite and Cart66 Professional share the same database. If you are upgrading from Cart66 Lite to Professional and want to keep all your settings, <strong>do not delete the database</strong> when uninstalling Cart66 Lite.' , 'cart66' ); ?></p>
               </li>
@@ -1489,59 +1725,155 @@ else {
   </div>
 </div>
 
+<script type="text/javascript">
+  (function($){
+    
+    $(document).ready(function(){
+      $(".multiselect").multiselect({sortable: true});
+
+      $('.sidebar-name').click(function() {
+       $(this.parentNode).toggleClass("closed");
+      });
+
+      $("#continue_shopping").val("<?php echo Cart66Setting::getValue('continue_shopping'); ?>");
+
+      $('#international_sales_yes').click(function() {
+       $('#eligible_countries_block').show();
+      });
+
+      $('#international_sales_no').click(function() {
+       $('#eligible_countries_block').hide();
+      });
+
+      if($('#international_sales_no').attr('checked')) {
+       $('#eligible_countries_block').hide();
+      }
 
 
+      $('#payleap_test_mode').change(function() {
+        payleapDisplay();
+      });
+      
+      $('#eway_sandbox').change(function() {
+        ewayDisplay();
+      });
+      
+      $('#mwarrior_test_mode').change(function() {
+        mwarriorDisplay();
+      });
 
-<script type='text/javascript'>
+      $("#use_other_analytics_plugin").val("<?php echo Cart66Setting::getValue('use_other_analytics_plugin'); ?>");
+
+      $('#use_other_analytics_plugin').change(function() {
+         setGoogleAnalytics();
+      });
+      
+      $('#eway_sandbox').change(function() {
+        ewayDisplay();
+      });
+
+      $('#auth_url').change(function() {
+        setGatewayDisplay();
+      });
+
+      <?php if($authUrl = Cart66Setting::getValue('auth_url')): ?>
+          $('#auth_url').val('<?php echo $authUrl; ?>').attr('selected', true);
+      <?php endif; ?>
+
+      payleapDisplay();
+      setGatewayDisplay();
+      ewayDisplay();
+      mwarriorDisplay();
+      setGoogleAnalytics();
+    })
+   
+  })(jQuery);
+  
   $jq = jQuery.noConflict();
   
-  $jq(document).ready(function() {
-    $jq(".multiselect").multiselect({sortable: true});
-    
-    $jq('.sidebar-name').click(function() {
-     $jq(this.parentNode).toggleClass("closed");
-    });
-
-    $jq('#international_sales_yes').click(function() {
-     $jq('#eligible_countries_block').show();
-    });
-
-    $jq('#international_sales_no').click(function() {
-     $jq('#eligible_countries_block').hide();
-    });
-
-    if($jq('#international_sales_no').attr('checked')) {
-     $jq('#eligible_countries_block').hide();
+  function setGatewayDisplay() {
+    $jq("#api_login_id, #transaction_key").show();
+    if($jq('#auth_url').val() == 'other') {
+      $jq('#emulation_url_item').css('display', 'inline');
+    }
+    else {
+      $jq('#emulation_url_item').css('display', 'none');
     }
     
-    $jq('#auth_url').change(function() {
-      setGatewayDisplay();
-    });
-    
-    <?php if($authUrl = Cart66Setting::getValue('auth_url')): ?>
-        $jq('#auth_url').val('<?php echo $authUrl; ?>').attr('selected', true);
-    <?php endif; ?>
-    
-    setGatewayDisplay();
-    function setGatewayDisplay() {
-      if($jq('#auth_url').val() == 'other') {
-        $jq('#emulation_url_item').css('display', 'inline');
-      }
-      else {
-        $jq('#emulation_url_item').css('display', 'none');
-        
-      }
-      
-      if($jq('#auth_url :selected').text() == 'Authorize.net' || $jq('#auth_url :selected').text() == 'Authorize.net Test') {
-        $jq('#authnet-image').css('display', 'block');
-      }
-      else {
-        $jq('#authnet-image').css('display', 'none');
-      }
+    if($jq('#auth_url :selected').text() == 'Authorize.net Test'){
+      $jq("#authorizenetTestMessage").show();
+    }
+    else{
+      $jq("#authorizenetTestMessage").hide();
     }
     
-  });
+    if($jq('#auth_url :selected').text() == 'eWay'){
+      $jq("#eway_live").show();
+      $jq("#api_login_id, #transaction_key").hide();
+    }
+    else{
+      $jq("#eway_live").hide();
+    }
+    
+    if($jq('#auth_url :selected').text() == 'PayLeap'){
+      $jq("#payleap_live").show();
+      $jq("#api_login_id, #transaction_key").hide();
+    }
+    else{
+      $jq("#payleap_live").hide();
+    }
+    
+    if($jq('#auth_url :selected').text() == 'Merchant Warrior'){
+      $jq("#mwarrior_live").show();
+      $jq("#api_login_id, #transaction_key").hide();
+    }
+    else{
+      $jq("#mwarrior_live").hide();
+    }
+    
+    if($jq('#auth_url :selected').text() == 'Authorize.net' || $jq('#auth_url :selected').text() == 'Authorize.net Test') {
+      $jq('#authnet-image').css('display', 'block');
+    }
+    else {
+      $jq('#authnet-image').css('display', 'none');
+    }
+    
+  }
+
+  function setGoogleAnalytics() {
+    if($jq('#use_other_analytics_plugin :selected').val() == 'no'){
+      $jq("#google_analytics_product_id").show();
+    }
+    else{
+      $jq("#google_analytics_product_id").hide();
+    }
+  }
+
+  function ewayDisplay() {
+    if ($jq('#eway_sandbox').is(':checked')) { 
+      $jq("#eway_sandbox_display").show(); 
+    } 
+    else { 
+      $jq("#eway_sandbox_display").hide(); 
+    }
+  }
   
+  function payleapDisplay() {
+    if ($jq('#payleap_test_mode').is(':checked')) { 
+      $jq("#payleap_test").show();
+    }
+    else {
+      $jq("#payleap_test").hide();
+    }
+  }
   
+  function mwarriorDisplay() {
+    if ($jq('#mwarrior_test_mode').is(':checked')) { 
+      $jq("#mwarrior_test").show();
+    }
+    else {
+      $jq("#mwarrior_test").hide();
+    }
+  }
   
-</script>
+</script> 

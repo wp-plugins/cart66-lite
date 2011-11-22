@@ -159,7 +159,7 @@ class Cart66Session {
     $data = array(
       'id' => null,
       'session_id' => self::_newSessionId(),
-      'ip_address' => $_SERVER['REMOTE_ADDR'],
+      'ip_address' => self::_getIp(),
       'user_agent' => $userAgent,
       'last_activity' => date('Y-m-d H:i:s', Cart66Common::localTs()),
       'user_data' => serialize(self::$_userData)
@@ -199,7 +199,7 @@ class Cart66Session {
   protected static function _isValid($data) {
     $isValid = true;
     
-    if($data['ip_address'] != $_SERVER['REMOTE_ADDR']) {
+    if($data['ip_address'] != self::_getIp()) {
       $isValid = false;
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Session is not valid - IP Address changed");
     }
@@ -300,5 +300,14 @@ class Cart66Session {
 	  $sql = $wpdb->prepare($sql, self::$_data['id']);
 	  $wpdb->query($sql);
 	}
+	
+	protected static function _getIp(){
+      $ip = (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : false;
+      if (!$ip){
+        $ip = $_SERVER["REMOTE_ADDR"];
+      }          
+      $ipArray = explode(",", $ip); 
+      return $ipArray[0];
+  }
 
 }

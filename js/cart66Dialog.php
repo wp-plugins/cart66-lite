@@ -29,8 +29,6 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 	if(count($products)):
 	  $i=0;
 	  foreach($products as $p) {
-	    // Only show non-gravity products in this list
-	    if(!$p->isGravityProduct()) {
 	      if($p->itemNumber==""){
           $id=$p->id;
           $type='id';
@@ -57,7 +55,7 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
   	    
   	    $options .= '<option value="'.$id.'">'.$p->name.' '.$description.'</option>';
   	    $i++;
-	    }
+	    
 	  }
 	
 	else:
@@ -81,7 +79,8 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 	   	
 	  var productIndex = jQuery("#productNameSelector option:selected").index();
 	  
-	  var price = "<p style='margin-top:2px;'><label id='priceLabel'>"+prodprices[productIndex]+"</label></p>";
+	  var priceDescription = jQuery("<div/>").html(prodprices[productIndex]).text();
+    var price = "<p style='margin-top:2px;'><label id='priceLabel'>" + priceDescription + "</label></p>";
 	  if(jQuery("input[@name='showPrice']:checked").val()=="no"){
 	    price = "";
 	  }
@@ -106,13 +105,13 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 
     <?php if($cartImgPath): ?>
       var buttonPath = '<?php echo $buttonPath ?>';
-      button = "<img src='"+buttonPath+"' title='Add to Cart' alt='Cart66 Add To Cart Button'>";
+      button = "<img src='"+buttonPath+"' title='<?php _e( 'Add to Cart' , 'cart66' ); ?>' alt='<?php _e( 'Cart66 Add To Cart Button' , 'cart66' ); ?>'>";
     <?php else: ?>
-      button = "<input type='button' class='Cart66ButtonPrimary' value='Add To Cart' />";
+      button = "<input type='button' class='Cart66ButtonPrimary' value='<?php _e( 'Add To Cart' , 'cart66' ); ?>' />";
     <?php endif; ?>
 
 	  if($jq("#buttonImage").val()!=""){
-	    button = "<img src='"+jQuery("#buttonImage").val()+"' title='Add to Cart' alt='Cart66 Add To Cart Button'>";
+	    button = "<img src='"+jQuery("#buttonImage").val()+"' title='<?php _e( 'Add to Cart' , 'cart66' ); ?>' alt='<?php _e( 'Cart66 Add To Cart Button' , 'cart66' ); ?>'>";
 	  } 
     
     if($jq("input[@name='showPrice']:checked").val()=="only"){
@@ -121,7 +120,7 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
     
     var prevBox = "<div style='"+style+"'>"+price+button+"</div>";
 	  
-	  jQuery("#buttonPreview").html(prevBox);
+	  jQuery("#buttonPreview").html(prevBox).text();
 	}
 
 	function insertProductCode() {
@@ -192,13 +191,6 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 	  jQuery("input").click(function(){preview();});
 	  
 	  
-	  jQuery(".smallText").click(function(){
-	    jQuery(".gfProductMessage").show();
-	  })
-	  jQuery(".closeMessage").click(function(){
-	    jQuery(".gfProductMessage").hide();
-	  })
-	  
 	  jQuery("#productNameSelector").change(function(){
 	    preview();
 	  })
@@ -253,20 +245,11 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 	</div>
 	<div class="panel_wrapper">
 		<div id="panel" class="panel current">
-		  <div class="gfProductMessage">
-			  <p>When using a Cart66 product attached to a Gravity Form it is important to use the Gravity Form shortcode and not the Cart66 one. If you do use the Cart66 [add_to_cart ] shortcode, the product is not added to the cart. To prevent confusion ONLY the non-Gravity Forms products are displayed in this dropdown.</p>
-			  
-			  <p>To add the Gravity Form product, simply use the Gravity Forms button to insert the form and Cart66 will do the rest.</p>
-			  
-			  <p align="center" class="mceActionPanel">
-			    <input type="button" id="closeMessage" value="<?php  _e('OK'); ?>" class="closeMessage button" />
-			  </p>
-			</div>
+		  
 			<table border="0" cellspacing="0" cellpadding="2">
 				<tr>
 					<td class="phplabel"><label for="productNameSelector"><?php  _e('Your products'); ?>:</label></td>
 					<td class="phpinput"><select id="productNameSelector" name="productName"><?php echo $options; ?></select><br>
-					<span class="smallText">Looking for a Gravity Form product?</span>
 				</tr>
 				<tr>
 				  <td class="phplabel"><label for="productStyle"><?php  _e('CSS style'); ?>:</label></td>
@@ -349,6 +332,18 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
           <td><div class="shortcode" onclick="shortcode('checkout_authorizenet');"><a title="Insert [checkout_authorizenet]">[checkout_authorizenet]</a></div></td>
           <td>Authorize.net (or AIM compatible gateway) checkout form</td>
         </tr>
+        <tr>
+          <td><div class="shortcode" onclick="shortcode('checkout_eway');"><a title="Insert [checkout_eway]">[checkout_eway]</a></div></td>
+          <td>Eway checkout form</td>
+        </tr>
+        <tr>
+          <td><div class="shortcode" onclick="shortcode('checkout_mwarrior');"><a title="Insert [checkout_mwarrior]">[checkout_mwarrior]</a></div></td>
+          <td>Merchant Warrior checkout form</td>
+        </tr>
+        <tr>
+          <td><div class="shortcode" onClick="shortcode('checkout_payleap');"><a title="Insert [checkout_mwarrior]">[checkout_payleap]</a></div></td>
+          <td>PayLeap checkout form</td>
+        </tr>
         <?php endif; ?>
         
         
@@ -394,6 +389,10 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 
 
         <?php if(CART66_PRO): ?>
+        <tr>
+          <td><div class="shortcode" onclick="shortcode('terms_of_service');"><a title="Insert [terms_of_service]">[terms_of_service]</a></div></td>
+          <td>Show the terms of service agreement.</td> 
+        </tr>
         <tr>
           <td><div class="shortcode" onclick="shortcode('show_to');"><a title="Insert [show_to]">[show_to]</a></div></td>
           <td>Show content only to members with the listed feature levels - opposite of [hide_from]</td>
@@ -454,12 +453,13 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
 	</div>
 </form>
 
-<script language="javascript">
-jQuery.noConflict();
-jQuery(document).ready(function($){
-  $(".66altColor tr:even").css("background-color", "#fff");
-  $(".66altColor tr:odd").css("background-color", "#eee");
-});
+<script type="text/javascript">
+  (function($){
+    $(document).ready(function(){
+      $(".66altColor tr:even").css("background-color", "#fff");
+      $(".66altColor tr:odd").css("background-color", "#eee");
+    })
+  })(jQuery);
 </script>
 </body>
 </html>

@@ -9,7 +9,7 @@
     require_once(CART66_PATH . "/pro/admin/reports.php");
   }
   else {
-    echo '<p class="description">" . __("Sales reports are only available in <a href="http://cart66.com">Cart66 Professional</a>.","cart66") . "</p>';
+    echo '<p class="description">' . __('Sales reports are only available in <a href="http://cart66.com">Cart66 Professional</a>.','cart66') . '</p>';
   }
   ?>
   
@@ -42,3 +42,11 @@
     </table>
   </form>
 </div>
+
+<script type="text/javascript">
+ (function($){
+   $(document).ready(function(){
+     $("#start_date,#end_date").datepicker();
+   })
+ })(jQuery);
+</script>

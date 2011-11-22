@@ -1,4 +1,4 @@
-<h2> Inventory Tracking</h2>
+<h2>Cart66 Inventory Tracking</h2>
 
 <?php
 // Get a list of all products
@@ -10,11 +10,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-task'] == 'save-invent
   $save = true;
   ?>
   <script type="text/javascript">
-  var $jq = jQuery.noConflict();
-  $jq(document).ready(function() {
-    setTimeout('$jq("#Cart66SuccessBox").fadeOut(800);', 1000);
-  });
-  </script>
+    (function($){
+      $(document).ready(function(){
+        $("#Cart66SuccessBox").show().delay(1000).fadeOut('slow'); 
+      })
+    })(jQuery);
+  </script> 
   <div id='Cart66SuccessBox' style='width: 300px;'><p class='Cart66Success'><?php _e( 'Inventory updated' , 'cart66' ); ?></p></div>
   <?php
 }

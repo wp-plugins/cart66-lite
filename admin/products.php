@@ -105,10 +105,27 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
                 <span class="label_desc" id="price-description"></span>
               </li>
               <li>
-                <label class="long" for="product-price_description" id="price_label"><?php _e( 'Price description' , 'cart66' ); ?>:</label>
+                <label class="long" for="product-price_description" id="price_description_label"><?php _e( 'Price description' , 'cart66' ); ?>:</label>
                 <input type='text' style="width: 275px;" id="product-price_description" name='product[price_description]' value='<?php echo $product->priceDescription ?>'>
                 <span class="label_desc" id="price_description"><?php _e( 'If you would like to customize the display of the price' , 'cart66' ); ?></span>
               </li>
+              <li class="isUserPrice">
+                <label class="long" for="product-is_user_price" id="is_user_price"><?php _e( 'User defined price' , 'cart66' ); ?>:</label>
+                <select id="product-is_user_price" name='product[is_user_price]'>
+                  <option value='1' <?php echo ($product->is_user_price == 1)? 'selected="selected"' : '' ?>><?php _e( 'Yes' , 'cart66' ); ?></option>
+                  <option value='0' <?php echo ($product->is_user_price == 0)? 'selected="selected"' : '' ?>><?php _e( 'No' , 'cart66' ); ?></option>
+                </select><span class="desc"><?php _e( 'Allow the customer to specify a price.' , 'cart66' ); ?></span>
+                
+              </li>
+              
+              <li class="userPriceSettings" style="<?php echo ($product->is_user_price == 1)? 'display:block;' : 'display:none;' ?>">
+                <label class="long" for="product-min_price"><?php _e( 'Min price' , 'cart66' ); ?>:</label>
+                <?php echo CART66_CURRENCY_SYMBOL ?><input type="text" style="width: 75px;" id="product-min_price" name='product[min_price]' value='<?php echo $product->minPrice ?>' />
+                <label class="short" for="product-max_price"><?php _e( 'Max price' , 'cart66' ); ?>:</label>
+                <?php echo CART66_CURRENCY_SYMBOL ?><input type="text" style="width: 75px;" id="product-max_price" name='product[max_price]' value='<?php echo $product->maxPrice ?>' />
+                <span class="label_desc" id="is_user_price_description"><?php _e( 'Set to $0.00 for no limit ' , 'cart66' ); ?></span>
+              </li>
+              
               <li>
                 <label class="long" for="product-taxable"><?php _e( 'Taxed' , 'cart66' ); ?>:</label>
                 <select id="product-taxable" name='product[taxable]'>
@@ -133,7 +150,9 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
                   If using live rates and you want an item to have free shipping you can enter 0 for the weight.' , 'cart66' ); ?></p>
               </li>
               <li class="nonSubscription">
-                <label class="long" for="product-max_qty"><?php _e( 'Max quantity' , 'cart66' ); ?>:</label>
+                <label class="long" for="product-min_qty"><?php _e( 'Min quantity' , 'cart66' ); ?>:</label>
+                <input type="text" style="width: 50px;" id="product-min_qty" name='product[min_quantity]' value='<?php echo $product->minQuantity ?>' />
+                <label class="short" for="product-max_qty"><?php _e( 'Max quantity' , 'cart66' ); ?>:</label>
                 <input type="text" style="width: 50px;" id="product-max_qty" name='product[max_quantity]' value='<?php echo $product->maxQuantity ?>' />
                 <p class="label_desc"><?php _e( 'Limit the quantity that can be added to the cart. Set to 0 for unlimited.<br/>
                   If you are selling digital products you may want to limit the quantity of the product to 1.' , 'cart66' ); ?></p>
@@ -194,6 +213,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
                   <li class="member_product_attrs">
                     <label class="long" for="product-feature_level"><?php _e( 'Feature level' , 'cart66' ); ?>:</label>
                     <input type="text" name="product[feature_level]" value="<?php echo $product->featureLevel; ?>" id="product-feature_level">
+                    <span class="label_desc"><?php _e( 'Enter the feature level. No spaces are allowed.' , 'cart66' ); ?></span>
                   </li>
                   <li class="member_product_attrs">
                     <label for="product-billing_interval" class="long" for="membership_duration"><?php _e( 'Duration' , 'cart66' ); ?>:</label>
@@ -361,7 +381,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
   if(count($products)):
 ?>
   <h3 style="margin-top: 20px;"><?php _e( 'Your Products' , 'cart66' ); ?></h3>
-  <table class="widefat" style="width: 95%">
+  <table class="widefat Cart66HighlightTable" style="width: 95%">
   <thead>
     <tr>
       <th colspan="8">Search: <input type="text" name="Cart66AccountSearchField" value="" id="Cart66AccountSearchField" /></th>
@@ -384,7 +404,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
        <td><?php echo $p->name ?>
          <?php
            if($p->gravityFormId > 0 && isset($gfTitles) && isset($gfTitles[$p->gravityFormId])) {
-             echo '<br/><em>Linked To Gravity From: ' . $gfTitles[$p->gravityFormId] . '</em>';
+             echo '<br/><em>Linked To Gravity Form: ' . $gfTitles[$p->gravityFormId] . '</em>';
            }
           ?>
        </td>
@@ -446,186 +466,217 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
 </table>
 <?php endif; ?>
 
+<script type="text/javascript">
+  (function($){
+    $(document).ready(function(){
+      toggleSubscriptionText();
+      toggleMembershipProductAttrs();
 
-<script type='text/javascript'>
-  jQuery.noConflict();
-  jQuery(document).ready(function($) {
-    
-    toggleSubscriptionText();
-    toggleMembershipProductAttrs();
-    
-    $('.sidebar-name').click(function() {
-      $(this.parentNode).toggleClass("closed");
-    });
+      $('.sidebar-name').click(function() {
+        $(this.parentNode).toggleClass("closed");
+      });
 
-    $('.delete').click(function() {
-      return confirm('Are you sure you want to delete this item?');
-    });
+      $("#product-feature_level").keydown(function(e) {
+        if (e.keyCode == 32) {
+          $(this).val($(this).val() + ""); // append '-' to input
+          return false; // return false to prevent space from being added
+        }
+      }).change(function(e) {
+          $(this).val(function (i, v) { return v.replace(/ /g, ""); }); 
+      });
 
-    // Ajax to populate gravity_form_qty_id when gravity_form_id changes
-    $('#product-gravity_form_id').change(function() {
-      var gravityFormId = $('#product-gravity_form_id').val();
-      $.get(ajaxurl, { 'action': 'update_gravity_product_quantity_field', 'formId': gravityFormId}, function(myOptions) {
-        $('#gravity_form_qty_id >option').remove();
-        $('#gravity_form_qty_id').append( new Option('None', 0) );
-        $.each(myOptions, function(val, text) {
-            $('#gravity_form_qty_id').append( new Option(text,val) );
+      $("#product-spreedly_subscription_id").change(function(){
+        if($(this).val() != 0){
+          $(".userPriceSettings, .isUserPrice").hide();
+          $("#product-is_user_price").val("0");
+        }
+        else{
+          $(".isUserPrice").show();
+          if($(".isUserPrice").val() == 1){
+            $(".userPriceSettings").show();
+          }
+        }
+      })
+
+      $("#product-is_user_price").change(function(){
+        if($(this).val() == 1){
+          $(".userPriceSettings").show();
+        }
+        if($(this).val() == 0){
+          $(".userPriceSettings").hide();
+        }
+      })
+
+      $('.delete').click(function() {
+        return confirm('Are you sure you want to delete this item?');
+      });
+
+      // Ajax to populate gravity_form_qty_id when gravity_form_id changes
+      $('#product-gravity_form_id').change(function() {
+        var gravityFormId = $('#product-gravity_form_id').val();
+        $.get(ajaxurl, { 'action': 'update_gravity_product_quantity_field', 'formId': gravityFormId}, function(myOptions) {
+          $('#gravity_form_qty_id >option').remove();
+          $('#gravity_form_qty_id').append( new Option('None', 0) );
+          $.each(myOptions, function(val, text) {
+              $('#gravity_form_qty_id').append( new Option(text,val) );
+          });
         });
       });
-    });
-    
-    $('#spreedly_subscription_id').change(function() {
-      toggleSubscriptionText();
-    });
-    
-    $('#paypal_subscription_id').change(function() {
-      toggleSubscriptionText();
-    });
-    
-    $('#Cart66AccountSearchField').quicksearch('table tbody tr');
-    
-    $('#product-membership_product').change(function() {
-      toggleMembershipProductAttrs();
-    });
-    
-    $('#product-lifetime_membership').click(function() {
-      toggleLifeTime();
-    });
-    
-    $('#viewLocalDeliverInfo').click(function() {
-      $('#localDeliveryInfo').toggle();
-      return false;
-    });
-    
-    $('#amazons3ForceDownload').click(function() {
-      $('#amazons3ForceDownloadAnswer').toggle();
-      return false;
-    });
-    
-    validateS3BucketName();  
-    $("#product-s3_bucket, #product-s3_file").blur(function(){
-       validateS3BucketName();        
+
+      $('#spreedly_subscription_id').change(function() {
+        toggleSubscriptionText();
+      });
+
+      $('#paypal_subscription_id').change(function() {
+        toggleSubscriptionText();
+      });
+
+      $('#Cart66AccountSearchField').quicksearch('table tbody tr');
+
+      $('#product-membership_product').change(function() {
+        toggleMembershipProductAttrs();
+      });
+
+      $('#product-lifetime_membership').click(function() {
+        toggleLifeTime();
+      });
+
+      $('#viewLocalDeliverInfo').click(function() {
+        $('#localDeliveryInfo').toggle();
+        return false;
+      });
+
+      $('#amazons3ForceDownload').click(function() {
+        $('#amazons3ForceDownloadAnswer').toggle();
+        return false;
+      });
+
+      <?php if(Cart66Setting::getValue('amazons3_id')): ?>
+      validateS3BucketName();  
+      <?php endif; ?>
+      $("#product-s3_bucket, #product-s3_file").blur(function(){
+         validateS3BucketName();        
+      })
     })
-    
-    
-  });
-  
-  function toggleLifeTime() {
-    if(jQuery('#product-lifetime_membership').attr('checked')) {
-      jQuery('#product-billing_interval').val('');
-      jQuery('#product-billing_interval').attr('disabled', true);
-      jQuery('#product-billing_interval_unit').val('days');
-      jQuery('#product-billing_interval_unit').attr('disabled', true);
-    }
-    else {
-      jQuery('#product-billing_interval').attr('disabled', false);
-      jQuery('#product-billing_interval_unit').attr('disabled', false);
-    }
-  }
-  
-  function toggleMembershipProductAttrs() {
-    if(jQuery('#product-membership_product').val() == '1') {
-      jQuery('.member_product_attrs').css('display', 'block');
-    }
-    else {
-      jQuery('.member_product_attrs').css('display', 'none');
-    }
-  }
-  
-  function toggleSubscriptionText() {
-    if(isSubscriptionProduct()) {
-      jQuery('#price_label').text('One Time Fee:');
-      jQuery('#price_description').text('One time fee charged when subscription is purchased. This could be a setup fee.');
-      jQuery('#subscriptionVariationDesc').show();
-      jQuery('.nonSubscription').hide();
-      jQuery('#membershipProductFields').hide();
-      jQuery('#product-membership_product').val(0);
-      jQuery('#product-feature_level').val('');
-      jQuery('#product-billing_interval').val('');
-      jQuery('#product-billing_interval_unit').val('days');
-      jQuery('#product-lifetime_membership').removeAttr('checked');
-    }
-    else {
-      jQuery('#price_label').text('Price:');
-      jQuery('#price_description').text('');
-      jQuery('#subscriptionVariationDesc').hide();
-      jQuery('.nonSubscription').show();
-      jQuery('#membershipProductFields').show();
-    }
-  }
-  
-  function isSubscriptionProduct() {
-    var spreedlySubId = jQuery('#spreedly_subscription_id').val();
-    var paypalSubId = jQuery('#paypal_subscription_id').val();
-    
-    if(spreedlySubId > 0 || paypalSubId > 0) {
-      return true;
-    }
-    return false;
-  }
-  
-  function bucketError(message){
-    jQuery(".bucketNameLabel").css('color','#ff0000');
-    // check for existing message
-    if(jQuery(".cart66S3BucketRestrictions").html().indexOf(message) == -1){
-      jQuery(".cart66S3BucketRestrictions").append("<li>" + message + "</li>");
-    }
-  }
-  
-  function validateS3BucketName(){
-    var rawBucket = jQuery("#product-s3_bucket").val();
-  
-    // clear errors
-    jQuery(".cart66S3BucketRestrictions li").remove();
-    jQuery(".bucketNameLabel").css('color','#000');
-    
-    // no underscores
-    if(rawBucket.indexOf('_') != -1){
-      bucketError("Bucket names should NOT contain underscores (_).");
-    }
-    
-    // not empty if there's a file name
-    // proper length
-    if(rawBucket == "" && jQuery("#product-s3_file").val() != ""){
-      bucketError("If you have a file name, you'll need a bucket.");
-    } 
-    else if(rawBucket.length > 0 && (rawBucket.length < 3 || rawBucket.length > 63) ){
-      bucketError("Bucket names should be between 3 and 63 characters long.")
-    }
-    
-    // dont end with a dash
-    if(rawBucket.substring(rawBucket.length-1,rawBucket.length) == "-"){
-      bucketError("Bucket names should NOT end with a dash.");
-    }
-    
-    // dont have dashes next to periods
-    if(rawBucket.indexOf('.-') != -1 || rawBucket.indexOf('-.') != -1){
-      bucketError("Dashes cannot appear next to periods. For example, “my-.bucket.com” and “my.-bucket” are invalid names.");
-    }
-    
-    // no uppercase characters allowed
-    // only letters, numbers, periods or dashes
-    i=0;
-    while(i <= rawBucket.length-1){
-      if (rawBucket.charCodeAt(i) > 64 && rawBucket.charCodeAt(i) < 90) {
-      	bucketError("Bucket names should NOT contain UPPERCASE letters.");
+    function toggleLifeTime() {
+      if($('#product-lifetime_membership').attr('checked')) {
+        $('#product-billing_interval').val('');
+        $('#product-billing_interval').attr('disabled', true);
+        $('#product-billing_interval_unit').val('days');
+        $('#product-billing_interval_unit').attr('disabled', true);
       }
-      if (rawBucket != "" && !rawBucket.charAt(i).match(/[a-z0-9\.\-]/g) ){
-        bucketError("Bucket names may only contain lower case letters, numbers, periods or hyphens.");
+      else {
+        $('#product-billing_interval').attr('disabled', false);
+        $('#product-billing_interval_unit').attr('disabled', false);
       }
-      i++;
     }
-    
-    // must start with letter or number
-    if(rawBucket != "" && !rawBucket.substring(0,1).match(/[a-z0-9]/g) ){
-      bucketError("Bucket names must begin with a number or a lower-case letter.");
+
+    function toggleMembershipProductAttrs() {
+      if($('#product-membership_product').val() == '1') {
+        $('.member_product_attrs').show();
+        $(".nonSubscription").hide();
+      }
+      else {
+        $('.member_product_attrs').hide();
+        $(".nonSubscription").show();
+      }
+      
     }
-    
-    // cannot be an ip address
-    if(rawBucket != "" && rawBucket.match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g) ){
-      bucketError("Bucket names cannot be an IP address");
+
+    function toggleSubscriptionText() {
+      if(isSubscriptionProduct()) {
+        $('#price_label').text('One Time Fee:');
+        $('#price_description').text('One time fee charged when subscription is purchased. This could be a setup fee.');
+        $('#subscriptionVariationDesc').show();
+        $('.nonSubscription').hide();
+        $('#membershipProductFields').hide();
+        $('#product-membership_product').val(0);
+        $('#product-feature_level').val('');
+        $('#product-billing_interval').val('');
+        $('#product-billing_interval_unit').val('days');
+        $('#product-lifetime_membership').removeAttr('checked');
+      }
+      else {
+        $('#price_label').text('Price:');
+        $('#price_description').text('');
+        $('#subscriptionVariationDesc').hide();
+        $('.nonSubscription').show();
+        $('#membershipProductFields').show();
+      }
     }
-    
-  }
-  
-</script>
+
+    function isSubscriptionProduct() {
+      var spreedlySubId = $('#spreedly_subscription_id').val();
+      var paypalSubId = $('#paypal_subscription_id').val();
+
+      if(spreedlySubId > 0 || paypalSubId > 0) {
+        return true;
+      }
+      return false;
+    }
+
+    function bucketError(message){
+      $(".bucketNameLabel").css('color','#ff0000');
+      // check for existing message
+      if($(".cart66S3BucketRestrictions").html().indexOf(message) == -1){
+        $(".cart66S3BucketRestrictions").append("<li>" + message + "</li>");
+      }
+    }
+
+    function validateS3BucketName(){
+      var rawBucket = $("#product-s3_bucket").val();
+
+      // clear errors
+      $(".cart66S3BucketRestrictions li").remove();
+      $(".bucketNameLabel").css('color','#000');
+
+      // no underscores
+      if(rawBucket.indexOf('_') != -1){
+        bucketError("Bucket names should NOT contain underscores (_).");
+      }
+
+      // not empty if there's a file name
+      // proper length
+      if(rawBucket == "" && $("#product-s3_file").val() != ""){
+        bucketError("If you have a file name, you'll need a bucket.");
+      } 
+      else if(rawBucket.length > 0 && (rawBucket.length < 3 || rawBucket.length > 63) ){
+        bucketError("Bucket names should be between 3 and 63 characters long.")
+      }
+
+      // dont end with a dash
+      if(rawBucket.substring(rawBucket.length-1,rawBucket.length) == "-"){
+        bucketError("Bucket names should NOT end with a dash.");
+      }
+
+      // dont have dashes next to periods
+      if(rawBucket.indexOf('.-') != -1 || rawBucket.indexOf('-.') != -1){
+        bucketError("Dashes cannot appear next to periods. For example, “my-.bucket.com” and “my.-bucket” are invalid names.");
+      }
+
+      // no uppercase characters allowed
+      // only letters, numbers, periods or dashes
+      i=0;
+      while(i <= rawBucket.length-1){
+        if (rawBucket.charCodeAt(i) > 64 && rawBucket.charCodeAt(i) < 90) {
+        	bucketError("Bucket names should NOT contain UPPERCASE letters.");
+        }
+        if (rawBucket != "" && !rawBucket.charAt(i).match(/[a-z0-9\.\-]/g) ){
+          bucketError("Bucket names may only contain lower case letters, numbers, periods or hyphens.");
+        }
+        i++;
+      }
+
+      // must start with letter or number
+      if(rawBucket != "" && !rawBucket.substring(0,1).match(/[a-z0-9]/g) ){
+        bucketError("Bucket names must begin with a number or a lower-case letter.");
+      }
+
+      // cannot be an ip address
+      if(rawBucket != "" && rawBucket.match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g) ){
+        bucketError("Bucket names cannot be an IP address");
+      }
+
+    }
+  })(jQuery);
+</script> 

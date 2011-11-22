@@ -63,13 +63,18 @@ class Cart66Order extends Cart66ModelAbstract {
     return $this->id;
   }
   
-  public function getOrderRows($where=null) {
+  public function getOrderRows($where=null, $limit=null) {
     if(!empty($where)) {
       $sql = "SELECT * from $this->_tableName $where order by ordered_on desc";
     }
     else {
       $sql = "SELECT * from $this->_tableName order by ordered_on desc";
     }
+    
+    if(!empty($limit)){
+      $sql = $sql . " LIMIT $limit";
+    }
+    
     $orders = $this->_db->get_results($sql);
     return $orders;
   }
@@ -86,6 +91,41 @@ class Cart66Order extends Cart66ModelAbstract {
       $data['status'] = $status;
       $this->_db->update($this->_tableName, $data, array('id' => $this->id), array('%s'));
       return $status;
+    }
+    return false;
+  }
+  
+  public function updateViewed() {
+    global $post;
+    $receiptPage = get_page_by_path('store/receipt');
+    if( isset( $post->ID ) && $post->ID == $receiptPage->ID) {
+      $order = new Cart66Order();
+      if(isset($_GET['ouid'])) {
+        $order->loadByOuid($_GET['ouid']);
+        $data['viewed'] = '1';
+        if($order->viewed == 0) {
+          $this->_db->update($this->_tableName, $data, array('id' => $order->id), array('%s'));
+        }
+      }
+    }
+    return false;
+  }
+  
+  public function addTrackingCode() {
+    if(Cart66Setting::getValue('enable_google_analytics') && is_home()) {
+      echo '<script type="text/javascript">
+        /* <![CDATA[ */
+        var _gaq = _gaq || [];
+        _gaq.push([\'_setAccount\', \'' . Cart66Setting::getValue('google_analytics_wpid') . '\']);
+        _gaq.push([\'_trackPageview\']);
+
+        (function() {
+          var ga = document.createElement(\'script\'); ga.type = \'text/javascript\'; ga.async = true;
+          ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
+          var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      /* ]]> */
+      </script>hello world';
     }
     return false;
   }

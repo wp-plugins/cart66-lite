@@ -6,6 +6,8 @@
   $setting = new Cart66Setting();
   $paypalEmail = Cart66Setting::getValue('paypal_email');
   $returnUrl = Cart66Setting::getValue('paypal_return_url');
+  $promotion = Cart66Session::get('Cart66Promotion');
+ 
   
   $checkoutOk = true;
   if(Cart66Session::get('Cart66Cart')->requireShipping()) {
@@ -92,7 +94,21 @@
         echo "\n<input type='hidden' name='shopping_url' value='" . Cart66Setting::getValue('shopping_url') . "' />\n";
       
         // Send shipping price as an item amount if the item total - discount amount = $0.00 otherwise paypal will ignore the discount
-        $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
+        $discount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
+        
+        if($promotion->apply_to == 'total' || $promotion->apply_to == 'products'){
+          $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
+        }       
+        else{
+          $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount();
+        }
+        
+        if($promotion->apply_to == 'shipping'){
+          $shipping = $shipping - Cart66Session::get('Cart66Cart')->getDiscountAmount();
+          $discount = 0;
+        }
+        
+        
         if($itemTotal == 0 && $shipping > 0) {
           echo "\n<input type='hidden' name='item_name_$i' value=\"Shipping\" />";
           echo "\n<input type='hidden' name='item_number_$i' value='SHIPPING' />";
@@ -106,13 +122,13 @@
       <input type="hidden" name="upload" value="1" />
       <input type="hidden" name="no_shipping" value="2" />
       <input type="hidden" name="currency_code" value="<?php echo CURRENCY_CODE; ?>" id="currency_code" />
-      <input type="hidden" name="custom" value="<?php echo $shippingMethod ?>|<?php echo $aff;  ?>|<?php echo $gfIds ?>|<?php if(Cart66Session::get('Cart66Cart')->getPromotion()) { echo Cart66Session::get('Cart66Cart')->getPromotion()->code; } ?>" />
+      <input type="hidden" name="custom" value="<?php echo $shippingMethod ?>|<?php echo $aff;  ?>|<?php echo $gfIds ?>|<?php if(Cart66Session::get('Cart66PromotionCode')) { echo Cart66Session::get('Cart66PromotionCode'); } ?>" />
       <?php if($shipping > 0): ?>
         <input type='hidden' name='handling_cart' value='<?php echo $shipping ?>' />
       <?php endif;?>
     
-      <?php if(Cart66Session::get('Cart66Cart')->getDiscountAmount() > 0): ?>
-        <input type="hidden" name="discount_amount_cart" value="<?php echo number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2, '.', ''); ?>"/>
+      <?php if(Cart66Session::get('Cart66Promotion') && Cart66Session::get('Cart66Promotion')->getDiscountAmount(Cart66Session::get('Cart66Cart')) > 0): ?>
+        <input type="hidden" name="discount_amount_cart" value="<?php echo $discount; ?>"/>
       <?php endif; ?>
     
       <input type="hidden" name="notify_url" value="<?php echo $ipnUrl ?>">

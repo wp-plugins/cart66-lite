@@ -67,9 +67,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cart66-action']) && $_P
   $returnUrl = get_permalink($returnPage->ID);
   $cancelPage = get_page_by_path('store/checkout');
   $cancelUrl = get_permalink($cancelPage->ID);
+  $localeCode = Cart66Common::getLocaleCode();
   $ecUrls = array(
     'RETURNURL' => $returnUrl,
-    'CANCELURL' => $cancelUrl
+    'CANCELURL' => $cancelUrl,
+    'LOCALECODE' => $localeCode
   );
   $pp->setEcUrls($ecUrls);
   

@@ -794,7 +794,7 @@ class Cart66Product extends Cart66ModelAbstract {
     if($this->id > 0) {
       if($this->isSpreedlySubscription()) {
         $price = $this->price + $priceDifference;
-
+        $priceDescription = "";
         if($price > 0) {
           $priceDescription = CART66_CURRENCY_SYMBOL . number_format($price, 2);
         }

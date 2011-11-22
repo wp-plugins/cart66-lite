@@ -45,6 +45,8 @@ class Cart66ShortcodeManager {
     $options = isset($attrs['options']) ? $attrs['options'] : '';
     $urlOptions = isset($attrs['options']) ? '&options=' . urlencode($options) : '';
     
+    $content = do_shortcode($content);
+    
     $iCount = true;
     $iKey = $product->getInventoryKey($options);
     if($product->isInventoryTracked($iKey)) {
@@ -144,7 +146,7 @@ class Cart66ShortcodeManager {
       if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
         require_once(CART66_PATH . "/pro/gateways/Cart66AuthorizeNet.php");
 
-        if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+        if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0 || Cart66Session::get('Cart66Cart')->hasSpreedlySubscriptions()) {
           $authnet = new Cart66AuthorizeNet();
           $view = $this->_buildCheckoutView($authnet);
           return $view;
@@ -160,7 +162,90 @@ class Cart66ShortcodeManager {
       }
     }
   }
+  
+  public function payLeapCheckout($attrs) {
+    if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+        $gatewayName = Cart66Common::postVal('cart66-gateway-name');  
+        if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66PayLeap') {
+          return ($gatewayName == "Cart66ManualGateway") ? $this->manualCheckout() : "";
+        }
 
+        if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
+          require_once(CART66_PATH . "/pro/gateways/Cart66PayLeap.php");
+
+          if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+            $payleap = new Cart66PayLeap();
+            $view = $this->_buildCheckoutView($payleap);
+            return $view;
+          }
+          elseif(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of PayLeap Checkout because the cart value is $0.00");
+            return $this->manualCheckout();
+          }
+
+        }
+        else {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering PayLeap checkout form because the cart contains a PayPal subscription");
+        }
+      }
+  }
+  
+  public function ewayCheckout($attrs) {
+     if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+      $gatewayName = Cart66Common::postVal('cart66-gateway-name');
+      if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66Eway') {
+        return ($gatewayName == "Cart66ManualGateway") ? $this->manualCheckout() : "";
+      }
+
+      if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
+        require_once(CART66_PATH . "/pro/gateways/Cart66Eway.php");
+
+        if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+          $eway = new Cart66Eway();
+          $view = $this->_buildCheckoutView($eway);
+          return $view;
+        }
+        elseif(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of Eway Checkout because the cart value is $0.00");
+          return $this->manualCheckout();
+        }
+
+      }
+      else {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering Eway checkout form because the cart contains a PayPal subscription");
+      }
+    }
+  }  
+  
+  public function mwarriorCheckout($attrs) {
+      if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+        $gatewayName = Cart66Common::postVal('cart66-gateway-name');
+        if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66MerchantWarrior') {
+          return ($gatewayName == "Cart66ManualGateway") ? $this->manualCheckout() : "";
+        }
+
+        if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
+          require_once(CART66_PATH . "/pro/gateways/Cart66MWarrior.php");
+
+          if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+            $mwarrior = new Cart66MerchantWarrior();
+            $view = $this->_buildCheckoutView($mwarrior);
+            return $view;
+          }
+          elseif(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of Merchant Warrior Checkout because the cart value is $0.00");
+            return $this->manualCheckout();
+          }
+
+        }
+        else {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering Merchant Warrior checkout form because the cart contains a PayPal subscription");
+        }
+      }
+  }
+
+
+  
   public function payPalProCheckout($attrs) {
     if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
       $gatewayName = Cart66Common::postVal('cart66-gateway-name');
@@ -500,6 +585,19 @@ class Cart66ShortcodeManager {
     return do_shortcode($content);
   }
   
+  public function postSale($attrs, $content='null') {
+    $postSale = false;
+    if(isset($_GET['ouid'])) {
+      $order = new Cart66Order();
+      $order->loadByOuid($_GET['ouid']);
+      if($order->viewed == 0) {
+        $postSale = true;
+      }
+    }
+    $content = $postSale ? $content : '';
+    return do_shortcode($content);
+  }
+  
   public function gravityFormToCart($entry) {
     if(CART66_PRO) {
       $formId = Cart66GravityReader::getGravityFormIdForEntry($entry['id']);
@@ -545,6 +643,53 @@ class Cart66ShortcodeManager {
       }
     }
     return $link;
+  }
+  
+  public function termsOfService($attrs) {
+    if(CART66_PRO) {
+      $attrs = array("location"=>"Cart66ShortcodeTOS");
+      $view = Cart66Common::getView('/pro/views/terms.php', $attrs);
+      return $view;
+    }
+  }
+  
+  public function accountExpiration($attrs,$content = null){
+    $output = false;
+    if(Cart66Common::isLoggedIn()) {
+      $data = array();
+      $account = new Cart66Account(Cart66Session::get('Cart66AccountId'));
+      $subscription = $account->getCurrentAccountSubscription($account->id);
+      $expirationDate = $subscription->active_until;
+      $format = "m/d/Y";
+      if(isset($attrs['format'])){
+        $format = $attrs['format'];
+      }
+      
+      $output = date($format,strtotime($expirationDate));
+      
+      // expired?
+      if(strtotime($expirationDate) <= strtotime("now")){
+        if(isset($attrs['expired'])){
+          $output = $attrs['expired'];          
+        }
+        if(!empty($content)){
+          $output = $content;
+        }
+      }
+      
+      //lifetime?
+      if($subscription->lifetime == 1){
+        $output = "Lifetime";
+        if(isset($attrs['lifetime'])){
+          $output = $attrs['lifetime'];          
+        }
+      }
+      
+    }
+    
+    
+    return do_shortcode($output);
+    
   }
   
   protected function _buildCheckoutView($gateway) {

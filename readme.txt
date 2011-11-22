@@ -86,6 +86,37 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.3.0 =
+* NEW: Product specific promotions
+* NEW: Date ranges for promotions
+* NEW: Multiple codes for promotions
+* NEW: Promotions can apply to shipping, products, and cart total
+* NEW: Auto-apply promotions
+* NEW: Google Analytics eCommerce Tracking
+* NEW: Dashboard Widgets
+* NEW: From the Page or Post Editor you can click on the Cart66 icon in the Upload/Insert toolbar in visual or HTML mode
+* NEW: Shortcode added for showing content one time, immediately after a sale
+* NEW: Compatibility with IPV6
+* NEW: Advanced cart widget
+* NEW: User-defined pricing
+* NEW: User defined and admin defined quantity to add_to_cart shortcodes
+* NEW: Minimum quantity option for products
+* NEW: Continue shopping override option
+* NEW: Option to show shipping form by default
+* NEW: French translation added
+* Updated: Added datepicker to date fields
+* Updated: Added Egypt, Saudi Arabia, Lesotho, and Kenya to country list
+* Updated: CSS classes added to various cart components
+* Updated: Cart button uses better jQuery conflict protection
+* Updated: Added classes to complete order buttons
+* Updated: Added button classes to update cart and apply coupon buttons
+* Updated: Added shipping country for Express Checkout orders
+* Fixed: Tax was sometimes not charged
+* Fixed: Scripts problem with CDATA
+* Fixed: Previous page url for continue shopping button
+* Fixed: Encoding problem for currency symbols in PayPal subscription pricing descriptions
+* Fixed: Dialog box errors
+
 = 1.1.6 =
 * Updated: Enhancements for WordPress 3.2 compatibility
 * Fixed: jQuery compatibility issues in WordPress 3.2

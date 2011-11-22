@@ -12,6 +12,12 @@ class Cart66ButtonManager {
       $style = isset($attrs['style']) ? 'style="' . $attrs['style'] . '"' : '';
 
       $price = '';
+      $quantity = (isset($attrs['quantity'])) ? $attrs['quantity'] : 1;
+      
+      $buttonText = isset($attrs['text']) ? $attrs['text'] : __('Add To Cart', 'cart66');
+      
+      $showName = isset($attrs['show_name']) ? strtolower($attrs['show_name']) : '';
+      
       $showPrice = isset($attrs['showprice']) ? strtolower($attrs['showprice']) : 'yes';
       if($showPrice == 'yes' || $showPrice == 'only') {
         $price = CART66_CURRENCY_SYMBOL . number_format($product->price, 2);
@@ -37,14 +43,23 @@ class Cart66ButtonManager {
         }
         
       }
-
+      
+      $gravity_form_id = (isset($product->gravity_form_id)) ? $product->gravity_form_id : false;
+      
       $data = array(
         'price' => $price,
+        'is_user_price' => $product->is_user_price,
+        'min_price' => $product->min_price,
+        'max_price' => $product->max_price,
+        'quantity' => $quantity,
+        'buttonText' => $buttonText,
         'showPrice' => $showPrice,
+        'showName' => $showName,
         'style' => $style,
         'addToCartPath' => self::getAddToCartImagePath($attrs),
         'product' => $product,
-        'productOptions' => $product->getOptions()
+        'productOptions' => $product->getOptions(),
+        'gravity_form_id' => $gravity_form_id
       );
       $view = Cart66Common::getView('views/cart-button.php', $data);
     }

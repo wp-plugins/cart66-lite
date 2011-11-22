@@ -44,14 +44,28 @@ class Cart66Cart {
     if(isset($_POST['options_2'])) {
       $options .= '~' . Cart66Common::postVal('options_2');
     }
+    
+    if(isset($_POST['item_quantity'])) {
+      $itemQuantity = ($_POST['item_quantity'] > 0) ? round($_POST['item_quantity'],0) : 1;
+    }
+    else{
+      $itemQuantity = 1;
+    }
+    
+    if(isset($_POST['item_user_price'])){
+      $sanitizedPrice = preg_replace("/[^0-9\.]/","",$_POST['item_user_price']);
+      Cart66Session::set("userPrice_$itemId",$sanitizedPrice);
+    }
 
     if(Cart66Product::confirmInventory($itemId, $options)) {
-      $this->addItem($itemId, 1, $options);
+      $this->addItem($itemId, $itemQuantity, $options);
     }
     else {
       Cart66Common::log("Item not added due to inventory failure");
       wp_redirect($_SERVER['HTTP_REFERER']);
     }
+    //$this->_setAutoPromoFromPost();
+    $this->_setPromoFromPost();
   }
   
   public function updateCart() {
@@ -62,6 +76,7 @@ class Cart66Cart {
     $this->_setShippingMethodFromPost();
     $this->_updateQuantitiesFromPost();
     $this->_setCustomFieldInfoFromPost();
+    //$this->_setAutoPromoFromPost();
     $this->_setPromoFromPost();
     
     Cart66Session::touch();
@@ -73,6 +88,7 @@ class Cart66Cart {
     $product = new Cart66Product($id);
     
     if($product->id > 0) {
+      
       $newItem = new Cart66CartItem($product->id, $qty, $optionInfo->options, $optionInfo->priceDiff);
       
       if( ($product->isSubscription() || $product->isMembershipProduct()) && ($this->hasSubscriptionProducts() || $this->hasMembershipProducts() )) {
@@ -91,6 +107,7 @@ class Cart66Cart {
       else {
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Product being added is NOT a Gravity Product");
         $isNew = true;
+        $newItem->setQuantity($qty);
         foreach($this->_items as $item) {
           if($item->isEqual($newItem)) {
             $isNew = false;
@@ -106,7 +123,8 @@ class Cart66Cart {
           $this->_items[] = $newItem;
         }
       }
-      
+
+      $this->_setPromoFromPost();
       Cart66Session::touch();
       do_action('cart66_after_add_to_cart', $product, $qty);
     }
@@ -119,12 +137,14 @@ class Cart66Cart {
       $this->_items[$itemIndex]->detachAllForms();
       if(count($this->_items) <= 1) {
         $this->_items = array();
+        Cart66Session::drop('Cart66Tax',true);
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Reset the cart items array");
       }
       else {
         unset($this->_items[$itemIndex]);
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Did not reset the cart items array because the cart contains more than just a membership item");
       }
+      $this->_setPromoFromPost();
       Cart66Session::touch();
       do_action('cart66_after_remove_item', $this, $product);
     }
@@ -239,8 +259,9 @@ class Cart66Cart {
       if(!$item->isSubscription()) {
         $total += $item->getProductPrice() * $item->getQuantity();
       }
-      elseif($item->isPayPalSubscription()) {
-        $total += $item->getProductPrice();
+      else {
+        // item is subscription
+        $total += $item->getBaseProductPrice();
       }
     }
     return $total;
@@ -394,80 +415,60 @@ class Cart66Cart {
       }
     }
     
+   
+    $shipping = ($shipping < 0) ? 0 : $shipping;
     return number_format($shipping, 2, '.', '');
   }
   
-  public function applyPromotion($code) {
+  public function applyPromotion($code,$auto=false) {
     $code = strtoupper($code);
     $promotion = new Cart66Promotion();
-    if($promotion->loadByCode($code)) {
-      if(is_object($this->_promotion) && $this->_promotion->minOrder > $this->getNonSubscriptionAmount()) {
-        // Order total not high enough for promotion to apply
-        $this->_promoStatus = -1;
-        $this->_promotion = null;
-      }
-      else {
-        $this->_promotion = $promotion;
-        $this->_promoStatus = 1;
-      }
-      Cart66Session::touch();
+    
+    if($promotion->validateCustomerPromotion($code)) {  
+      $this->clearPromotion();
+      Cart66Session::set('Cart66Promotion',$promotion);
+      Cart66Session::set('Cart66PromotionCode',$code);
+    } 
+    else {      
+      $this->clearPromotion();
+      if($auto==false){        
+        Cart66Session::set('Cart66PromotionErrors',$promotion->getErrors());
+      }    
+      
     }
-    else {
-      $this->_promoStatus = -1;
-      $this->_promotion = null;
-    }
+    
+  }
+  
+  public function clearPromotion() {
+    Cart66Session::drop('Cart66PromotionErrors',true);
+    Cart66Session::drop('Cart66Promotion',true);
+    Cart66Session::drop('Cart66PromotionCode',true);
   }
   
   public function getPromotion() {
     $promotion = false;
-    if(is_a($this->_promotion, 'Cart66Promotion')) {
-      $promotion = $this->_promotion;
+    if($sessionPromo = Cart66Session::get('Cart66Promotion')) {
+      $promotion = $sessionPromo;
     }
     return $promotion;
   }
   
-  public function getPromoMessage() {
-    $message = '&nbsp;';
-    if($this->_promoStatus == -1) {
-      $message = 'Invalid coupon code';
+  // Get the products in the cart and returns the ID's of each product
+  public function getProductsAndIds() {
+    $product = new Cart66Product();
+    $products = array();
+    foreach($this->_items as $item) { //needs to be changed because _items is a private cart function
+      $product->load($item->getProductId());
+      $products[] = $product->id;
     }
-    elseif($this->_promoStatus == -2) {
-      $message = 'Order total not high enough for promotion to apply';
-    }
-    if($this->_promoStatus < 0) {
-      $this->_promoStatus = 0;
-    }
-    return $message;
+    return $products;
   }
   
-  public function resetPromotionStatus() {
-    if(is_a($this->_promotion, 'Cart66Promotion')) {
-      if($this->_promotion->minOrder > $this->getSubTotal()) {
-        // Order total not high enough for promotion to apply
-        $this->_promoStatus = -2;
-        $this->_promotion = null;
-      }
-      else {
-        $this->_promoStatus = 1;
-      }
-    }
-  }
-  
-  public function clearPromotion() {
-    $this->_promotion = '';
-    $this->_promoStatus = 0;
-  }
-  
-  public function getPromoStatus() {
-    return $this->_promoStatus;
-  }
   
   public function getDiscountAmount() {
     $discount = 0;
-    if(is_a($this->_promotion, 'Cart66Promotion')) {
-      $total = $this->getNonSubscriptionAmount();
-      $discountedTotal = $this->_promotion->discountTotal($total);
-      $discount = number_format($total - $discountedTotal, 2, '.', '');
+    if(Cart66Session::get('Cart66Promotion')) {
+      $discount = number_format(Cart66Session::get('Cart66Promotion')->getDiscountAmount(Cart66Session::get('Cart66Cart')), 2, '.', '');
       // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Getting discount Total: $total -- Discounted Total: $discountedTotal -- Discount: $discount");
     }
     return $discount;
@@ -483,24 +484,75 @@ class Cart66Cart {
    */
   public function getGrandTotal($includeSubscriptions=true) {
     if($includeSubscriptions) {
-      $total = $this->getSubTotal() + $this->getShippingCost() - $this->getDiscountAmount();
+       $subTotal = $this->getSubTotal();
     }
-    else {
-      $total = $this->getNonSubscriptionAmount() + $this->getShippingCost() - $this->getDiscountAmount();
+    else{
+       $subTotal = $this->getNonSubscriptionAmount();
     }
+    
+    // discounts apply to the total by default
+    $total = $subTotal + $this->getShippingCost();
+    
+    if($this->getDiscountAmount() > 0){
+      // discount is in use
+      $promotion = Cart66Session::get('Cart66Promotion');
+      if($promotion && $promotion->apply_to == "shipping"){
+        $shippingWithDiscount = $this->getShippingCost() - $this->getDiscountAmount();
+        $shippingWithDiscount = ($shippingWithDiscount < 0) ? 0 : $shippingWithDiscount;
+        $total = $this->getNonSubscriptionAmount() + $shippingWithDiscount;
+      }
+      if($promotion && $promotion->apply_to == "total"){
+        // nothing special to do here right now
+        $total = $total - $promotion->getDiscountAmount();
+      }
+      if($promotion && $promotion->apply_to == "products"){
+        $total = ($subTotal - $promotion->getDiscountAmount()) + $this->getShippingCost();
+      }
+      
+        
+    }
+      
+    
     $total = ($total < 0) ? 0 : $total;
     return $total; 
   }
+  
+  public function getFinalDiscountTotal(){
+     $finalDiscountTotal = 0;
+     $subTotal = $this->getSubTotal();
+ 
+     $promotion = Cart66Session::get('Cart66Promotion');
+     if($promotion && $promotion->apply_to == "shipping"){
+       $finalDiscountTotal = $promotion->stayPositive($this->getShippingCost());
+     }
+     if($promotion && $promotion->apply_to == "total"){
+       $finalDiscountTotal = $promotion->stayPositive($subTotal + $this->getShippingCost());
+     }
+     if($promotion && $promotion->apply_to == "products"){
+       $finalDiscountTotal = $promotion->stayPositive($subTotal);
+     }
+     
+     
+     return $finalDiscountTotal;
+   }
   
   public function storeOrder($orderInfo) {
     $order = new Cart66Order();
     $orderInfo['trans_id'] = (empty($orderInfo['trans_id'])) ? 'MT-' . Cart66Common::getRandString() : $orderInfo['trans_id'];
     $orderInfo['ip'] = $_SERVER['REMOTE_ADDR'];
-    $orderInfo['discount_amount'] = $this->getDiscountAmount();
+    if(Cart66Session::get('Cart66Promotion')){
+       $orderInfo['discount_amount'] = Cart66Session::get('Cart66Promotion')->getDiscountAmount(Cart66Session::get('Cart66Cart'));
+    }
+    else{
+      $orderInfo['discount_amount'] = 0;
+    }
     $order->setInfo($orderInfo);
     $order->setItems($this->getItems());
     $orderId = $order->save();
-    
+    //update the number of redemptions for the promotion code.
+    if(Cart66Session::get('Cart66Promotion')) {
+      Cart66Session::get('Cart66Promotion')->updateRedemptions();
+    }
     $orderInfo['id'] = $orderId;
     do_action('cart66_after_order_saved', $orderInfo);
     
@@ -905,6 +957,12 @@ class Cart66Cart {
       foreach($qtys as $itemIndex => $qty) {
         $item = $this->getItem($itemIndex);
         if(!is_null($item) && get_class($item) == 'Cart66CartItem') {
+          
+          if($qty == 0){
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Customer specified quantity of 0 - remove item.");
+            $this->removeItem($itemIndex);
+          }
+          
           if(Cart66Product::confirmInventory($item->getProductId(), $item->getOptionInfo(), $qty)) {
             $this->setItemQuantity($itemIndex, $qty);
           }
@@ -937,11 +995,30 @@ class Cart66Cart {
       $couponCode = Cart66Common::postVal('couponCode');
       $this->applyPromotion($couponCode);
     }
-    else {
-      $this->resetPromotionStatus();
+    else{
+      if(Cart66Session::get('Cart66Promotion')){
+        $currentPromotionCode = Cart66Session::get('Cart66PromotionCode');
+        $this->applyPromotion($currentPromotionCode);
+      }
+      else {
+        $this->clearPromotion();
+        $this->_setAutoPromoFromPost();
+      }
     }
+    
   }
   
+  //applies coupon codes that are set to Auto Apply
+  protected function _setAutoPromoFromPost() {    
+    $promotion = new Cart66Promotion();
+    $promotions = $promotion->getAutoApplyPromotions();
+    foreach($promotions as $promo){
+      if($promo->validateCustomerPromotion($promo->getCodeAt())) {  
+        $this->applyPromotion($promo->getCodeAt(), true);
+      }
+    }
+  }
+   
   /**
    * Return a stdClass object with the price difference and a CSV list of options.
    *   $optionResult->priceDiff
