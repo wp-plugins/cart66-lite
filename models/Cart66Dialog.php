@@ -4,7 +4,7 @@ class Cart66Dialog {
   
   public static function cart66_dialog_box() {
     $image = CART66_URL . '/images/cart66_tiny_type.png';
-    $cart66_button = '<a href="#TB_inline?width=670&inlineId=select_cart66_shortcode" class="thickbox" title="' . 
+    $cart66_button = '<a id="Cart66Thickbox" href="#TB_inline?width=670&inlineId=select_cart66_shortcode" class="thickbox" title="' . 
       __("Add Cart66 Shortcodes", 'cart66') 
       . '"><img src="'.$image.'" alt="' . 
       __("Add Cart66 Shortcodes", 'cart66') 
@@ -352,6 +352,9 @@ class Cart66Dialog {
       	    preview();
       	  })
           adjustHeights();
+          $("#Cart66ThickBox").click(function(){
+            adjustHeights();
+          })
           $("input:radio[name=quantityOptions]").change(function(){
             if($("input:radio[name=quantityOptions]:checked").val()=="off"){
       	      $("#defaultQuantityGroup").fadeOut(600);
