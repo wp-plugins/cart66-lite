@@ -244,7 +244,7 @@ class Cart66Dialog {
         	$shortcodes_system = array(
         	 'express' => __('Listens for PayPal Express callbacks <br/>Belongs on system page store/express', 'cart66'),
         	 'ipn' => __('PayPal Instant Payment Notification <br/>Belongs on system page store/ipn', 'cart66'),
-        	 'receipt' => __('Shows the customer\'s receipt after a successful sale <br/>Belongs on system page store/receipt', 'cart66'),        	 
+        	 'receipt' => __('Shows the customer\'s receipt after a successful sale <br/>Belongs on system page store/receipt', 'cart66')        	 
         	);
         	$shortcodes = array(
         	 'add_to_cart item=&quot;&quot;' => __('Create add to cart button', 'cart66'),
