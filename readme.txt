@@ -1,4 +1,4 @@
-=== Cart66 Lite :: Ecommerce Shopping Cart Plugin For Your Online Store ===
+=== Cart66 Lite :: WordPress Ecommerce ===
 Contributors: reality66
 Donate link: http://cart66.com
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales, shopping cart
