@@ -12,10 +12,13 @@ class Cart66CartWidget extends WP_Widget {
     extract($args);			
     $data['title'] = $instance['title'];
     $data['shipping'] = isset($instance['shipping']) ? $instance['shipping'] : false;
-    if(Cart66Session::get('Cart66Cart') && get_class(Cart66Session::get('Cart66Cart')) == 'Cart66Cart') {
-      $this->_items = Cart66Session::get('Cart66Cart')->getItems();
-      $data['items'] = $this->_items;
+    
+    if(!Cart66Session::get('Cart66Cart')) {
+      Cart66Session::set('Cart66Cart', new Cart66Cart());
     }
+    $this->_items = Cart66Session::get('Cart66Cart')->getItems();
+    $data['items'] = $this->_items;
+    
     $data['cartPage'] = get_page_by_path('store/cart');
     $data['checkoutPage'] = get_page_by_path('store/checkout');
     $data['numItems'] = $this->countItems();

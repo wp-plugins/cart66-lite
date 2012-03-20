@@ -346,7 +346,10 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
         </tr>
         <?php endif; ?>
         
-        
+        <tr>
+          <td><div class="shortcode" onclick="shortcode('checkout_mijireh');"><a title="Insert [checkout_mijireh]">[checkout_mijireh]</a></div></td>
+          <td>Mijireh Checkout (Accept Credit Cards - PCI Compliant)</td>
+        </tr>
         <tr>
           <td><div class="shortcode" onclick="shortcode('checkout_manual');"><a title="Insert [checkout_manual]">[checkout_manual]</a></div></td>
           <td>Checkout form that does not process credit cards</td>

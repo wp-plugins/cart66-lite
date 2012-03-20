@@ -102,8 +102,10 @@ class Cart66Session {
     
     if(self::$_validRequest) {
       $sid = isset($_COOKIE['Cart66SID']) ? $_COOKIE['Cart66SID'] : false;
+      /*
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] ***************************************************\n" .
         "Starting session with Cart66SID: $sid\nREQUEST: " . $_SERVER['REQUEST_URI'] . "\nQUERY STRING: " . $_SERVER['QUERY_STRING']);
+      */
       self::_loadSession($sid);
     }
     

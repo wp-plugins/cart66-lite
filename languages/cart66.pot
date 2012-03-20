@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: teste\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-09 11:10-0500\n"
-"PO-Revision-Date: 2011-06-09 11:10-0500\n"
+"POT-Creation-Date: 2011-10-28 12:09-0500\n"
+"PO-Revision-Date: 2011-10-28 12:09-0500\n"
 "Last-Translator: Bobby Smith <bobby@reality66.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -13,860 +13,3156 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../cart66-menu/admin/inventory.php:18
-msgid "Inventory updated"
-msgstr ""
-
-#: ../cart66-menu/gateways/Cart66GatewayAbstract.php:139
-msgid "Passwords do not match"
-msgstr ""
-
-#: ../cart66-menu/js/cart66Dialog.php:238
-msgid "Pick a product"
-msgstr ""
-
-#: ../cart66-menu/js/cart66Dialog.php:239
-msgid "Shortcode Reference"
-msgstr ""
-
-#: ../cart66-menu/js/cart66Dialog.php:250
-msgid "OK"
-msgstr ""
-
-#: ../cart66-menu/js/cart66Dialog.php:255
-msgid "Your products"
-msgstr ""
-
-#: ../cart66-menu/js/cart66Dialog.php:260
-msgid "CSS style"
-msgstr ""
-
-#: ../cart66-menu/js/cart66Dialog.php:264
-msgid "Show price"
-msgstr ""
-
-#: ../cart66-menu/js/cart66Dialog.php:272
-msgid "Button path"
-msgstr ""
-
-#: ../cart66-menu/js/cart66Dialog.php:276
-msgid "Preview"
-msgstr ""
-
-#: ../cart66-menu/js/cart66Dialog.php:437
-msgid "Insert"
-msgstr ""
-
-#: ../cart66-menu/js/cart66Dialog.php:440
-msgid "Cancel"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66.php:400
-msgid "Orders"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66.php:401
-msgid "Products"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66.php:402
-msgid "PayPal Subscriptions"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66.php:403
-msgid "Inventory"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66.php:404
-msgid "Promotions"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66.php:405
-msgid "Shipping"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66.php:406
-msgid "Settings"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66.php:407
-msgid "Reports"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66.php:408
-msgid "Accounts"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66.php:574
-#: ../cart66-menu/models/Cart66.php:575
-msgid "Feature Levels"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66CartWidget.php:63
-msgid "Title"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66Common.php:702
-msgid "We're sorry.<br/>Your order could not be completed for the following reasons"
-msgstr ""
-
-#: ../cart66-menu/models/Cart66CustomProduct.php:739
-msgid "Unable to upload file"
-msgstr ""
-
-#: ../cart66-menu/pro/models/Cart66Account.php:311
-msgid "Username required"
-msgstr ""
-
-#: ../cart66-menu/pro/models/Cart66Account.php:324
-msgid "Username unavailable"
-msgstr ""
-
-#: ../cart66-menu/pro/models/Cart66Account.php:341
-msgid "Email address is invalid"
-msgstr ""
-
-#: ../cart66-menu/pro/models/Cart66Account.php:357
-msgid "Account password is required"
-msgstr ""
-
-#: ../cart66-menu/pro/models/Cart66PayPalSubscription.php:13
-msgid "Item number is required"
-msgstr ""
-
-#: ../cart66-menu/pro/models/Cart66PayPalSubscription.php:22
-msgid "The item number must be unique"
-msgstr ""
-
-#: ../cart66-menu/pro/models/Cart66PayPalSubscription.php:27
-msgid "Subscription name is required"
-msgstr ""
-
-#: ../cart66-menu/pro/models/Cart66PayPalSubscription.php:31
-msgid "Feature level is required"
-msgstr ""
-
-#: ../cart66-menu/pro/models/Cart66PayPalSubscription.php:35
-msgid "The price must be greater than zero"
-msgstr ""
-
-#: ../cart66-menu/pro/models/Cart66PayPalSubscription.php:39
-msgid "The billing interval must be a number greater than zero"
-msgstr ""
-
-#: ../cart66-menu/views/account-info.php:13
-msgid "Update Your Account Information"
-msgstr ""
-
-#: ../cart66-menu/views/account-info.php:15
-#: ../cart66-menu/views/checkout-form.php:42
-#: ../cart66-menu/views/checkout-form.php:111
-#: ../cart66-menu/views/paypal-express.php:371
-msgid "First name"
-msgstr ""
-
-#: ../cart66-menu/views/account-info.php:19
-#: ../cart66-menu/views/checkout-form.php:47
-#: ../cart66-menu/views/checkout-form.php:116
-#: ../cart66-menu/views/paypal-express.php:374
-msgid "Last name"
-msgstr ""
-
-#: ../cart66-menu/views/account-info.php:23
-#: ../cart66-menu/views/checkout-form.php:239
-#: ../cart66-menu/views/paypal-express.php:377
-msgid "Email"
-msgstr ""
-
-#: ../cart66-menu/views/account-info.php:27
-#: ../cart66-menu/views/account-login.php:10
-#: ../cart66-menu/views/account-login.php:30
-#: ../cart66-menu/views/paypal-express.php:380
-msgid "Username"
-msgstr ""
-
-#: ../cart66-menu/views/account-info.php:31
-msgid "Update Your Password"
-msgstr ""
-
-#: ../cart66-menu/views/account-info.php:32
-msgid "Leave blank to keep current password"
-msgstr ""
-
-#: ../cart66-menu/views/account-info.php:35
-#: ../cart66-menu/views/account-login.php:14
-#: ../cart66-menu/views/paypal-express.php:383
-msgid "Password"
-msgstr ""
-
-#: ../cart66-menu/views/account-info.php:37
-msgid "Enter a new password"
-msgstr ""
-
-#: ../cart66-menu/views/account-login.php:20
-msgid "Forgot my password"
-msgstr ""
-
-#: ../cart66-menu/views/account-login.php:27
-msgid "Enter your username and we will send you a new password.<br/> The email will be sent to the email address you used for your account"
-msgstr ""
-
-#: ../cart66-menu/views/cart-button.php:9
-#: ../cart66-menu/views/cart-button.php:16
-msgid "Price"
-msgstr ""
-
-#: ../cart66-menu/views/cart-button.php:23
-msgid "Cart66 Professional"
-msgstr ""
-
-#: ../cart66-menu/views/cart-button.php:23
-msgid "is required to sell subscriptions"
-msgstr ""
-
-#: ../cart66-menu/views/cart-button.php:33
-msgid "Out of stock"
-msgstr ""
-
-#: ../cart66-menu/views/cart-sidebar.php:14
-msgid "View Cart"
-msgstr ""
-
-#: ../cart66-menu/views/cart-sidebar.php:16
-msgid "Check out"
-msgstr ""
-
-#: ../cart66-menu/views/cart-sidebar.php:19
-msgid "Your cart is empty"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:48
-msgid "Inventory Restriction"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:60
-msgid "Please Provide Your Zip Code"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:61
-msgid "Before you can checkout, please provide the zip code for where we will be shipping your order and click"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:61
-msgid "Calculate Shipping"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:69
-msgid "No Shipping Service Selected"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:70
-msgid "We cannot process your order because you have not selected a shipping method. If there are no shipping services available, we may not be able to ship to your location"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:78
-msgid "Too Many Subscriptions"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:79
-msgid "Only one subscription may be purchased at a time"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:93
-msgid "Your current subscription will be canceled when you purchase your new subscription"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:105
-msgid "Product"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:106
-msgid "Quantity"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:108
-msgid "Item Price"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:109
-msgid "Item Total"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:152
-msgid "Show Details"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:172
-#: ../cart66-menu/views/cart.php:231
-msgid "Shipping to"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:205
-msgid "Enter Your Zip Code"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:231
-msgid "via"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:257
-#: ../cart66-menu/views/cart.php:268
-msgid "Shipping Method"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:284
-msgid "Update Total"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:289
-msgid "Subtotal"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:305
-msgid "Coupon"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:314
-msgid "Tax"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:323
-msgid "Do you have a coupon?"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:325
-msgid "Apply Coupon"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:334
-msgid "Total"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:351
-#: ../cart66-menu/views/cart.php:376
-msgid "Continue Shopping"
-msgstr ""
-
-#: ../cart66-menu/views/cart.php:365
-#: ../cart66-menu/views/checkout-form.php:311
-msgid "Checkout"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:33
-#: ../cart66-menu/views/checkout-form.php:100
-msgid "Shipping Address"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:35
-msgid "Order Information"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:38
-msgid "Billing Address"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:52
-#: ../cart66-menu/views/checkout-form.php:121
-msgid "Address"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:57
-msgid "Address 2"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:62
-#: ../cart66-menu/views/checkout-form.php:131
-msgid "City"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:66
-#: ../cart66-menu/views/checkout-form.php:136
-msgid "State"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:82
-#: ../cart66-menu/views/checkout-form.php:152
-msgid "Zip code"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:87
-#: ../cart66-menu/views/checkout-form.php:157
-msgid "Country"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:103
-msgid "Same as billing address"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:173
-msgid "Contact Information"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:175
-msgid "Payment Information"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:189
-msgid "Card Number"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:194
-msgid "Expiration"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:227
-msgid "Security ID"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:229
-msgid "Security code on back of card"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:234
-msgid "Phone"
-msgstr ""
-
-#: ../cart66-menu/views/checkout-form.php:327
-msgid "Your receipt will be on the next page and also immediately emailed to you. <strong>We respect your privacy!</strong>"
-msgstr ""
-
-#: ../cart66-menu/views/paypal-checkout.php:129
-msgid "You must configure your payment settings"
-msgstr ""
-
-#: ../cart66-menu/views/paypal-express.php:367
-msgid "Create Your Account"
-msgstr ""
-
-#: ../cart66-menu/views/paypal-express.php:386
-msgid "Repeat Password"
-msgstr ""
-
-#: ../cart66-menu/views/paypal-express.php:389
-msgid "Complete Order"
-msgstr ""
-
-#: ../cart66-menu/views/paypal-express.php:405
-#: ../cart66-menu/views/paypal-express.php:420
-msgid "Your receipt will be on the next page and also emailed to you"
-msgstr ""
-
-#: ../cart66-menu/views/paypal-expresscheckout.php:10
-msgid "PayPal Express Checkout Is Not Configured"
-msgstr ""
-
-#: ../cart66-menu/views/paypal-expresscheckout.php:11
-msgid "In order to use PayPal Express Checkout you must enter your PayPal API username, password and signature in the Cart66 Settings Panel"
-msgstr ""
-
-#: ../cart66-menu/views/receipt.php:107
-#: ../cart66-menu/views/receipt_print_version.php:77
-#: ../cart66-pro/admin/order-view.php:104
-msgid "Billing Information"
-msgstr ""
-
-#: ../cart66-menu/views/receipt.php:130
-#: ../cart66-pro/admin/orders.php:81
-msgid "Date"
-msgstr ""
-
-#: ../cart66-menu/views/receipt.php:139
-#: ../cart66-menu/views/receipt_print_version.php:108
-#: ../cart66-pro/admin/order-view.php:125
-msgid "Shipping Information"
-msgstr ""
-
-#: ../cart66-menu/views/receipt.php:157
-#: ../cart66-menu/views/receipt_print_version.php:125
-msgid "Delivery via"
-msgstr ""
-
-#: ../cart66-menu/views/receipt.php:234
-#: ../cart66-menu/views/receipt_print_version.php:201
-msgid "Discount"
-msgstr ""
-
-#: ../cart66-menu/views/receipt.php:254
-msgid "Printer Friendly Receipt"
-msgstr ""
-
-#: ../cart66-menu/views/receipt.php:294
-msgid "Receipt not available"
-msgstr ""
-
-#: ../cart66-menu/views/receipt_print_version.php:12
-msgid "Your Receipt"
-msgstr ""
-
-#: ../cart66-menu/views/receipt_print_version.php:70
-#: ../cart66-pro/admin/order-view.php:7
-#: ../cart66-pro/admin/orders.php:78
-msgid "Order Number"
-msgstr ""
-
-#: ../cart66-pro/admin/accounts.php:8
-#: ../cart66-pro/admin/inventory.php:30
+#: ../cart66-gh/admin/accounts.php:8
+#: ../cart66-gh/admin/inventory.php:31
 msgid "Account functionality is only available in <a href='http://cart66.com'>Cart66 Professional</a>"
 msgstr ""
 
-#: ../cart66-pro/admin/order-view.php:42
+#: ../cart66-gh/admin/inventory.php:19
+msgid "Inventory updated"
+msgstr ""
+
+#: ../cart66-gh/admin/order-view.php:7
+#: ../cart66-gh/admin/orders.php:78
+#: ../cart66-gh/admin/settings.php:125
+#: ../cart66-gh/admin/settings.php:136
+msgid "Order Number"
+msgstr ""
+
+#: ../cart66-gh/admin/order-view.php:14
+#: ../cart66-gh/admin/products.php:73
+#: ../cart66-gh/admin/shipping.php:377
+#: ../cart66-gh/admin/shipping.php:422
+msgid "Product"
+msgstr ""
+
+#: ../cart66-gh/admin/order-view.php:15
+msgid "Quantity"
+msgstr ""
+
+#: ../cart66-gh/admin/order-view.php:16
+#: ../cart66-gh/admin/products.php:103
+msgid "Price"
+msgstr ""
+
+#: ../cart66-gh/admin/order-view.php:17
+#: ../cart66-gh/admin/order-view.php:94
+msgid "Total"
+msgstr ""
+
+#: ../cart66-gh/admin/order-view.php:42
 msgid "This order requires Gravity Forms in order to view all of the order information"
 msgstr ""
 
-#: ../cart66-pro/admin/order-view.php:159
+#: ../cart66-gh/admin/order-view.php:85
+msgid "Coupon"
+msgstr ""
+
+#: ../cart66-gh/admin/order-view.php:104
+msgid "Billing Information"
+msgstr ""
+
+#: ../cart66-gh/admin/order-view.php:105
+msgid "Contact Information"
+msgstr ""
+
+#: ../cart66-gh/admin/order-view.php:125
+msgid "Shipping Information"
+msgstr ""
+
+#: ../cart66-gh/admin/order-view.php:159
 msgid "View Receipt Online"
 msgstr ""
 
-#: ../cart66-pro/admin/order-view.php:164
+#: ../cart66-gh/admin/order-view.php:164
 msgid "Order Status"
 msgstr ""
 
-#: ../cart66-pro/admin/order-view.php:180
+#: ../cart66-gh/admin/order-view.php:180
 msgid "Back To Orders"
 msgstr ""
 
-#: ../cart66-pro/admin/orders.php:30
+#: ../cart66-gh/admin/orders.php:30
 msgid "Search by last name, email, or order number"
 msgstr ""
 
-#: ../cart66-pro/admin/orders.php:39
+#: ../cart66-gh/admin/orders.php:39
 msgid "Filter Orders"
 msgstr ""
 
-#: ../cart66-pro/admin/orders.php:61
+#: ../cart66-gh/admin/orders.php:61
 msgid ""
 "You should consider setting order status options such as new and complete on the \n"
 "        <a href='?page=cart66-settings'>Cart66 Settings page</a>."
 msgstr ""
 
-#: ../cart66-pro/admin/orders.php:68
+#: ../cart66-gh/admin/orders.php:68
 msgid "Search String"
 msgstr ""
 
-#: ../cart66-pro/admin/orders.php:75
+#: ../cart66-gh/admin/orders.php:75
+#: ../cart66-gh/admin/promotions.php:187
 msgid "Search"
 msgstr ""
 
-#: ../cart66-pro/admin/orders.php:79
+#: ../cart66-gh/admin/orders.php:79
+#: ../cart66-gh/admin/promotions.php:190
+#: ../cart66-gh/admin/promotions.php:203
 msgid "Name"
 msgstr ""
 
-#: ../cart66-pro/admin/orders.php:80
+#: ../cart66-gh/admin/orders.php:80
+#: ../cart66-gh/admin/promotions.php:84
+#: ../cart66-gh/admin/promotions.php:192
+#: ../cart66-gh/admin/promotions.php:205
 msgid "Amount"
 msgstr ""
 
-#: ../cart66-pro/admin/orders.php:82
+#: ../cart66-gh/admin/orders.php:81
+msgid "Date"
+msgstr ""
+
+#: ../cart66-gh/admin/orders.php:82
 msgid "Delivery"
 msgstr ""
 
-#: ../cart66-pro/admin/orders.php:83
+#: ../cart66-gh/admin/orders.php:83
 msgid "Status"
 msgstr ""
 
-#: ../cart66-pro/admin/orders.php:84
+#: ../cart66-gh/admin/orders.php:84
+#: ../cart66-gh/admin/promotions.php:198
+#: ../cart66-gh/admin/promotions.php:211
+#: ../cart66-gh/admin/settings.php:425
+#: ../cart66-gh/admin/shipping.php:523
 msgid "Actions"
 msgstr ""
 
-#: ../cart66-pro/admin/orders.php:99
+#: ../cart66-gh/admin/orders.php:99
 msgid "View"
 msgstr ""
 
-#: ../cart66-pro/admin/orders.php:100
+#: ../cart66-gh/admin/orders.php:100
+#: ../cart66-gh/admin/promotions.php:229
+#: ../cart66-gh/admin/settings.php:449
+#: ../cart66-gh/admin/shipping.php:359
+#: ../cart66-gh/admin/shipping.php:442
+#: ../cart66-gh/admin/shipping.php:538
 msgid "Delete"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:18
+#: ../cart66-gh/admin/products.php:18
 msgid "The product could not be saved for the following reasons"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:23
+#: ../cart66-gh/admin/products.php:23
 msgid "The file upload failed"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:79
+#: ../cart66-gh/admin/products.php:79
 msgid "Product name"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:83
+#: ../cart66-gh/admin/products.php:83
 msgid "Item number"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:85
+#: ../cart66-gh/admin/products.php:85
 msgid "Unique item number required."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:90
+#: ../cart66-gh/admin/products.php:90
 msgid "Attach Spreedly subscription"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:108
+#: ../cart66-gh/admin/products.php:108
 msgid "Price description"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:110
+#: ../cart66-gh/admin/products.php:110
 msgid "If you would like to customize the display of the price"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:113
-msgid "Taxed"
+#: ../cart66-gh/admin/products.php:113
+msgid "User defined price"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:115
-#: ../cart66-pro/admin/products.php:124
-#: ../cart66-pro/admin/products.php:190
+#: ../cart66-gh/admin/products.php:115
+#: ../cart66-gh/admin/products.php:132
+#: ../cart66-gh/admin/products.php:141
+#: ../cart66-gh/admin/products.php:209
+#: ../cart66-gh/admin/settings.php:172
+#: ../cart66-gh/admin/settings.php:212
+#: ../cart66-gh/admin/settings.php:241
+#: ../cart66-gh/admin/settings.php:251
 msgid "Yes"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:116
-#: ../cart66-pro/admin/products.php:125
-#: ../cart66-pro/admin/products.php:189
+#: ../cart66-gh/admin/products.php:116
+#: ../cart66-gh/admin/products.php:133
+#: ../cart66-gh/admin/products.php:142
+#: ../cart66-gh/admin/products.php:208
+#: ../cart66-gh/admin/settings.php:174
+#: ../cart66-gh/admin/settings.php:214
+#: ../cart66-gh/admin/settings.php:242
+#: ../cart66-gh/admin/settings.php:252
 msgid "No"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:118
+#: ../cart66-gh/admin/products.php:117
+msgid "Allow the customer to specify a price."
+msgstr ""
+
+#: ../cart66-gh/admin/products.php:122
+msgid "Min price"
+msgstr ""
+
+#: ../cart66-gh/admin/products.php:124
+msgid "Max price"
+msgstr ""
+
+#: ../cart66-gh/admin/products.php:126
+msgid "Set to $0.00 for no limit "
+msgstr ""
+
+#: ../cart66-gh/admin/products.php:130
+msgid "Taxed"
+msgstr ""
+
+#: ../cart66-gh/admin/products.php:135
 msgid "Do you want to collect sales tax when this item is purchased?"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:119
+#: ../cart66-gh/admin/products.php:136
 msgid "For subscriptions, tax is only collected on the one time fee."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:127
+#: ../cart66-gh/admin/products.php:144
 msgid "Does this product require shipping"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:130
+#: ../cart66-gh/admin/products.php:147
 msgid "Weight"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:132
+#: ../cart66-gh/admin/products.php:149
 msgid ""
 "Shipping weight in pounds. Used for live rates calculations. Weightless items ship free.<br/>\n"
 "                  If using live rates and you want an item to have free shipping you can enter 0 for the weight."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:136
+#: ../cart66-gh/admin/products.php:153
+msgid "Min quantity"
+msgstr ""
+
+#: ../cart66-gh/admin/products.php:155
 msgid "Max quantity"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:138
+#: ../cart66-gh/admin/products.php:157
 msgid ""
 "Limit the quantity that can be added to the cart. Set to 0 for unlimited.<br/>\n"
 "                  If you are selling digital products you may want to limit the quantity of the product to 1."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:145
+#: ../cart66-gh/admin/products.php:164
 msgid "Attach Gravity Form"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:147
-#: ../cart66-pro/admin/products.php:169
+#: ../cart66-gh/admin/products.php:166
+#: ../cart66-gh/admin/products.php:188
 msgid "None"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:164
+#: ../cart66-gh/admin/products.php:183
 msgid "A Gravity Form may only be linked to one product"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:167
+#: ../cart66-gh/admin/products.php:186
 msgid "Quantity field"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:179
+#: ../cart66-gh/admin/products.php:198
 msgid "Use one of the Gravity Form fields as the quantity for your product."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:187
+#: ../cart66-gh/admin/products.php:206
 msgid "Membership Product"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:192
+#: ../cart66-gh/admin/products.php:211
 msgid "Should purchasing this product create a membership account?"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:195
+#: ../cart66-gh/admin/products.php:214
 msgid "Feature level"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:199
+#: ../cart66-gh/admin/products.php:216
+msgid "Enter the feature level. No spaces are allowed."
+msgstr ""
+
+#: ../cart66-gh/admin/products.php:219
 msgid "Duration"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:208
-#: ../cart66-pro/admin/products.php:276
+#: ../cart66-gh/admin/products.php:228
+#: ../cart66-gh/admin/products.php:298
+#: ../cart66-gh/admin/settings.php:404
 msgid "or"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:209
+#: ../cart66-gh/admin/products.php:229
 msgid "Lifetime"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:221
+#: ../cart66-gh/admin/products.php:240
 msgid "Digital Product Options"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:225
+#: ../cart66-gh/admin/products.php:244
 msgid "Limit The Number Of Times This File Can Be Downloaded"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:228
+#: ../cart66-gh/admin/products.php:247
 msgid "Download limit"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:230
+#: ../cart66-gh/admin/products.php:249
 msgid "Max number of times customer may download product. Enter 0 for no limit."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:235
+#: ../cart66-gh/admin/products.php:254
 msgid "Deliver Digital Products With Amazon S3"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:238
+#: ../cart66-gh/admin/products.php:257
 msgid "Bucket"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:240
+#: ../cart66-gh/admin/products.php:259
 msgid "The Amazon S3 bucket name that is holding the digital file."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:243
+#: ../cart66-gh/admin/products.php:265
 msgid "File"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:245
+#: ../cart66-gh/admin/products.php:267
 msgid "The Amazon S3 file name of your digital product."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:248
+#: ../cart66-gh/admin/products.php:270
 msgid "How do I force the file to download rather than being displayed in the browser?"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:249
+#: ../cart66-gh/admin/products.php:271
 msgid ""
 "If you want your digital product to download rather than display in the web browser, log into your Amazon S3 account and click on the file that you want to force to download and enter the following Meta Data in the file's properties:<br/>\n"
 "                Key = Content-Type | Value = application/octet-stream<br/>\n"
 "                Key = Content-Disposition | Value = attachment"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:259
+#: ../cart66-gh/admin/products.php:281
 msgid "<strong>WARNING:</strong> The digital products folder does not exist. Please update your <strong>Digital Product Settings</strong> on the <a href='?page=cart66-settings'>settings page</a>."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:260
+#: ../cart66-gh/admin/products.php:282
 msgid "<strong>WARNING:</strong> WordPress cannot write to your digital products folder. Please make your digital products file writeable or change your digital products folder in the <strong>Digital Product Settings</strong> on the <a href='?page=cart66-settings'>settings page</a>."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:264
+#: ../cart66-gh/admin/products.php:286
 msgid ""
 "Before you can upload your digital product, please specify a folder for your digital products in the<br/>\n"
 "                <strong>Digital Product Settings</strong> on the <a href='?page=cart66-settings'>settings page</a>."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:268
+#: ../cart66-gh/admin/products.php:290
 msgid "Deliver Digital Products From Your Server"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:271
+#: ../cart66-gh/admin/products.php:293
 msgid "Upload product"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:273
+#: ../cart66-gh/admin/products.php:295
 msgid "If you FTP your product to your product folder, enter the name of the file you uploaded in the field below."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:276
+#: ../cart66-gh/admin/products.php:298
 msgid "File name"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:282
+#: ../cart66-gh/admin/products.php:304
 msgid "Delete this file from the server"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:285
+#: ../cart66-gh/admin/products.php:307
 msgid "<strong>WARNING:</strong> This file is not in your products folder"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:294
+#: ../cart66-gh/admin/products.php:316
 msgid "NOTE: If you are delivering large digital files, please consider using Amazon S3."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:295
+#: ../cart66-gh/admin/products.php:317
 msgid "View local delivery information"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:296
+#: ../cart66-gh/admin/products.php:318
 msgid ""
 "There are several settings built into PHP that affect the size of the files you can upload. These settings are set by your web host and can usually be configured for your specific needs.Please contact your web hosting company if you need help change any of the settings below.\n"
 "              <br/><br/>\n"
 "              If you need to upload a file larger than what is allowed via this form, you can FTP the file to the products folder"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:299
+#: ../cart66-gh/admin/products.php:321
 msgid "then enter the name of the file in the \"File name\" field above."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:301
+#: ../cart66-gh/admin/products.php:323
 msgid "Max Upload Filesize"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:301
+#: ../cart66-gh/admin/products.php:323
 msgid "Max Postsize"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:310
+#: ../cart66-gh/admin/products.php:332
 msgid "Product Variations"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:316
+#: ../cart66-gh/admin/products.php:338
 msgid "Option Group 1"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:318
+#: ../cart66-gh/admin/products.php:340
 msgid "Small, Medium +$2.00, Large +$4.00"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:321
+#: ../cart66-gh/admin/products.php:343
 msgid "Option Group 2"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:323
+#: ../cart66-gh/admin/products.php:345
 msgid "Red, White, Blue"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:326
+#: ../cart66-gh/admin/products.php:348
 msgid "Custom field"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:328
+#: ../cart66-gh/admin/products.php:350
 msgid "No custom field"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:329
+#: ../cart66-gh/admin/products.php:351
 msgid "Single line text field"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:330
+#: ../cart66-gh/admin/products.php:352
 msgid "Multi line text field"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:332
+#: ../cart66-gh/admin/products.php:354
 msgid "Include a free form text area so your buyer can provide custom information such as a name to engrave on the product."
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:335
+#: ../cart66-gh/admin/products.php:357
 msgid "Instructions"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:337
+#: ../cart66-gh/admin/products.php:359
 msgid "Tell your buyer what to enter into the custom text field. (Ex. Please enter the name you want to engrave)"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:361
+#: ../cart66-gh/admin/products.php:368
+#: ../cart66-gh/admin/promotions.php:167
+#: ../cart66-gh/admin/shipping.php:330
+#: ../cart66-gh/admin/shipping.php:503
+msgid "Cancel"
+msgstr ""
+
+#: ../cart66-gh/admin/products.php:383
 msgid "Your Products"
 msgstr ""
 
-#: ../cart66-pro/admin/products.php:406
+#: ../cart66-gh/admin/products.php:428
 msgid "Your Spreedly Subscription Products"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:18
+msgid "The promotion could not be saved for the following reasons"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:48
+msgid "Promotion"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:57
+msgid "Promotion name"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:59
+msgid "Promotion name required"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:62
+msgid "Promotion code"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:64
+msgid "Unique promotion code required"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:67
+msgid "Type of promotion"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:69
+msgid "Money Amount"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:70
+msgid "Percentage"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:72
+msgid "Select if this promotion will be applied using a specific dollar amount or a percentage of the total"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:75
+msgid "Apply to"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:77
+#: ../cart66-gh/admin/settings.php:1471
+msgid "Products"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:78
+#: ../cart66-gh/admin/settings.php:1511
+msgid "Shipping"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:79
+msgid "Cart Total"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:81
+msgid "Select if this promotion will apply to specific products, shipping or the entire cart total"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:88
+msgid "Set the promotion amount"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:91
+msgid "Minimum order"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:93
+msgid "Set the minimum amount required for this promotion to apply"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:99
+msgid "Minimum quantity"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:103
+msgid "Maximum quantity"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:106
+msgid "Set the minimum and/or maximum quantity required for this promotion to apply"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:113
+msgid "From"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:117
+msgid "To"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:120
+msgid "Select the date and time that this promotion will start and end. You may leave either blank"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:124
+msgid "Maximum redemptions"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:127
+#: ../cart66-gh/admin/promotions.php:196
+#: ../cart66-gh/admin/promotions.php:209
+msgid "Used"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:132
+#: ../cart66-gh/admin/promotions.php:223
+msgid "Never"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:136
+msgid "Set the maximum number of times this promotion can be redeemed"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:139
+msgid "Maximum redemptions per order"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:141
+msgid "Set the maximum number of times this promotion can be redeemed per order"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:144
+msgid "Eligible Products"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:147
+msgid "Enter the names of products in your inventory that this promotion will be applied to.  You can enter as many products as you want.  If you want this promotion to apply to all orders, leave this field blank.  If you have selected to apply this promotion to shipping or the cart total, this promotion will only apply if the products in this list match the products in the cart."
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:154
+msgid "Enable"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:155
+msgid "Do you want this promotion to be valid"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:158
+msgid "Auto Apply"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:159
+msgid "Do you want this promotion to automatically apply when all conditions are met? (no user input required)"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:191
+#: ../cart66-gh/admin/promotions.php:204
+msgid "Code"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:193
+#: ../cart66-gh/admin/promotions.php:206
+msgid "Minimum Order"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:194
+#: ../cart66-gh/admin/promotions.php:207
+msgid "Enabled"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:195
+#: ../cart66-gh/admin/promotions.php:208
+msgid "Effective"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:197
+#: ../cart66-gh/admin/promotions.php:210
+msgid "Apply To"
+msgstr ""
+
+#: ../cart66-gh/admin/promotions.php:228
+#: ../cart66-gh/admin/shipping.php:358
+#: ../cart66-gh/admin/shipping.php:441
+#: ../cart66-gh/admin/shipping.php:537
+msgid "Edit"
+msgstr ""
+
+#: ../cart66-gh/admin/reports.php:5
+msgid "Product Sales"
+msgstr ""
+
+#: ../cart66-gh/admin/reports.php:12
+msgid "Sales reports are only available in <a href=\"http://cart66.com\">Cart66 Professional</a>."
+msgstr ""
+
+#: ../cart66-gh/admin/reports.php:28
+msgid "Start Date"
+msgstr ""
+
+#: ../cart66-gh/admin/reports.php:29
+msgid "End Date"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:84
+msgid "Success"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:113
+msgid "Cart66 Settings"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:128
+msgid ""
+"Please enter your Cart66 order number to get automatic upgrades and support.<br/>\n"
+"          If you do not have an order number please <a href=\"http://www.Cart66.com\">buy a license</a>."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:145
+msgid "Invalid Order Number"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:160
+msgid "Main Settings"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:170
+msgid "Hide system pages"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:175
+msgid ""
+"Hiding system pages will hide all the pages that Cart66 installs \n"
+"                  from your site's navigation. Express, IPN, and Receipt will always be hidden. Selecting 'Yes' will also hide\n"
+"                  Store, Cart, and Checkout which you may want to have your customers access through the Cart66 Shopping Cart widget rather than your site's main navigation."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:180
+msgid "Home country"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:197
+msgid "Your home country will be the default country on your checkout form"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:202
+msgid "Use the HTML entity such as &amp;pound; for &pound; British Pound Sterling or &amp;euro; for &euro; Euro"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:205
+msgid "Currency character"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:207
+msgid "Do NOT use the HTML entity. This is the currency character used for the email receipts."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:210
+msgid "International sales"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:218
+msgid "Ship to countries"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:236
+msgid "Use SSL"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:243
+msgid "Be sure use an SSL certificate if you are using a payment gateway other than PayPal Website Payments Standard or PayPal Express Checkout."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:247
+msgid "Track inventory"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:253
+msgid "This feature uses ajax. If you have javascript errors in your theme clicking Add To Cart buttons will not add products to the cart."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:272
+msgid "Cart and Checkout Settings"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:281
+msgid "Shipping Form"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:286
+msgid "Show \"Same as Billing\""
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:287
+msgid "Always show the shipping form"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:288
+msgid "Choose whether or not to display the shipping address form on the checkout page by default."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:291
+msgid "User Price Label"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:293
+msgid "Defaults to \"Enter an amount: \""
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:296
+msgid "User Quantity Label"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:298
+msgid "Defaults to \"Quantity: \""
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:314
+msgid "Tax Rates"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:317
+msgid ""
+"If you would like to collect sales tax please enter the tax rate information below. \n"
+"          You may enter tax rates for zip codes or states. If you are entering zip codes, you can enter individual \n"
+"          zip codes or zip code ranges. A zip code range is entered with the low value separated from the high value\n"
+"          by a dash. For example, 23000-25000. Zip code tax rates take precedence over state tax rates.\n"
+"          You may also choose whether or not you want to apply taxes to shipping charges."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:323
+msgid ""
+"NOTE: If you are using PayPal Website Payments Standard you must set up the tax rate \n"
+"          information <strong>in your paypal account</strong>."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:330
+msgid "State"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:333
+msgid "All Sales"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:405
+msgid "Zip"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:407
+#: ../cart66-gh/admin/settings.php:423
+#: ../cart66-gh/admin/shipping.php:424
+msgid "Rate"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:410
+msgid "Don't tax shipping"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:411
+msgid "Tax shipping"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:422
+msgid "Location"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:424
+msgid "Tax Shipping"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:445
+msgid "yes"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:445
+msgid "no"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:464
+msgid "PayPal Settings"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:467
+msgid ""
+"If you have signed up for the PayPal Pro account or if you plan to use PayPal Express Checkout, \n"
+"          please configure you settings below."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:476
+msgid "PayPal Email"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:480
+msgid "Default Currency"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:495
+msgid "Shopping URL"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:497
+msgid "Used when buyers click 'Continue Shopping' in the PayPal Cart."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:500
+msgid "Return URL"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:503
+msgid "Where buyers are sent after paying at PayPal."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:506
+msgid "Notification URL"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:514
+msgid "Instant Payment Notification (IPN)"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:518
+msgid "PayPal API Settings for Express Checkout"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:521
+#: ../cart66-gh/admin/settings.php:675
+#: ../cart66-gh/admin/settings.php:689
+msgid "API Username"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:526
+msgid "API Password"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:531
+msgid "API Signature"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:538
+msgid "Use PayPal Sandbox"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:546
+msgid "Send transactions to <a href=\"https://developer.paypal.com\">PayPal's developer sandbox</a>."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:553
+msgid "Note: The Website Payments Pro solution can only be implemented by UK, Canadian and US Merchants."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:554
+msgid "Learn more"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:556
+msgid "Note: The Website Payments Pro solution is only available in <a href=\"http://cart66.com\">Cart66 Professional</a> and can only be implemented by UK, Canadian and US Merchants."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:570
+msgid "Payment Gateway Settings"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:574
+msgid "These settings configure your connection to your Authorize.net AIM compatible payment gateway."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:588
+msgid "Gateway"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:596
+msgid "Other"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:598
+msgid "The Authorize.net test server requires a developer test account which is different than your normal authorize.net account. You can sign up for one here: <a href=\"https://developer.authorize.net/testaccount/\" target=\"_blank\">https://developer.authorize.net/testaccount/"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:601
+msgid "Accept Cards"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:613
+msgid "Emulation URL"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:615
+msgid "Autorize.net AIM emulation URL"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:621
+msgid "eWay Customer ID"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:625
+msgid "eWay Sandbox"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:629
+msgid "These are the settings used for test transactions with eWay."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:631
+msgid "Sandbox ID"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:638
+msgid "Currency"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:645
+#: ../cart66-gh/admin/settings.php:661
+msgid "API Passphrase"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:648
+#: ../cart66-gh/admin/settings.php:664
+msgid "MerchantUUID"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:651
+#: ../cart66-gh/admin/settings.php:667
+msgid "API key"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:655
+msgid "Test Mode"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:659
+msgid "These are the settings used for test transactions with Merchant Warrior."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:679
+#: ../cart66-gh/admin/settings.php:693
+msgid "Transaction Key"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:683
+msgid "PayLeap Test Mode"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:687
+msgid "These are the settings used for test transactions with PayLeap."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:699
+msgid "API Login ID"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:701
+msgid "Where can I find my Authorize.net API Login ID and Transaction Key?"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:704
+msgid "Transaction key"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:716
+msgid "With <a href=\"http://cart66.com\">Cart66 Professional</a> you can accept credit cards directly on your website using:"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:722
+msgid "Any other gateway that implements the Authorize.net AIM interface"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:733
+msgid "Email Receipt Settings"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:737
+msgid "These are the settings used for sending email receipts to your customers after they place an order."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:743
+#: ../cart66-gh/admin/settings.php:794
+msgid "From Name"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:746
+msgid ""
+"The name of the person from whom the email receipt will be sent. \n"
+"                You may want this to be your company name."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:749
+#: ../cart66-gh/admin/settings.php:800
+msgid "From Address"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:752
+msgid "The email address the email receipt will be from."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:755
+msgid "Receipt Subject"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:758
+msgid "The subject of the email receipt"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:760
+msgid "Receipt Intro"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:763
+msgid "This text will appear at the top of the receipt email message above the list of items purchased."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:765
+msgid "Copy Receipt To"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:767
+msgid "Use commas to separate addresses."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:784
+msgid "Password Reset Email Settings"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:788
+msgid "These are the settings used for sending password reset emails your subscribers who forget their passwords."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:797
+msgid ""
+"The name of the person from whom the email will be sent. \n"
+"                  You may want this to be your company name."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:803
+msgid "The email address the email will be from."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:806
+msgid "Email Subject"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:809
+msgid "The subject of the email."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:811
+msgid "Email Intro"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:814
+msgid "This text will appear at the top of the reset email message above the new password."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:828
+msgid "Blog Post Access Denied Messages"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:832
+msgid "These are the messages your visitors will see when attempting to access a blog post that they do not have permission to view."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:838
+msgid "Not logged in"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:841
+msgid "The message that appears when a private posted is accessed by a visitor who is not logged in."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:843
+msgid "Access denied"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:846
+msgid "The message that appears when a logged in member's subscription does not allow them to view the post."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:862
+msgid "Status Options"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:865
+msgid "Define the order status options to suit your business needs. For example, you may want to have new, complete, and canceled."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:872
+msgid "Order statuses"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:875
+msgid "Separate values with commas. (ex. new,complete,cancelled)"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:889
+msgid "Digital Product Settings"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:892
+msgid "Enter the absolute path to where you want to store your digital products. We suggest you choose a folder that is not web accessible. To help you figure out the path to your digital products folder, this is the absolute path to the page you are viewing now."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:894
+msgid "Please note you should NOT enter a web url starting with http:// Your filesystem path will start with just a /"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:901
+msgid "Product folder"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:908
+msgid "<strong>WARNING:</strong> This directory does not exist."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:909
+msgid "<strong>WARNING:</strong> WordPress cannot write to this folder."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:927
+msgid "Store Home Page"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:930
+msgid ""
+"This is the link to the page of your site that you consider to be the home page of your store.\n"
+"          You can choose to have customers go back to the last page they were on when they clicked \"Add to Cart\" or you can force the continue shopping button to always go to the store home page."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:938
+msgid "Continue Shopping"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:944
+msgid "Store URL"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:962
+msgid "Google Analytics Ecommerce Tracking"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:965
+msgid "Collect transaction and purchase data for your website using the Google Analytics tracking code.  If you already use another analytics plugin, make sure you specify that here so that your site does not track the receipt page twice."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:972
+msgid "Enable for my site"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:977
+msgid "Other plugins"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:979
+msgid "Yes, I want to use Cart66 with other Google Analytics plugins"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:980
+msgid "No, I want to use Cart66 to track on its own"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:984
+msgid "Web Product ID"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:986
+msgid "Starts with UA-XXXXXXXX-X"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1003
+msgid "Spreedly Account Information"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1006
+msgid "Configure your Spreedly account information to sell subscriptions."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1013
+msgid "Short site name"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1015
+msgid "Look in your spreedly account under Site Details for the short site name (Used in URLs, etc)"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1017
+msgid "API token"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1020
+msgid "Look in your spreedly account under Site Details for the API Authentication Token."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1022
+msgid "Log out link"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1025
+msgid "Append a logout link to your site's navigation.<br/>Note, this only works with themes that build the navigation using the wp_list_pages() function. See the documentation for other log out options when using WordPress 3.0 Menus."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1041
+msgid "Amazon S3 Settings"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1044
+msgid "Amazon S3 provides a simple web services interface for delivering digital content. It gives you access to the same highly scalable, reliable, secure, fast, inexpensive infrastructure that Amazon uses to run its own global network of web sites. Deliver you Cart66 digital products through your Amazon S3 account to increase security and performance when selling digital products."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1045
+msgid "Configure your Amazon S3 account information so Cart66 can distribute secure digital downloads from your Amazon S3 account."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1052
+msgid "Access Key ID"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1055
+msgid "Secret Key"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1071
+msgid "Constant Contact Settings"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1074
+msgid "Configure your Constant Contact account information so your buyers can opt in to your newsletter."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1082
+#: ../cart66-gh/admin/shipping.php:237
+msgid "Username"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1085
+#: ../cart66-gh/admin/shipping.php:241
+msgid "Password"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1088
+#: ../cart66-gh/admin/settings.php:1167
+msgid "Opt-in Message"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1091
+#: ../cart66-gh/admin/settings.php:1170
+msgid "Provide a message to tell your buyers what your newsletter is about.<br/>For example, you might want to say something like \"Yes! I would like to subscribe to:\""
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1129
+msgid ""
+"Constant Contact is\n"
+"              an industry leader in email marketing. Constant Contact provides email marketing software that makes it easy to \n"
+"              create professional HTML email campaigns with no tech skills."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1132
+#: ../cart66-gh/admin/settings.php:1261
+#: ../cart66-gh/admin/settings.php:1307
+#: ../cart66-gh/admin/settings.php:1356
+msgid "This feature is only available in <a href=\"http://cart66.com\">Cart66 Professional</a>."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1144
+msgid "MailChimp Settings"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1153
+msgid "Configure your <a href=\"http://eepurl.com/dtQBb\" target=\"_blank\">Mail Chimp</a> account information so your buyers can opt in to your newsletter."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1163
+msgid "MailChimp API Key"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1165
+msgid "Need an API key? Find out how to get one"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1172
+msgid "Double Opt-In"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1176
+msgid "Send a Double Opt-In email"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1180
+msgid "Don't send a Double Opt-In email"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1181
+msgid "Send a double opt-in confirmation message. <strong>Abusing this may cause your account to be suspended.</strong>"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1181
+msgid "Read more about Opt-Ins"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1184
+msgid "Show Lists"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1233
+#: ../cart66-gh/admin/settings.php:1521
+msgid "Settings"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1236
+msgid "Configure your iDevAffiliate account information so Cart66 can award commissions to your affiliates."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1247
+msgid "Copy and paste your iDevAffiliate \"3rd Party Affiliate Call\" URL. It will looks like"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1249
+msgid "Be sure to leave the XXX's in place and Cart66 will replace the XXX's with the appropriate values for each sale."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1251
+msgid "Note: To disable iDevAffiliate integration, simply delete this URL and click Save."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1260
+msgid "is The Industry Leader in self managed affiliate program software. Started in 1999, iDevAffiliate is the original in self managed affiliate software! iDevAffiliate was hand coded from scratch by the same team that provides their technical support! iDevAffilaite is also the affilate software that runs our"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1272
+msgid "Zendesk Account Information"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1275
+msgid "Configure your Zendesk account information to enable remote authentication."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1283
+msgid "Token"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1286
+msgid "Look in your Zendesk account under \"Settings > Security > Authentication > Single Sign-On\" for the Authentication Token."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1288
+msgid "Prefix"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1291
+msgid "The prefix is the first part of your zendesk account URL.<br/>For example, if your Zendesk URL is http://<strong style=\"font-size: 14px;\">mycompany</strong>.zendesk.com Then your prefix is mycompany."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1306
+msgid "is the industry leader in web-based help desk software with an elegant support ticket system and a self-service customer support platform. Agile, smart, and convenient."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1317
+msgid "Terms of Service"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1320
+msgid "Require customer acceptance of your terms of service."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1327
+msgid "Require Terms"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1332
+msgid "Terms Title"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1336
+msgid "Terms Text"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1340
+msgid "Acceptance Label"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1342
+msgid "I Agree, proceed to Checkout"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1344
+msgid "Replacement Text"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1367
+msgid "Customize Cart Images"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1370
+msgid "If you would like to use your own shopping cart images (Add To Cart, Checkout, etc), enter the URL to the directory where you will be storing the images. The path should be outside the plugins/cart66 directory so that they are not lost when you upgrade your Cart66 intallation to a new version."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1371
+msgid "For example you may want to store your custom cart images here"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1373
+msgid "Be sure that your path ends in a trailing slash like the example above and that you have all of the image names below in your directory"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1390
+msgid "URL to image directory"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1407
+msgid "Customize Styles"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1410
+msgid "If you would like to override the default styles, you may enter the URL to your custom style sheet."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1416
+msgid "URL to CSS"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1452
+msgid "Set the role required to access the areas of the Cart66 plugin. Note that the ability to edit these settings requires the \"manage_options\" capability normally assigned to Administrators."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1457
+msgid "The admin page roles have been saved."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1461
+msgid "Orders"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1463
+#: ../cart66-gh/admin/settings.php:1473
+#: ../cart66-gh/admin/settings.php:1483
+#: ../cart66-gh/admin/settings.php:1493
+#: ../cart66-gh/admin/settings.php:1503
+#: ../cart66-gh/admin/settings.php:1513
+#: ../cart66-gh/admin/settings.php:1523
+#: ../cart66-gh/admin/settings.php:1533
+#: ../cart66-gh/admin/settings.php:1543
+msgid "Administrator"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1464
+#: ../cart66-gh/admin/settings.php:1474
+#: ../cart66-gh/admin/settings.php:1484
+#: ../cart66-gh/admin/settings.php:1494
+#: ../cart66-gh/admin/settings.php:1504
+#: ../cart66-gh/admin/settings.php:1514
+#: ../cart66-gh/admin/settings.php:1524
+#: ../cart66-gh/admin/settings.php:1534
+#: ../cart66-gh/admin/settings.php:1544
+msgid "Editor"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1465
+#: ../cart66-gh/admin/settings.php:1475
+#: ../cart66-gh/admin/settings.php:1485
+#: ../cart66-gh/admin/settings.php:1495
+#: ../cart66-gh/admin/settings.php:1505
+#: ../cart66-gh/admin/settings.php:1515
+#: ../cart66-gh/admin/settings.php:1525
+#: ../cart66-gh/admin/settings.php:1535
+#: ../cart66-gh/admin/settings.php:1545
+msgid "Author"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1466
+#: ../cart66-gh/admin/settings.php:1476
+#: ../cart66-gh/admin/settings.php:1486
+#: ../cart66-gh/admin/settings.php:1496
+#: ../cart66-gh/admin/settings.php:1506
+#: ../cart66-gh/admin/settings.php:1516
+#: ../cart66-gh/admin/settings.php:1526
+#: ../cart66-gh/admin/settings.php:1536
+#: ../cart66-gh/admin/settings.php:1546
+msgid "Contributor"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1481
+msgid "PayPal Subscriptions"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1491
+msgid "Inventory"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1501
+msgid "Promotions"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1531
+msgid "Reports"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1541
+msgid "Accounts"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1552
+#: ../cart66-gh/admin/settings.php:1601
+msgid "Save"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1566
+msgid "Error Logging &amp; Debugging"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1577
+msgid "Enable logging"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1581
+msgid "Only enable logging when testing your site. The log file will grow quickly."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1585
+msgid "Disable caching"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1587
+msgid "never"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1588
+msgid "on cart pages"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1589
+msgid "on all pages"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1591
+msgid "Send HTTP headers to prevent pages from being cached by web browsers."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1595
+msgid "Delete database when uninstalling"
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1597
+msgid "<strong>WARNING:</strong> Cart66 Lite and Cart66 Professional share the same database. If you are upgrading from Cart66 Lite to Professional and want to keep all your settings, <strong>do not delete the database</strong> when uninstalling Cart66 Lite."
+msgstr ""
+
+#: ../cart66-gh/admin/settings.php:1623
+msgid "Debugging Data"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:123
+msgid "Live Shipping Rates"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:125
+msgid "Using live shipping rates overrides all other types of shipping settings."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:129
+msgid "Live shipping rates are enabled."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:135
+msgid "Live shipping rates are not enabled."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:148
+msgid "Current Tweak Factor"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:173
+msgid "Tweak by percentage"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:174
+msgid "Tweak by fixed amount"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:180
+msgid "What is this?"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:184
+msgid "How The Rate Tweaker Works"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:185
+msgid "The rate tweaker provides a way to adjust the live rate quotes by increasing or decreasing all of the calculated rates by a specified amount. You may choose to modify the rates by a percentage amount or by fixed amount. Enter a positive value to increase the calculated rates or negative value to reduce them. The rate tweaker will never reduce shipping rates below zero."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:186
+#, php-format
+msgid "For example, if you want to increase all the calculated rates by 15% select \"Tweak by percentage\" and enter 15 in the text field then click \"Save\""
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:187
+msgid "If you want to take $5.00 off all the shipping rates select \"Tweak by fixed amount\" and enter -5 in the text field then click \"Save\""
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:188
+msgid "To stop using the rate tweaker, enter 0 and click \"save\""
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:193
+msgid "USPS Shipping Account Information"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:194
+msgid "If you intend to use United States Postal Service real-time shipping quotes please provide your USPS account information.<br/>This feature requires a <strong>production USPS account.</strong> A test account will not work."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:199
+msgid "Webtools username"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:203
+#: ../cart66-gh/admin/shipping.php:253
+msgid "Ship from zip"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:207
+msgid "Select the USPS shipping methods you would like to offer to your customers."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:208
+#: ../cart66-gh/admin/shipping.php:272
+msgid "Select All"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:231
+msgid "UPS Shipping Account Information"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:232
+msgid "If you intend to use UPS real-time shipping quotes please provide your UPS account information."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:245
+msgid "API Key"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:249
+msgid "Account number"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:257
+msgid "Pickup Type"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:266
+msgid "Commercial Only"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:271
+msgid "Select the UPS shipping methods you would like to offer to your customers."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:272
+msgid "Clear All"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:297
+msgid "Shipping Methods"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:298
+msgid ""
+"Create the shipping methods you will offer your customers. If no shipping\n"
+"    price is defined for a product, the default rates entered here will be used\n"
+"    to calculate shipping costs."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:308
+#: ../cart66-gh/admin/shipping.php:385
+#: ../cart66-gh/admin/shipping.php:423
+#: ../cart66-gh/admin/shipping.php:488
+#: ../cart66-gh/admin/shipping.php:521
+msgid "Shipping method"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:314
+#: ../cart66-gh/admin/shipping.php:346
+msgid "Default rate"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:317
+msgid "Rate if only one item is ordered"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:324
+msgid "Rate for each additional item"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:345
+msgid "Shipping Method"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:347
+msgid "Default bundle rate"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:367
+msgid "Product Shipping Prices"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:369
+msgid "The shipping prices you set up here override the default shipping prices for the shipping methods above."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:393
+msgid "Shipping rate"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:412
+msgid "You must enter at least one shipping method and at least one product for these setting to appear."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:425
+msgid "Bundle rate"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:449
+msgid "Cart Price Shipping Rates"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:451
+msgid ""
+"You can set the shipping cost based on the total cart value. For example, you \n"
+"      may want to offer free shipping on orders over $50. To do that set minimum cart amount to $50 and the\n"
+"      shipping cost to $0."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:454
+msgid ""
+"You can also set up tiered shipping costs based on the cart amount. For example,\n"
+"      if you want to charge $10 shipping on orders between $0 - $24.99 and $5 shipping on orders between $25 - $49.99\n"
+"      and free shipping on orders $50 or more you would set that up with three shipping rules as follows."
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:460
+#: ../cart66-gh/admin/shipping.php:483
+#: ../cart66-gh/admin/shipping.php:520
+msgid "Minimum cart amount"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:461
+#: ../cart66-gh/admin/shipping.php:496
+#: ../cart66-gh/admin/shipping.php:522
+msgid "Shipping cost"
+msgstr ""
+
+#: ../cart66-gh/admin/shipping.php:510
+msgid "You must have entered at least one shipping method before you can configure these settings."
+msgstr ""
+
+#: ../cart66-gh/gateways/Cart66GatewayAbstract.php:106
+msgid "Billing "
+msgstr ""
+
+#: ../cart66-gh/gateways/Cart66GatewayAbstract.php:106
+#: ../cart66-gh/gateways/Cart66GatewayAbstract.php:127
+#: ../cart66-gh/gateways/Cart66GatewayAbstract.php:158
+msgid " required"
+msgstr ""
+
+#: ../cart66-gh/gateways/Cart66GatewayAbstract.php:127
+msgid "Payment "
+msgstr ""
+
+#: ../cart66-gh/gateways/Cart66GatewayAbstract.php:132
+msgid "Invalid credit card number"
+msgstr ""
+
+#: ../cart66-gh/gateways/Cart66GatewayAbstract.php:139
+msgid "Passwords do not match"
+msgstr ""
+
+#: ../cart66-gh/gateways/Cart66GatewayAbstract.php:158
+msgid "Shipping "
+msgstr ""
+
+#: ../cart66-gh/gateways/Cart66GatewayAbstract.php:227
+msgid "Unable to determine tax rate because shipping data is unavailable"
+msgstr ""
+
+#: ../cart66-gh/gateways/Cart66GatewayAbstract.php:304
+msgid "There must be at least one item in the cart."
+msgstr ""
+
+#: ../cart66-gh/gateways/Cart66ManualGateway.php:13
+msgid "Email address is required"
+msgstr ""
+
+#: ../cart66-gh/gateways/Cart66ManualGateway.php:18
+msgid "Phone number is required"
+msgstr ""
+
+#: ../cart66-gh/js/cart66Dialog.php:108
+#: ../cart66-gh/js/cart66Dialog.php:114
+#: ../cart66-gh/models/Cart66Dialog.php:175
+msgid "Add to Cart"
+msgstr ""
+
+#: ../cart66-gh/js/cart66Dialog.php:108
+#: ../cart66-gh/js/cart66Dialog.php:114
+#: ../cart66-gh/models/Cart66Dialog.php:169
+#: ../cart66-gh/models/Cart66Dialog.php:175
+msgid "Cart66 Add To Cart Button"
+msgstr ""
+
+#: ../cart66-gh/js/cart66Dialog.php:110
+#: ../cart66-gh/models/Cart66ButtonManager.php:17
+msgid "Add To Cart"
+msgstr ""
+
+#: ../cart66-gh/js/cart66Dialog.php:242
+msgid "Pick a product"
+msgstr ""
+
+#: ../cart66-gh/js/cart66Dialog.php:243
+msgid "Shortcode Reference"
+msgstr ""
+
+#: ../cart66-gh/js/cart66Dialog.php:251
+#: ../cart66-gh/models/Cart66Dialog.php:203
+msgid "Your products"
+msgstr ""
+
+#: ../cart66-gh/js/cart66Dialog.php:255
+#: ../cart66-gh/models/Cart66Dialog.php:221
+msgid "CSS style"
+msgstr ""
+
+#: ../cart66-gh/js/cart66Dialog.php:259
+#: ../cart66-gh/models/Cart66Dialog.php:225
+msgid "Show price"
+msgstr ""
+
+#: ../cart66-gh/js/cart66Dialog.php:267
+#: ../cart66-gh/models/Cart66Dialog.php:231
+msgid "Button path"
+msgstr ""
+
+#: ../cart66-gh/js/cart66Dialog.php:271
+#: ../cart66-gh/models/Cart66Dialog.php:235
+msgid "Preview"
+msgstr ""
+
+#: ../cart66-gh/js/cart66Dialog.php:448
+msgid "Insert"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66.php:691
+#: ../cart66-gh/models/Cart66.php:692
+msgid "Feature Levels"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Ajax.php:86
+msgid "Warning"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66ButtonManager.php:8
+msgid "Could not load product information"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66CartWidget.php:73
+msgid "Title"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66CartWidget.php:77
+msgid "Choose Cart Widget Type:"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66CartWidget.php:79
+msgid "Standard"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66CartWidget.php:80
+msgid "Advanced"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66CartWidget.php:86
+msgid "Show shipping in widget"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:832
+msgid "We're sorry.<br/>Your order could not be completed for the following reasons"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:876
+msgid "ORDER NUMBER"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:885
+msgid "Item"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:889
+msgid "Item Price"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:890
+msgid "Item Total"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:906
+#: ../cart66-gh/models/Cart66Exporter.php:38
+msgid "Tax"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:909
+msgid "TOTAL"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:912
+msgid "SHIPPING INFORMATION"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:921
+msgid "Delivery via"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:925
+msgid "BILLING INFORMATION"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:936
+#: ../cart66-gh/models/Cart66Exporter.php:32
+msgid "Phone"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:940
+#: ../cart66-gh/models/Cart66Exporter.php:33
+msgid "Email"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:953
+msgid "DOWNLOAD LINK"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:953
+msgid "Click the link below to download your order."
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:956
+msgid "VIEW RECEIPT ONLINE"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:956
+msgid "Click the link below to view your receipt online."
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:1306
+msgid " hours ago"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:1310
+msgid " minutes ago"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Common.php:1314
+msgid " seconds ago"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:7
+msgid "Cart66 Recent Orders"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:8
+msgid "Cart66 Statistics"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:39
+msgid "You have no orders yet... Start Selling!"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:43
+msgid "Cart66 Products"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:44
+msgid "Cart66 Inventory"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:45
+msgid "Cart66 Shipping"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:53
+msgid "Order Details"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:66
+#: ../cart66-gh/models/Cart66Dashboard.php:316
+msgid "Order Total"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:140
+msgid "View All Orders"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:141
+msgid "View Reports"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:145
+msgid "Recent Orders Total"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:176
+msgid "How many recent orders would you like to display?"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:182
+msgid "Display Status Column"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:187
+msgid "Display Order Number Column"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:192
+msgid "Display Delivery Column"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:235
+msgid "Summary"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:236
+msgid "Today/Yesterday"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:238
+#: ../cart66-gh/models/Cart66Dashboard.php:430
+#: ../cart66-gh/models/Cart66Dashboard.php:453
+msgid "Daily Average"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:239
+msgid "Estimate"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:242
+#: ../cart66-gh/models/Cart66Dialog.php:197
+msgid "loading..."
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:249
+msgid "Last Updated"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:259
+msgid " Daily Average"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:267
+#: ../cart66-gh/models/Cart66Dashboard.php:304
+msgid "Today's Total"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:275
+#: ../cart66-gh/models/Cart66Dashboard.php:307
+msgid "Yesterday's Total"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:291
+msgid "Estimated"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:315
+msgid "Today's Order Details"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:347
+msgid "No orders yet today"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:368
+msgid "Sales"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:369
+msgid "Income"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:426
+#: ../cart66-gh/models/Cart66Dashboard.php:449
+msgid "Total Income"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:465
+msgid "Today"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:473
+msgid "Total Days in"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:481
+msgid "Remaining Days in"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:489
+msgid "Estimated Remaining Income"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:537
+msgid "There is a new version of Cart66 available"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:538
+msgid "You are currently running Cart66"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:540
+msgid "The latest version of Cart66 is"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:541
+msgid "View Details"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:543
+msgid "Upgrade Automatically"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dashboard.php:544
+msgid "Dismiss"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:8
+#: ../cart66-gh/models/Cart66Dialog.php:10
+msgid "Add Cart66 Shortcodes"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:60
+msgid "No Products"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:193
+msgid "Shortcodes"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:200
+msgid "Insert A Product"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:208
+msgid "User Defined"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:209
+msgid "Predefined"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:210
+msgid "Off"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:213
+msgid "Default Quantity"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:217
+msgid "Button Text"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:228
+msgid "Price Only"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:245
+msgid "Listens for PayPal Express callbacks <br/>Belongs on system page store/express"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:246
+msgid "PayPal Instant Payment Notification <br/>Belongs on system page store/ipn"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:247
+msgid "Shows the customer's receipt after a successful sale <br/>Belongs on system page store/receipt"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:248
+msgid "Listens for spreedly account changes <br/>Belongs on system page store/spreedly"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:251
+msgid "Create add to cart button"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:252
+msgid "Show the shopping cart"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:253
+msgid "Show the shopping cart in read-only mode"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:254
+msgid "Checkout form that does not process credit cards"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:255
+msgid "PayPal Website Payments Standard checkout button"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:256
+msgid "PayPal Express checkout button"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:257
+msgid "Clear the contents of the shopping cart"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:258
+msgid "Show the Cart66 sidebar widget"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:259
+msgid "Display content one time immediately after a sale"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:263
+msgid "Show link to manage subscription account information"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:264
+msgid "Account login form"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:265
+msgid "Logs user out of account"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:266
+msgid "Show link to log out of account"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:267
+msgid "Show a member when their account expires"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:268
+msgid "Link to cancel PayPal subscription"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:269
+msgid "PayLeap checkout form"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:270
+msgid "Authorize.net (or AIM compatible gateway) checkout form"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:271
+msgid "Eway checkout form"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:272
+msgid "Merchant Warrior checkout form"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:273
+msgid "PayPal Pro checkout form"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:274
+msgid "Show the terms of service agreement"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:275
+msgid "Show the name of the subscription feature level for the currently logged in user"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:276
+msgid "Show the name of the subscription for the currently logged in user"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:277
+msgid "Listens for remote login calls from Zendesk"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:278
+msgid "Hide content from members without the listed feature levels - opposite of [show_to]"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:279
+msgid "Show content only to members with the listed feature levels - opposite of [hide_from]"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:286
+msgid "Insert A System Shortcode"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:289
+msgid "Shortcode Quick Reference"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:309
+msgid "System Shortcodes"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Dialog.php:330
+msgid "Insert Shortcode"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:13
+msgid "Order ID"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:16
+msgid "Billing First Name"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:17
+msgid "Billing Last Name"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:18
+msgid "Billing Address"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:19
+msgid "Billing Address 2"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:20
+msgid "Billing City"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:21
+msgid "Billing State"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:22
+msgid "Billing Country"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:23
+msgid "Billing Zip Code"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:24
+msgid "Shipping First Name"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:25
+msgid "Shipping Last Name"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:26
+msgid "Shipping Address"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:27
+msgid "Shipping Address 2"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:28
+msgid "Shipping City"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:29
+msgid "Shipping State"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:30
+msgid "Shipping Country"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:31
+msgid "Shipping Zip Code"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:35
+msgid "Discount Amount"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:36
+msgid "Shipping Cost"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:37
+msgid "Subtotal"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:40
+msgid "IP Address"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Exporter.php:41
+msgid "Delivery Method"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Product.php:739
+msgid "Unable to upload file"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:32
+msgid "Apply to All Orders"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:44
+msgid "Unlimited"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:102
+msgid "No Start Date"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:107
+msgid "No End Date"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:112
+msgid "Ongoing"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:194
+msgid "That promotion is not valid."
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:199
+msgid "That promotion is not enabled."
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:203
+msgid "The minimum required order total for that promotion has not been met."
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:207
+msgid "The minimum quantity required for that promotion has not been met."
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:211
+msgid "The maximum quantity allowed for that promotion has been exceeded."
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:215
+msgid "This promotion is not currently active."
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:219
+msgid "This promotion has been redeemed the maximum number of times allowed."
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:223
+msgid "Your cart does not contain any eligible products for this promotion."
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:244
+msgid "Promotion Name is required"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:248
+msgid "Promotion Code is required"
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:254
+msgid " The Effective Dates are invalid, the ending date must be after the starting date."
+msgstr ""
+
+#: ../cart66-gh/models/Cart66Promotion.php:265
+msgid "The Promotion Code(s) must be unique. The code \""
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:12
+msgid "Account"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:26
+msgid "First name"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:30
+msgid "Last name"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:45
+msgid "Leave blank unless changing"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:52
+msgid "Plan name"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:60
+msgid "Active until"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:64
+msgid "Enter dates like mm/dd/YYYY or time spans like +3 months.<br/>If this is s lifetime membership just click the Lifetime checkbox."
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:66
+#: ../cart66-gh/pro/admin/accounts.php:153
+msgid "Notes"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:69
+msgid "Notes about this account - not viewable by customer."
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:104
+msgid "Subscription Name"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:105
+msgid "Feature Level"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:106
+msgid "Active Until"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/accounts.php:107
+msgid "Type"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/inventory.php:3
+msgid "Inventory Tracking Is Not Active"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/inventory.php:4
+msgid "You must enable inventory tracking in in the <a href=\""
+msgstr ""
+
+#: ../cart66-gh/pro/admin/inventory.php:8
+msgid ""
+"Track your inventory by selecting the checkbox next to the products you want to track and enter \n"
+"  the quantity you have in stock in the text field. If you are tracking inventory for a product, Cart66 will check the \n"
+"  inventory levels every time a product is added to the shopping cart, every time the quantity of a product in the shopping \n"
+"  cart is changed, and on the checkout page. Inventory is reduced after a successful sale, not when a product is added to \n"
+"  the shopping cart."
+msgstr ""
+
+#: ../cart66-gh/pro/admin/inventory.php:39
+msgid "Select None"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/inventory.php:40
+msgid "Select With Quantity"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/inventory.php:47
+#: ../cart66-gh/pro/admin/inventory.php:55
+msgid "Track"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/inventory.php:48
+#: ../cart66-gh/pro/admin/inventory.php:56
+#: ../cart66-gh/pro/admin/reports.php:12
+msgid "Product Name"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/inventory.php:49
+#: ../cart66-gh/pro/admin/inventory.php:57
+msgid "Product Variation"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/inventory.php:105
+msgid "You do not have any products"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:18
+msgid "PayPal Subscription Information"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:28
+msgid "Subscription name"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:40
+msgid "Initial payment"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:43
+msgid "Payment collected at checkout <a href=\"#\" class=\"what_is\" id=\"what_is_initial_payment\">more info...</a>"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:44
+msgid "or example, this may be a setup fee. This one time fee will be charged at checkout regardless of when you decide to start collecting the recurring payments."
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:47
+msgid "Recurring Price"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:52
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:112
+msgid "Bill every"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:55
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:116
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:154
+msgid "Days"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:56
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:117
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:155
+msgid "Weeks"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:57
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:118
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:156
+msgid "Months"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:58
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:119
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:157
+msgid "Years"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:60
+msgid "How frequently would you like to charge your customer?"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:63
+msgid "Billing cycles"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:65
+msgid "Continuous"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:72
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:138
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:159
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:165
+msgid "What's this?"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:73
+msgid "How many times do you want to bill your customer?<br/>Continuous billing will bill the customer until they cancel the subscription."
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:103
+msgid "Offer trial period"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:110
+msgid "Set up trial period"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:115
+msgid "No Trial"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:121
+msgid "The amount of time between billings"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:124
+msgid "Trial price"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:130
+msgid "Trial cycles"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:139
+msgid "How many times to you want to bill your customer during the trial? For example, if you wanted to offer a trial price of $5.00 per month and wanted the trial period to last for 3 months you would set the following: <br/> Trial period: 1 Month &mdash; Trial price: $5.00 &mdash;  Trial cycles: 3."
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:145
+msgid "Start payments in"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:160
+msgid "When do you want the first recurring payment to be made? The initial payment will be charged at checkout. Usually, your first recurring payment is the 2nd payment you receive from the subscriber.<br/><br/> For example, if you are charging monthly for a service that begins immediately upon checkout, collect the first monthly payment as an \"initial payment\" and start collecting the recurring payments in 1 month."
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:166
+msgid "(Optional) If you leave this blank, Cart66 will display a price description based on the information that defines this subscription. You may customize that message and briefly describe how you plan to bill your customer. This will be the message that showsup next to your add to cart buttons and also in the shopping cart."
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:186
+msgid "This feature is only available in <a href=\"http://cart66.com\">Cart66 Professional</a>"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:195
+msgid "Your PayPal Subscription Plans"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:199
+msgid "Item Number"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:201
+msgid "Level"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:202
+msgid "Initial Payment"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:203
+msgid "Price Description"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:204
+msgid "Additional Payments"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:205
+msgid "Trial"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/paypal-subscriptions.php:206
+msgid "Start In"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/reports.php:17
+msgid "Total Sales"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/reports.php:22
+#: ../cart66-gh/pro/admin/reports.php:25
+msgid "sales"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/reports.php:23
+#: ../cart66-gh/pro/admin/reports.php:26
+msgid "income"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/reports.php:87
+msgid "You have not yet created any products"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/reports.php:91
+msgid "Product sales reports are only available in <a href=\"http://cart66.com\">Cart66 Professional</a>"
+msgstr ""
+
+#: ../cart66-gh/pro/admin/reports.php:96
+msgid "Daily Income Totals"
+msgstr ""
+
+#: ../cart66-gh/pro/gateways/Cart66AuthorizeNet.php:28
+msgid "The Authorize.net Gateway Is Not Configured Correctly"
+msgstr ""
+
+#: ../cart66-gh/pro/gateways/Cart66AuthorizeNet.php:29
+msgid "In order to use the Authorize.net Gateway, you must enter your API Login ID and Transaction Key in the Cart66 Settings Panel"
+msgstr ""
+
+#: ../cart66-gh/pro/gateways/Cart66Eway.php:38
+msgid "The eWay Gateway Is Not Configured Correctly"
+msgstr ""
+
+#: ../cart66-gh/pro/gateways/Cart66Eway.php:39
+msgid "In order to use the eWay Gateway, you must enter your Customer ID in the Cart66 Settings Panel"
+msgstr ""
+
+#: ../cart66-gh/pro/gateways/Cart66MWarrior.php:44
+msgid "The Merchant Warrior Gateway Is Not Configured Correctly"
+msgstr ""
+
+#: ../cart66-gh/pro/gateways/Cart66MWarrior.php:45
+msgid "In order to use the Merchant Warrior Gateway, you must enter your Merchant Warrior API Passphrase, MerchantUUID and API Key in the Cart66 Settings Panel"
+msgstr ""
+
+#: ../cart66-gh/pro/gateways/Cart66PayLeap.php:38
+msgid "The PayLeap Gateway Is Not Configured Correctly"
+msgstr ""
+
+#: ../cart66-gh/pro/gateways/Cart66PayLeap.php:39
+msgid "In order to use the PayLeap Gateway, you must enter your PayLeap API Username and Transaction Key in the Cart66 Settings Panel"
+msgstr ""
+
+#: ../cart66-gh/pro/models/Cart66Account.php:311
+msgid "Username required"
+msgstr ""
+
+#: ../cart66-gh/pro/models/Cart66Account.php:324
+msgid "Username unavailable"
+msgstr ""
+
+#: ../cart66-gh/pro/models/Cart66Account.php:341
+msgid "Email address is invalid"
+msgstr ""
+
+#: ../cart66-gh/pro/models/Cart66Account.php:357
+msgid "Account password is required"
+msgstr ""
+
+#: ../cart66-gh/pro/models/Cart66PayPalSubscription.php:13
+msgid "Item number is required"
+msgstr ""
+
+#: ../cart66-gh/pro/models/Cart66PayPalSubscription.php:22
+msgid "The item number must be unique"
+msgstr ""
+
+#: ../cart66-gh/pro/models/Cart66PayPalSubscription.php:27
+msgid "Subscription name is required"
+msgstr ""
+
+#: ../cart66-gh/pro/models/Cart66PayPalSubscription.php:31
+msgid "Feature level is required"
+msgstr ""
+
+#: ../cart66-gh/pro/models/Cart66PayPalSubscription.php:35
+msgid "The price must be greater than zero"
+msgstr ""
+
+#: ../cart66-gh/pro/models/Cart66PayPalSubscription.php:39
+msgid "The billing interval must be a number greater than zero"
+msgstr ""
+
+#: ../cart66-gh/views/account-info.php:13
+msgid "Update Your Account Information"
+msgstr ""
+
+#: ../cart66-gh/views/account-info.php:31
+msgid "Update Your Password"
+msgstr ""
+
+#: ../cart66-gh/views/account-info.php:32
+msgid "Leave blank to keep current password."
+msgstr ""
+
+#: ../cart66-gh/views/account-info.php:37
+msgid "Enter a new password."
+msgstr ""
+
+#: ../cart66-gh/views/account-login.php:20
+msgid "Forgot my password"
+msgstr ""
+
+#: ../cart66-gh/views/account-login.php:27
+msgid "Enter your username and we will send you a new password.<br/> The email will be sent to the email address you used for your account."
+msgstr ""
+
+#: ../cart66-gh/views/cart-button.php:38
+msgid "Enter an amount: "
+msgstr ""
+
+#: ../cart66-gh/views/cart-button.php:54
+msgid "Quantity: "
+msgstr ""
+
+#: ../cart66-gh/views/cart-button.php:66
+msgid "Cart66 Professional"
+msgstr ""
+
+#: ../cart66-gh/views/cart-button.php:66
+msgid "is required to sell subscriptions"
+msgstr ""
+
+#: ../cart66-gh/views/cart-button.php:76
+msgid "Out of stock"
+msgstr ""
+
+#: ../cart66-gh/views/cart-button.php:82
+msgid "We're Sorry"
+msgstr ""
+
+#: ../cart66-gh/views/cart-sidebar-advanced.php:7
+msgid "You have"
+msgstr ""
+
+#: ../cart66-gh/views/cart-sidebar-advanced.php:9
+msgid "in your shopping cart"
+msgstr ""
+
+#: ../cart66-gh/views/cart-sidebar-advanced.php:67
+#: ../cart66-gh/views/cart.php:190
+#: ../cart66-gh/views/cart.php:250
+msgid "Shipping to"
+msgstr ""
+
+#: ../cart66-gh/views/cart-sidebar-advanced.php:73
+msgid "change"
+msgstr ""
+
+#: ../cart66-gh/views/cart-sidebar-advanced.php:101
+#: ../cart66-gh/views/cart.php:224
+msgid "Enter Your Zip Code"
+msgstr ""
+
+#: ../cart66-gh/views/cart-sidebar-advanced.php:153
+msgid "items in your shopping cart"
+msgstr ""
+
+#: ../cart66-gh/views/cart-sidebar-advanced.php:154
+#: ../cart66-gh/views/cart-sidebar.php:14
+msgid "View Cart"
+msgstr ""
+
+#: ../cart66-gh/views/cart-sidebar.php:16
+msgid "Check out"
+msgstr ""
+
+#: ../cart66-gh/views/cart-sidebar.php:19
+msgid "Your cart is empty."
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:66
+msgid "Inventory Restriction"
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:78
+msgid "Please Provide Your Zip Code"
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:79
+msgid "Before you can checkout, please provide the zip code for where we will be shipping your order and click"
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:79
+msgid "Calculate Shipping"
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:87
+msgid "No Shipping Service Selected"
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:88
+msgid "We cannot process your order because you have not selected a shipping method. If there are no shipping services available, we may not be able to ship to your location."
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:96
+msgid "Too Many Subscriptions"
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:97
+msgid "Only one subscription may be purchased at a time."
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:111
+msgid "Your current subscription will be canceled when you purchase your new subscription."
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:170
+msgid "Show Details"
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:250
+msgid "via"
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:286
+msgid "Update Total"
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:333
+msgid "Do you have a coupon?"
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:342
+msgid "Apply Coupon"
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:391
+#: ../cart66-gh/views/checkout-form.php:315
+msgid "Checkout"
+msgstr ""
+
+#: ../cart66-gh/views/cart.php:415
+msgid "Your Cart Is Empty"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:39
+msgid "Order Information"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:55
+#: ../cart66-gh/views/checkout-form.php:124
+msgid "Address"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:60
+msgid "Address 2"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:65
+#: ../cart66-gh/views/checkout-form.php:134
+msgid "City"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:85
+#: ../cart66-gh/views/checkout-form.php:154
+msgid "Zip code"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:90
+#: ../cart66-gh/views/checkout-form.php:159
+msgid "Country"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:106
+msgid "Same as billing address"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:177
+msgid "Payment Information"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:191
+msgid "Card Number"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:196
+msgid "Expiration"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:229
+msgid "Security ID"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:231
+msgid "Security code on back of card"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:326
+#: ../cart66-gh/views/checkout-form.php:328
+#: ../cart66-gh/views/paypal-express.php:402
+msgid "Complete Order"
+msgstr ""
+
+#: ../cart66-gh/views/checkout-form.php:331
+msgid "Your receipt will be on the next page and also immediately emailed to you. <strong>We respect your privacy!</strong>"
+msgstr ""
+
+#: ../cart66-gh/views/paypal-checkout.php:129
+msgid "You must configure your payment settings"
+msgstr ""
+
+#: ../cart66-gh/views/paypal-express.php:380
+msgid "Create Your Account"
+msgstr ""
+
+#: ../cart66-gh/views/paypal-express.php:399
+msgid "Repeat Password"
+msgstr ""
+
+#: ../cart66-gh/views/paypal-express.php:418
+#: ../cart66-gh/views/paypal-express.php:433
+msgid "Your receipt will be on the next page and also emailed to you."
+msgstr ""
+
+#: ../cart66-gh/views/paypal-expresscheckout.php:10
+msgid "PayPal Express Checkout Is Not Configured"
+msgstr ""
+
+#: ../cart66-gh/views/paypal-expresscheckout.php:11
+msgid "In order to use PayPal Express Checkout you must enter your PayPal API username, password and signature in the Cart66 Settings Panel"
+msgstr ""
+
+#: ../cart66-gh/views/receipt.php:92
+msgid "You have exceeded the maximum number of downloads for this product"
+msgstr ""
+
+#: ../cart66-gh/views/receipt.php:275
+#: ../cart66-gh/views/receipt_print_version.php:201
+msgid "Discount"
+msgstr ""
+
+#: ../cart66-gh/views/receipt.php:295
+msgid "Printer Friendly Receipt"
+msgstr ""
+
+#: ../cart66-gh/views/receipt.php:303
+msgid "Receipt not available"
+msgstr ""
+
+#: ../cart66-gh/views/receipt_print_version.php:12
+msgid "Your Receipt"
+msgstr ""
+
+#: ../cart66-gh/views/client/checkout.php:40
+msgid "Province"
+msgstr ""
+
+#: ../cart66-gh/views/client/checkout.php:41
+msgid "Post code"
 msgstr ""
 
 #: ../cart66-pro/admin/promotions.php:21
@@ -886,1291 +3182,11 @@ msgstr ""
 msgid "NOTE: Promotion code discounts do not affect shipping costs."
 msgstr ""
 
-#: ../cart66-pro/admin/promotions.php:33
-#: ../cart66-pro/admin/promotions.php:72
-#: ../cart66-pro/admin/promotions.php:80
-msgid "Promotion code"
-msgstr ""
-
-#: ../cart66-pro/admin/promotions.php:37
-msgid "Type of promotion"
-msgstr ""
-
-#: ../cart66-pro/admin/promotions.php:39
-msgid "Money Amount"
-msgstr ""
-
-#: ../cart66-pro/admin/promotions.php:40
-msgid "Percentage"
-msgstr ""
-
-#: ../cart66-pro/admin/promotions.php:50
-msgid "Minimum order"
-msgstr ""
-
 #: ../cart66-pro/admin/promotions.php:52
 msgid "Leave blank to apply this promotion to all orders."
 msgstr ""
 
-#: ../cart66-pro/admin/promotions.php:74
-#: ../cart66-pro/admin/promotions.php:82
-msgid "Minimum Order"
-msgstr ""
-
-#: ../cart66-pro/admin/promotions.php:93
-#: ../cart66-pro/admin/shipping.php:344
-#: ../cart66-pro/admin/shipping.php:427
-#: ../cart66-pro/admin/shipping.php:522
-msgid "Edit"
-msgstr ""
-
-#: ../cart66-pro/admin/reports.php:5
-msgid "Product Sales"
-msgstr ""
-
-#: ../cart66-pro/admin/reports.php:28
-msgid "Start Date"
-msgstr ""
-
-#: ../cart66-pro/admin/reports.php:29
-msgid "End Date"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:83
-msgid "Success"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:112
-msgid "Cart66 Settings"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:127
-msgid ""
-"Please enter your Cart66 order number to get automatic upgrades and support.<br/>\n"
-"          If you do not have an order number please <a href=\"http://www.Cart66.com\">buy a license</a>."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:144
-msgid "Invalid Order Number"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:159
-msgid "Main Settings"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:169
-msgid "Hide system pages"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:174
-msgid ""
-"Hiding system pages will hide all the pages that Cart66 installs \n"
-"                  from your site's navigation. Express, IPN, and Receipt will always be hidden. Selecting 'Yes' will also hide\n"
-"                  Store, Cart, and Checkout which you may want to have your customers access through the Cart66 Shopping Cart widget rather than your site's main navigation."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:179
-msgid "Home country"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:194
-msgid "Your home country will be the default country on your checkout form"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:199
-msgid "Use the HTML entity such as &amp;pound; for &pound; British Pound Sterling or &amp;euro; for &euro; Euro"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:202
-msgid "Currency character"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:204
-msgid "Do NOT use the HTML entity. This is the currency character used for the email receipts."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:207
-msgid "International sales"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:215
-msgid "Ship to countries"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:233
-msgid "Use SSL"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:240
-msgid "Be sure use an SSL certificate if you are using a payment gateway other than PayPal Website Payments Standard or PayPal Express Checkout."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:244
-msgid "Track inventory"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:250
-msgid "This feature uses ajax. If you have javascript errors in your theme clicking Add To Cart buttons will not add products to the cart."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:270
-msgid "Tax Rates"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:273
-msgid ""
-"If you would like to collect sales tax please enter the tax rate information below. \n"
-"          You may enter tax rates for zip codes or states. If you are entering zip codes, you can enter individual \n"
-"          zip codes or zip code ranges. A zip code range is entered with the low value separated from the high value\n"
-"          by a dash. For example, 23000-25000. Zip code tax rates take precedence over state tax rates.\n"
-"          You may also choose whether or not you want to apply taxes to shipping charges."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:279
-msgid ""
-"NOTE: If you are using PayPal Website Payments Standard you must set up the tax rate \n"
-"          information <strong>in your paypal account</strong>."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:289
-msgid "All Sales"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:361
-msgid "Zip"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:363
-#: ../cart66-pro/admin/settings.php:379
-#: ../cart66-pro/admin/shipping.php:410
-msgid "Rate"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:366
-msgid "Don't tax shipping"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:367
-msgid "Tax shipping"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:378
-msgid "Location"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:380
-msgid "Tax Shipping"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:401
-msgid "yes"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:401
-msgid "no"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:420
-msgid "PayPal Settings"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:423
-msgid ""
-"If you have signed up for the PayPal Pro account or if you plan to use PayPal Express Checkout, \n"
-"          please configure you settings below."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:430
-msgid "PayPal Email"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:434
-msgid "Default Currency"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:449
-msgid "Shopping URL"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:451
-msgid "Used when buyers click 'Continue Shopping' in the PayPal Cart."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:454
-msgid "Return URL"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:457
-msgid "Where buyers are sent after paying at PayPal."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:460
-msgid "Notification URL"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:468
-msgid "Instant Payment Notification (IPN)"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:472
-msgid "PayPal API Settings for Express Checkout"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:475
-msgid "API Username"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:480
-msgid "API Password"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:485
-msgid "API Signature"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:494
-msgid "Note: The Website Payments Pro solution can only be implemented by UK, Canadian and US Merchants."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:495
-msgid "Learn more"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:497
-msgid "Note: The Website Payments Pro solution is only available in <a href=\"http://cart66.com\">Cart66 Professional</a> and can only be implemented by UK, Canadian and US Merchants."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:511
-msgid "Payment Gateway Settings"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:515
-msgid "These settings configure your connection to your Authorize.net AIM compatible payment gateway."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:525
-msgid "Gateway"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:530
-msgid "Other"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:535
-msgid "Emulation URL"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:537
-msgid "Autorize.net AIM emulation URL"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:540
-msgid "API Login ID"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:542
-msgid "Where can I find my Authorize.net API Login ID and Transaction Key?"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:545
-msgid "Transaction key"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:550
-msgid "Accept Cards"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:569
-msgid "With <a href=\"http://cart66.com\">Cart66 Professional</a> you can accept credit cards directly on your website using:"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:575
-msgid "Any other gateway that implements the Authorize.net AIM interface"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:586
-msgid "Email Receipt Settings"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:590
-msgid "These are the settings used for sending email receipts to your customers after they place an order."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:596
-#: ../cart66-pro/admin/settings.php:646
-msgid "From Name"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:599
-msgid ""
-"The name of the person from whom the email receipt will be sent. \n"
-"                You may want this to be your company name."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:602
-#: ../cart66-pro/admin/settings.php:652
-msgid "From Address"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:605
-msgid "The email address the email receipt will be from."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:608
-msgid "Receipt Subject"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:611
-msgid "The subject of the email receipt"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:613
-msgid "Receipt Intro"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:616
-msgid "This text will appear at the top of the receipt email message above the list of items purchased."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:618
-msgid "Copy Receipt To"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:620
-msgid "Use commas to separate addresses."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:636
-msgid "Password Reset Email Settings"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:640
-msgid "These are the settings used for sending password reset emails your subscribers who forget their passwords."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:649
-msgid ""
-"The name of the person from whom the email will be sent. \n"
-"                  You may want this to be your company name."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:655
-msgid "The email address the email will be from."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:658
-msgid "Email Subject"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:661
-msgid "The subject of the email."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:663
-msgid "Email Intro"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:666
-msgid "This text will appear at the top of the reset email message above the new password."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:680
-msgid "Blog Post Access Denied Messages"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:684
-msgid "These are the messages your visitors will see when attempting to access a blog post that they do not have permission to view."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:690
-msgid "Not logged in"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:693
-msgid "The message that appears when a private posted is accessed by a visitor who is not logged in."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:695
-msgid "Access denied"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:698
-msgid "The message that appears when a logged in member's subscription does not allow them to view the post."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:714
-msgid "Status Options"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:717
-msgid "Define the order status options to suit your business needs. For example, you may want to have new, complete, and canceled."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:724
-msgid "Order statuses"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:727
-msgid "Separate values with commas. (ex. new,complete,cancelled)"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:741
-msgid "Digital Product Settings"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:744
-msgid "Enter the absolute path to where you want to store your digital products. We suggest you choose a folder that is not web accessible. To help you figure out the path to your digital products folder, this is the absolute path to the page you are viewing now."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:746
-msgid "Please note you should NOT enter a web url starting with http:// Your filesystem path will start with just a /"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:753
-msgid "Product folder"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:760
-msgid "<strong>WARNING:</strong> This directory does not exist."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:761
-msgid "<strong>WARNING:</strong> WordPress cannot write to this folder."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:779
-msgid "Store Home Page"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:782
-msgid ""
-"This is the link to the page of your site that you consider to be the home page of your store.\n"
-"          When a customer views the items in their shopping cart this is the link used by the \"continue shopping\" button.\n"
-"          You might set this to be the home page of your website or, perhaps, another page within your website that you consider\n"
-"          to be the home page of the store section of your website. If you do not set a value here, the home page of your website\n"
-"          will be used."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:793
-msgid "Store URL"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:811
-msgid "Spreedly Account Information"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:814
-msgid "Configure your Spreedly account information to sell subscriptions."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:821
-msgid "Short site name"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:824
-msgid "Look in your spreedly account under Site Details for the short site name (Used in URLs, etc)"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:826
-msgid "API token"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:829
-msgid "Look in your spreedly account under Site Details for the API Authentication Token."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:831
-msgid "Log out link"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:834
-msgid "Append a logout link to your site's navigation.<br/>Note, this only works with themes that build the navigation using the wp_list_pages() function. See the documentation for other log out options when using WordPress 3.0 Menus."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:850
-msgid "Amazon S3 Settings"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:853
-msgid "Amazon S3 provides a simple web services interface for delivering digital content. It gives you access to the same highly scalable, reliable, secure, fast, inexpensive infrastructure that Amazon uses to run its own global network of web sites. Deliver you Cart66 digital products through your Amazon S3 account to increase security and performance when selling digital products."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:854
-msgid "Configure your Amazon S3 account information so Cart66 can distribute secure digital downloads from your Amazon S3 account."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:861
-msgid "Access Key ID"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:864
-msgid "Secret Key"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:880
-msgid "Constant Contact Settings"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:883
-msgid "Configure your Constant Contact account information so your buyers can opt in to your newsletter."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:897
-#: ../cart66-pro/admin/settings.php:976
-msgid "Opt-in Message"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:900
-#: ../cart66-pro/admin/settings.php:979
-msgid "Provide a message to tell your buyers what your newsletter is about.<br/>For example, you might want to say something like \"Yes! I would like to subscribe to:\""
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:938
-msgid ""
-"Constant Contact is\n"
-"              an industry leader in email marketing. Constant Contact provides email marketing software that makes it easy to \n"
-"              create professional HTML email campaigns with no tech skills."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:941
-#: ../cart66-pro/admin/settings.php:1070
-#: ../cart66-pro/admin/settings.php:1116
-msgid "This feature is only available in <a href=\"http://cart66.com\">Cart66 Professional</a>."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:953
-msgid "MailChimp Settings"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:962
-msgid "Configure your <a href=\"http://eepurl.com/dtQBb\" target=\"_blank\">Mail Chimp</a> account information so your buyers can opt in to your newsletter."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:972
-msgid "MailChimp API Key"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:974
-msgid "Need an API key? Find out how to get one"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:981
-msgid "Double Opt-In"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:985
-msgid "Send a Double Opt-In email"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:989
-msgid "Don't send a Double Opt-In email"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:990
-msgid "Send a double opt-in confirmation message. <strong>Abusing this may cause your account to be suspended.</strong>"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:990
-msgid "Read more about Opt-Ins"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:993
-msgid "Show Lists"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1045
-msgid "Configure your iDevAffiliate account information so Cart66 can award commissions to your affiliates."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1056
-msgid "Copy and paste your iDevAffiliate \"3rd Party Affiliate Call\" URL. It will looks like"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1058
-msgid "Be sure to leave the XXX's in place and Cart66 will replace the XXX's with the appropriate values for each sale."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1060
-msgid "Note: To disable iDevAffiliate integration, simply delete this URL and click Save."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1069
-msgid "is The Industry Leader in self managed affiliate program software. Started in 1999, iDevAffiliate is the original in self managed affiliate software! iDevAffiliate was hand coded from scratch by the same team that provides their technical support! iDevAffilaite is also the affilate software that runs our"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1081
-msgid "Zendesk Account Information"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1084
-msgid "Configure your Zendesk account information to enable remote authentication."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1092
-msgid "Token"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1095
-msgid "Look in your Zendesk account under Account --> Security --> Enable Remote Authentication for the Authentication Token."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1097
-msgid "Prefix"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1100
-msgid "The prefix is the first part of your zendesk account URL.<br/>For example, if your Zendesk URL is http://<strong style=\"font-size: 14px;\">mycompany</strong>.zendesk.com Then your prefix is mycompany."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1115
-msgid "is the industry leader in web-based help desk software with an elegant support ticket system and a self-service customer support platform. Agile, smart, and convenient."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1127
-msgid "Customize Cart Images"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1130
-msgid "If you would like to use your own shopping cart images (Add To Cart, Checkout, etc), enter the URL to the directory where you will be storing the images. The path should be outside the plugins/cart66 directory so that they are not lost when you upgrade your Cart66 intallation to a new version."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1131
-msgid "For example you may want to store your custom cart images here"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1133
-msgid "Be sure that your path ends in a trailing slash like the example above and that you have all of the image names below in your directory"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1150
-msgid "URL to image directory"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1167
-msgid "Customize Styles"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1170
-msgid "If you would like to override the default styles, you may enter the URL to your custom style sheet."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1176
-msgid "URL to CSS"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1192
-msgid "Error Logging &amp; Debugging"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1203
-msgid "Enable logging"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1207
-msgid "Only enable logging when testing your site. The log file will grow quickly."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1211
-msgid "Use PayPal Sandbox"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1215
-msgid "Send transactions to <a href=\"https://developer.paypal.com\">PayPal's developer sandbox</a>."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1219
-msgid "Disable caching"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1221
-msgid "never"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1222
-msgid "on cart pages"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1223
-msgid "on all pages"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1225
-msgid "Send HTTP headers to prevent pages from being cached by web browsers."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1229
-msgid "Delete database when uninstalling"
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1231
-msgid "<strong>WARNING:</strong> Cart66 Lite and Cart66 Professional share the same database. If you are upgrading from Cart66 Lite to Professional and want to keep all your settings, <strong>do not delete the database</strong> when uninstalling Cart66 Lite."
-msgstr ""
-
-#: ../cart66-pro/admin/settings.php:1257
-msgid "Debugging Data"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:123
-msgid "Live Shipping Rates"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:125
-msgid "Using live shipping rates overrides all other types of shipping settings."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:129
-msgid "Live shipping rates are enabled."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:135
-msgid "Live shipping rates are not enabled."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:148
-msgid "Current Tweak Factor"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:173
-msgid "Tweak by percentage"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:174
-msgid "Tweak by fixed amount"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:180
-msgid "What is this?"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:184
-msgid "How The Rate Tweaker Works"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:185
-msgid "The rate tweaker provides a way to adjust the live rate quotes by increasing or decreasing all of the calculated rates by a specified amount. You may choose to modify the rates by a percentage amount or by fixed amount. Enter a positive value to increase the calculated rates or negative value to reduce them. The rate tweaker will never reduce shipping rates below zero."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:186
-#, php-format
-msgid "For example, if you want to increase all the calculated rates by 15% select \"Tweak by percentage\" and enter 15 in the text field then click \"Save\""
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:187
-msgid "If you want to take $5.00 off all the shipping rates select \"Tweak by fixed amount\" and enter -5 in the text field then click \"Save\""
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:188
-msgid "To stop using the rate tweaker, enter 0 and click \"save\""
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:193
-msgid "USPS Shipping Account Information"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:194
-msgid "If you intend to use United States Postal Service real-time shipping quotes please provide your USPS account information.<br/>This feature requires a <strong>production USPS account.</strong> A test account will not work."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:199
-msgid "Webtools username"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:203
-#: ../cart66-pro/admin/shipping.php:253
-msgid "Ship from zip"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:207
-msgid "Select the USPS shipping methods you would like to offer to your customers."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:208
-#: ../cart66-pro/admin/shipping.php:258
-msgid "Select All"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:231
-msgid "UPS Shipping Account Information"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:232
-msgid "If you intend to use UPS real-time shipping quotes please provide your UPS account information."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:245
-msgid "API Key"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:249
-msgid "Account number"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:257
-msgid "Select the UPS shipping methods you would like to offer to your customers."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:258
-msgid "Clear All"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:283
-msgid "Shipping Methods"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:284
-msgid ""
-"Create the shipping methods you will offer your customers. If no shipping\n"
-"    price is defined for a product, the default rates entered here will be used\n"
-"    to calculate shipping costs."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:294
-#: ../cart66-pro/admin/shipping.php:371
-#: ../cart66-pro/admin/shipping.php:409
-#: ../cart66-pro/admin/shipping.php:474
-#: ../cart66-pro/admin/shipping.php:507
-msgid "Shipping method"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:300
-#: ../cart66-pro/admin/shipping.php:332
-msgid "Default rate"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:303
-msgid "Rate if only one item is ordered"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:310
-msgid "Rate for each additional item"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:333
-msgid "Default bundle rate"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:353
-msgid "Product Shipping Prices"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:355
-msgid "The shipping prices you set up here override the default shipping prices for the shipping methods above."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:379
-msgid "Shipping rate"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:398
-msgid "You must enter at least one shipping method and at least one product for these setting to appear."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:411
-msgid "Bundle rate"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:435
-msgid "Cart Price Shipping Rates"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:437
-msgid ""
-"You can set the shipping cost based on the total cart value. For example, you \n"
-"      may want to offer free shipping on orders over $50. To do that set minimum cart amount to $50 and the\n"
-"      shipping cost to $0."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:440
-msgid ""
-"You can also set up tiered shipping costs based on the cart amount. For example,\n"
-"      if you want to charge $10 shipping on orders between $0 - $24.99 and $5 shipping on orders between $25 - $49.99\n"
-"      and free shipping on orders $50 or more you would set that up with three shipping rules as follows."
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:446
-#: ../cart66-pro/admin/shipping.php:469
-#: ../cart66-pro/admin/shipping.php:506
-msgid "Minimum cart amount"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:447
-#: ../cart66-pro/admin/shipping.php:482
-#: ../cart66-pro/admin/shipping.php:508
-msgid "Shipping cost"
-msgstr ""
-
-#: ../cart66-pro/admin/shipping.php:496
-msgid "You must have entered at least one shipping method before you can configure these settings."
-msgstr ""
-
-#: ../cart66-pro/gateways/Cart66GatewayAbstract.php:106
-msgid "Billing "
-msgstr ""
-
-#: ../cart66-pro/gateways/Cart66GatewayAbstract.php:106
-#: ../cart66-pro/gateways/Cart66GatewayAbstract.php:127
-#: ../cart66-pro/gateways/Cart66GatewayAbstract.php:158
-msgid " required"
-msgstr ""
-
-#: ../cart66-pro/gateways/Cart66GatewayAbstract.php:127
-msgid "Payment "
-msgstr ""
-
-#: ../cart66-pro/gateways/Cart66GatewayAbstract.php:132
-msgid "Invalid credit card number"
-msgstr ""
-
-#: ../cart66-pro/gateways/Cart66GatewayAbstract.php:158
-msgid "Shipping "
-msgstr ""
-
-#: ../cart66-pro/gateways/Cart66GatewayAbstract.php:224
-msgid "Unable to determine tax rate because shipping data is unavailable"
-msgstr ""
-
-#: ../cart66-pro/gateways/Cart66GatewayAbstract.php:300
-msgid "There must be at least one item in the cart."
-msgstr ""
-
-#: ../cart66-pro/gateways/Cart66ManualGateway.php:13
-msgid "Email address is required"
-msgstr ""
-
-#: ../cart66-pro/gateways/Cart66ManualGateway.php:18
-msgid "Phone number is required"
-msgstr ""
-
-#: ../cart66-pro/models/Cart66ButtonManager.php:8
-msgid "Could not load product information"
-msgstr ""
-
-#: ../cart66-pro/models/Cart66Common.php:749
-msgid "ORDER NUMBER"
-msgstr ""
-
-#: ../cart66-pro/models/Cart66Common.php:758
-msgid "Item"
-msgstr ""
-
-#: ../cart66-pro/models/Cart66Common.php:782
-msgid "TOTAL"
-msgstr ""
-
-#: ../cart66-pro/models/Cart66Common.php:785
-msgid "SHIPPING INFORMATION"
-msgstr ""
-
-#: ../cart66-pro/models/Cart66Common.php:798
-msgid "BILLING INFORMATION"
-msgstr ""
-
-#: ../cart66-pro/models/Cart66Common.php:826
-msgid "DOWNLOAD LINK"
-msgstr ""
-
-#: ../cart66-pro/models/Cart66Common.php:826
-msgid "Click the link below to download your order."
-msgstr ""
-
-#: ../cart66-pro/models/Cart66Common.php:829
-msgid "VIEW RECEIPT ONLINE"
-msgstr ""
-
-#: ../cart66-pro/models/Cart66Common.php:829
-msgid "Click the link below to view your receipt online."
-msgstr ""
-
-#: ../cart66-pro/pro/admin/accounts.php:12
-msgid "Account"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/accounts.php:45
-msgid "Leave blank unless changing"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/accounts.php:52
-msgid "Plan name"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/accounts.php:60
-msgid "Active until"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/accounts.php:63
-msgid "Enter dates like mm/dd/YYYY or time spans like +3 months.<br/>If this is s lifetime membership just click the Lifetime checkbox."
-msgstr ""
-
-#: ../cart66-pro/pro/admin/accounts.php:65
-#: ../cart66-pro/pro/admin/accounts.php:152
-msgid "Notes"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/accounts.php:68
-msgid "Notes about this account - not viewable by customer."
-msgstr ""
-
-#: ../cart66-pro/pro/admin/accounts.php:103
-msgid "Subscription Name"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/accounts.php:104
-msgid "Feature Level"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/accounts.php:105
-msgid "Active Until"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/accounts.php:106
-msgid "Type"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/inventory.php:3
-msgid "Inventory Tracking Is Not Active"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/inventory.php:4
-msgid "You must enable inventory tracking in in the <a href=\"<?php echo $wpurl ?>/wp-admin/admin.php?page=cart66-settings\">settings panel</a>."
-msgstr ""
-
-#: ../cart66-pro/pro/admin/inventory.php:8
-msgid ""
-"Track your inventory by selecting the checkbox next to the products you want to track and enter \n"
-"  the quantity you have in stock in the text field. If you are tracking inventory for a product, Cart66 will check the \n"
-"  inventory levels every time a product is added to the shopping cart, every time the quantity of a product in the shopping \n"
-"  cart is changed, and on the checkout page. Inventory is reduced after a successful sale, not when a product is added to \n"
-"  the shopping cart."
-msgstr ""
-
-#: ../cart66-pro/pro/admin/inventory.php:39
-msgid "Select None"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/inventory.php:40
-msgid "Select With Quantity"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/inventory.php:47
-#: ../cart66-pro/pro/admin/inventory.php:55
-msgid "Track"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/inventory.php:48
-#: ../cart66-pro/pro/admin/inventory.php:56
-#: ../cart66-pro/pro/admin/reports.php:11
-msgid "Product Name"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/inventory.php:49
-#: ../cart66-pro/pro/admin/inventory.php:57
-msgid "Product Variation"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/inventory.php:105
-msgid "You do not have any products"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:18
-msgid "PayPal Subscription Information"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:28
-msgid "Subscription name"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:40
-msgid "Initial payment"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:43
-msgid "Payment collected at checkout <a href=\"#\" class=\"what_is\" id=\"what_is_initial_payment\">more info...</a>"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:44
-msgid "or example, this may be a setup fee. This one time fee will be charged at checkout regardless of when you decide to start collecting the recurring payments."
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:47
-msgid "Recurring Price"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:52
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:112
-msgid "Bill every"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:55
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:116
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:154
-msgid "Days"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:56
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:117
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:155
-msgid "Weeks"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:57
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:118
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:156
-msgid "Months"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:58
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:119
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:157
-msgid "Years"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:60
-msgid "How frequently would you like to charge your customer?"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:63
-msgid "Billing cycles"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:65
-msgid "Continuous"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:72
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:138
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:159
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:165
-msgid "What's this?"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:73
-msgid "How many times do you want to bill your customer?<br/>Continuous billing will bill the customer until they cancel the subscription."
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:103
-msgid "Offer trial period"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:110
-msgid "Set up trial period"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:115
-msgid "No Trial"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:121
-msgid "The amount of time between billings"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:124
-msgid "Trial price"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:130
-msgid "Trial cycles"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:139
-msgid "How many times to you want to bill your customer during the trial? For example, if you wanted to offer a trial price of $5.00 per month and wanted the trial period to last for 3 months you would set the following: <br/> Trial period: 1 Month &mdash; Trial price: $5.00 &mdash;  Trial cycles: 3."
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:145
-msgid "Start payments in"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:160
-msgid "When do you want the first recurring payment to be made? The initial payment will be charged at checkout. Usually, your first recurring payment is the 2nd payment you receive from the subscriber.<br/><br/> For example, if you are charging monthly for a service that begins immediately upon checkout, collect the first monthly payment as an \"initial payment\" and start collecting the recurring payments in 1 month."
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:166
-msgid "(Optional) If you leave this blank, Cart66 will display a price description based on the information that defines this subscription. You may customize that message and briefly describe how you plan to bill your customer. This will be the message that showsup next to your add to cart buttons and also in the shopping cart."
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:186
-msgid "This feature is only available in <a href=\"http://cart66.com\">Cart66 Professional</a>"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:195
-msgid "Your PayPal Subscription Plans"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:199
-msgid "Item Number"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:201
-msgid "Level"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:202
-msgid "Initial Payment"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:203
-msgid "Price Description"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:204
-msgid "Additional Payments"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:205
-msgid "Trial"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/paypal-subscriptions.php:206
-msgid "Start In"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/reports.php:16
-msgid "Total Sales"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/reports.php:21
-#: ../cart66-pro/pro/admin/reports.php:24
-msgid "sales"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/reports.php:22
-#: ../cart66-pro/pro/admin/reports.php:25
-msgid "income"
-msgstr ""
-
-#: ../cart66-pro/pro/admin/reports.php:91
-msgid "Daily Income Totals"
-msgstr ""
-
-#: ../cart66-pro/views/account-info.php:32
-msgid "Leave blank to keep current password."
-msgstr ""
-
-#: ../cart66-pro/views/account-info.php:37
-msgid "Enter a new password."
-msgstr ""
-
-#: ../cart66-pro/views/account-login.php:27
-msgid "Enter your username and we will send you a new password.<br/> The email will be sent to the email address you used for your account."
-msgstr ""
-
-#: ../cart66-pro/views/cart-sidebar.php:19
-msgid "Your cart is empty."
-msgstr ""
-
-#: ../cart66-pro/views/cart.php:70
-msgid "We cannot process your order because you have not selected a shipping method. If there are no shipping services available, we may not be able to ship to your location."
-msgstr ""
-
-#: ../cart66-pro/views/cart.php:79
-msgid "Only one subscription may be purchased at a time."
-msgstr ""
-
-#: ../cart66-pro/views/cart.php:93
-msgid "Your current subscription will be canceled when you purchase your new subscription."
-msgstr ""
-
-#: ../cart66-pro/views/paypal-express.php:407
-#: ../cart66-pro/views/paypal-express.php:422
-msgid "Your receipt will be on the next page and also emailed to you."
+#: ../cart66-pro/js/cart66Dialog.php:263
+msgid "OK"
 msgstr ""
 

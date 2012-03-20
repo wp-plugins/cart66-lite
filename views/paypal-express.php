@@ -50,8 +50,31 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     $keepGoing = true; // Change to false if a critical step in the checkout fails.
     $token = Cart66Common::postVal('token');
     $payerId = Cart66Common::postVal('PayerID');
-    $itemAmount = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
+    $promotion = Cart66Session::get('Cart66Promotion');
+    $discount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
+    $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount();
     $shipping = Cart66Session::get('Cart66Cart')->getShippingCost();
+    if(is_object($promotion) && $promotion->apply_to == 'total') {
+      
+      $itemDiscount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
+      if($itemDiscount > 0) {
+        $itemTotal = $itemTotal - $itemDiscount;            
+      }
+      if($itemTotal <= 0) {
+        $discount = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount();
+        $shipping = $shipping + $itemTotal;
+        $itemTotal = 0;
+      }
+    }
+
+      if(is_object($promotion) && $promotion->apply_to == 'products'){
+        $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
+      }
+
+      if(is_object($promotion) && $promotion->apply_to == 'shipping'){
+        $shipping = $shipping - Cart66Session::get('Cart66Cart')->getDiscountAmount();
+        $discount = 0;
+      }
     if(isset($_POST['tax']) && $_POST['tax'] > 0) {
       $tax = Cart66Common::postVal('tax');
     }
@@ -81,20 +104,20 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
       if(CART66_PRO) { include(CART66_PATH . "/pro/Cart66ConstantContactOptIn.php"); }
       if(CART66_PRO) { include(CART66_PATH . "/pro/Cart66MailChimpOptIn.php"); }
       
-      if($itemAmount > 0 || $shipping > 0) {
+      if($itemTotal > 0 || $shipping > 0) {
         // Send shipping as the item amount if the item amount is $0.00 otherwise paypal will refuse the transaction
-        if($itemAmount == 0 && $shipping > 0) {
-          $itemAmount = $shipping;
+        if($itemTotal == 0 && $shipping > 0) {
+          $itemTotal = $shipping;
           $shipping = 0;
         }
         
         $pp->populatePayPalCartItems();
         
-        Cart66Common::log("Preparing DoExpressCheckout:\nToken: $token\nPayerID: $payerId\nItem Amount: $itemAmount\nShipping: $shipping\nTax: $tax");
-        $response = $pp->DoExpressCheckout($token, $payerId, $itemAmount, $shipping, $tax);
+        Cart66Common::log("Preparing DoExpressCheckout:\nToken: $token\nPayerID: $payerId\nItem Amount: $itemTotal\nShipping: $shipping\nTax: $tax");
+        $response = $pp->DoExpressCheckout($token, $payerId, $itemTotal, $shipping, $tax);
       }
       else {
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Bypassing DoExpressCheckout because item amount is not greater than zero: $itemAmount");
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Bypassing DoExpressCheckout because item amount is not greater than zero: $itemTotal");
         $response['ACK'] = 'SUCCESS'; // Forcing success since DoExpressCheckout wasn't called
       }
       $ack = strtoupper($response['ACK']);
@@ -145,7 +168,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           $promo = Cart66Session::get('Cart66PromotionCode');
           $promoMsg = "none";
           if($promo) {
-            $promoMsg = $promo->code . ' (-' . CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Promotion')->getDiscountAmount(Cart66Session::get('Cart66Cart')), 2) . ')';
+            $promoMsg = $promo . ' (-' . CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Promotion')->getDiscountAmount(Cart66Session::get('Cart66Cart')), 2) . ')';
           }
           Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Details:\n" . print_r($details,true));
 
@@ -209,11 +232,13 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
         }
       }
       else {
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] ");
-        echo "<pre>";
-        echo "Amount: $amount --- Tax: $tax\n";
-        print_r($response);
-        echo "</pre>";
+        try {
+          throw new Cart66Exception(ucwords($response['L_SHORTMESSAGE0']), 66503);
+        }
+        catch(Cart66Exception $e) {
+          $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), array('Error Number: ' . $response['L_ERRORCODE0'], $response['L_LONGMESSAGE0']));
+          echo Cart66Common::getView('views/error-messages.php', $exception);
+        }
       }
     }
     

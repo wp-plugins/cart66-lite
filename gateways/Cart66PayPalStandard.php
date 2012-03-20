@@ -73,9 +73,10 @@ class Cart66PayPalStandard {
       if(isset($coupon) && $coupon!="") {
         $coupon_code = $coupon;
       }
-
+      
       $data = array(
-        'bill_first_name' => $pp['address_name'],
+        'bill_first_name' => $pp['first_name'],
+        'bill_last_name' => $pp['last_name'],
         'bill_address' => $pp['address_street'],
         'bill_city' => $pp['address_city'],
         'bill_state' => $pp['address_state'],
@@ -97,7 +98,7 @@ class Cart66PayPalStandard {
         'coupon' => $coupon_code,
         'discount_amount' => $discount,
         'trans_id' => $pp['txn_id'],
-        'ordered_on' => date('Y-m-d H:i:s'),
+        'ordered_on' => date('Y-m-d H:i:s', Cart66Common::localTs()),
         'status' => $status,
         'ouid' => $ouid
       );
@@ -203,7 +204,13 @@ class Cart66PayPalStandard {
           }
         }
       }
-
+      
+      $promotion = new Cart66Promotion();
+      $promotion->loadByCode($coupon_code);
+      if($promotion) {
+        $promotion->updateRedemptions();
+      }
+      
       // Process affiliate reward if necessary
       if($referrer) {
         Cart66Common::awardCommission($orderId, $referrer);

@@ -6,13 +6,15 @@ class Cart66CartItem {
   private $_optionInfo;
   private $_priceDifference;
   private $_customFieldInfo;
+  private $_productUrl;
   private $_formEntryIds;
   
-  public function __construct($productId=0, $qty=1, $optionInfo='', $priceDifference=0) {
+  public function __construct($productId=0, $qty=1, $optionInfo='', $priceDifference=0, $productUrl='') {
     $this->_productId = $productId;
     $this->_quantity = $qty;
     $this->_optionInfo = $optionInfo;
     $this->_priceDifference = $priceDifference;
+    $this->_productUrl = $productUrl;
     $this->_formEntryIds = array();
     // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] New Cart Item Option Info: $optionInfo");
   }
@@ -250,7 +252,13 @@ class Cart66CartItem {
   
   public function getBaseProductPrice(){
     $product = new Cart66Product($this->_productId);
-    return $product->price;
+    if($product->is_paypal_subscription) {
+      $price = $product->setup_fee;
+    }
+    else {
+      $price = $product->price + $this->_priceDifference;
+    }
+    return $price;
   }
   
   public function getProductPriceDescription() {
@@ -318,6 +326,10 @@ class Cart66CartItem {
       $fullName .= " ($options)";
     }
     return $fullName;
+  }
+  
+  public function getProductUrl() {
+    return $this->_productUrl;
   }
   
   public function isEqual(Cart66CartItem $item) {

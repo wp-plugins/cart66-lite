@@ -1,5 +1,7 @@
 /* @override 
 	http://pro.cart66/wp-content/plugins/cart66-gh/cart66.css?ver=1.2.3
+	http://plugin.cart66/wp-content/plugins/cart66-gh/cart66.css?ver=1.3.1
+	http://wordpress3.2/wp-content/plugins/cart66-gh/cart66.css?ver=1.3.1
 */
 
 #viewCartTable {
@@ -44,13 +46,13 @@
   display: table;
 }
 
-
 #continueShopping, #checkoutShopping {
 	display: inline-block;
 	}
 #checkoutShopping {
 	float: right;
 	}
+
 #Cart66CheckoutReplacementText {
 	width: 50%;
 	margin: 10px auto;
@@ -100,7 +102,6 @@ input[type=submit] {
 .Cart66Error {
   background-color: #FEE;
   border: 1px solid red;
-  width: 500px;
   padding:15px;
   margin: 15px 0px;
   clear: both;
@@ -129,7 +130,12 @@ input[type=submit] {
   margin: 3px 7px 4px 0px;
   display: inline-block;
 }
-
+.Cart66UserQuantity {
+  display:inline-block;
+}
+.Cart66PriceBlock {
+  display:block;
+}
 .Cart66CustomFieldDesc {
   color: #777;
   font-style: italic;
@@ -200,28 +206,6 @@ input[type=submit] {
   font-weight: bold;
 }
 
-.Cart66Unavailable {
-  position: fixed;
-  border: 1px solid #70091A;
-  
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  
-  -moz-box-shadow: 7px 7px 15px #CCCCCC;
-  -webkit-box-shadow: 7px 7px 15px #CCCCCC;
-  box-shadow: 7px 7px 15px #CCCCCC;
-  
-  background-color: #EEEEEE;
-  padding: 5px 20px;
-  margin: 0px;
-  top: 25%;
-  left: 32%;
-  width: 400px;
-  height: auto;
-  color: black;
-  z-index: 100;
-}
 
 .Cart66Unavailable h2 {
   line-height: 1.5em !important;
@@ -279,7 +263,12 @@ input[type=submit] {
   border-radius: 5px;
   cursor: pointer;
   background-color: #445e67;
-  color: #fff !important;
+  color: #fff;
+}
+.ajaxPurAddToCart {
+  color:#888 !important;
+  background-color:#fff !important;
+  border-color:#ccc !important;
 }
 .Cart66ButtonSecondary {
   background-color: #2C3538;
@@ -301,7 +290,7 @@ a.Cart66ButtonSecondary {
 
 /* Cart66 Form CSS */
 .Cart66Success,
-.Cart66Error {
+.Cart66Error, .Cart66Warning {
   background-color: #FEE;
   border: 1px solid red;
   margin: 10px 0px;
@@ -310,7 +299,9 @@ a.Cart66ButtonSecondary {
   -webkit-border-radius: 5px;
   color: #633;
 }
-
+#minAmountMessage.Cart66Error {
+	width: auto;
+	}
 .Cart66Success {
   background-color: #EFE;
   border: 1px solid green;
@@ -324,7 +315,10 @@ a.Cart66ButtonSecondary {
   color: #CBB;
   font-size: 1.5em;
 }
-
+.Cart66Warning {
+  background-color:#FDF5E3;
+  border:1px solid #FDEE54;
+}
 .phorm2 {
   min-width: 550px;
   clear: both;
@@ -358,6 +352,7 @@ a.Cart66ButtonSecondary {
   vertical-align: top;
   margin-top: 3px;
   margin-right: 3px;
+  float:none;
 }
 .phorm2 ul li input {
 	margin:0;
@@ -572,6 +567,21 @@ span.subscriptionOrMembership {
 .Cart66ProductSubtotalColumn, .Cart66ShippingRow td {
 	text-align: right;
 	}
-.Cart66WidgetViewCartCheckout {
+.Cart66WidgetViewCartCheckoutItems, .Cart66WidgetViewCartCheckoutEmpty {
 	text-align: center;
 	}
+	#wp-admin-bar-cart66{
+		width:55px;
+	}
+	#wpadminbar .cart66AdminBarIcon{
+		position:absolute;
+		margin:-20px 0px 0px 10px;
+		width: 36px !important;
+		height: 12px !important;
+		background-image: url(images/cart66_admin_button.png);
+		background-repeat: no-repeat;	
+	}
+	#wp-admin-bar-cart66.hover .cart66AdminBarIcon{
+		background-image: url(images/cart66_tiny_type.png);
+	}
+	

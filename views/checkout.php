@@ -5,7 +5,8 @@ $supportedGateways = array (
   'Cart66ManualGateway',
   'Cart66Eway',
   'Cart66MerchantWarrior',
-  'Cart66PayLeap'
+  'Cart66PayLeap',
+  'Cart66Mijireh'
 );
 
 $errors = array();
@@ -38,13 +39,25 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           $jqErrors[] = 'account-password';
           $jqErrors[] = 'account-password2';
         }
-        if(count($errors) == 0) { $createAccount = true; } // An account should be created and the account data is valid
+        if(count($errors) == 0) { $createAccount = true; }
+        else {
+          if(count($errors)) {
+            try {
+              throw new Cart66Exception(__('Your order could not be processed for the following reasons:', 'cart66'), 66500);
+            }
+            catch(Cart66Exception $e) {
+              $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), $errors);
+              echo Cart66Common::getView('views/error-messages.php', $exception);
+            }
+          }
+        }
+        
+         // An account should be created and the account data is valid
       }
     }
   }
   
   $gatewayName = Cart66Common::postVal('cart66-gateway-name');
-  Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] CHECKOUT: with gateway: $gatewayName");
   
   if(in_array($gatewayName, $supportedGateways)) {
       
@@ -53,12 +66,13 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     $gateway->setBilling(Cart66Common::postVal('billing'));
     $gateway->setPayment(Cart66Common::postVal('payment'));
     
+    // If shipping data is set, pass it to the gateway, it could be mijireh which does not have a "same as billing" checkbox
+    if(isset($_POST['shipping'])) {
+      $gateway->setShipping(Cart66Common::postVal('shipping'));
+    }
     
     if(isset($_POST['sameAsBilling'])) {
       $gateway->setShipping(Cart66Common::postVal('billing'));
-    }
-    elseif(isset($_POST['shipping'])) {
-      $gateway->setShipping(Cart66Common::postVal('shipping'));
     }
     
     $s = $gateway->getShipping();
@@ -67,18 +81,21 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
       $tax = $gateway->getTaxAmount();
       Cart66Session::set('Cart66Tax',$tax);
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Tax PreCalculated: $".$tax);
-      //echo nl2br(print_r($taxLocation,true));
-      //echo "Tax $".$tax ."<br>";
     }
-    
-
-      
 
     if(count($errors) == 0) {
       $errors = $gateway->getErrors();     // Error info for server side error code
+      if(count($errors)) {
+        try {
+          throw new Cart66Exception(__('Your order could not be processed for the following reasons:', 'cart66'), 66500);
+        }
+        catch(Cart66Exception $e) {
+          $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), $errors);
+          echo Cart66Common::getView('views/error-messages.php', $exception);
+        }
+      }
       $jqErrors = $gateway->getJqErrors(); // Error info for client side error code
     }
-    
     
     if(count($errors) == 0 || 1) {
       // Calculate final billing amounts
@@ -95,13 +112,20 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
       }
 
       if(!Cart66Session::get('Cart66CheckoutThrottle')->isReady($gateway->getCardNumberTail(), $oneTimeTotal)) {
-        $errors[] = "You must wait " . Cart66Session::get('Cart66CheckoutThrottle')->getTimeRemaining() . " more seconds before trying to checkout again.";
+        try {
+          throw new Cart66Exception(__('Your order could not be processed for the following reasons:', 'cart66'), 66500);
+        }
+        catch(Cart66Exception $e) {
+          $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), "You must wait " . Cart66Session::get('Cart66CheckoutThrottle')->getTimeRemaining() . " more seconds before trying to checkout again.");
+          echo Cart66Common::getView('views/error-messages.php', $exception);
+        }
       }
     }
     
     
     // Charge credit card for one time transaction using Authorize.net API
     if(count($errors) == 0 && !Cart66Session::get('Cart66InventoryWarning')) {
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] start working on charging the credit card");
       
       // =============================
       // = Start Spreedly Processing =
@@ -139,6 +163,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
         }
         else {
           $errors = $account->getErrors();
+          if(count($errors)) {
+            try {
+              throw new Cart66Exception(__('Your order could not be processed for the following reasons:', 'cart66'), 66500);
+            }
+            catch(Cart66Exception $e) {
+              $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), $errors);
+              echo Cart66Common::getView('views/error-messages.php', $exception);
+            }
+          }
           $jqErrors = $account->getJqErrors();
           Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Account validation failed. " . print_r($errors, true));
         }
@@ -200,7 +233,17 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
         }
         else {
           // Attempt to discover reason for transaction failure
-          $errors['Could Not Process Transaction'] = $gateway->getTransactionResponseDescription();
+          
+          try {
+            throw new Cart66Exception(__('Your order could not be completed for the following reasons:', 'cart66'), 66500);
+          }
+          catch(Cart66Exception $e) {
+            $gatewayResponse = $gateway->getTransactionResponseDescription();
+            $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), array('Error Number: ' . $gatewayResponse['errorcode'], strtolower($gatewayResponse['errormessage'])));
+            echo Cart66Common::getView('views/error-messages.php', $exception);
+          }
+          
+          //$errors['Could Not Process Transaction'] = $gateway->getTransactionResponseDescription();
         }
       }
       
@@ -237,11 +280,24 @@ $billingCountryCode =  (isset($b['country']) && !empty($b['country'])) ? $b['cou
 $shippingCountryCode = (isset($s['country']) && !empty($s['country'])) ? $s['country'] : Cart66Common::getHomeCountryCode();
 
 // Include the HTML markup for the checkout form
+$userViewFile = get_stylesheet_directory() . "/cart66-templates/views/checkout-form.php";
+$checkoutFormFile = CART66_PATH . 'views/checkout-form.php';
+
+if($gatewayName == 'Cart66Mijireh') {
+  $checkoutFormFile = CART66_PATH . 'views/mijireh/shipping_address.php';
+}
+
+if(file_exists($userViewFile) && filesize($userViewFile)>10 && CART66_PRO && Cart66Common::isRegistered()) {
+	$checkoutFormFile = $userViewFile;
+}
+
+Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Using Checkout Form File :: $checkoutFormFile");
+
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-  include_once(CART66_PATH . '/views/checkout-form.php');  
+  include_once($checkoutFormFile);
 }
 else {
-  include(CART66_PATH . '/views/checkout-form.php');
+  include($checkoutFormFile);
 }
 
 // Include the client side javascript validation                 

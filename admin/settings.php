@@ -85,7 +85,6 @@ else {
   <?php echo $successMessage ?></p>
 </div>
 
-
 <?php endif; ?>
 
 <!-- Example Code Block -->
@@ -197,7 +196,7 @@ else {
                 <p class="label_desc"><?php _e( 'Your home country will be the default country on your checkout form' , 'cart66' ); ?></p>
               </li>
               <li>
-                <label style="display: inline-block; width: 120px; text-align: right;">Currency symbol:</label>
+                <label style="display: inline-block; width: 120px; text-align: right;"><?php _e( 'Currency symbol' , 'cart66' ); ?>:</label>
                 <input type="text" name="CART66_CURRENCY_SYMBOL" value="<?php echo htmlentities(Cart66Setting::getValue('CART66_CURRENCY_SYMBOL'));  ?>" id="CART66_CURRENCY_SYMBOL">
                 <span class="description"><?php _e( 'Use the HTML entity such as &amp;pound; for &pound; British Pound Sterling or &amp;euro; for &euro; Euro' , 'cart66' ); ?></span>
               </li>
@@ -266,7 +265,7 @@ else {
     </div>
     
     <!-- Cart and Checkout Settings -->
-    <div class="widgets-holder-wrap <?php echo (Cart66Setting::getValue('sameAsBillingOff') || Cart66Setting::getValue('userPriceLabel') || Cart66Setting::getValue('userQuantityLabel')) ? '' : 'closed'; ?>">
+    <div class="widgets-holder-wrap <?php echo (Cart66Setting::getValue('sameAsBillingOff') || Cart66Setting::getValue('userPriceLabel') || Cart66Setting::getValue('userQuantityLabel') || Cart66Setting::getValue('product_links_in_cart')) ? '' : 'closed'; ?>">
       <div class="sidebar-name">
         <div class="sidebar-name-arrow"><br/></div>
         <h3><?php _e( 'Cart and Checkout Settings' , 'cart66' ); ?> <span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
@@ -276,7 +275,8 @@ else {
         <div>
           <form id="cartCheckoutSettingsForm" class="ajaxSettingForm" action="" method='post'>
             <input type='hidden' name='action' value="save_settings" />
-            <input type='hidden' name='_success' value="The cart and checkout settings have been saved.">
+            <input type='hidden' name='_success' value="The cart and checkout settings have been saved." />
+            <input type='hidden' name='disable_edit_product_links' value="" />
             <ul>
               <li><label style="display: inline-block; width: 120px; text-align: right;"><?php _e( 'Shipping Form' , 'cart66' ); ?>:</label>
               <?php
@@ -297,7 +297,66 @@ else {
               <input type='text' name='userQuantityLabel' id='userQuantityLabel' style='width: 375px;' value="<?php echo Cart66Setting::getValue('userQuantityLabel'); ?>" />
               <p style="width: 450px;" class="label_desc"><?php _e( 'Defaults to "Quantity: "' , 'cart66' ); ?></p>
               </li>
+              
+              <li>
+                <label style="display: inline-block; width: 120px; text-align: right;" for='ajaxOptions'><?php _e( 'AJAX Add To Cart' , 'cart66' ); ?>:</label>
+                <?php
+                  $enableAjaxDefault = Cart66Setting::getValue('enable_ajax_by_default');
+                  if(!$enableAjaxDefault) { $enableAjaxDefault = 'no'; }
+                ?>
+                <input type='radio' name='enable_ajax_by_default' value="yes" style='width: auto;' <?php if($enableAjaxDefault == 'yes') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'><?php _e( 'Yes' , 'cart66' ); ?></label>
+                <input type='radio' name='enable_ajax_by_default' value="no" style='width: auto;' <?php if($enableAjaxDefault == 'no') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'><?php _e( 'No' , 'cart66' ); ?></label>
+                <p style="width: 450px;" class="label_desc"><?php _e( 'This changes the default action when adding a product shortcode to a page or post' , 'cart66' ); ?>.</p>
+              </li>
 
+              <li>
+                <label style="display: inline-block; width: 120px; text-align: right;" for='product_links_in_cart'><?php _e( 'Product Links in Cart' , 'cart66' ); ?>:</label>
+                <?php
+                  $enableProductLinkDefault = Cart66Setting::getValue('product_links_in_cart');
+                  if(!$enableProductLinkDefault) { $enableProductLinkDefault = 'no'; }
+                ?>
+                <input type='radio' name='product_links_in_cart' value="yes" style='width: auto;' <?php if($enableProductLinkDefault == 'yes') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'><?php _e( 'Yes' , 'cart66' ); ?></label>
+                <input type='radio' name='product_links_in_cart' value="no" style='width: auto;' <?php if($enableProductLinkDefault == 'no') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'><?php _e( 'No' , 'cart66' ); ?></label>
+                <p style="width: 450px;" class="label_desc"><?php _e( 'Use this option to add a link back to the original product page' , 'cart66' ); ?>.</span>
+              </li>
+              
+              <li>
+                <label style="display: inline-block; width: 120px; text-align: right;" for='product_links_in_cart'><?php _e( 'Edit Product Links' , 'cart66' ); ?>:</label>
+                <?php
+                  $editProductLinks = Cart66Setting::getValue('enable_edit_product_links');
+                  if(!$editProductLinks) { $editProductLinks = 'no'; }
+                ?>
+                <input type='radio' name='enable_edit_product_links' value="yes" style='width: auto;' <?php if($editProductLinks == 'yes') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'><?php _e( 'Yes' , 'cart66' ); ?></label>
+                <input type='radio' name='enable_edit_product_links' value="no" style='width: auto;' <?php if($editProductLinks == 'no') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'><?php _e( 'No' , 'cart66' ); ?></label>
+                <p style="width: 450px;" class="label_desc"><?php _e( 'Use this option to enable the edit product links on your product pages' , 'cart66' ); ?>.</span>
+              </li>
+              
+              <?php if(CART66_PRO): ?>
+                <li>
+                  <label style="display: inline-block; width: 20px; text-align: right;">&nbsp;</label>
+                  <strong><?php _e( 'Minimum Cart Amount Settings' , 'cart66' ); ?></strong>
+                </li>
+                <li><label style="display: inline-block; width: 120px; text-align: right;" for="minimum_cart_amount"><?php _e( 'Min. Amount' , 'cart66' ); ?>:</label>
+                <?php
+                  $track = Cart66Setting::getValue('minimum_cart_amount');
+                ?>
+                <input type="radio" name="minimum_cart_amount" id="minimum_cart_amount_yes" value="1" style="width: auto;" <?php if($track == '1') { echo "checked='checked'"; } ?>><label style="width: auto; padding-left: 5px;"><?php _e( 'Yes' , 'cart66' ); ?></label>
+                <input type="radio" name="minimum_cart_amount" id="minimum_cart_amount_no" value="0" style="width: auto;" <?php if($track == '0') { echo "checked='checked'"; } ?>><label style="width: auto; padding-left: 5px;"><?php _e( 'No' , 'cart66' ); ?></label>
+                  <p style="width: 450px;" class="label_desc"><?php _e( 'This feature allows you to set a minimum cart amount before your customers can checkout.' , 'cart66' ); ?></p>
+                </li>
+
+                <li class="min_amount">
+                  <label style="display: inline-block; width: 120px; text-align: right;" for="minimum_amount"><?php _e( 'Amount' , 'cart66' ); ?>: <?php echo CART66_CURRENCY_SYMBOL; ?></label>
+                  <input type="text" name="minimum_amount" value="<?php echo htmlentities(Cart66Setting::getValue('minimum_amount'));  ?>" id="minimum_amount">
+                  <span class="description"><?php _e( 'Set the amount required in order for a customer to checkout' , 'cart66' ); ?>.</span>
+                </li>
+
+                <li class="min_amount"><label style="display: inline-block; width: 120px; text-align: right;" for='minimum_amount_label'><?php _e( 'Min. Amount Label' , 'cart66' ); ?>:</label>
+                <input type='text' name='minimum_amount_label' id='minimum_amount_label' style='width: 375px;' value="<?php echo Cart66Setting::getValue('minimum_amount_label'); ?>" />
+                <p style="width: 450px;" class="label_desc"><?php _e( 'Defaults to "You have not yet reached the required minimum amount in order to checkout."' , 'cart66' ); ?></p>
+                </li>
+              <?php endif; ?>
+              
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
               <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
             </ul>
@@ -457,6 +516,47 @@ else {
       </div>
     </div>
     
+    <!-- Mijireh Settings -->
+    <?php
+      $has_mijireh = Cart66Setting::getValue('mijireh_store_id') || Cart66Setting::getValue('mijireh_access_key');
+    ?>
+    <div class="widgets-holder-wrap <?php echo ($has_mijireh) ? '' : 'closed'; ?>">
+      <div class="sidebar-name">
+        <div class="sidebar-name-arrow"><br/></div>
+        <h3><?php _e('Mijireh Settings - Secure Credit Card Processing', 'cart66'); ?> <span><img class="ajax-feedback" alt="" title="" src="images/wpspin_light.gif"/></span></h3>
+      </div>
+      <div class="widget-holder">
+        <?php if(!Cart66Setting::getValue('mijireh_access_key')): ?>
+          <p class="description"><a href="http://www.mijireh.com">Secure credit card processing. Get started for FREE</a>.</p>
+        <?php endif; ?>
+        
+        <p class="description">Accept credit cards with peace of mind using <a href="http://www.mijireh.com">Mijreh</a>. 
+          You focus on the selling while Mijireh takes care of the security.</p>
+        
+        <p class="description">Note: Mijireh checkout will not process recurring payments.</p>
+        <?php if(!$has_mijireh): ?>
+          <p class="description"><a href="http://mijireh.com">Get Mijireh Now</a></p>
+        <?php endif; ?>
+        <div>
+          <form id="PayPalSettings" class="ajaxSettingForm" action="" method='post'>
+            <input type='hidden' name='action' value="save_settings" />
+            <input type='hidden' name='_success' value="Your Mijireh settings have been saved.">
+            <ul>
+              <li>
+                <label style="display: inline-block; width: 120px; text-align: right;" for='mijireh_access_key'><?php _e( 'Access Key' , 'cart66' ); ?>:</label>
+                <input type='text' name='mijireh_access_key' id='mijireh_access_key' style='width: 375px;' value="<?php echo Cart66Setting::getValue('mijireh_access_key'); ?>" />
+              </li>
+              <li>
+                <label style="display: inline-block; width: 120px; text-align: right;">&nbsp;</label>
+                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" />
+              </li>
+            </ul>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    
     <!-- PayPal Settings -->
     <div class="widgets-holder-wrap <?php echo (Cart66Setting::getValue('paypal_email') || Cart66Setting::getValue('paypalpro_api_username') ) ? '' : 'closed'; ?>">
       <div class="sidebar-name">
@@ -526,12 +626,30 @@ else {
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='paypalpro_api_password'><?php _e( 'API Password' , 'cart66' ); ?>:</label>
               <input type='text' name='paypalpro_api_password' id='paypalpro_api_password' style='width: 375px;' 
               value="<?php echo Cart66Setting::getValue('paypalpro_api_password'); ?>" />
-              </li>
+              </li>			  
 
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='paypalpro_api_signature'><?php _e( 'API Signature' , 'cart66' ); ?>:</label>
               <input type='text' name='paypalpro_api_signature' id='paypalpro_api_signature' style='width: 375px;' 
               value="<?php echo Cart66Setting::getValue('paypalpro_api_signature'); ?>" />
               </li>
+
+			  <?php if(CART66_PRO): ?>
+				
+				<li style="padding-top:10px;">
+	                <label style="display: inline-block; width: 120px; text-align: right;">&nbsp;</label>
+	                <strong><?php _e( 'Dont Require PayPal account for Express Checkout' , 'cart66' ); ?></strong>
+	            </li>
+	
+				<li>
+	                <label style="display: inline-block; width: 120px; text-align: right;" for='express_force_paypal'>&nbsp;</label>
+					<input type="hidden" name='express_force_paypal' value=''>
+	                <input type='checkbox' name='express_force_paypal' id='express_force_paypal' value="true" 
+	                  <?php echo Cart66Setting::getValue('express_force_paypal') ? 'checked="checked"' : '' ?>
+	                />
+	                <span class="label_desc"><?php _e( 'Allow Express Checkout customers to checkout without a PayPal Account' , 'cart66' ); ?></span>
+	            </li>
+
+			  <?php endif; ?>
               
               <li style="padding-top:10px;">
                 <label style="display: inline-block; width: 120px; text-align: right;">&nbsp;</label>
@@ -739,33 +857,34 @@ else {
             <input type='hidden' name='action' value="save_settings" />
             <input type='hidden' name='_success' value="The email receipt settings have been saved.">
             <ul>
+              <div class="emailSettings">
+                <li><label style="display: inline-block; width: 120px; text-align: right;" for='receipt_from_name'><?php _e( 'From Name' , 'cart66' ); ?>:</label>
+                <input type='text' name='receipt_from_name' id='receipt_from_name' style='width: 375px;' 
+                value="<?php echo Cart66Setting::getValue('receipt_from_name', true); ?>" />
+                <p style="margin-left: 125px;" class="description"><?php _e( 'The name of the person from whom the email receipt will be sent. 
+                  You may want this to be your company name.' , 'cart66' ); ?></p></li>
 
-              <li><label style="display: inline-block; width: 120px; text-align: right;" for='receipt_from_name'><?php _e( 'From Name' , 'cart66' ); ?>:</label>
-              <input type='text' name='receipt_from_name' id='receipt_from_name' style='width: 375px;' 
-              value="<?php echo Cart66Setting::getValue('receipt_from_name', true); ?>" />
-              <p style="margin-left: 125px;" class="description"><?php _e( 'The name of the person from whom the email receipt will be sent. 
-                You may want this to be your company name.' , 'cart66' ); ?></p></li>
+                <li><label style="display: inline-block; width: 120px; text-align: right;" for='receipt_from_address'><?php _e( 'From Address' , 'cart66' ); ?>:</label>
+                <input type='text' name='receipt_from_address' id='receipt_from_address' style='width: 375px;' 
+                value="<?php echo Cart66Setting::getValue('receipt_from_address'); ?>" />
+                <p  style="margin-left: 125px;" class="description"><?php _e( 'The email address the email receipt will be from.' , 'cart66' ); ?></p>
+                </li>
 
-              <li><label style="display: inline-block; width: 120px; text-align: right;" for='receipt_from_address'><?php _e( 'From Address' , 'cart66' ); ?>:</label>
-              <input type='text' name='receipt_from_address' id='receipt_from_address' style='width: 375px;' 
-              value="<?php echo Cart66Setting::getValue('receipt_from_address'); ?>" />
-              <p  style="margin-left: 125px;" class="description"><?php _e( 'The email address the email receipt will be from.' , 'cart66' ); ?></p>
-              </li>
+                <li><label style="display: inline-block; width: 120px; text-align: right;" for='receipt_subject'><?php _e( 'Receipt Subject' , 'cart66' ); ?>:</label>
+                <input type='text' name='receipt_subject' id='receipt_subject' style='width: 375px;' 
+                value="<?php echo Cart66Setting::getValue('receipt_subject', true); ?>" />
+                <p style="margin-left: 125px;" class="description"><?php _e( 'The subject of the email receipt' , 'cart66' ); ?></p></li>
 
-              <li><label style="display: inline-block; width: 120px; text-align: right;" for='receipt_subject'><?php _e( 'Receipt Subject' , 'cart66' ); ?>:</label>
-              <input type='text' name='receipt_subject' id='receipt_subject' style='width: 375px;' 
-              value="<?php echo Cart66Setting::getValue('receipt_subject', true); ?>" />
-              <p style="margin-left: 125px;" class="description"><?php _e( 'The subject of the email receipt' , 'cart66' ); ?></p></li>
+                <li><label style="display: inline-block; width: 120px; text-align: right; margin-top: 0px;" for='receipt_intro'><?php _e( 'Receipt Intro' , 'cart66' ); ?>:</label>
+                <br/><textarea style="width: 375px; height: 140px; margin-left: 125px; margin-top: -20px;" 
+                name='receipt_intro'><?php echo Cart66Setting::getValue('receipt_intro'); ?></textarea>
+                <p style="margin-left: 125px;" class="description"><?php _e( 'This text will appear at the top of the receipt email message above the list of items purchased.' , 'cart66' ); ?></p></li>
 
-              <li><label style="display: inline-block; width: 120px; text-align: right; margin-top: 0px;" for='receipt_intro'><?php _e( 'Receipt Intro' , 'cart66' ); ?>:</label>
-              <br/><textarea style="width: 375px; height: 140px; margin-left: 125px; margin-top: -20px;" 
-              name='receipt_intro'><?php echo Cart66Setting::getValue('receipt_intro'); ?></textarea>
-              <p style="margin-left: 125px;" class="description"><?php _e( 'This text will appear at the top of the receipt email message above the list of items purchased.' , 'cart66' ); ?></p></li>
-
-              <li><label style="display: inline-block; width: 120px; text-align: right;" for='receipt_copy'><?php _e( 'Copy Receipt To' , 'cart66' ); ?>:</label>
-              <input type='text' name='receipt_copy' id='receipt_copy' style='width: 375px;' value="<?php echo Cart66Setting::getValue('receipt_copy'); ?>" />
-              <p style="margin-left: 125px;" class="description"><?php _e( 'Use commas to separate addresses.' , 'cart66' ); ?></p>
-              </li>
+                <li><label style="display: inline-block; width: 120px; text-align: right;" for='receipt_copy'><?php _e( 'Copy Receipt To' , 'cart66' ); ?>:</label>
+                <input type='text' name='receipt_copy' id='receipt_copy' style='width: 375px;' value="<?php echo Cart66Setting::getValue('receipt_copy'); ?>" />
+                <p style="margin-left: 125px;" class="description"><?php _e( 'Use commas to separate addresses.' , 'cart66' ); ?></p>
+                </li>
+              </div>
 
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
               <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
@@ -937,8 +1056,8 @@ else {
             
             <li><label style="display: inline-block; width: 120px; text-align: right;" for="continue_shopping"><?php _e( 'Continue Shopping' , 'cart66' ); ?>:</label>
             <select name='continue_shopping' id='continue_shopping'>
-                <option value="0">Send customer back to the last page</option>
-                <option value="1">Always go to the store home page</option>
+                <option value="0"><?php _e( 'Send customer back to the last page' , 'cart66' ); ?></option>
+                <option value="1"><?php _e( 'Always go to the store home page' , 'cart66' ); ?></option>
             </select></li>
               
             <li><label style="display: inline-block; width: 120px; text-align: right;" for='store_url'><?php _e( 'Store URL' , 'cart66' ); ?>:</label>
@@ -970,8 +1089,8 @@ else {
               <input type='hidden' name='_success' value='Your Google Analytics settings have been saved.'>
               <ul>
                 <li>
-                  <label style="display: inline-block; width: 120px; text-align: right;" for='spreedly_shortname'><?php _e( 'Enable for my site' , 'cart66' ); ?>:</label>
-                    <input type="hidden" name='enable_google_analytics' id='enable_google_analytics' value="" />  
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='enable_google_analytics'><?php _e( 'Enable for my site' , 'cart66' ); ?>:</label>
+                    <input type="hidden" name='enable_google_analytics' value="" />  
                     <input type="checkbox" name='enable_google_analytics' id='enable_google_analytics' value="1" <?php echo (Cart66Setting::getValue('enable_google_analytics') == 1) ? 'checked="checked"' : ''; ?> />
                 </li>
                 <li>
@@ -1532,6 +1651,16 @@ else {
                 <span class="label_desc"><?php _e( '' , 'cart66' ); ?></span>
               </li>
               <li>
+                <label style="display: inline-block; width: 220px; text-align: right;" for='styles_url'><?php _e( 'Notifications' , 'cart66' ); ?>:</label>
+                <select name='admin_page_roles[notifications]' id='admin_page_roles_notifications' style="width: 150px;">
+                  <option value="manage_options"><?php _e( 'Administrator' , 'cart66' ); ?></option>
+                  <option value="edit_pages"><?php _e( 'Editor' , 'cart66' ); ?></option>
+                  <option value="publish_posts"><?php _e( 'Author' , 'cart66' ); ?></option>
+                  <option value="edit_posts"><?php _e( 'Contributor' , 'cart66' ); ?></option>               
+                </select>
+                <span class="label_desc"><?php _e( '' , 'cart66' ); ?></span>
+              </li>
+              <li>
                 <label style="display: inline-block; width: 220px; text-align: right;" for='styles_url'><?php _e( 'Reports' , 'cart66' ); ?>:</label>
                 <select name='admin_page_roles[reports]' id='admin_page_roles_reports' style="width: 150px;">
                   <option value="manage_options"><?php _e( 'Administrator' , 'cart66' ); ?></option>
@@ -1710,6 +1839,7 @@ else {
   								  $isWritable = (is_writable(CART66_PATH)) ? "Writable" : "Not Writable";
   								  echo Cart66Setting::validateDebugValue($isWritable,"Writable");
   								?><br>
+  								
              </div>
            </li>
           </ul>
@@ -1736,7 +1866,12 @@ else {
       });
 
       $("#continue_shopping").val("<?php echo Cart66Setting::getValue('continue_shopping'); ?>");
-
+      <?php if(CART66_PRO): ?>
+        enableAdvancedNotifications();
+        $('#enable_advanced_notifications').change(function() {
+          enableAdvancedNotifications();
+        });
+      <?php endif; ?>
       $('#international_sales_yes').click(function() {
        $('#eligible_countries_block').show();
       });
@@ -1748,7 +1883,18 @@ else {
       if($('#international_sales_no').attr('checked')) {
        $('#eligible_countries_block').hide();
       }
+      
+      $('#minimum_cart_amount_yes').click(function() {
+       $('.min_amount').show();
+      });
 
+      $('#minimum_cart_amount_no').click(function() {
+       $('.min_amount').hide();
+      });
+
+      if($('#minimum_cart_amount_no').attr('checked')) {
+       $('.min_amount').hide();
+      }
 
       $('#payleap_test_mode').change(function() {
         payleapDisplay();
@@ -1839,7 +1985,18 @@ else {
     }
     
   }
-
+  <?php if(CART66_PRO): ?>
+  function enableAdvancedNotifications() {
+    if($jq('#enable_advanced_notifications').is(':checked')) { 
+      $jq('.advNotifications').show();
+      $jq('.emailSettings').hide();
+    }
+    else {
+      $jq('.advNotifications').hide();
+      $jq('.emailSettings').show();
+    }
+  }
+  <?php endif; ?>
   function setGoogleAnalytics() {
     if($jq('#use_other_analytics_plugin :selected').val() == 'no'){
       $jq("#google_analytics_product_id").show();

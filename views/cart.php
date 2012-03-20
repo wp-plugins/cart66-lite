@@ -1,6 +1,5 @@
 <?php 
 
-
 $items = Cart66Session::get('Cart66Cart')->getItems();
 $shippingMethods = Cart66Session::get('Cart66Cart')->getShippingMethods();
 $shipping = Cart66Session::get('Cart66Cart')->getShippingCost();
@@ -11,6 +10,7 @@ $discountAmount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
 $cartPage = get_page_by_path('store/cart');
 $checkoutPage = get_page_by_path('store/checkout');
 $setting = new Cart66Setting();
+
 
 // Try to return buyers to the last page they were on when the click to continue shopping
 if(Cart66Setting::getValue('continue_shopping') == 1){
@@ -24,9 +24,9 @@ else{
     Cart66Session::set('Cart66LastPage', $lastPage);
   }
   if(!Cart66Session::get('Cart66LastPage')) {
-      // If the last page is not set, use the store url
-      $lastPage = Cart66Setting::getValue('store_url') ? Cart66Setting::getValue('store_url') : get_bloginfo('url');
-      Cart66Session::set('Cart66LastPage', $lastPage);
+    // If the last page is not set, use the store url
+    $lastPage = Cart66Setting::getValue('store_url') ? Cart66Setting::getValue('store_url') : get_bloginfo('url');
+    Cart66Session::set('Cart66LastPage', $lastPage);
   }
 }
 
@@ -57,21 +57,24 @@ if($cartImgPath && stripos(strrev($cartImgPath), '/') !== 0) {
 }
 if($cartImgPath) {
   $continueShoppingImg = $cartImgPath . 'continue-shopping.png';
+  $updateTotalImg = $cartImgPath . 'update-total.png';
+  $applyCouponImg = $cartImgPath . 'apply-coupon.png';
 }
 
 if(count($items)): ?>
 
 <?php if(Cart66Session::get('Cart66InventoryWarning') && $fullMode): ?>
-  <div class="Cart66Unavailable">
-    <h1><?php _e( 'Inventory Restriction' , 'cart66' ); ?></h1>
-    <?php 
-      echo Cart66Session::get('Cart66InventoryWarning');
-      Cart66Session::drop('Cart66InventoryWarning');
-    ?>
-    <input type="button" name="close" value="Ok" id="close" class="Cart66ButtonSecondary modalClose" />
-  </div>
+  <?php 
+    echo Cart66Session::get('Cart66InventoryWarning');
+    Cart66Session::drop('Cart66InventoryWarning');
+  ?>
 <?php endif; ?>
 
+<?php if(number_format(Cart66Setting::getValue('minimum_amount'), 2, '.', '') > number_format(Cart66Session::get('Cart66Cart')->getSubTotal(), 2, '.', '') && Cart66Setting::getValue('minimum_cart_amount') == 1): ?>
+  <div id="minAmountMessage" class="Cart66Error">
+    <?php echo (Cart66Setting::getValue('minimum_amount_label')) ? Cart66Setting::getValue('minimum_amount_label') : 'You have not yet reached the required minimum amount in order to checkout.' ?>
+  </div>
+<?php endif;?>
 
 <?php if(Cart66Session::get('Cart66ZipWarning')): ?>
   <div id="Cart66ZipWarning" class="Cart66Unavailable">
@@ -135,6 +138,7 @@ if(count($items)): ?>
   <tbody>
     <?php foreach($items as $itemIndex => $item): ?>
       <?php 
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Item option info: " . $item->getOptionInfo());
         $product->load($item->getProductId());
         $price = $item->getProductPrice() * $item->getQuantity();
         
@@ -142,7 +146,11 @@ if(count($items)): ?>
       <tr>
         <td <?php if($item->hasAttachedForms()) { echo "class=\"noBottomBorder\""; } ?> >
           <?php #echo $item->getItemNumber(); ?>
-          <?php echo $item->getFullDisplayName(); ?>
+          <?php if($item->getProductUrl() != '' && Cart66Setting::getValue('product_links_in_cart') == 'yes'): ?>
+            <a class="product_url" href="<?php echo $item->getProductUrl(); ?>"><?php echo $item->getFullDisplayName(); ?></a>
+          <?php else: ?>
+            <?php echo $item->getFullDisplayName(); ?>
+          <?php endif; ?>
           <?php echo $item->getCustomField($itemIndex, $fullMode); ?>
         </td>
         <?php if($fullMode): ?>
@@ -291,7 +299,11 @@ if(count($items)): ?>
       <?php if($fullMode): ?>
       <td>&nbsp;</td>
       <td>
-        <input type='submit' name='updateCart' value='<?php _e( 'Update Total' , 'cart66' ); ?>' class="Cart66UpdateTotalButton Cart66ButtonSecondary" />
+        <?php if($cartImgPath && Cart66Common::urlIsLIve($updateTotalImg)): ?>
+          <input class="Cart66UpdateTotalButton" type="image" src='<?php echo $updateTotalImg ?>' value="<?php _e( 'Update Total' , 'cart66' ); ?>" name="updateCart"/>
+        <?php else: ?>
+          <input type='submit' name='updateCart' value='<?php _e( 'Update Total' , 'cart66' ); ?>' class="Cart66UpdateTotalButton Cart66ButtonSecondary" />
+        <?php endif; ?>
       </td>
       <?php else: ?>
         <td colspan='2'>&nbsp;</td>
@@ -347,7 +359,13 @@ if(count($items)): ?>
               <?php Cart66Session::get('Cart66Cart')->clearPromotion();
                   endif; ?>
             <div id="couponCode"><input type='text' name='couponCode' value='' /></div>
-            <div id="updateCart"><input type='submit' name='updateCart' value='<?php _e( 'Apply Coupon' , 'cart66' ); ?>' class="Cart66ApplyCouponButton Cart66ButtonSecondary" /></div>
+            <div id="updateCart">
+              <?php if($cartImgPath && Cart66Common::urlIsLIve($applyCouponImg)): ?>
+                <input class="Cart66ApplyCouponButton" type="image" src='<?php echo $applyCouponImg ?>' value="<?php _e( 'Apply Coupon' , 'cart66' ); ?>" name="updateCart"/>
+              <?php else: ?>
+                <input type='submit' name='updateCart' value='<?php _e( 'Apply Coupon' , 'cart66' ); ?>' class="Cart66ApplyCouponButton Cart66ButtonSecondary" />
+              <?php endif; ?>
+            </div>
           <?php endif; ?>
         </td>
         <?php else: ?>
@@ -393,6 +411,9 @@ if(count($items)): ?>
             $checkoutImg = $cartImgPath . 'checkout.png';
           }
         ?>
+        <?php
+        if(number_format(Cart66Setting::getValue('minimum_amount'), 2, '.', '') > number_format(Cart66Session::get('Cart66Cart')->getGrandTotal(), 2, '.', '') && Cart66Setting::getValue('minimum_cart_amount') == 1): ?>
+        <?php else: ?>
       <div id="checkoutShopping">
         <?php if($checkoutImg): ?>
           <a id="Cart66CheckoutButton" href='<?php echo get_permalink($checkoutPage->ID) ?>'><img src='<?php echo $checkoutImg ?>' /></a>
@@ -400,6 +421,7 @@ if(count($items)): ?>
           <a id="Cart66CheckoutButton" href='<?php echo get_permalink($checkoutPage->ID) ?>' class="Cart66ButtonPrimary" title="Continue to Checkout"><?php _e( 'Checkout' , 'cart66' ); ?></a>
         <?php endif; ?>
     	</div>
+    	<?php endif; ?>
     <?php else: ?>
     <div id="Cart66CheckoutReplacementText">
         <?php echo Cart66Setting::getValue('cart_terms_replacement_text');  ?>

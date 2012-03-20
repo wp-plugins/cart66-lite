@@ -1,6 +1,244 @@
 <?php
 class Cart66Ajax {
   
+  public static function ajaxReceipt() {
+    if(isset($_GET['order_id'])) {
+      $orderReceipt = new Cart66Order($_GET['order_id']);
+      $printView = Cart66Common::getView('views/receipt_print_version.php', array('order' => $orderReceipt));
+      $printView = str_replace("\n", '', $printView);
+      $printView = str_replace("'", '"', $printView);
+      echo $printView;
+      die();
+    }
+  }
+  
+  public static function shortcodeProductsTable() {
+    global $wpdb;
+    $prices = array();
+  	$types = array(); 
+  	//$options='';
+    $postId = Cart66Common::postVal('id');
+    $product = new Cart66Product();
+    $products = $product->getModels("where id=$postId", "order by name");
+    $data = array();
+    foreach($products as $p) {
+      if($p->itemNumber==""){
+        $type='id';
+      }
+      else{
+        $type='item';
+      }
+
+  	  $types[] = htmlspecialchars($type);
+
+  	  if(CART66_PRO && $p->isPayPalSubscription()) {
+  	    $sub = new Cart66PayPalSubscription($p->id);
+  	    $subPrice = strip_tags($sub->getPriceDescription($sub->offerTrial > 0, '(trial)'));
+  	    $prices[] = htmlspecialchars($subPrice);
+  	    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] subscription price in dialog: $subPrice");
+  	  }
+  	  else {
+  	    $prices[] = htmlspecialchars(strip_tags($p->getPriceDescription()));
+  	  }
+
+
+  	  //$options .= '<option value="'.$id.'">'.$p->name.' '.$description.'</option>';
+      $data[] = array('type' => $types, 'price' => $prices, 'item' => $p->itemNumber);
+    }
+    echo json_encode($data);
+    die();
+  }  
+  
+  public static function ajaxCartElements($args="") {
+
+    $items = Cart66Session::get('Cart66Cart')->getItems();
+    $product = new Cart66Product();
+    $currencySymbol = CART66_CURRENCY_SYMBOL;
+    $products = array();
+    foreach($items as $itemIndex => $item) {
+      $product->load($item->getProductId());
+      $products[] = array(
+        'productName' => $item->getFullDisplayName(),
+        'productQuantity' => $item->getQuantity(),
+        'productPrice' => number_format($item->getProductPrice(), 2),
+        'productSubtotal' => number_format($item->getProductPrice() * $item->getQuantity(), 2),
+        'currencySymbol' => $currencySymbol
+      );
+    }
+    
+    $summary = array(
+      'items' => ' ' . _n('item', 'items', Cart66CartWidget::countItems(), 'cart66'), 
+      'amount' => number_format(Cart66CartWidget::getSubTotal(), 2), 
+      'count' => Cart66CartWidget::countItems(), 
+      'currencySymbol' => $currencySymbol
+    );
+    
+    $array = array(
+      'summary' => $summary,
+      'products' => $products,
+      'subtotal' => number_format(Cart66Session::get('Cart66Cart')->getSubTotal(), 2),
+      'shipping' => Cart66Session::get('Cart66Cart')->requireShipping() ? 1 : 0,
+    );
+    echo json_encode($array);
+    die();
+  }
+  
+  public static function ajaxAddToCart() {
+    $message = self::addToCartFunctions();
+    echo json_encode($message);
+  	die();
+  }
+  
+  public function addToCartFunctions() {
+    $message = '';
+    $msgId = '';
+    $itemId = Cart66Common::postVal('cart66ItemId');
+    $itemName = Cart66Common::postVal('itemName');
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Adding item to cart: $itemId");
+    
+    $options = '';
+    $optionResult = '';
+    if(isset($_POST['options_1'])) {
+      $options = Cart66Common::postVal('options_1');
+      $optionResult = Cart66Common::postVal('options_1');
+    }
+    if(isset($_POST['options_2'])) {
+      $options .= '~' . Cart66Common::postVal('options_2');
+      $optionResult .= ', ' . Cart66Common::postVal('options_2');
+    }
+    
+    $optionResult = ($optionResult !=null) ? '(' . $optionResult . ') ' : '';
+    
+    $itemQuantity = '';
+    if(isset($_POST['item_quantity'])) {
+      $itemQuantity = ($_POST['item_quantity'] > 0) ? round($_POST['item_quantity'],0) : 1;
+    }
+    else{
+      $itemQuantity = 1;
+    }
+    
+    if(isset($_POST['item_user_price'])){
+      $sanitizedPrice = preg_replace("/[^0-9\.]/","",$_POST['item_user_price']);
+      Cart66Session::set("userPrice_$itemId",$sanitizedPrice);
+    }
+    
+    $productUrl = null;
+    if(isset($_POST['product_url'])){
+      $productUrl = $_POST['product_url'];
+    }
+    
+    if(Cart66Setting::getValue('continue_shopping') == 1){
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] continue shopping is 1");
+      // force the last page to be store home
+      $lastPage = Cart66Setting::getValue('store_url') ? Cart66Setting::getValue('store_url') : get_bloginfo('url');
+      Cart66Session::set('Cart66LastPage', $lastPage);
+    }
+    else{
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] add to cart task and http referrer is set last page is being set as referrer");
+      Cart66Session::set('Cart66LastPage', $productUrl);
+    }
+    
+    $items = Cart66Session::get('Cart66Cart')->getItems();
+    if($items) {
+      foreach($items as $itemIndex => $item) {
+        $productId = $item->getProductId();
+        $productOptions = $item->getOptionInfo();
+        $actualQuantity = $itemQuantity + $item->getQuantity();
+        if($productId == $itemId && $productOptions == $options) {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] starting 3");
+          if(Cart66Product::confirmInventory($productId, $productOptions, $actualQuantity)) {
+            Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
+            $message = __('We have successfully added', 'cart66') . " <strong>$itemQuantity</strong> $itemName $optionResult" . __('to the cart', 'cart66') . ".";
+            $msgQuantityInCart = $actualQuantity;
+            $msgId = 0;
+            break;
+          }
+          else {
+            $qtyAvailable = Cart66Product::checkInventoryLevelForProduct($productId, $productOptions);
+            if($qtyAvailable > 0) {
+              Cart66Session::get('Cart66Cart')->addItem($itemId, $qtyAvailable, $options, null, $productUrl, true);
+              $message = __('The quantity for', 'cart66') . " $itemName $optionResult" . __("could not be changed to","cart66") . " <strong>$actualQuantity</strong> " . __("because we only have", "cart66") . " $qtyAvailable " . __("in stock","cart66") . ". " . __('Your cart has been updated based on our available inventory', 'cart66') . ".";
+              Cart66Common::log("Quantity available ($qtyAvailable) cannot meet desired quantity ($itemQuantity) for product id: " . $item->getProductId());
+              $msgQuantityInCart = $qtyAvailable;
+              $msgId = -1;
+              break;
+            }
+            else {
+              Cart66Common::log("Item not added due to inventory failure");
+              $message = __('We could not add', 'cart66') . " <strong>$actualQty $itemName $optionResult</strong>" . __('to the cart because we are out of stock', 'cart66') . ".";
+              $msgQuantityInCart = 0;
+              $msgId = -2;
+              break;
+            }
+          }
+        }
+        else {
+          if(Cart66Product::confirmInventory($itemId, $options, $itemQuantity)) {
+            Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
+            $message = __('We have successfully added', 'cart66') . " <strong>$itemQuantity</strong> $itemName $optionResult" . __('to the cart', 'cart66') . ".";
+            $msgQuantityInCart = $itemQuantity;
+            $msgId = 0;
+            break;
+          }
+          else {
+            $actualQty = Cart66Product::checkInventoryLevelForProduct($itemId, $options);
+            if($actualQty > 0){
+              Cart66Session::get('Cart66Cart')->addItem($itemId, $actualQty, $options, null, $productUrl, true);
+              $message = __('We only added', 'cart66') . " <strong>$actualQty</strong> $itemName $optionResult" . __('to the cart because that is all we have in stock', 'cart66') . ". " . __('Your cart has been updated based on our available inventory', 'cart66') . ".";
+              $msgQuantityInCart = $actualQty;
+              $msgId = -1;
+              break;
+            }
+            else {
+              Cart66Common::log("Item not added due to inventory failure");
+              $message = __('We could not add', 'cart66') . " <strong>$actualQty $itemName $optionResult</strong>" . __('to the cart because we are out of stock', 'cart66') . ".";
+              $msgQuantityInCart = 0;
+              $msgId = -2;
+              break;
+            }
+          }
+        }
+      }
+    }
+    else {
+      if(Cart66Product::confirmInventory($itemId, $options, $itemQuantity)) {
+        Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
+        $message = __('We have successfully added', 'cart66') . " <strong>$itemQuantity</strong> $itemName $optionResult" . __('to the cart', 'cart66') . ".";
+        $msgQuantityInCart = $itemQuantity;
+        $msgId = 0;
+      }
+      else {
+        $actualQty = Cart66Product::checkInventoryLevelForProduct($itemId, $options);
+        if($actualQty > 0){
+          Cart66Session::get('Cart66Cart')->addItem($itemId, $actualQty, $options, null, $productUrl, true);
+          $message = __('We only added', 'cart66') . " <strong>$actualQty</strong> $itemName $optionResult" . __('to the cart because that is all we have in stock', 'cart66') . ". " . __('Your cart has been updated based on our available inventory', 'cart66') . ".";
+          $msgQuantityInCart = $actualQty;
+          $msgId = -1;
+        }
+        else {
+          Cart66Common::log("Item not added due to inventory failure");
+          $message = __('We could not add', 'cart66') . " <strong>$actualQty $itemName $optionResult</strong>" . __('to the cart because we are out of stock', 'cart66') . ".";
+          $msgQuantityInCart = 0;
+          $msgId = -2;
+        }
+      }
+    }
+    if(!empty($message)) {
+      $msgRequestedQuantity = $itemQuantity;
+      $msgProductName = $itemName;
+      $msgOptions = $optionResult;
+      $message = array(
+        'msgId' => $msgId, 
+        'msg' => $message, 
+        'quantityInCart' => $msgQuantityInCart, 
+        'requestedQuantity' => $msgRequestedQuantity, 
+        'productName' => $msgProductName, 
+        'productOptions' => $options
+      );
+    }
+    return $message;
+  }
+  
   public static function promotionProductSearch() {
     global $wpdb;
     $search = Cart66Common::getVal('q');
@@ -104,7 +342,7 @@ class Cart66Ajax {
     die();
   }
   
-  function checkInventoryOnAddToCart() {
+  public function checkInventoryOnAddToCart() {
     $result = array(true);
     $itemId = Cart66Common::postVal('cart66ItemId');
     $options = '';
@@ -147,6 +385,54 @@ class Cart66Ajax {
     $result = json_encode($result);
     echo $result;
     die();
+  }
+  
+  public static function pageSlurp() {
+    require_once(CART66_PATH . "/models/Pest.php");
+    require_once(CART66_PATH . "/models/PestJSON.php");
+    
+    $page_id = Cart66Common::postVal('page_id');
+    $page = get_page($page_id);
+    $slurp_url = get_permalink($page->ID);
+    $html = false;
+    $job_id = $slurp_url;
+    
+    wp_update_post(array('ID' => $page->ID, 'post_status' => 'publish'));
+    $remote = wp_remote_get($slurp_url);
+    if(!is_wp_error($remote) && $remote['response']['code'] == '200') {
+      $html = $remote['body'];
+    }
+    wp_update_post(array('ID' => $page->ID, 'post_status' => 'private'));
+    
+    if($html) {
+      $access_key = Cart66Setting::getValue('mijireh_access_key');
+      $rest = new PestJSON(MIJIREH_CHECKOUT);
+      $rest->setupAuth($access_key, '');
+      $data = array(
+        'url' => $slurp_url,
+        'html' => htmlentities($html, ENT_COMPAT | 0, 'UTF-8')
+      );
+      
+      try {
+        $response = $rest->post('/api/1/slurps', $data);
+        $job_id = $response['job_id'];
+      }
+      catch(Pest_Unauthorized $e) {
+        header('Bad Request', true, 400);
+        die();
+      }
+      
+    }
+    else {
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] NO HTML!!!!");
+    }
+    
+    echo $job_id;
+    die;
+  }
+  
+  public static function dismissMijirehNotice() {
+    Cart66Setting::setValue('mijireh_notice', 1);
   }
   
 }

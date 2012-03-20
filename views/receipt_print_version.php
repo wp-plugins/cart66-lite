@@ -71,6 +71,8 @@
       <!-- <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td align="left"><p><strong>Date: <?php echo date('m/d/Y', strtotime($order->ordered_on)); ?></strong></p></td> -->
     </tr>
+    
+    <?php if(strlen($order->bill_last_name) > 2): ?>
     <tr>
       <td valign="top">
         <p>
@@ -101,6 +103,8 @@
         </p>
       </td>
     </tr>
+    <?php endif; ?>
+    
     <tr>
       <td>
         <?php if($order->shipping_method != 'None'): ?>
@@ -126,8 +130,21 @@
         </p>
         <?php endif; ?>
       </td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
+      <?php if(strlen($order->bill_last_name) > 2): ?>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      <?php else: ?>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td valign="top">
+          <p><strong><?php _e( 'Contact Information' , 'cart66' ); ?></strong><br/>
+          <?php if(!empty($order->phone)): ?>
+            Phone: <?php echo Cart66Common::formatPhone($order->phone) ?><br/>
+          <?php endif; ?>
+          Email: <?php echo $order->email ?><br/>
+          Date: <?php echo date('m/d/Y g:i a', strtotime($order->ordered_on)) ?>
+          </p>
+        </td>
+      <?php endif; ?>
     </tr>
   </table>
 

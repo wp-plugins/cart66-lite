@@ -65,26 +65,21 @@ class Cart66 {
     $sandbox = Cart66Setting::getValue('paypal_sandbox') ? true : false;
     define("CART66_DEBUG", $cart66Logging);
     define("SANDBOX", $sandbox);
-    
-    // Ajax actions
-    if(CART66_PRO) {
-      add_action('wp_ajax_check_inventory_on_add_to_cart', array('Cart66Ajax', 'checkInventoryOnAddToCart'));
-      add_action('wp_ajax_nopriv_check_inventory_on_add_to_cart', array('Cart66Ajax', 'checkInventoryOnAddToCart'));
-    }
-    
+        
     // Handle dynamic JS requests
     // See: http://ottopress.com/2010/dont-include-wp-load-please/ for why
     add_filter('query_vars', array($this, 'addAjaxTrigger'));
     add_action('template_redirect', array($this, 'ajaxTriggerCheck'));
     
+		// add Cart66 to the admin bar
+		add_action('admin_bar_menu', array($this, 'cart66_admin_bar_menu'), 35);
+		
     if(IS_ADMIN) {
       //add_action( 'admin_notices', 'cart66_data_collection' );
       add_action('admin_head', array( $this, 'registerBasicScripts'));
-
-      if(strpos($_SERVER['QUERY_STRING'], 'page=cart66') !== false) {
-        add_action('admin_head', array($this, 'registerAdminStyles'));
-        add_action('admin_init', array($this, 'registerCustomScripts'));
-      }
+      add_action('admin_init', array($this, 'registerAdminScripts'));
+      add_action('admin_init', array($this, 'registerCustomScripts'));
+      add_action('admin_print_styles', array($this, 'registerAdminStyles'));
       
       add_action('admin_menu', array($this, 'buildAdminMenu'));
       // we dont use this button anymore
@@ -93,10 +88,30 @@ class Cart66 {
       add_action('wp_ajax_save_settings', array('Cart66Ajax', 'saveSettings'));
       add_action('wp_ajax_promotionProductSearch', array('Cart66Ajax', 'promotionProductSearch'));
       add_action('wp_ajax_loadPromotionProducts', array('Cart66Ajax', 'loadPromotionProducts'));
+      add_action('wp_ajax_promotions_table', array('Cart66DataTables', 'promotionsTable'));
+      add_action('wp_ajax_products_table', array('Cart66DataTables', 'productsTable'));
+      add_action('wp_ajax_orders_table', array('Cart66DataTables', 'ordersTable'));
+      add_action('wp_ajax_print_view', array('Cart66Ajax', 'ajaxReceipt'));
+      add_action('wp_ajax_dashboard_products_table', array('Cart66DataTables', 'dashboardProductsTable'));
+      add_action('wp_ajax_shortcode_products_table', array('Cart66Ajax', 'shortcodeProductsTable'));
+      add_action('wp_ajax_page_slurp', array('Cart66Ajax', 'pageSlurp'));
+      add_action('wp_ajax_dismiss_mijireh_notice', array('Cart66Ajax', 'dismissMijirehNotice'));
+            
+      if(CART66_PRO) {
+        add_action('wp_ajax_spreedly_table', array('Cart66DataTables', 'spreedlyTable'));
+        add_action('wp_ajax_paypal_subscriptions_table', array('Cart66DataTables', 'paypalSubscriptionsTable'));
+        add_action('wp_ajax_accounts_table', array('Cart66DataTables', 'accountsTable'));
+        add_action('wp_ajax_inventory_table', array('Cart66DataTables', 'inventoryTable'));
+      }
       
       // Load Dialog Box in editor
       add_action('media_buttons', array('Cart66Dialog', 'cart66_dialog_box'), 11);
-      add_action('admin_footer',  array('Cart66Dialog', 'add_shortcode_popup'));
+      add_action('admin_footer', array('Cart66Dialog', 'add_shortcode_popup'));
+      
+      // Load Page Slurp Button on checkout page
+      add_action('add_meta_boxes', array($this, 'addPageSlurpButtonMeta')); 
+      
+      add_action('media_buttons', array($this, 'addPageSlurpButton'), 12);
       
       // Load Dashboard Widget
       $pageRoles = Cart66Setting::getValue('admin_page_roles');
@@ -110,12 +125,10 @@ class Cart66 {
         add_action('wp_ajax_update_gravity_product_quantity_field', array('Cart66Ajax', 'updateGravityProductQuantityField'));
       }
       
-      
       if(class_exists('SpreedlySubscription') || true) {
         add_action('save_post', array($this, 'saveFeatureLevelMetaBoxData'));
         add_action('add_meta_boxes', array($this, 'addFeatureLevelMetaBox'));
       }
-      
       
       //Plugin update actions
       if(CART66_PRO) {
@@ -123,6 +136,7 @@ class Cart66 {
         add_filter('pre_set_site_transient_update_plugins', array('Cart66ProCommon', 'getUpdatePluginsOption'));    //used by WP 3.0
         add_action('install_plugins_pre_plugin-information', array('Cart66ProCommon', 'showChangelog'));
       }
+
     }
     else {
       $this->initShortcodes();
@@ -135,48 +149,21 @@ class Cart66 {
         add_action('wp_head', array($this, 'checkShippingMethodOnCheckout'));
         add_action('wp_head', array($this, 'checkZipOnCheckout'));
         add_action('wp_head', array($this, 'checkTermsOnCheckout'));
+        add_action('wp_head', array($this, 'checkMinAmountOnCheckout'));
         add_action('template_redirect', array($this, 'protectSubscriptionPages'));
         add_filter('wp_list_pages_excludes', array($this, 'hideStorePages'));
         add_filter('wp_list_pages_excludes', array($this, 'hidePrivatePages'));
         add_filter('wp_nav_menu_items', array($this, 'filterPrivateMenuItems'), 10, 2);
       }
       
-      add_action('wp_head', array($this, 'displayVersionInfo'));
+      add_action('wp_head', array('Cart66Common', 'displayVersionInfo'));
       add_action('template_redirect', array($this, 'dontCacheMeBro'));
       add_action('shutdown', array('Cart66Session', 'touch'));
-      
       add_action('wp_footer', array($order, 'updateViewed'));
       if(Cart66Setting::getValue('use_other_analytics_plugin') == 'no') {
         add_action('wp_footer', array($order, 'addTrackingCode'));
       }
     }
-    
-    
-    
-    function cart66_data_collection(){
-         global $current_screen;
-         
-         echo '<div class="updated">';
-         echo '<script type="text/javascript">
-          (function($){
-            $(document).ready(function(){
-              $("#cart66SendSurvey").click(function(){
-                $.get("http://cart66.com/survey/",function(data){
-                  alert(data)
-                })
-              })
-            })
-          })(jQuery);
-         </script>  ';
-         echo '<H3>Cart66 Usage Survey</h3>';
-         echo '<p>To improve our customer experience, Cart66 would love for you to participate in an anonymous usage survey. This data will be sent one time, and does not contain any personal or identification information.</p>';
-         echo '<p>Here\'s what is being sent:<br><br>';
-         echo Cart66Common::showReportData();
-         echo '<p><a id="cart66SendSurvey" class="button" href="#">Send</a> &nbsp;&nbsp;&nbsp; <a class="button" href="#">No thanks</a></p>';
-         echo '</div>';
-    }
-    
-    
     
     // ================================================================
     // = Intercept query string cart66 tasks                          =
@@ -202,19 +189,106 @@ class Cart66 {
       if(isset($_GET['options'])) {
         $options = Cart66Common::getVal('options');
       }
-      Cart66Session::get('Cart66Cart')->addItem(Cart66Common::getVal('cart66ItemId'), 1, $options);
+      $productUrl = null;
+      if(isset($_GET['product_url'])){
+        $productUrl = $_GET['product_url'];
+      }
+      Cart66Session::get('Cart66Cart')->addItem(Cart66Common::getVal('cart66ItemId'), 1, $options, null, $productUrl);
+    }
+    elseif($_SERVER['REQUEST_METHOD'] == 'GET' && Cart66Common::getVal('task') == 'mijireh-notification') {
+      require_once(CART66_PATH . "/gateways/Cart66Mijireh.php");
+      $order_number = Cart66Common::getVal('order_number');
+      $mijireh = new Cart66Mijireh();
+      $mijireh->saveOrder($order_number);
     }
     
   }
   
-  public function displayVersionInfo() {
-    if(CART66_PRO) {
-      echo '<meta name="Cart66Version" content="Professional ' . Cart66Setting::getValue('version') . '" />' . "\n";
-    }
-    else {
-      echo '<meta name="Cart66Version" content="Lite ' . Cart66Setting::getValue('version') . '" />' . "\n";
-    }
+  public function cart66_admin_bar_menu() {
+	  global $wp_admin_bar;
+    if (!is_admin_bar_showing() ){
+	    return;
+		}
+	  
+	  $wp_admin_bar->add_menu(
+      array( 'id' => 'cart66',
+        'title' => false,
+        'href' => false,
+				'meta' => array("html"=>'<span class="cart66AdminBarIcon"></span>')
+      )
+    );
+		
+		$pageRoles = Cart66Setting::getValue('admin_page_roles');
+    $pageRoles = unserialize($pageRoles);
+		
+		$cart66Pages = array(
+			"Orders" => array("role" => $pageRoles['orders'], "slug" => '_admin'),
+			"Products" => array("role" => $pageRoles['products'], "slug" => '-products'),
+			"Promotions" => array("role" => $pageRoles['promotions'], "slug" => '-promotions'),
+			"Settings" => array("role" => $pageRoles['settings'], "slug" => '-settings')
+		);
+		
+		foreach($cart66Pages as $page=>$meta){
+			if(current_user_can($meta['role'])){
+				$wp_admin_bar->add_menu( array(
+					'id' => 'cart66-adminbar-'.$meta['slug'],
+			    'parent' => 'cart66',
+			    'title' => __($page),
+			    'href' => get_bloginfo('wpurl') . '/wp-admin/admin.php?page=cart66' . strtolower($meta['slug']),
+			    'meta' => false) 
+				);
+			}
+		}
+		
+		$wp_admin_bar->add_menu( array(
+			'id' => 'cart66-pages',
+	    'parent' => 'cart66',
+	    'title' => __("Store Pages"),
+	    'href' => false,
+	    'meta' => false) 
+		);
+		
+		$storePages = array(
+			"Store" => get_page_by_path('store'),
+			"Cart" => get_page_by_path('store/cart'),
+			"Checkout" => get_page_by_path('store/checkout'),
+			"Receipt" => get_page_by_path('store/receipt')
+		);
+		
+		foreach($storePages as $pageName=>$cartPage){
+			$wp_admin_bar->add_menu( array(
+				'id' => 'cart66-storepage-' . strtolower($pageName),
+		    'parent' => 'cart66-pages',
+		    'title' => __($pageName),
+		    'href' => get_bloginfo('wpurl') . '/wp-admin/post.php?post=' . $cartPage->ID . '&action=edit',
+		    'meta' => false) 
+			);
+		}
+	}
+  
+  public function cart66_data_collection(){
+       global $current_screen;
+       
+       echo '<div class="updated">';
+       echo '<script type="text/javascript">
+        (function($){
+          $(document).ready(function(){
+            $("#cart66SendSurvey").click(function(){
+              $.get("http://cart66.com/survey/",function(data){
+                alert(data)
+              })
+            })
+          })
+        })(jQuery);
+       </script>  ';
+       echo '<H3>Cart66 Usage Survey</h3>';
+       echo '<p>To improve our customer experience, Cart66 would love for you to participate in an anonymous usage survey. This data will be sent one time, and does not contain any personal or identification information.</p>';
+       echo '<p>Here\'s what is being sent:<br><br>';
+       echo Cart66Common::showReportData();
+       echo '<p><a id="cart66SendSurvey" class="button" href="#">Send</a> &nbsp;&nbsp;&nbsp; <a class="button" href="#">No thanks</a></p>';
+       echo '</div>';
   }
+    
   
   public function filterPrivateMenuItems($menuItems, $args=null) {
     $links = explode("</li>", $menuItems);
@@ -290,6 +364,7 @@ class Cart66 {
     require_once(CART66_PATH . "/models/Cart66ShortcodeManager.php");
     require_once(CART66_PATH . "/models/Cart66ButtonManager.php");
     require_once(CART66_PATH . "/models/Cart66Dashboard.php");
+    require_once(CART66_PATH . "/models/Cart66DataTables.php");
     require_once(CART66_PATH . "/models/Cart66Dialog.php");
     require_once(CART66_PATH . "/models/Cart66Updater.php");
     require_once(CART66_PATH . "/gateways/Cart66GatewayAbstract.php");
@@ -308,6 +383,9 @@ class Cart66 {
       require_once(CART66_PATH . "/pro/models/Cart66PayPalSubscription.php");
       require_once(CART66_PATH . "/pro/models/Cart66Ups.php");
       require_once(CART66_PATH . "/pro/models/Cart66Usps.php");
+      require_once(CART66_PATH . "/pro/models/Cart66FedEx.php");
+      require_once(CART66_PATH . "/pro/models/Cart66AuPost.php");
+      require_once(CART66_PATH . "/pro/models/Cart66CaPost.php");
       require_once(CART66_PATH . "/pro/models/Cart66MailChimp.php");
       
       // Load Constant Contact classes
@@ -356,26 +434,34 @@ class Cart66 {
   public function registerBasicScripts() {
     ?><script type="text/javascript">var wpurl = '<?php echo esc_js( home_url('/') ); ?>';</script><?php
     $dashboardCss = CART66_URL . '/admin/dashboard.css';
-    echo "<link rel='stylesheet' type='text/css' href='$dashboardCss' />\n";
+    wp_enqueue_style('dashboard-css', $dashboardCss, null, CART66_VERSION_NUMBER, 'all');
+  }
+  
+  public function registerAdminScripts() {
+    $path = CART66_URL . '/js/jquery.dataTables.min.js';
+    wp_enqueue_script('jquery-dataTables', $path, null, CART66_VERSION_NUMBER, true);    
+    $path = CART66_URL . '/js/page-slurp.js';
+    wp_enqueue_script('page-slurp', $path, null, CART66_VERSION_NUMBER, true);
+    wp_enqueue_script('pusher', 'https://d3dy5gmtp8yhk7.cloudfront.net/1.11/pusher.min.js', null, CART66_VERSION_NUMBER, true);
   }
   
   public function registerCustomScripts() {
     if(strpos($_SERVER['QUERY_STRING'], 'page=cart66') !== false) {
       $path = CART66_URL . '/js/ajax-setting-form.js';
-      wp_enqueue_script('ajax-setting-form', $path);
+      wp_enqueue_script('ajax-setting-form', $path, null, CART66_VERSION_NUMBER);
 
       // Include jquery-multiselect, jquery-datepicker, jquery-timepicker-addon and jquery-ui
       wp_enqueue_script('jquery');
       wp_enqueue_script('jquery-ui-core');
       wp_enqueue_script('jquery-ui-sortable');
       $path = CART66_URL . '/js/ui.multiselect.js';
-      wp_enqueue_script('jquery-multiselect', $path, null, null, true);
+      wp_enqueue_script('jquery-multiselect', $path, null, CART66_VERSION_NUMBER, true);
       $path = CART66_URL . '/js/jquery-ui.core.datepicker.slider.js';
-      wp_enqueue_script('jquery-datepicker', $path, null, null, true);
+      wp_enqueue_script('jquery-datepicker', $path, null, CART66_VERSION_NUMBER, true);
       $path = CART66_URL . '/js/ui.timepicker.addon.js';
-      wp_enqueue_script('jquery-timepicker-addon', $path, null, null, true);
+      wp_enqueue_script('jquery-timepicker-addon', $path, null, CART66_VERSION_NUMBER, true);
       $path = CART66_URL . '/js/jquery.tokeninput.js';
-      wp_enqueue_script('jquery-tokeninput', $path, null, null, true);
+      wp_enqueue_script('jquery-tokeninput', $path, null, CART66_VERSION_NUMBER, true);
  
       // Include the jquery table quicksearch library
       $path = CART66_URL . '/js/jquery.quicksearch.js';
@@ -385,15 +471,21 @@ class Cart66 {
   }
   
   public function registerAdminStyles() {
-    if(strpos($_SERVER['QUERY_STRING'], 'page=cart66') !== false) {
-      $widgetCss = WPURL . '/wp-admin/css/widgets.css';
-      echo "<link rel='stylesheet' type='text/css' href='$widgetCss' />\n";
-
+    $slurpable = Cart66Common::isSlurpPage();
+    $notice = $slurpable ? 'Slurp Good' : 'Slurp Bad';
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Registering admin styles: $notice");
+    
+    if(strpos($_SERVER['QUERY_STRING'], 'page=cart66') !== false || Cart66Common::isSlurpPage()) {
+      if(version_compare(get_bloginfo('version'), '3.3', '<')) {
+        $widgetCss = WPURL . '/wp-admin/css/widgets.css';
+        wp_enqueue_style('widget-css', $widgetCss, null, CART66_VERSION_NUMBER, 'all');
+      }
+      
     	$adminCss = CART66_URL . '/admin/admin-styles.css';
-      echo "<link rel='stylesheet' type='text/css' href='$adminCss' />\n";
+    	wp_enqueue_style('admin-css', $adminCss, null, CART66_VERSION_NUMBER, 'all');
 
       $uiCss = CART66_URL . '/admin/jquery-ui-1.7.1.custom.css';
-      echo "<link rel='stylesheet' type='text/css' href='$uiCss' />\n";
+      wp_enqueue_style('ui-css', $uiCss, null, CART66_VERSION_NUMBER, 'all');
     }
   }
   
@@ -422,7 +514,7 @@ class Cart66 {
         }
       }
       
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Disable caching is: $disableCaching");
+      // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Disable caching is: $disableCaching");
       
       if($sendHeaders) {
         // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Sending no cache headers");
@@ -495,14 +587,16 @@ class Cart66 {
   }
   
   public function checkTermsOnCheckout() {
-      if(Cart66Setting::getValue('require_terms') == 1) {
-        global $post;
-        $checkoutPage = get_page_by_path('store/checkout');
-        $cartPage = get_page_by_path('store/cart');
-        if( isset( $post->ID ) && $post->ID == $checkoutPage->ID || $post->ID == $cartPage->ID) {
-          
-          $sendBack = false;
-         
+    global $post;
+    $checkoutPage = get_page_by_path('store/checkout');
+    $cartPage = get_page_by_path('store/cart');
+    
+    // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] What is the post? " . print_r($post, 1));
+    $sendBack = false;
+    if(isset($post) && is_object($post) && is_object($cartPage) && is_object($checkoutPage)) {
+      
+      if($post->ID == $checkoutPage->ID || $post->ID == $cartPage->ID) {
+        if(Cart66Setting::getValue('require_terms') == 1) {
           if($post->ID == $cartPage->ID && isset($_POST['terms_acceptance']) && $_POST['terms_acceptance'] == "I_Accept"){
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Terms are accepted, forwarding to checkout");
             Cart66Session::set("terms_acceptance","accepted",true);
@@ -514,14 +608,43 @@ class Cart66 {
             $link = get_permalink($cartPage->ID);
             $sendBack = true;
           }
-        
           if($sendBack) {
             wp_redirect($link);
             exit();
           }
-          
-        } // End if checkout or cart page
-      } // End if require terms
+        }
+      }
+      
+    }
+  }
+  
+  public function checkMinAmountOnCheckout() {
+    global $post;
+    $checkoutPage = get_page_by_path('store/checkout');
+    $cartPage = get_page_by_path('store/cart');
+    $sendBack = false;
+    if(isset($post->ID)) {
+      
+      if($post->ID == $checkoutPage->ID || $post->ID == $cartPage->ID) {
+        if(Cart66Setting::getValue('minimum_cart_amount') == 1) {
+          $minAmount = number_format(Cart66Setting::getValue('minimum_amount'), 2, '.', '');
+          $subTotal = number_format(Cart66Session::get('Cart66Cart')->getSubTotal(), 2, '.', '');
+          if($post->ID == $checkoutPage->ID && $minAmount > $subTotal) {
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Minimum Cart amount is not yet met, send back to cart");
+            $link = get_permalink($cartPage->ID);
+            $sendBack = true;
+          }
+          else {
+            $sendBack = false;
+          }
+          if($sendBack) {
+            wp_redirect($link);
+            exit();
+          }
+        }
+      }
+      
+    }
   }
   
   public function checkZipOnCheckout() {
@@ -587,7 +710,7 @@ class Cart66 {
 
     if(!Cart66Session::get('Cart66Cart')) {
       Cart66Session::set('Cart66Cart', new Cart66Cart());
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Creating a new Cart66Cart OBJECT for the database session.");
+      // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Creating a new Cart66Cart OBJECT for the database session.");
     }
 
     if(isset($_POST['task'])) {
@@ -620,12 +743,14 @@ class Cart66 {
     add_shortcode('account_logout',               array($sc, 'accountLogout'));
     add_shortcode('account_logout_link',          array($sc, 'accountLogoutLink'));
     add_shortcode('account_info',                 array($sc, 'accountInfo'));
+    add_shortcode('account_details',              array($sc, 'accountDetails'));
     add_shortcode('add_to_cart',                  array($sc, 'showCartButton'));
     add_shortcode('add_to_cart_anchor',           array($sc, 'showCartAnchor'));
     add_shortcode('cart',                         array($sc, 'showCart'));
     add_shortcode('cart66_download',              array($sc, 'downloadFile'));
     add_shortcode('cancel_paypal_subscription',   array($sc, 'cancelPayPalSubscription'));
     add_shortcode('checkout_authorizenet',        array($sc, 'authCheckout'));
+    add_shortcode('checkout_mijireh',             array($sc, 'mijirehCheckout'));
     add_shortcode('checkout_manual',              array($sc, 'manualCheckout'));
     add_shortcode('checkout_payleap',             array($sc, 'payLeapCheckout'));
     add_shortcode('checkout_paypal',              array($sc, 'paypalCheckout'));
@@ -672,7 +797,18 @@ class Cart66 {
    */
   public function ajaxTriggerCheck() {
     if ( intval( get_query_var( 'cart66AjaxCartRequests' ) ) == 1 ) {
+      //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] CHECKED INVENTORY");
       Cart66Ajax::checkInventoryOnAddToCart();
+      exit;
+    }
+    if ( intval( get_query_var( 'cart66AjaxCartRequests' ) ) == 2 ) {
+      //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] AJAX ADD TO CART");
+      Cart66Ajax::ajaxAddToCart();
+      exit;
+    }
+    if ( intval( get_query_var( 'cart66AjaxCartRequests' ) ) == 3 ) {
+      //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] UPDATE CART WIDGETS WITH AJAX");
+      Cart66Ajax::ajaxCartElements();
       exit;
     }
   }
@@ -682,6 +818,31 @@ class Cart66 {
    */
   public function registerCartWidget() {
     register_widget('Cart66CartWidget');
+  }
+  
+  public function addPageSlurpButtonMeta() { 
+    global $post;
+    if(Cart66Common::isSlurpPage()) { 
+      add_meta_box(  
+          'slurp_meta_box', // $id  
+          'Mijireh Page Slurp', // $title  
+          array($this, 'drawPageSlurpMetaBox'), // $callback  
+          'page', // $page  
+          'normal', // $context  
+          'high'); // $priority  
+        }
+  }
+  public function drawPageSlurpMetaBox($post) {
+    echo "<div id='mijireh_notice' class='mijireh-info alert-message info' data-alert='alert'>";
+    echo  "<div class='mijireh-logo'><img src='" . CART66_URL . "/images/mijireh-checkout-logo.png' alt='Mijireh Checkout Logo'></div>";
+    echo  "<div class='mijireh-blurb'>";
+    echo    "<h2>Slurp your custom checkout page!</h2>";
+    echo    "<p>Get the page designed just how you want and when you're ready, click the button below and we'll slurp it right up. Need help? <a href='http://cart66.com/2012/mijireh-checkout-with-cart66/'>Here are some tips</a> to having a great checkout page.</p>";
+    echo    "<div id='slurp_progress' class='meter progress progress-info progress-striped active' style='display: none;'><div id='slurp_progress_bar' class='bar' style='width: 20%;'>Slurping...</div></div>";
+    echo    "<p class='aligncenter'><a href='#' id='page_slurp' rel=". $post->ID ." class='button-primary'>Slurp This Page!</a></p>";
+    echo    '<p class="aligncenter"><a class="nobold" href="' . MIJIREH_CHECKOUT . '/checkout/' . Cart66Setting::getValue('mijireh_access_key') . '" id="view_slurp" target="_new">Preview Checkout Page</a></p>';
+    echo  "</div>";
+    echo  "</div>";
   }
   
   public function addFeatureLevelMetaBox() {
@@ -931,6 +1092,13 @@ class Cart66 {
       }
     }
     
+  }
+  
+  public function addPageSlurpButton() {
+    global $post;
+    if(Cart66Common::isSlurpPage()) {
+      // echo "<a href='#' id='page_slurp'>Slurp</a> ";
+    }
   }
   
 }

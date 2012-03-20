@@ -75,37 +75,57 @@ class Cart66Common {
   
   public static function getView($filename, $data=null) {
 
-    $unregistered = '';
+    $notice = '';
     if(strpos($filename, 'admin') !== false) {
+      
+      $mijireh_notice = Cart66Setting::getValue('mijireh_notice');
+      if($mijireh_notice != 1) {
+        $notice = '<div id="mijireh_notice" class="mijireh-info alert-message info" data-alert="alert">
+        <a href="#" id="mijireh_dismiss" class="close">&times;</a>
+          <div class="mijireh-logo"><img src="' . CART66_URL . '/images/mijireh-checkout-logo.png" alt="Mijireh Checkout Logo"></div>
+          <div class="mijireh-blurb">
+          <h2>Cart66 now supports Mijireh Checkout!</h2>
+          <p>Accept credit cards on a fully PCI compliant ecommerce platform</p>
+          <ul>
+            <li>No need for SSL certificates or a dedicated IP addresss</li>
+            <li>No need to pay for for quarterly security scans</li>
+            <li>No need to give up control of your design</li>
+          </ul>
+          <h1><a href="http://mijireh.com" target="_new">Start now for FREE!</a></h1>
+          </div>
+        </div>';
+      }
+      
       if(CART66_PRO && !self::isRegistered()) {
         $hardCoded = '';
         $settingsUrl = get_bloginfo('wpurl') . '/wp-admin/admin.php?page=cart66-settings';
         if(CART66_ORDER_NUMBER !== false) {
           $hardCoded = "<br/><br/><em>An invalid order number has be hard coded<br/> into the main cart66.php file.</em>";
         }
-        $unregistered = '
-          <div class="unregistered">
-            This is not a registered copy of Cart66.<br/>
+        $notice .= '
+          <div class="unregistered alert-message alert-error">
+            <p>This is not a registered copy of Cart66.<br/>
             Please <a href="' . $settingsUrl . '">enter your order number</a> or
             <a href="http://www.cart66.com/pricing">buy a license for your site.</a> ' . $hardCoded . '
+            </p>
           </div>
         ';
       }
+      
     }
 
     $customView = false;
     $themeDirectory = get_stylesheet_directory();
     $approvedOverrideFiles = array(
-                                   "views/cart.php",
-                                   "views/cart-button.php",
-                                   "views/account-login.php",
-                                   "views/checkout-form.php",
-                                   "views/cart-sidebar.php",
-                                   "views/cart-sidebar-advanced.php",
-                                   "views/receipt.php",
-                                   "views/receipt_print_version.php",
-                                   "pro/views/terms.php"
-                             );
+      "views/cart.php",
+      "views/cart-button.php",
+      "views/account-login.php",
+      "views/cart-sidebar.php",
+      "views/cart-sidebar-advanced.php",
+      "views/receipt.php",
+      "views/receipt_print_version.php",
+      "pro/views/terms.php"
+    );
     $overrideDirectory = $themeDirectory."/cart66-templates";
     $userViewFile = $overrideDirectory."/$filename";
     
@@ -123,8 +143,8 @@ class Cart66Common {
       }
     }
     else{
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] File exists: ".var_export(file_exists($userViewFile),true)."\n");
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Approved Override: ".var_export(in_array($filename,$approvedOverrideFiles),true));
+      // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] File exists: ".var_export(file_exists($userViewFile),true)."\n");
+      // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Approved Override: ".var_export(in_array($filename,$approvedOverrideFiles),true));
     }
   
     // Check for override and confirm we have a registered plugin
@@ -142,7 +162,7 @@ class Cart66Common {
     $contents = ob_get_contents();
     ob_end_clean();
 
-    return $unregistered . $contents;
+    return $notice . $contents;
   }
   
   public static function getTableName($name, $prefix='cart66_'){
@@ -241,13 +261,15 @@ class Cart66Common {
           $buyer_email = $order->email;
           
           // Affiliate Royale
-          do_action('cart66_award_commission', $referrer, $sale_amount, $txn_id, $item_id, $buyer_email); 
+          do_action('wafp_award_commission', $referrer, $sale_amount, $txn_id, $item_id, $buyer_email); 
 
-          // Make sure commission has not already been granted for this transaction
-          $aff_sales_table = $wpdb->prefix . "affiliates_sales_tbl";
-          $txnCount = $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM $aff_sales_table where txn_id = %s", $txn_id));
-          if($txnCount < 1 && function_exists('wp_aff_award_commission')) {
-            wp_aff_award_commission($referrer,$sale_amount,$txn_id,$item_id,$buyer_email);
+          if(function_exists('wp_aff_award_commission')) {
+            // Make sure commission has not already been granted for this transaction
+            $aff_sales_table = $wpdb->prefix . "affiliates_sales_tbl";
+            $txnCount = $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM $aff_sales_table where txn_id = %s", $txn_id));
+            if($txnCount < 1) {
+              wp_aff_award_commission($referrer,$sale_amount,$txn_id,$item_id,$buyer_email);
+            }
           }
         }
         
@@ -299,6 +321,7 @@ class Cart66Common {
     return wp_mail($to, $subject, $msg, $headers);
   }
   
+  
   /**
    * Send email receipt and copies thereof.
    * Return true if all the emails that were supposed to be sent got sent.
@@ -343,6 +366,99 @@ class Cart66Common {
     }
     return $isSent;
   }
+  
+  public static function getEmailReceiptMessage($order) {
+     $product = new Cart66Product();
+
+     $msg = __("ORDER NUMBER","cart66") . ": " . $order->trans_id . "\n\n";
+     $hasDigital = false;
+     foreach($order->getItems() as $item) {
+       $product->load($item->product_id);
+       if($hasDigital == false) {
+         $hasDigital = $product->isDigital();
+       }
+       $price = $item->product_price * $item->quantity;
+       // $msg .= "Item: " . $item->item_number . ' ' . $item->description . "\n";
+       $msg .= __("Item","cart66") . ": " . $item->description . "\n";
+       if($item->quantity > 1) {
+         $msg .= __("Quantity","cart66") . ": " . $item->quantity . "\n";
+       }
+       $msg .= __("Item Price","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price, 2) . "\n";
+       $msg .= __("Item Total","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price * $item->quantity, 2) . "\n\n";
+
+       if($product->isGravityProduct()) {
+         $msg .= Cart66GravityReader::displayGravityForm($item->form_entry_ids, true);
+       }
+     }
+
+     if($order->shipping_method != 'None' && $order->shipping_method != 'Download') {
+       $msg .= __("Shipping","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . $order->shipping . "\n";
+     }
+
+     if(!empty($order->coupon) && $order->coupon != 'none') {
+       $msg .= __("Coupon","cart66") . ": " . $order->coupon . "\n";
+     }
+
+     if($order->tax > 0) {
+       $msg .= __("Tax","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->tax, 2) . "\n";
+     }
+
+     $msg .= "\n" . __("TOTAL","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->total, 2) . "\n";
+
+     if($order->shipping_method != 'None' && $order->shipping_method != 'Download') {
+       $msg .= "\n\n" . __("SHIPPING INFORMATION","cart66") . "\n\n";
+
+       $msg .= $order->ship_first_name . ' ' . $order->ship_last_name . "\n";
+       $msg .= $order->ship_address . "\n";
+       if(!empty($order->ship_address2)) {
+         $msg .= $order->ship_address2 . "\n";
+       }
+       $msg .= $order->ship_city . ' ' . $order->ship_state . ' ' . $order->ship_zip . "\n" . $order->ship_country . "\n";
+
+       $msg .= "\n" . __("Delivery via","cart66") . ": " . $order->shipping_method . "\n";
+     }
+
+
+     $msg .= "\n\n" . __("BILLING INFORMATION","cart66") . "\n\n";
+
+     $msg .= $order->bill_first_name . ' ' . $order->bill_last_name . "\n";
+     $msg .= $order->bill_address . "\n";
+     if(!empty($order->bill_address2)) {
+       $msg .= $order->bill_address2 . "\n";
+     }
+     $msg .= $order->bill_city . ' ' . $order->bill_state . ' ' . $order->bill_zip . "\n" . $order->bill_country . "\n";
+
+     if(!empty($order->phone)) {
+       $phone = self::formatPhone($order->phone);
+       $msg .= "\n" . __("Phone","cart66") . ": $phone\n";
+     }
+
+     if(!empty($order->email)) {
+       $msg .= __("Email","cart66") . ': ' . $order->email . "\n";
+     }
+
+     $receiptPage = get_page_by_path('store/receipt');
+     $link = get_permalink($receiptPage->ID);
+     if(strstr($link,"?")){
+       $link .= '&ouid=' . $order->ouid;
+     }
+     else{
+       $link .= '?ouid=' . $order->ouid;
+     }
+
+     if($hasDigital) {
+       $msg .= "\n" . __('DOWNLOAD LINK','cart66') . "\n" . __('Click the link below to download your order.','cart66') . "\n$link";
+     }
+     else {
+       $msg .= "\n" . __('VIEW RECEIPT ONLINE','cart66') . "\n" . __('Click the link below to view your receipt online.','cart66') . "\n$link";
+     }
+
+     $setting = new Cart66Setting();
+     $msgIntro = Cart66Setting::getValue('receipt_intro');
+     $msg = $msgIntro . " \n----------------------------------\n\n" . $msg;
+
+     return $msg;
+   }
   
   public static function randomString($numChars = 7) {
 		$letters = "";
@@ -526,6 +642,8 @@ class Cart66Common {
        'GB'=>'United Kingdom',
        'US'=>'United States',
        'UY'=>'Uruguay',
+       'VU'=>'Vanuatu',
+			 'VN'=>'Vietnam',
        'VE'=>'Venezuela');
     
     // Put home country at the top of the list
@@ -864,108 +982,15 @@ class Cart66Common {
     if(count($jqErrors)) {
       $lines = '';
       foreach($jqErrors as $val) {
-        $lines .= "  \$jq('#$val').addClass('errorField);\n";
+        $lines .= "  \$('#$val').addClass('errorField');\n";
       }
     }
     $lines  = rtrim($lines, "\n");
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] jq error script lines: $lines");
     $script = str_replace('_script_here_', $lines, $script);
     return $script;
   }
 
-  
-  public static function getEmailReceiptMessage($order) {
-    $product = new Cart66Product();
-    
-    $msg = __("ORDER NUMBER","cart66") . ": " . $order->trans_id . "\n\n";
-    $hasDigital = false;
-    foreach($order->getItems() as $item) {
-      $product->load($item->product_id);
-      if($hasDigital == false) {
-        $hasDigital = $product->isDigital();
-      }
-      $price = $item->product_price * $item->quantity;
-      // $msg .= "Item: " . $item->item_number . ' ' . $item->description . "\n";
-      $msg .= __("Item","cart66") . ": " . $item->description . "\n";
-      if($item->quantity > 1) {
-        $msg .= __("Quantity","cart66") . ": " . $item->quantity . "\n";
-      }
-      $msg .= __("Item Price","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price, 2) . "\n";
-      $msg .= __("Item Total","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price * $item->quantity, 2) . "\n\n";
-      
-      if($product->isGravityProduct()) {
-        $msg .= Cart66GravityReader::displayGravityForm($item->form_entry_ids, true);
-      }
-    }
-
-    if($order->shipping_method != 'None' && $order->shipping_method != 'Download') {
-      $msg .= __("Shipping","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . $order->shipping . "\n";
-    }
-
-    if(!empty($order->coupon) && $order->coupon != 'none') {
-      $msg .= __("Coupon","cart66") . ": " . $order->coupon . "\n";
-    }
-
-    if($order->tax > 0) {
-      $msg .= __("Tax","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->tax, 2) . "\n";
-    }
-
-    $msg .= "\n" . __("TOTAL","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->total, 2) . "\n";
-
-    if($order->shipping_method != 'None' && $order->shipping_method != 'Download') {
-      $msg .= "\n\n" . __("SHIPPING INFORMATION","cart66") . "\n\n";
-
-      $msg .= $order->ship_first_name . ' ' . $order->ship_last_name . "\n";
-      $msg .= $order->ship_address . "\n";
-      if(!empty($order->ship_address2)) {
-        $msg .= $order->ship_address2 . "\n";
-      }
-      $msg .= $order->ship_city . ' ' . $order->ship_state . ' ' . $order->ship_zip . "\n" . $order->ship_country . "\n";
-
-      $msg .= "\n" . __("Delivery via","cart66") . ": " . $order->shipping_method . "\n";
-    }
-
-
-    $msg .= "\n\n" . __("BILLING INFORMATION","cart66") . "\n\n";
-
-    $msg .= $order->bill_first_name . ' ' . $order->bill_last_name . "\n";
-    $msg .= $order->bill_address . "\n";
-    if(!empty($order->bill_address2)) {
-      $msg .= $order->bill_address2 . "\n";
-    }
-    $msg .= $order->bill_city . ' ' . $order->bill_state . ' ' . $order->bill_zip . "\n" . $order->bill_country . "\n";
-
-    if(!empty($order->phone)) {
-      $phone = self::formatPhone($order->phone);
-      $msg .= "\n" . __("Phone","cart66") . ": $phone\n";
-    }
-    
-    if(!empty($order->email)) {
-      $msg .= __("Email","cart66") . ': ' . $order->email . "\n";
-    }
-
-    $receiptPage = get_page_by_path('store/receipt');
-    $link = get_permalink($receiptPage->ID);
-    if(strstr($link,"?")){
-      $link .= '&ouid=' . $order->ouid;
-    }
-    else{
-      $link .= '?ouid=' . $order->ouid;
-    }
-
-    if($hasDigital) {
-      $msg .= "\n" . __('DOWNLOAD LINK','cart66') . "\n" . __('Click the link below to download your order.','cart66') . "\n$link";
-    }
-    else {
-      $msg .= "\n" . __('VIEW RECEIPT ONLINE','cart66') . "\n" . __('Click the link below to view your receipt online.','cart66') . "\n$link";
-    }
-    
-    $setting = new Cart66Setting();
-    $msgIntro = Cart66Setting::getValue('receipt_intro');
-    $msg = $msgIntro . " \n----------------------------------\n\n" . $msg;
-    
-    return $msg;
-  }
-  
   /**
    * Return the WP_CONTENT_URL taking into account HTTPS and the possibility that WP_CONTENT_URL may not be defined
    * 
@@ -1031,8 +1056,8 @@ class Cart66Common {
   }
   
   public function appendWurlQueryString($nvPairs) {
-    $url = get_bloginfo('wpurl');
-    $url .= strpos($url, '?') ? '&' : '?';
+    $url = home_url();
+    $url .= strpos($url, '?') ? '&' : '/?';
     $url .= $nvPairs;
     return $url;
   }
@@ -1306,24 +1331,96 @@ class Cart66Common {
   public static function getElapsedTime($datestamp) {
     $output = false;
     if(!empty($datestamp) && $datestamp != '0000-00-00 00:00:00') {
-      $totaldelay = time() - strtotime($datestamp);
+      $totaldelay = Cart66Common::localTs() - strtotime($datestamp);
       if($days=floor($totaldelay/86400)) {
         $totaldelay = $totaldelay % 86400;
         $output = date('m/d/Y', strtotime($datestamp));
       }
       elseif($hours=floor($totaldelay/3600)) {
         $totaldelay = $totaldelay % 3600;
-        $output = $hours . __(' hours ago', 'cart66');
+        $output = $hours . ' ' . _n('hour', 'hours', $hours, 'cart66') . ' ago';
       }
       elseif($minutes=floor($totaldelay/60)) {
         $totaldelay = $totaldelay % 60;
-        $output = $minutes . __(' minutes ago', 'cart66');
+        $output = $minutes . ' ' . _n('minute', 'minutes', $minutes, 'cart66') . ' ago';
       }
       elseif($seconds=floor($totaldelay/1)) {
         $totaldelay = $totaldelay % 1;
-        $output = $seconds . __(' seconds ago', 'cart66');
+        $output = $seconds . ' ' . _n('second', 'seconds', $seconds, 'cart66') . ' ago';
       }
     }
     return $output;
   }
+  
+  public static function getTimeLeft($datestamp) {
+    $output = false;
+    if(!empty($datestamp) && $datestamp != '0000-00-00 00:00:00') {
+      $timeleft = strtotime($datestamp) - Cart66Common::localTs();
+      if($days=floor($timeleft/86400)) {
+        $timeleft = $timeleft % 86400;
+        $output = date('m/d/Y', strtotime($datestamp));
+      }
+      elseif($hours=floor($timeleft/3600)) {
+        $timeleft = $timeleft % 3600;
+        $output = $hours . __(' hours to go', 'cart66');
+      }
+      elseif($minutes=floor($timeleft/60)) {
+        $timeleft = $timeleft % 60;
+        $output = ($minutes == 1) ? $minutes . __(' minute ago', 'cart66') : $minutes . __(' minutes to go', 'cart66');
+      }
+      elseif($seconds=floor($timeleft/1)) {
+        $timeleft = $timeleft % 1;
+        $output = $seconds . __(' seconds to go', 'cart66');
+      }
+    }
+    return $output;
+  }
+  
+  public static function userRoles($role) {
+    $access = false;
+    $pageRoles = Cart66Setting::getValue('admin_page_roles');
+    $pageRoles = unserialize($pageRoles);
+    if(current_user_can($pageRoles[$role])) {
+      $access = true;
+    }
+    return $access;
+  }
+  
+  public static function urlIsLive($url) {
+    return @fopen($url, 'r');
+  }
+  
+  public static function displayVersionInfo() {
+    if(CART66_PRO) {
+      echo '<meta name="generator" content="Cart66 Professional ' . Cart66Setting::getValue('version') . '" />' . "\n";
+    }
+    else {
+      echo '<meta name="generator" content="Cart66 Lite ' . Cart66Setting::getValue('version') . '" />' . "\n";
+    }
+  }
+  
+  public static function removeCart66Meta() {
+    remove_action('wp_head', array('Cart66Common','displayVersionInfo'));
+  }
+  
+  /**
+   * Return true if the current page is the mijireh checkout page, otherwise return false.
+   * 
+   * @return boolean
+   */
+  public static function isSlurpPage() {
+    global $post;
+    $isSlurp = false;
+    if(isset($post) && is_object($post)) {
+      $content = $post->post_content;
+      if(strpos($content, '{{mj-checkout-form}}') !== false) {
+        $isSlurp = true;
+      }
+    }
+    else {
+      // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Check Slurp Page Failed: " . print_r($post, 1));
+    }
+    return $isSlurp;
+  }
+  
 }

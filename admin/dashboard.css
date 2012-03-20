@@ -130,7 +130,8 @@
   color:#8F8F8F;
   font-size:11px;
 }
-
+#productTable_length, #productTable_processing { display:none !important; }
+div.t3 { padding-bottom:5px !important; }
 div.pane .dailyAverage { float:left;}
 #dailyAverage .average { font-size:14px;padding:0 0 0 5px; }
 #dailyAverage td { padding:0; }
@@ -183,7 +184,7 @@ div.loading h2 { padding:100px; }
 }
 #TB_ajaxContent {
   width:640px !important;
-  height:400px !important;
+  height:440px;
 }
 #cart66-shortcode-window ul#sidemenu {
 font-weight: normal;
@@ -235,7 +236,7 @@ font-size: 1.6em;
 }
 /* Upgrade message */
 #cart66_upgrade_message {
-  padding:10px; position:relative;display:none;margin:5px 25px 0 5px;
+  padding:10px; position:relative;display:none;margin:5px 9px 0 8px;
 }
 p.left {
   float:left;margin:0;
@@ -245,4 +246,18 @@ p.left img {
 }
 #cart66_upgrade_message a.dismiss {
   float:right;line-height:30px;
+}
+#wp-admin-bar-cart66{
+	width:55px;
+}
+#wpadminbar .cart66AdminBarIcon{
+	position:absolute;
+	margin:-20px 0px 0px 10px;
+	width: 36px !important;
+	height: 12px !important;
+	background-image: url(../images/cart66_admin_button.png);
+	background-repeat: no-repeat;	
+}
+#wp-admin-bar-cart66.hover .cart66AdminBarIcon{
+	background-image: url(../images/cart66_tiny_type.png);
 }

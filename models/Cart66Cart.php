@@ -36,7 +36,7 @@ class Cart66Cart {
   public function addToCart() {
     $itemId = Cart66Common::postVal('cart66ItemId');
     Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Adding item to cart: $itemId");
-
+    
     $options = '';
     if(isset($_POST['options_1'])) {
       $options = Cart66Common::postVal('options_1');
@@ -56,9 +56,14 @@ class Cart66Cart {
       $sanitizedPrice = preg_replace("/[^0-9\.]/","",$_POST['item_user_price']);
       Cart66Session::set("userPrice_$itemId",$sanitizedPrice);
     }
+    
+    $productUrl = null;
+    if(isset($_POST['product_url'])){
+      $productUrl = $_POST['product_url'];
+    }
 
     if(Cart66Product::confirmInventory($itemId, $options)) {
-      $this->addItem($itemId, $itemQuantity, $options);
+      $this->addItem($itemId, $itemQuantity, $options, null, $productUrl);
     }
     else {
       Cart66Common::log("Item not added due to inventory failure");
@@ -83,13 +88,14 @@ class Cart66Cart {
     do_action('cart66_after_update_cart', $this);
   }
   
-  public function addItem($id, $qty=1, $optionInfo='', $formEntryId=0) {
+  public function addItem($id, $qty=1, $optionInfo='', $formEntryId=0, $productUrl='', $ajax=false) {
+
     $optionInfo = $this->_processOptionInfo($optionInfo);
     $product = new Cart66Product($id);
     
     if($product->id > 0) {
       
-      $newItem = new Cart66CartItem($product->id, $qty, $optionInfo->options, $optionInfo->priceDiff);
+      $newItem = new Cart66CartItem($product->id, $qty, $optionInfo->options, $optionInfo->priceDiff, $productUrl);
       
       if( ($product->isSubscription() || $product->isMembershipProduct()) && ($this->hasSubscriptionProducts() || $this->hasMembershipProducts() )) {
         // Make sure only one subscription can be added to the cart. Spreedly only allows one subscription per subscriber.
@@ -101,6 +107,7 @@ class Cart66Cart {
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Product being added is a Gravity Product: $formEntryId");
         if($formEntryId > 0) {
           $newItem->addFormEntryId($formEntryId);
+          $newItem->setQuantity($qty);
           $this->_items[] = $newItem;
         }
       }
@@ -112,6 +119,25 @@ class Cart66Cart {
           if($item->isEqual($newItem)) {
             $isNew = false;
             $newQuantity = $item->getQuantity() + $qty;
+            $actualQty = Cart66Product::checkInventoryLevelForProduct($id, $optionInfo->options);
+            $confirmInventory = Cart66Product::confirmInventory($id, $optionInfo->options, $newQuantity);
+            if($actualQty !== NULL && $actualQty < $newQuantity && !$confirmInventory){
+              if($actualQty > 0) {
+                $alert = '<p>We are not able to fulfill your order for <strong>' .  $qty . '</strong> ' . $item->getFullDisplayName() . "  because we only have <strong>$actualQty in stock</strong>.</p>";
+              }
+              else {
+                $alert = '<p>We are not able to fulfill your order for <strong>' .  $qty . '</strong> ' . $item->getFullDisplayName() . "  because it is <strong>out of stock</strong>.</p>";
+              }
+              if(!empty($alert)) {
+                $alert = "<div class='Cart66Unavailable Cart66Error'><h1>Inventory Restriction</h1> $alert <p>Your cart has been updated based on our available inventory.</p>";
+                $alert .= '<input type="button" name="close" value="Ok" class="Cart66ButtonSecondary modalClose" /></div>';
+                Cart66Session::set('Cart66InventoryWarning', $alert);
+              }
+              if($ajax==true) {
+                Cart66Session::drop('Cart66InventoryWarning');
+              }
+              $newQuantity = $actualQty;
+            }
             $item->setQuantity($newQuantity);
             if($formEntryId > 0) {
               $item->addFormEntryId($formEntryId);
@@ -261,10 +287,31 @@ class Cart66Cart {
       }
       else {
         // item is subscription
-        $total += $item->getBaseProductPrice();
+        $basePrice = $item->getBaseProductPrice();
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Item is a subscription with base price $basePrice");
+        $total += $basePrice;
       }
     }
     return $total;
+  }
+  
+  /**
+   * Returns true if the cart contains one or more products for which sales tax is collected.
+   * 
+   * @return boolean
+   */
+  public function hasTaxableProducts() {
+    $isTaxed = false;
+    
+    foreach($this->_items as $item) {
+      $p = $item->getProduct();
+      if($p->taxable == 1) {
+        $isTaxed = true;
+        break;
+      }
+    }
+    
+    return $isTaxed;
   }
   
   public function getTaxableAmount() {
@@ -276,7 +323,14 @@ class Cart66Cart {
         $total += $item->getProductPrice() * $item->getQuantity();
       }
     }
-    $discount = $this->getDiscountAmount();
+    
+    $discount = 0;
+    $promotion = $this->getPromotion();
+    
+    if($promotion && $promotion->apply_to != "shipping"){
+      $discount = $this->getDiscountAmount();
+    }    
+    
     if($discount > $total) {
       $total = 0;
     }
@@ -573,6 +627,16 @@ class Cart66Cart {
     return $allDigital;
   }
   
+  public function isAllMembershipProducts(){
+    $i = 0;
+    foreach($this->getItems() as $item) {
+      if($item->isMembershipProduct() || $item->isSubscription()) {
+        $i++;
+      }
+    }
+    return ($i == count($this->getItems())) ? true : false;
+  }
+  
   public function hasMembershipProducts() {
     foreach($this->getItems() as $item) {
       if($item->isMembershipProduct()) {
@@ -749,10 +813,10 @@ class Cart66Cart {
     }
     // Not using live rates
     else {
-      if($this->isAllDigital()) {
+      if($this->isAllDigital() && !$this->isAllMembershipProducts()) {
         return 'Download';
       }
-      elseif(!$this->requireShipping()) {
+      elseif(!$this->requireShipping() || $this->isAllMembershipProducts()) {
         return 'None';
       }
       else {
@@ -805,7 +869,7 @@ class Cart66Cart {
     }
     
     if(!empty($alert)) {
-      $alert = "<div class='Cart66Unavailable'><h1>Inventory Restriction</h1> $alert <p>Your cart has been updated based on our available inventory.</p>";
+      $alert = "<div class='Cart66Unavailable Cart66Error'><h1>Inventory Restriction</h1> $alert <p>Your cart has been updated based on our available inventory.</p>";
       $alert .= '<input type="button" name="close" value="Ok" class="Cart66ButtonSecondary modalClose" /></div>';
     }
     
@@ -874,6 +938,37 @@ class Cart66Cart {
         }
       }
       
+      // Get FedEx Live Shipping Rates
+      if(Cart66Setting::getValue('fedex_developer_key')) {
+        $this->_liveRates->setToCountryCode($countryCode);
+        $rates = $this->getFedexRates();
+        foreach($rates as $name => $price) {
+          $this->_liveRates->addRate('FedEx', $name, $price);
+        }
+      }
+      
+      // Get Australia Post Live Shipping Rates
+      if(Cart66Setting::getValue('aupost_developer_key')) {
+        $this->_liveRates->setToCountryCode($countryCode);
+        $rates = $this->getAuPostRates();
+        foreach($rates as $name => $price) {
+          $this->_liveRates->addRate('Australia Post', $name, $price);
+        }
+      }
+      
+      // Get Canada Post Live Shipping Rates
+      if(Cart66Setting::getValue('capost_merchant_id')) {
+        $this->_liveRates->setToCountryCode($countryCode);
+        $rates = $this->getCaPostRates();
+        foreach($rates as $name => $price) {
+          $this->_liveRates->addRate('Canada Post', $name, $price);
+        }
+      }
+      
+      if(Cart66Setting::getValue('shipping_local_pickup')) {
+        $this->_liveRates->addRate('Local Pickup', Cart66Setting::getValue('shipping_local_pickup_label'), number_format(Cart66Setting::getValue('shipping_local_pickup_amount'), 2));
+      }
+      
     }
     else {
       $this->_liveRates->clearRates();
@@ -925,6 +1020,33 @@ class Cart66Cart {
     return $rates;
   }
   
+  public function getFedexRates() {
+    $fedex = new Cart66FedEx();
+    $weight = Cart66Session::get('Cart66Cart')->getCartWeight();
+    $zip = Cart66Session::get('cart66_shipping_zip');
+    $countryCode = Cart66Session::get('cart66_shipping_country_code');
+    $rates = $fedex->getAllRates($zip, $countryCode, $weight);
+    return $rates;
+  }
+  
+  public function getAuPostRates() {
+    $aupost = new Cart66AuPost();
+    $weight = Cart66Session::get('Cart66Cart')->getCartWeight();
+    $zip = Cart66Session::get('cart66_shipping_zip');
+    $countryCode = Cart66Session::get('cart66_shipping_country_code');
+    $rates = $aupost->getAllRates($zip, $countryCode, $weight);
+    return $rates;
+  }
+  
+  public function getCaPostRates() {
+    $capost = new Cart66CaPost();
+    $weight = Cart66Session::get('Cart66Cart')->getCartWeight();
+    $zip = Cart66Session::get('cart66_shipping_zip');
+    $countryCode = Cart66Session::get('cart66_shipping_country_code');
+    $rates = $capost->getAllRates($zip, $countryCode, $weight);
+    return $rates;
+  }
+  
   protected function _setDefaultShippingMethodId() {
     // Set default shipping method to the cheapest method
     $method = new Cart66ShippingMethod();
@@ -971,7 +1093,7 @@ class Cart66Cart {
             $this->setItemQuantity($itemIndex, $qtyAvailable);
             if(!Cart66Session::get('Cart66InventoryWarning')) { Cart66Session::set('Cart66InventoryWarning', ''); }
             $inventoryWarning = Cart66Session::get('Cart66InventoryWarning');
-            $inventoryWarning .= '<p>The quantity for ' . $item->getFullDisplayName() . " could not be changed to $qty because we only have $qtyAvailable in stock.</p>";
+            $inventoryWarning .= '<div class="Cart66Error">' . __("The quantity for","cart66") . ' ' . $item->getFullDisplayName() . " " . __("could not be changed to","cart66") . " $qty " . __("because we only have", "cart66") . " $qtyAvailable " . __("in stock","cart66") . ".</div>";
             Cart66Session::set('Cart66InventoryWarning', $inventoryWarning);
             Cart66Common::log("Quantity available ($qtyAvailable) cannot meet desired quantity ($qty) for product id: " . $item->getProductId());
           }

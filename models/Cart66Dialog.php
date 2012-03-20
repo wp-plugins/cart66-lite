@@ -4,7 +4,7 @@ class Cart66Dialog {
   
   public static function cart66_dialog_box() {
     $image = CART66_URL . '/images/cart66_tiny_type.png';
-    $cart66_button = '<a id="Cart66Thickbox" href="#TB_inline?width=670&inlineId=select_cart66_shortcode" class="thickbox" title="' . 
+    $cart66_button = '<a id="Cart66Thickbox" href="#TB_inline?width=670&height=440&inlineId=select_cart66_shortcode" class="thickbox" title="' . 
       __("Add Cart66 Shortcodes", 'cart66') 
       . '"><img src="'.$image.'" alt="' . 
       __("Add Cart66 Shortcodes", 'cart66') 
@@ -14,44 +14,52 @@ class Cart66Dialog {
   
   //Action target that displays the popup to insert a form to a post/page
   function add_shortcode_popup(){
-    $product= new Cart66Product();
     ?>
     <link type="text/css" rel="stylesheet" href="<?php echo CART66_URL; ?>/js/cart66.css" />
     <script language="javascript" type="text/javascript">
-  	  <!--
+
     	<?php
     	$prices = array();
     	$types = array(); 
     	$options='';
-    	$products = $product->getModels("where id>0", "order by name");
+    	$products = Cart66Product::loadProductsOutsideOfClass();
+    	    	
+    	//$products = $product->getModels("where id>0", "order by name");    	
     	if(count($products)):
     	  $i=0;
     	  foreach($products as $p) {
-    	    if($p->itemNumber==""){
+    	    $optionClasses = "";
+    	    if($p->item_number==""){
             $id=$p->id;
             $type='id';
             $description = "";
           }
           else{
-            $id=$p->itemNumber;
+            $id=$p->item_number;
             $type='item';
-            $description = '(# '.$p->itemNumber.')';
+            $description = '(# '.$p->item_number.')';
           }
 
       	  $types[] = htmlspecialchars($type);
 
-      	  if(CART66_PRO && $p->isPayPalSubscription()) {
+      	  if(CART66_PRO && $p->is_paypal_subscription == 1) {
       	    $sub = new Cart66PayPalSubscription($p->id);
       	    $subPrice = strip_tags($sub->getPriceDescription($sub->offerTrial > 0, '(trial)'));
       	    $prices[] = htmlspecialchars($subPrice);
+      	    $optionClasses .= " subscriptionProduct ";
       	    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] subscription price in dialog: $subPrice");
       	  }
       	  else {
-      	    $prices[] = htmlspecialchars(strip_tags($p->getPriceDescription()));
+      	    $priceDescription = __('Price:', 'cart66') . ' ' . CART66_CURRENCY_SYMBOL . $p->price;
+      	    if($p->price_description != null) {
+      	      $priceDescription = $p->price_description;
+      	    }
+      	    
+      	    $prices[] = htmlspecialchars(strip_tags($priceDescription));
       	  }
 
 
-      	  $options .= '<option value="'.$id.'">'.$p->name.' '.$description.'</option>';
+      	  $options .= '<option value="'.$id.'" class="' . $optionClasses . '">'.$p->name.' '.$description.'</option>';
       	  $i++;
 
     	  }
@@ -100,7 +108,18 @@ class Cart66Dialog {
         else {
           var quantity = '';
         }
-    		
+        if(jQuery("#productNameSelector option:selected").hasClass('subscriptionProduct')){
+          var quantity = '';
+        }
+        
+        var ajax = jQuery("input:radio[name=ajaxOptions]:checked").val();
+        if(ajax == 'yes') {
+          var ajax = 'ajax="yes"';
+        }
+        else {
+          var ajax = '';
+        }
+            		
     		var showPrice = jQuery("input:radio[name=showPrice]:checked").val();
         if(showPrice == 'no') {
           var showPrice = 'showprice="no"';
@@ -116,8 +135,8 @@ class Cart66Dialog {
     		if(jQuery("#buttonImage").val() != "") {
           var buttonImage = 'img="' + jQuery("#buttonImage").val() + '"';
         }
-        
-        window.send_to_editor('&nbsp;[add_to_cart '+type+'="'+prod+'" '+style+' ' +showPrice+' '+buttonImage+' ' +quantity+' ' +text+ ' ]&nbsp;');
+
+        window.send_to_editor('&nbsp;[add_to_cart '+type+'="'+prod+'" '+style+' ' +showPrice+' '+buttonImage+' ' +quantity+' ' +text+ ' ' +ajax+ ' ]&nbsp;');
       }
       
       function shortcode(code){
@@ -148,7 +167,7 @@ class Cart66Dialog {
     	    text = jQuery("#buttonText").val();
     	  }
     	  else {
-    	    text = 'Add to Cart';
+    	    text = '<?php _e( "Add to Cart" , "cart66" ); ?>';
     	  }
         
         <?php 
@@ -182,8 +201,14 @@ class Cart66Dialog {
         var prevBox = "<div style='"+style+"'>"+price+button+"</div>";
 
     	  jQuery("#buttonPreview").html(prevBox).text();
+    	  
+    	  if(jQuery("#productNameSelector option:selected").hasClass('subscriptionProduct')){
+    	    jQuery('.quantity').hide();
+    	  }
+    	  else{
+    	    jQuery('.quantity').show();
+    	  }
     	}
-    	-->
     </script>
     <div id="select_cart66_shortcode" style="display:none;">
       <div id="cart66-shortcode-window">
@@ -203,13 +228,13 @@ class Cart66Dialog {
         	      <label for="productNameSelector"><?php  _e('Your products'); ?>:</label>
         	      <select id="productNameSelector" name="productName"><?php echo $options; ?></select>
         	    </li>
-        	    <li>
+        	    <li class="quantity">
         	      <label for="quantityOptions" ><?php  _e('Quantity'); ?>:</label>
         	      <input type='radio' id="quantityOptions" name="quantityOptions" value='user' checked> <?php _e('User Defined', 'cart66'); ?>
                 <input type='radio' id="quantityOptions" name="quantityOptions" value='pre'> <?php _e('Predefined', 'cart66'); ?>
                 <input type='radio' id="quantityOptions" name="quantityOptions" value='off'> <?php _e('Off', 'cart66'); ?><br />
         	    </li>
-        	    <li id="defaultQuantityGroup">
+        	    <li id="defaultQuantityGroup" class="quantity">
         	      <label for="defaultQuantity"><?php _e('Default Quantity', 'cart66'); ?>:</label>
         	      <input id="defaultQuantity" name="defaultQuantity" size="2" value="1">
         	    </li>
@@ -220,6 +245,16 @@ class Cart66Dialog {
         	    <li>
         	      <label for="productStyle"><?php  _e('CSS style'); ?>:</label>
         	      <input id="productStyle" name="productStyle" size="34">
+        	    </li>
+        	    <li>
+        	      <label for="ajaxOptions" ><?php  _e('Ajax Add To Cart'); ?>:</label>
+        	      <?php if(Cart66Setting::getValue('enable_ajax_by_default') && Cart66Setting::getValue('enable_ajax_by_default') == "yes"): ?>
+        	        <input type='radio' id="ajaxOptions" name="ajaxOptions" value='yes' checked> <?php _e('Yes', 'cart66'); ?>
+                  <input type='radio' id="ajaxOptions" name="ajaxOptions" value='no'> <?php _e('No', 'cart66'); ?>
+                <?php else: ?>
+                  <input type='radio' id="ajaxOptions" name="ajaxOptions" value='yes'> <?php _e('Yes', 'cart66'); ?>
+                  <input type='radio' id="ajaxOptions" name="ajaxOptions" value='no' checked> <?php _e('No', 'cart66'); ?>
+                <?php endif; ?>
         	    </li>
         	    <li>
         	      <label for="showPrice" style="display: inline-block; width: 120px; text-align: right;"><?php  _e('Show price'); ?>:</label>
@@ -244,12 +279,13 @@ class Cart66Dialog {
         	$shortcodes_system = array(
         	 'express' => __('Listens for PayPal Express callbacks <br/>Belongs on system page store/express', 'cart66'),
         	 'ipn' => __('PayPal Instant Payment Notification <br/>Belongs on system page store/ipn', 'cart66'),
-        	 'receipt' => __('Shows the customer\'s receipt after a successful sale <br/>Belongs on system page store/receipt', 'cart66')        	 
+        	 'receipt' => __('Shows the customer\'s receipt after a successful sale <br/>Belongs on system page store/receipt', 'cart66')
         	);
         	$shortcodes = array(
         	 'add_to_cart item=&quot;&quot;' => __('Create add to cart button', 'cart66'),
         	 'cart' => __('Show the shopping cart', 'cart66'),
         	 'cart mode=&quot;read&quot;' => __('Show the shopping cart in read-only mode', 'cart66'),
+        	 'checkout_mijireh' => __('Mijireh Checkout Accept Credit Cards - PCI Compliant', 'cart66'),
         	 'checkout_manual' => __('Checkout form that does not process credit cards', 'cart66'),
         	 'checkout_paypal' => __('PayPal Website Payments Standard checkout button', 'cart66'),
         	 'checkout_paypal_express' => __('PayPal Express checkout button', 'cart66'),

@@ -23,6 +23,13 @@ class Cart66Product extends Cart66ModelAbstract {
     return $this->id;
   }
   
+  public function loadItemIdByDuid($duid) {
+    $itemsTable = Cart66Common::getTableName('order_items');
+    $sql = "SELECT id from $itemsTable where duid = '$duid'";
+    $id = $this->_db->get_var($sql);
+    return $id;
+  }
+  
   public function loadByItemNumber($itemNumber) {
     $itemNumber = $this->_db->escape($itemNumber);
     $sql = "SELECT id from $this->_tableName where item_number = '$itemNumber'";
@@ -44,9 +51,9 @@ class Cart66Product extends Cart66ModelAbstract {
     return $this->id;
   }
 
-  public function countDownloadsForDuid($duid) {
+  public function countDownloadsForDuid($duid, $order_item_id) {
     $downloadsTable = Cart66Common::getTableName('downloads');
-    $sql = "SELECT count(*) from $downloadsTable where duid='$duid'";
+    $sql = "SELECT count(*) from $downloadsTable where duid='$duid' AND order_item_id='$order_item_id'";
     return $this->_db->get_var($sql);
   }
   
@@ -218,7 +225,22 @@ class Cart66Product extends Cart66ModelAbstract {
     $this->_db->query($sql);
   }
   
-  public function updateInventoryFromPost($ikey) {
+  public function updateInventoryFromPost($_REQUEST) {
+    global $wpdb;
+    $inventory = Cart66Common::getTableName('inventory');
+    foreach($_REQUEST as $key => $value) {
+      if (substr($key, 0, 4) == "qty_") {
+        $ikey = substr($key, 4);
+        $wpdb->query("UPDATE $inventory SET quantity='$value' WHERE ikey='$ikey'");
+      }
+      if (substr($key, 0, 6) == "track_") {
+        $ikey = substr($key, 6);
+        $wpdb->query("UPDATE $inventory SET track='$value' WHERE ikey='$ikey'");
+      }
+    }
+  }
+  
+  public function updateInventoryFromPost2($ikey) {
     $inventory = Cart66Common::getTableName('inventory');
     $track = Cart66Common::postVal("track_$ikey");
     $qty = Cart66Common::postVal("qty_$ikey");
@@ -332,7 +354,7 @@ class Cart66Product extends Cart66ModelAbstract {
     $select = '';
     $optionName = "options_$optNumber";
     if(strlen($this->$optionName) > 1) {
-      $select = "\n<select name=\"options_$optNumber\" id=\"options_$optNumber\">";
+      $select = "\n<select name=\"options_$optNumber\" id=\"options_$optNumber\" class=\"cart66Options options_$optNumber\">";
       $opts = split(',', $this->$optionName);
       foreach($opts as $opt) {
         $opt = str_replace('+$', '+ $', $opt);
@@ -439,11 +461,11 @@ class Cart66Product extends Cart66ModelAbstract {
     return $productId;
   }
   
-  public static function getNonSubscriptionProducts() {
+  public static function getNonSubscriptionProducts($where=null, $order=null, $limit=null) {
     global $wpdb;
     $subscriptions = array();
     $product = new Cart66Product();
-    $products = $product->getModels();
+    $products = $product->getModels($where, $order, $limit);
     foreach($products as $p) {
       if(!$p->isSubscription()) {
         $subscriptions[] = $p;
@@ -452,11 +474,11 @@ class Cart66Product extends Cart66ModelAbstract {
     return $subscriptions;
   }
   
-  public static function getSubscriptionProducts() {
+  public static function getSubscriptionProducts($where=null, $order=null, $limit=null) {
     global $wpdb;
     $subscriptions = array();
     $product = new Cart66Product();
-    $products = $product->getModels();
+    $products = $product->getModels($where, $order, $limit);
     foreach($products as $p) {
       if($p->isSubscription()) {
         $subscriptions[] = $p;
@@ -465,11 +487,12 @@ class Cart66Product extends Cart66ModelAbstract {
     return $subscriptions;
   }
   
-  public static function getSpreedlyProducts() {
+  public static function getSpreedlyProducts($where=null, $order=null, $limit=null) {
     global $wpdb;
     $subscriptions = array();
     $product = new Cart66Product();
-    $products = $product->getModels("where spreedly_subscription_id > 0");
+    $where = $where == null ? "where spreedly_subscription_id > 0" : $where . " AND spreedly_subscription_id > 0";
+    $products = $product->getModels($where, $order, $limit);
     foreach($products as $p) {
       if($p->isSpreedlySubscription()) {
         $subscriptions[] = $p;
@@ -918,6 +941,22 @@ class Cart66Product extends Cart66ModelAbstract {
       throw new Cart66Exception('Product save failed: ' . $errors, 66102);
     }
     return $productId;
+  }
+  
+  public static function loadProductsOutsideOfClass($select='*', $where='id > 0', $orderBy='name') {
+    $tableName = Cart66Common::getTableName('products');
+  	$sql = "SELECT $select
+      from 
+        $tableName 
+      where
+        $where
+      order by
+        $orderBy
+    ";
+    global $wpdb;
+    $query = $wpdb->prepare($sql);
+    $products = $wpdb->get_results($query);
+    return $products;
   }
   
 }

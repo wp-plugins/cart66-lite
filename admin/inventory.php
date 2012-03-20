@@ -3,11 +3,14 @@
 <?php
 // Get a list of all products
 $product = new Cart66Product();
-$products = $product->getModels('where id>0', 'order by name');
+$products = $product->getModels('where id>0', 'order by name', '1');
 $save = false;
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-task'] == 'save-inventory-form') {
   $save = true;
+  
+  $product->updateInventoryFromPost($_REQUEST);
+  
   ?>
   <script type="text/javascript">
     (function($){

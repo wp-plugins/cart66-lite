@@ -35,7 +35,7 @@ $order = $data['order'];
               if(RGFormsModel::get_lead($entryId)) {
                 $formId = Cart66GravityReader::getGravityFormIdForEntry($entryId);
                 echo "<tr><td colspan='5'>" . Cart66GravityReader::displayGravityForm($entryId) . "</td></tr>";
-                echo "<tr><td colspan='5' align='right' style='padding-bottom: 5px !important; '><a style='font-size: 10px;' href='" . $wpurl . "/wp-admin/admin.php?page=gf_entries&view=entry&id=" . $formId. "&lid=" . $entryId . "'>View Gravity Forms Entry</a></td></tr>";
+                echo "<tr><td colspan='5' align='right' style='padding-bottom: 5px !important; '><a style='font-size: 10px;' href='" . $wpurl . "/wp-admin/admin.php?page=gf_entries&view=entry&id=" . $formId. "&lid=" . $entryId . "&pos=0'>View Gravity Forms Entry</a></td></tr>";
               }
             }
             else {
@@ -52,27 +52,27 @@ $order = $data['order'];
       </tr>
       
       <tr>
-        <td colspan="3" style="text-align: right;"><strong>Sub Total</strong></td>
+        <td colspan="4" style="text-align: right;"><strong><?php _e( 'Sub Total' , 'cart66' ); ?></strong></td>
         <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->subtotal, 2); ?></td>
       </tr>
       
       <?php if($order->discount_amount > 0): ?>
         <tr>
-          <td colspan="3" style="text-align: right;"><strong>Discount</strong></td>
+          <td colspan="4" style="text-align: right;"><strong><?php _e( 'Discount' , 'cart66' ); ?></strong></td>
           <td style="text-align: right;">-<?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->discountAmount, 2); ?></td>
         </tr>
       <?php endif; ?>
 
       <?php if($order->shipping_method != 'None'): ?>
       <tr>
-        <td colspan="3" style="text-align: right;"><strong>Shipping</strong></td>
+        <td colspan="4" style="text-align: right;"><strong><?php _e( 'Shipping' , 'cart66' ); ?></strong></td>
         <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->shipping, 2); ?></td>
       </tr>
       <?php endif; ?>
       
       <?php if($order->tax > 0): ?>
         <tr>
-          <td colspan="3" style="text-align: right;"><strong>Tax</strong></td>
+          <td colspan="4" style="text-align: right;"><strong><?php _e( 'Tax' , 'cart66' ); ?></strong></td>
           <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->tax, 2); ?></td>
         </tr>
       <?php endif; ?>
@@ -82,7 +82,7 @@ $order = $data['order'];
           <td colspan='4'>&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="2" style="text-align: right; background-color: #EEE;"><strong><?php _e( 'Coupon' , 'cart66' ); ?></strong></td>
+          <td colspan="3" style="text-align: right; background-color: #EEE;"><strong><?php _e( 'Coupon' , 'cart66' ); ?></strong></td>
           <td colspan="2" style="text-align: right; background-color: #EEE;"><?php echo $order->coupon ?></td>
         </tr>
         <tr>
@@ -91,7 +91,7 @@ $order = $data['order'];
       <?php endif; ?>
       
       <tr>
-        <td colspan="3" style="text-align: right;"><strong><?php _e( 'Total' , 'cart66' ); ?></strong></td>
+        <td colspan="4" style="text-align: right;"><strong><?php _e( 'Total' , 'cart66' ); ?></strong></td>
         <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->total, 2); ?></td>
       </tr>
       
@@ -156,7 +156,32 @@ $order = $data['order'];
 
     echo $link.$order->ouid ;
   
-  ?>" target="_blank"><?php _e( 'View Receipt Online' , 'cart66' ); ?></a></p>
+  ?>" target="_blank"><?php _e( 'View Receipt Online' , 'cart66' ); ?></a><br />
+  <a href='#' id="print_version"><?php _e( 'Printer Friendly Receipt' , 'cart66' ); ?></a></p>
+
+  <?php
+    if($order !== false) {
+      $printView = Cart66Common::getView('views/receipt_print_version.php', array('order' => $order));
+      $printView = str_replace("\n", '', $printView);
+      $printView = str_replace("'", '"', $printView);
+      ?>
+      <script type="text/javascript">
+      /* <![CDATA[ */
+        (function($){
+          $(document).ready(function(){
+            $('#print_version').click(function() {
+              myWindow = window.open('','Your_Receipt','resizable=yes,scrollbars=yes,width=550,height=700');
+              myWindow.document.open("text/html","replace");
+              myWindow.document.write(decodeURIComponent('<?php echo rawurlencode($printView); ?>' + ''));
+              return false;
+            });
+          })
+        })(jQuery);
+      /* ]]> */
+      </script> 
+    <?php
+    }
+  ?>
 <div class="wrap" style="margin-top: 30px;">
   <form class="phorm" action="" method='post'>
     <input type='hidden' name='task' value='update order status' />

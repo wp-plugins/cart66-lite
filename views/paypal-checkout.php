@@ -5,6 +5,9 @@
   $shippingMethod = Cart66Session::get('Cart66Cart')->getShippingMethodName();
   $setting = new Cart66Setting();
   $paypalEmail = Cart66Setting::getValue('paypal_email');
+  if(!$paypalEmail) {
+    throw new Cart66Exception('Invalid PayPal Standard Configuration', 66504); 
+  }
   $returnUrl = Cart66Setting::getValue('paypal_return_url');
   $promotion = Cart66Session::get('Cart66Promotion');
  
@@ -96,20 +99,31 @@
         // Send shipping price as an item amount if the item total - discount amount = $0.00 otherwise paypal will ignore the discount
         $discount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
         
-        if($promotion->apply_to == 'total' || $promotion->apply_to == 'products'){
-          $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
-        }       
-        else{
+        if(is_object($promotion) && $promotion->apply_to == 'total') {
           $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount();
+          $itemDiscount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
+          if($itemDiscount > 0) {
+            $itemTotal = $itemTotal - $itemDiscount;            
+          }
+          if($itemTotal <= 0) {
+            $discount = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount();
+            $shipping = $shipping + $itemTotal;
+            $itemTotal = 0;
+          }
+          
         }
         
-        if($promotion->apply_to == 'shipping'){
+        if(is_object($promotion) && $promotion->apply_to == 'products'){
+          $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
+        }
+        
+        if(is_object($promotion) && $promotion->apply_to == 'shipping'){
           $shipping = $shipping - Cart66Session::get('Cart66Cart')->getDiscountAmount();
           $discount = 0;
         }
         
         
-        if($itemTotal == 0 && $shipping > 0) {
+        if(isset($itemTotal) && $itemTotal == 0 && $shipping > 0) {
           echo "\n<input type='hidden' name='item_name_$i' value=\"Shipping\" />";
           echo "\n<input type='hidden' name='item_number_$i' value='SHIPPING' />";
           echo "\n<input type='hidden' name='amount_$i' value='" . $shipping . "' />";

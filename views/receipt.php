@@ -3,16 +3,6 @@ global $wpdb;
 
 $product = new Cart66Product();
 
-if(Cart66Setting::getValue('enable_google_analytics') == 1 && Cart66Setting::getValue('use_other_analytics_plugin') == 'no'): ?>
-  <script type="text/javascript">
-    /* <![CDATA[ */
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', '<?php echo Cart66Setting::getValue("google_analytics_wpid") ?>']);
-    _gaq.push(['_trackPageview']);
-  /* ]]> */
-  </script>
-<?php endif;
-
 $order = false;
 if(isset($_GET['ouid'])) {
   $order = new Cart66Order();
@@ -23,6 +13,7 @@ if(isset($_GET['ouid'])) {
   }
 }
 
+// TODO: Make sure affiliate payments work with Mijireh Checkout
 // Process Affiliate Payments
 // Begin processing affiliate information
 if(Cart66Session::get('ap_id')) {
@@ -32,7 +23,7 @@ elseif(isset($_COOKIE['ap_id'])) {
   $referrer = $_COOKIE['ap_id'];
 }
 
-if($order->viewed == 0){
+if(is_object($order) && $order->viewed == 0){
   // only process affiliate logging if this is the first time the receipt is viewed
   if (!empty($referrer)) {
     Cart66Common::awardCommission($order->id, $referrer);
@@ -44,6 +35,7 @@ if($order->viewed == 0){
     require_once(CART66_PATH . "/pro/idevaffiliate-award.php");
   }
   // End iDevAffiliate Tracking
+  
   if(isset($_COOKIE['ap_id']) && $_COOKIE['ap_id']) {
     setcookie('ap_id',$referrer, time() - 3600, "/");
     unset($_COOKIE['ap_id']);
@@ -60,7 +52,8 @@ if(isset($_GET['duid'])) {
     $okToDownload = true;
     if($product->download_limit > 0) {
       // Check if download limit has been exceeded
-      if($product->countDownloadsForDuid($duid) >= $product->download_limit) {
+      $order_item_id = $product->loadItemIdByDuid($duid);
+      if($product->countDownloadsForDuid($duid, $order_item_id) >= $product->download_limit) {
         $okToDownload = false;
       }
     }
@@ -69,10 +62,11 @@ if(isset($_GET['duid'])) {
       $data = array(
         'duid' => $duid,
         'downloaded_on' => date('Y-m-d H:i:s'),
-        'ip' => $_SERVER['REMOTE_ADDR']
+        'ip' => $_SERVER['REMOTE_ADDR'],
+        'order_item_id' => $product->loadItemIdByDuid($duid)
       );
       $downloadsTable = Cart66Common::getTableName('downloads');
-      $wpdb->insert($downloadsTable, $data, array('%s', '%s', '%s'));
+      $wpdb->insert($downloadsTable, $data, array('%s', '%s', '%s', '%s'));
       
       $setting = new Cart66Setting();
       
@@ -87,30 +81,92 @@ if(isset($_GET['duid'])) {
         $path = $dir . DIRECTORY_SEPARATOR . $product->download_path;
         Cart66Common::downloadFile($path);
       }
-      
+      exit();
     }
     else {
-      _e("You have exceeded the maximum number of downloads for this product","cart66");
+      echo '<p>' . __("You have exceeded the maximum number of downloads for this product","cart66") . '.</p>';
+      $order = new Cart66Order();
+      $order->loadByDuid($_GET['duid']);
+      if(empty($order->id)) {
+        echo "<h2>This order is no longer in the system</h2>";
+        exit();
+      }
+      
     }
-    exit();
+    
   }
 }
-?>
+
+if(Cart66Setting::getValue('enable_google_analytics') == 1 && Cart66Setting::getValue('use_other_analytics_plugin') == 'no'): ?>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', '<?php echo Cart66Setting::getValue("google_analytics_wpid") ?>']);
+    _gaq.push(['_trackPageview']);
+  /* ]]> */
+  </script>
+<?php endif; ?>
 
 <?php  if($order !== false): ?>
 <h2><?php _e( 'Order Number' , 'cart66' ); ?>: <?php echo $order->trans_id ?></h2>
 
 <?php 
-if(CART66_PRO) {
+if(CART66_PRO && $order->hasAccount() == 1) {
   $logInLink = Cart66AccessManager::getLogInLink();
-  if(Cart66Session::get('Cart66LoginInfo') && $logInLink !== false) {
-    echo '<h2>Your Account</h2>';
+  if($logInLink !== false) {
+    echo '<h2>Your Account Is Ready</h2>';
     echo "<p><a href=\"$logInLink\">Log into your account</a>.</p>";
   }
 }
 ?>
 
+<?php if($order->hasAccount() == -1): ?>
+  <?php if(!Cart66Common::isLoggedIn()): ?>
+    <h2>Please Create Your Account</h2>
+    
+    <?php
+      if(isset($data['errors'])) {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Account creation errors: " . print_r($data, true));
+        echo Cart66Common::showErrors($data['errors'], 'Your account could not be created.');
+        echo Cart66Common::getJqErrorScript($data['jqErrors']);
+      }
+    ?>
+    
+    <?php $account = $data['account']; ?>
+    <form action="" method='post' id="account_form" class="phorm2">
+      <input type="text" name="ouid" value="<?php echo $order->ouid; ?>">
+      <ul class="shortLabels">
+        <li>
+          <label for="account-first_name">First name:</label><input type="text" name="account[first_name]" value="<?php echo $account->firstName ?>" id="account-first_name">
+        </li>
+        <li>
+          <label for="account-last_name">Last name:</label><input type="text" name="account[last_name]" value="<?php echo $account->lastName ?>" id="account-last_name">
+        </li>
+        <li>
+          <label for="account-email">Email:</label><input type="text" name="account[email]" value="<?php echo $account->email ?>" id="account-email">
+        </li>
+        <li>
+          <label for="account-username">Username:</label><input type="text" name="account[username]" value="<?php echo $account->username ?>" id="account-username">
+        </li>
+        <li>
+          <label for="account-password">Password:</label><input type="password" name="account[password]" value="" id="account-password">
+        </li>
+        <li>
+          <label for="account-password2">&nbsp;</label><input type="password" name="account[password2]" value="" id="account-password2">
+          <p class="description">Repeat password</p>
+        </li>
+        <li>
+          <label for="Cart66CheckoutButton" class="Cart66Hidden"><?php _e( 'Save' , 'cart66' ); ?></label>
+          <input id="Cart66CheckoutButton" class="Cart66ButtonPrimary Cart66CompleteOrderButton" type="submit"  
+            value="<?php _e( 'Create Account' , 'cart66' ); ?>" name="Create Account"/>
+        </li>
+      </ul>
+    </form>
+  <?php endif; ?>
+<?php endif; ?>
+
 <table border="0" cellpadding="0" cellspacing="0">
+  <?php if(strlen($order->bill_last_name) > 2): ?>
   <tr>
     <td valign="top">
       <p>
@@ -141,6 +197,7 @@ if(CART66_PRO) {
       </p>
     </td>
   </tr>
+  <?php endif; ?>
   <tr>
     <td>
       <?php if($order->shipping_method != 'None'): ?>
@@ -168,8 +225,21 @@ if(CART66_PRO) {
       </p>
       <?php endif; ?>
     </td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
+    <?php if(strlen($order->bill_last_name) > 2): ?>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    <?php else: ?>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top">
+        <p><strong><?php _e( 'Contact Information' , 'cart66' ); ?></strong><br/>
+        <?php if(!empty($order->phone)): ?>
+          <?php _e( 'Phone' , 'cart66' ); ?>: <?php echo Cart66Common::formatPhone($order->phone) ?><br/>
+        <?php endif; ?>
+        <?php _e( 'Email' , 'cart66' ); ?>: <?php echo $order->email ?><br/>
+        <?php _e( 'Date' , 'cart66' ); ?>: <?php echo date('m/d/Y g:i a', strtotime($order->ordered_on)) ?>
+        </p>
+      </td>
+    <?php endif; ?>
   </tr>
 </table>
 
@@ -299,10 +369,16 @@ if(CART66_PRO) {
 
 <p><a href='#' id="print_version"><?php _e( 'Printer Friendly Receipt' , 'cart66' ); ?></a></p>
 
+<!-- Begin Newsletter Signup Form -->
+<?php include(CART66_PATH . '/views/newsletter-signup.php'); ?>
+<!-- End Newsletter Signup Form -->
+
 <?php
   // Erase the shopping cart from the session at the end of viewing the receipt
   Cart66Session::drop('Cart66Cart');
   Cart66Session::drop('Cart66Tax');
+  Cart66Session::drop('Cart66Promotion');
+  Cart66Session::drop('terms_acceptance');
 ?>
 <?php else: ?>
   <p><?php _e( 'Receipt not available' , 'cart66' ); ?></p>

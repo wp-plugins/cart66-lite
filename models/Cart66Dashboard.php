@@ -38,7 +38,7 @@ class Cart66Dashboard {
 	  $dashboardOrderLimit = (Cart66Setting::getValue('dashboard_order_limit')) ? Cart66Setting::getValue('dashboard_order_limit') : 10;
 	  
     $order = new Cart66Order();
-    $orderRows = $order->getOrderRows(null,$dashboardOrderLimit);
+    $orderRows = $order->getOrderRows(null, 'order by ordered_on DESC', $dashboardOrderLimit);
 
   ?>
 	
@@ -248,7 +248,8 @@ class Cart66Dashboard {
     $today_total =	totalFromRange($dayStart,$dayEnd);
     $yesterday_total = totalFromRange($yday,$dayStart);
     $month_total = totalFromRange($mdayStart,$mdayEnd);
-
+    $total_product_sales = Cart66DataTables::productsSearch();
+    $total_sales_amount = Cart66DataTables::totalSalesForMonth($total_product_sales);
     $daily_avg = ($month_total-$today_total)/date('j',strtotime('yesterday'));    //number_format($month_total/date("j"),2);
     $total_days = date('t',strtotime('now'));
     $est_month = ($total_days * $daily_avg);
@@ -272,7 +273,7 @@ class Cart66Dashboard {
   	       <?php _e('Last Updated', 'cart66') ?>:
   	      </td>
   	      <td class="right">
-  	        <?php echo date('D, M d, Y g:i:s A')?>
+  	        <?php echo date('D, M d, Y g:i:s A', Cart66Common::localTs()); ?>
   	      </td>
   	    </tr>
   	    </tfoot>
@@ -341,7 +342,7 @@ class Cart66Dashboard {
                 </thead>
           	  <?php 
         			$Orders = new Cart66Order();
-        			$todaysOrders = $Orders->getOrderRows(" WHERE ordered_on > '$dayStart' AND ordered_on < '$dayEnd' AND id>0");
+        			$todaysOrders = $Orders->getOrderRows(" WHERE ordered_on > '$dayStart' AND ordered_on < '$dayEnd' AND id>0", "order by ordered_on DESC");
         			
         			if($todaysOrders):
         			  $i=1; ?>
@@ -379,50 +380,32 @@ class Cart66Dashboard {
       </div>
       <div class="t3 pane">
         <table id="productTable" cellpadding="0" cellspacing="0">
-        <?php
-        $product = new Cart66Product();
-        $thisMonth = date('m/1/Y');
-        $products = $product->getModels('where id>0', 'order by name');
-        $totalSales = 0;
-        ?>
-          <thead>
-            <tr>
-              <th class="left"><?php _e('Product', 'cart66') ?></th>
-              <th class="center"><?php _e('Sales', 'cart66') ?></th>
-              <th class="right"><?php _e('Income', 'cart66') ?></th>
-            </tr>
-          </thead>
-          <tfoot>
-            <tr>
-              <th class="left"><strong><?php echo date("F, Y",strtotime('now')); ?></strong></th>
-              <th class="center"><strong><?php echo $totalSales; ?></strong></th>
-              <th class="right"><strong><?php echo CART66_CURRENCY_SYMBOL . number_format($month_total,2); ?></strong></th>
-            </tr>
-          </tfoot>
-          <tbody>
-          <?php
-          if(count($products)) {
-            foreach($products as $p){ 
-              $sales = $p->getSalesForMonth( date('n', strtotime("$thisMonth")), date('Y', strtotime("$thisMonth")) );
-              $totalSales += $sales;
-              if($sales>0) {
-                ?>
-                  <tr>
-                    <td><?php echo $p->name; ?></td>
-                    <td class="center"><?php echo (empty($sales)) ? "0" : $sales; ?></td>
-                    <td class="right">
-                    <?php echo CART66_CURRENCY_SYMBOL;
-                    $money = $p->getIncomeForMonth( date('n', strtotime("$thisMonth")), date('Y', strtotime("$thisMonth")) ); 
-                    echo number_format($money, 2);
-                    ?>
-                    </td>
-                  </tr>
+          <tr>
+            <thead>
+            	<tr>
+          			<th class="left"><?php _e('Product Name', 'cart66'); ?></th>
+          			<th class="center"><?php _e('Sales', 'cart66'); ?></th>
+          			<th class="right"><?php _e('Income', 'cart66'); ?></th>
+            	</tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th class="left"><strong><?php echo date("F, Y",strtotime('now')); ?></strong></th>
                 <?php
-              }
-            }
-          }
-          ?>
-          </tbody>
+                if(isset($total_sales_amount['total_sales'])) {
+                  $totalSales = $total_sales_amount['total_sales']['total_quantity'];
+                  $totalAmount = $total_sales_amount['total_sales']['total_amount'];
+                }
+                else {
+                  $totalSales = '0';
+                  $totalAmount = '0';
+                }
+                ?>
+                <th class="center"><strong><?php echo $totalSales; ?></strong></th>
+                <th class="right"><strong><?php echo CART66_CURRENCY_SYMBOL . number_format($totalAmount,2); ?></strong></th>
+              </tr>
+            </tfoot>
+          </tr>
         </table>
       </div>
       <div class="t4 pane">
@@ -521,6 +504,120 @@ class Cart66Dashboard {
     </div>
     <script type="text/javascript">
       (function($){
+        $(document).ready(function(){
+          
+          /* API method to get paging information */
+          $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
+          {
+              return {
+                  "iStart":         oSettings._iDisplayStart,
+                  "iEnd":           oSettings.fnDisplayEnd(),
+                  "iLength":        oSettings._iDisplayLength,
+                  "iTotal":         oSettings.fnRecordsTotal(),
+                  "iFilteredTotal": oSettings.fnRecordsDisplay(),
+                  "iPage":          Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
+                  "iTotalPages":    Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
+              };
+          }
+
+          /* Bootstrap style pagination control */
+          $.extend( $.fn.dataTableExt.oPagination, {
+              "bootstrap": {
+                  "fnInit": function( oSettings, nPaging, fnDraw ) {
+                      var oLang = oSettings.oLanguage.oPaginate;
+                      var fnClickHandler = function ( e ) {
+                          e.preventDefault();
+                          if ( oSettings.oApi._fnPageChange(oSettings, e.data.action) ) {
+                              fnDraw( oSettings );
+                          }
+                      };
+
+                      $(nPaging).addClass('pagination').append(
+                          '<ul>'+
+                              '<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
+                              '<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
+                          '</ul>'
+                      );
+                      var els = $('a', nPaging);
+                      $(els[0]).bind( 'click.DT', { action: "previous" }, fnClickHandler );
+                      $(els[1]).bind( 'click.DT', { action: "next" }, fnClickHandler );
+                  },
+
+                  "fnUpdate": function ( oSettings, fnDraw ) {
+                      var iListLength = 5;
+                      var oPaging = oSettings.oInstance.fnPagingInfo();
+                      var an = oSettings.aanFeatures.p;
+                      var i, j, sClass, iStart, iEnd, iHalf=Math.floor(iListLength/2);
+
+                      if ( oPaging.iTotalPages < iListLength) {
+                          iStart = 1;
+                          iEnd = oPaging.iTotalPages;
+                      }
+                      else if ( oPaging.iPage <= iHalf ) {
+                          iStart = 1;
+                          iEnd = iListLength;
+                      } else if ( oPaging.iPage >= (oPaging.iTotalPages-iHalf) ) {
+                          iStart = oPaging.iTotalPages - iListLength + 1;
+                          iEnd = oPaging.iTotalPages;
+                      } else {
+                          iStart = oPaging.iPage - iHalf + 1;
+                          iEnd = iStart + iListLength - 1;
+                      }
+
+                      for ( i=0, iLen=an.length ; i<iLen ; i++ ) {
+                          // Remove the middle elements
+                          $('li:gt(0)', an[i]).filter(':not(:last)').remove();
+
+                          // Add the new list items and their event handlers
+                          for ( j=iStart ; j<=iEnd ; j++ ) {
+                              sClass = (j==oPaging.iPage+1) ? 'class="active"' : '';
+                              $('<li '+sClass+'><a href="#">'+j+'</a></li>')
+                                  .insertBefore( $('li:last', an[i])[0] )
+                                  .bind('click', function (e) {
+                                      e.preventDefault();
+                                      oSettings._iDisplayStart = (parseInt($('a', this).text(),10)-1) * oPaging.iLength;
+                                      fnDraw( oSettings );
+                                  } );
+                          }
+
+                          // Add / remove disabled classes from the static elements
+                          if ( oPaging.iPage === 0 ) {
+                              $('li:first', an[i]).addClass('disabled');
+                          } else {
+                              $('li:first', an[i]).removeClass('disabled');
+                          }
+
+                          if ( oPaging.iPage === oPaging.iTotalPages-1 || oPaging.iTotalPages === 0 ) {
+                              $('li:last', an[i]).addClass('disabled');
+                          } else {
+                              $('li:last', an[i]).removeClass('disabled');
+                          }
+                      }
+                  }
+              }
+          } );
+          
+          
+          $('#productTable').dataTable({
+            "bProcessing": true,
+            "bServerSide": true,
+            "bPagination": true,
+            "bLengthChange": false,
+            "iDisplayLength": 6,
+            "sPaginationType": "bootstrap",
+    				"sAjaxSource": ajaxurl + "?action=dashboard_products_table",
+    				"aoColumns": [
+              { "sClass": "left" },
+              { "sClass": "center" },
+              { "sClass": "right" },
+            ],
+            "oLanguage": { "sZeroRecords": "<?php _e('No matching products found', 'cart66'); ?>" }
+          });
+        })
+      })(jQuery);
+    </script> 
+    <script type="text/javascript">
+      (function($){
         $(document).ready(function() {
           // setting the tabs in the sidebar hide and show, setting the current tab
       	  $('div.pane').hide();
@@ -529,11 +626,13 @@ class Cart66Dashboard {
       	  $('div.tabbed ul.tabs li.t1 a').addClass('tab-current');
           // SIDEBAR TABS
           $('div.tabbed ul li a, div.t1 a, div.t1 tr.summaryDetails').click(function(){
-      	    var thisClass = this.className.slice(0,2);
-      	    $('div.pane').hide();
-      	    $('div.' + thisClass).fadeIn(300);
-      	    $('div.tabbed ul.tabs li a').removeClass('tab-current');
-      	    $('div.tabbed ul.tabs li a.' + thisClass).addClass('tab-current');
+            if($(this).hasClass('tab')) {
+              var thisClass = this.className.slice(0,2);
+        	    $('div.pane').hide();
+        	    $('div.' + thisClass).fadeIn(300);
+        	    $('div.tabbed ul.tabs li a').removeClass('tab-current');
+        	    $('div.tabbed ul.tabs li a.' + thisClass).addClass('tab-current');
+            }
       	  });
         });
       })(jQuery);

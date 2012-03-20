@@ -2,7 +2,7 @@ create table if not exists `[prefix]products` (
   `id` int(10) unsigned not null auto_increment,
   `name` varchar(255) not null,
   `item_number` varchar(50) not null,
-  `price` decimal(8,2) not null,
+  `price` decimal(12,2) not null,
   `options_1` text not null,
   `options_2` text not null,
   `custom` varchar(50) not null default 'none',
@@ -21,14 +21,14 @@ create table if not exists `[prefix]products` (
   `gravity_form_id` int(10) unsigned not null default 0,
   `gravity_form_qty_id` int(10) unsigned not null default 0,
   `feature_level` varchar(255) not null,
-  `setup_fee` decimal(8,2) not null,
+  `setup_fee` decimal(12,2) not null,
   `billing_interval` int(10) unsigned not null,
   `billing_interval_unit` varchar(50) not null,
   `billing_cycles` int(10) unsigned not null,
   `offer_trial` tinyint(1) unsigned not null default 0,
   `trial_period` int(10) unsigned not null,
   `trial_period_unit` varchar(50) not null,
-  `trial_price` decimal(8,2) not null,
+  `trial_price` decimal(12,2) not null,
   `trial_cycles` int(10) unsigned not null default 0,
   `start_recurring_number` int(10) unsigned not null default 1,
   `start_recurring_unit` varchar(50) not null,
@@ -36,7 +36,7 @@ create table if not exists `[prefix]products` (
   `is_membership_product` tinyint(1) not null default 0,
   `lifetime_membership` tinyint(1) not null default 0,
   primary key(`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]downloads` (
   `id` int(10) unsigned not null auto_increment,
@@ -44,43 +44,43 @@ create table if not exists `[prefix]downloads` (
   `downloaded_on` datetime null,
   `ip` varchar(50) not null,
   primary key(`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]promotions` (
   `id` int(10) unsigned not null auto_increment,
   `code` text not null,
   `type` enum('dollar','percentage') not null default 'dollar',
-  `amount` decimal(8,2),
-  `min_order` decimal(8,2),
+  `amount` decimal(12,2),
+  `min_order` decimal(12,2),
   primary key(`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]shipping_methods` (
   `id` int(10) unsigned not null auto_increment,
   `name` varchar(100) not null,
-  `default_rate` decimal(8,2) not null,
-  `default_bundle_rate` decimal(8,2) not null,
+  `default_rate` decimal(12,2) not null,
+  `default_bundle_rate` decimal(12,2) not null,
   `carrier` varchar(100) not null,
   `code` varchar(50) not null,
   primary key(`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]shipping_rates` (
   `id` int(10) unsigned not null auto_increment,
   `product_id` int(10) unsigned not null,
   `shipping_method_id` int(10) unsigned not null,
-  `shipping_rate` decimal(8,2) not null,
-  `shipping_bundle_rate` decimal(8,2) not null,
+  `shipping_rate` decimal(12,2) not null,
+  `shipping_bundle_rate` decimal(12,2) not null,
   primary key(`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]shipping_rules` (
   `id` int(10) unsigned not null auto_increment,
-  `min_amount` decimal(8,2),
+  `min_amount` decimal(12,2),
   `shipping_method_id` int(10) unsigned not null,
-  `shipping_cost` decimal(8,2),
+  `shipping_cost` decimal(12,2),
   primary key(`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]tax_rates` (
   `id` int(10) unsigned not null auto_increment,
@@ -90,13 +90,13 @@ create table if not exists `[prefix]tax_rates` (
   `rate` decimal(8,3) not null,
   `tax_shipping` tinyint(1) not null default 0,
   primary key(`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]cart_settings` (
   `key` varchar(50) not null,
   `value` text not null,
   primary key(`key`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]orders` (
   `id` int(10) unsigned not null auto_increment,
@@ -119,13 +119,13 @@ create table if not exists `[prefix]orders` (
   `phone` varchar(15) not null,
   `email` varchar(100) not null,
   `coupon` varchar(50) null,
-  `discount_amount` decimal(8,2) not null,
+  `discount_amount` decimal(12,2) not null,
   `trans_id` varchar(25) not null,
-  `shipping` decimal(8,2) not null,
-  `subtotal` decimal(8,2) not null,
+  `shipping` decimal(12,2) not null,
+  `subtotal` decimal(12,2) not null,
   `tax` decimal(8,3) not null,
-  `total` decimal(8,2) not null,
-  `non_subscription_total` decimal(8,2) not null,
+  `total` decimal(12,2) not null,
+  `non_subscription_total` decimal(12,2) not null,
   `ordered_on` datetime,
   `status` varchar(50) not null,
   `ip` varchar(50) not null,
@@ -134,20 +134,20 @@ create table if not exists `[prefix]orders` (
   `account_id` int(10) unsigned not null default 0,
   `viewed` tinyint(1) not null default '0',
   primary key(`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]order_items` (
   `id` int(10) unsigned not null auto_increment,
   `order_id` int(10) unsigned not null,
   `product_id` int(10) unsigned not null,
   `item_number` varchar(50) not null,
-  `product_price` decimal(8,2) not null,
+  `product_price` decimal(12,2) not null,
   `description` text not null,
   `quantity` int(10) unsigned not null,
   `duid` varchar(100) null,
   `form_entry_ids` varchar(100) not null,
   primary key(`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]inventory` (
   `ikey` varchar(250) not null,
@@ -155,7 +155,7 @@ create table if not exists `[prefix]inventory` (
   `track` tinyint(1) unsigned not null default 0,
   `quantity` int(10) unsigned not null,
   primary key(`ikey`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]accounts` (
   `id` int(10) unsigned not null auto_increment,
@@ -168,7 +168,7 @@ create table if not exists `[prefix]accounts` (
   `created_at` datetime not null,
   `updated_at` datetime not null,
   primary key(`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]account_subscriptions` (
   `id` int(10) unsigned not null auto_increment,
@@ -192,13 +192,13 @@ create table if not exists `[prefix]account_subscriptions` (
   `active` tinyint(1) not null default 0,
   `billing_interval` varchar(50) not null,
   primary key(`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists `[prefix]pp_recurring_payments` (
   `id` int(10) unsigned not null auto_increment,
   `account_id` int(10) unsigned not null,
   `recurring_payment_id` varchar(50) not null,
-  `mc_gross` decimal(8,2) not null default 0,
+  `mc_gross` decimal(12,2) not null default 0,
   `txn_id` varchar(50) not null,
   `product_name` varchar(255) not null,
   `first_name` varchar(100) not null,
@@ -209,7 +209,7 @@ create table if not exists `[prefix]pp_recurring_payments` (
   `time_created` datetime not null,
   `created_at` datetime not null, 
   primary key(`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 create table if not exists`[prefix]sessions` (
   `id` int(10) unsigned not null auto_increment,
@@ -220,7 +220,7 @@ create table if not exists`[prefix]sessions` (
   `user_data` longtext default '' not null,
   unique key `sid` (`session_id`),
   primary key (`id`)
-);
+) DEFAULT CHARSET=utf8;
 
 --  Upgrading to Cart66 1.0.1
 
@@ -248,8 +248,8 @@ alter table `[prefix]account_subscriptions` add column `lifetime` tinyint(1) not
 
 alter table `[prefix]products` add column `min_quantity` int(10) unsigned not null default 0;
 alter table `[prefix]products` add column `is_user_price` tinyint(1) not null default 0;
-alter table `[prefix]products` add column `min_price` decimal(8,2) not null default 0;
-alter table `[prefix]products` add column `max_price` decimal(8,2) not null default 0;
+alter table `[prefix]products` add column `min_price` decimal(12,2) not null default 0;
+alter table `[prefix]products` add column `max_price` decimal(12,2) not null default 0;
 
 -- Upgrading to Cart66 1.3
  
@@ -279,3 +279,34 @@ alter table `[prefix]sessions` modify `ip_address` varchar(55) default '0' not n
 
 -- Upgrading to Cart66 1.3.1
 alter table `[prefix]sessions` modify `user_data` longtext default '' not null;
+
+-- Upgrading to Cart66 1.3.4
+alter table `[prefix]downloads` add column `order_item_id` int(10) unsigned not null;
+
+-- Upgrading to Cart66 1.3.7
+#update prices
+alter table `[prefix]products` modify `price` decimal(12,2) not null;
+alter table `[prefix]products` modify `setup_fee` decimal(12,2) not null;
+alter table `[prefix]products` modify `trial_price` decimal(12,2) not null;
+alter table `[prefix]products` modify `min_price` decimal(12,2) not null;
+alter table `[prefix]products` modify `max_price` decimal(12,2) not null;
+alter table `[prefix]order_items` modify `product_price` decimal(12,2) not null;
+alter table `[prefix]orders` modify `discount_amount` decimal(12,2) not null;
+alter table `[prefix]orders` modify `shipping` decimal(12,2) not null;
+alter table `[prefix]orders` modify `subtotal` decimal(12,2) not null;
+alter table `[prefix]orders` modify `tax` decimal(12,3) not null;
+alter table `[prefix]orders` modify `total` decimal(12,2) not null;
+alter table `[prefix]orders` modify `non_subscription_total` decimal(12,2) not null;
+alter table `[prefix]pp_recurring_payments` modify `mc_gross` decimal(12,2) not null;
+alter table `[prefix]promotions` modify `amount` decimal(12,2) not null;
+alter table `[prefix]promotions` modify `min_order` decimal(12,2) not null;
+alter table `[prefix]shipping_methods` modify `default_rate` decimal(12,2) not null;
+alter table `[prefix]shipping_methods` modify `default_bundle_rate` decimal(12,2) not null;
+alter table `[prefix]shipping_rates` modify `shipping_rate` decimal(12,2) not null;
+alter table `[prefix]shipping_rates` modify `shipping_bundle_rate` decimal(12,2) not null;
+alter table `[prefix]shipping_rules` modify `min_amount` decimal(12,2) not null;
+alter table `[prefix]shipping_rules` modify `shipping_cost` decimal(12,2) not null;
+alter table `[prefix]tax_rates` modify `rate` decimal(12,3) not null;
+
+-- Upgrading to Cart66 1.3.4
+alter table `[prefix]promotions` modify `products` longtext not null;

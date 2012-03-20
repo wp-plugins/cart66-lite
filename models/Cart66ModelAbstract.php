@@ -53,7 +53,7 @@ abstract class Cart66ModelAbstract extends Cart66BaseModelAbstract {
   /**
    * Return an array of models
    */
-  public function getModels($where=null, $orderBy=null, $limit=null) {
+  public function getModels($where=null, $orderBy=null, $limit=null, $tableName=null, $id=null) {
     $models = array();
     global $wpdb;
     if(isset($where)) {
@@ -65,12 +65,45 @@ abstract class Cart66ModelAbstract extends Cart66BaseModelAbstract {
     if(isset($limit)) {
       $limit = ' limit ' . $limit;
     }
-    $sql = 'SELECT id FROM ' . $this->_tableName . $where . $orderBy . $limit;
+    if($tableName == null){
+      $tableName = $this->_tableName;
+    }
+    if($id == null) {
+      $id = 'id';
+    }
+    $sql = 'SELECT ' . $id . ' FROM ' . $tableName . $where . $orderBy . $limit;
     // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] " . get_class($this) . " getModels: $sql");
     $ids = $wpdb->get_col($sql);
     foreach($ids as $id) {
       $className = get_class($this);
       $models[] = new $className($id);
+    }
+    return $models;
+  }
+  
+  public function getModelsNoClass($where=null, $orderBy=null, $limit=null, $tableName=null, $id=null) {
+    $models = array();
+    global $wpdb;
+    if(isset($where)) {
+      $where = ' ' . $where;
+    }
+    if(isset($orderBy)) {
+      $orderBy = ' ' . $orderBy;
+    }
+    if(isset($limit)) {
+      $limit = ' limit ' . $limit;
+    }
+    if($tableName == null){
+      $tableName = $this->_tableName;
+    }
+    if($id == null) {
+      $id = 'id';
+    }
+    $sql = 'SELECT ' . $id . ' FROM ' . $tableName . $where . $orderBy . $limit;
+    // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] " . get_class($this) . " getModels: $sql");
+    $ids = $wpdb->get_results($sql);
+    foreach($ids as $id) {
+      $models[] = $id;
     }
     return $models;
   }

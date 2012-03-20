@@ -5,12 +5,7 @@ $password = Cart66Setting::getValue('paypalpro_api_password');
 $signature = Cart66Setting::getValue('paypalpro_api_signature');
 if(!($username && $password && $signature)) {
   $settingsOk = false;
-  ?>
-  <div class='Cart66Error'>
-    <p><strong><?php _e( 'PayPal Express Checkout Is Not Configured' , 'cart66' ); ?></strong></p>
-    <p><?php _e( 'In order to use PayPal Express Checkout you must enter your PayPal API username, password and signature in the Cart66 Settings Panel' , 'cart66' ); ?></p>
-  </div>
-  <?php
+  throw new Cart66Exception('Invalid PayPal Express Configuration', 66501);
 }
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cart66-action']) && $_POST['cart66-action'] == 'paypalexpresscheckout') {
@@ -20,13 +15,40 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cart66-action']) && $_P
   // Calculate total amount to charge customer
   $total = Cart66Session::get('Cart66Cart')->getGrandTotal(false);
   $total = number_format($total, 2, '.', '');
+  Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] PayPal Express Checkout grand total: $total");
   
   // Calculate total cost of all items in cart, not including tax and shipping
-  $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
+  $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount();
   $itemTotal = number_format($itemTotal, 2, '.', '');
+  Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] PayPal Express Checkout item total: $itemTotal");
   
   // Calculate shipping costs
   $shipping = Cart66Session::get('Cart66Cart')->getShippingCost();
+  $promotion = Cart66Session::get('Cart66Promotion');
+  $discount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
+
+  if(is_object($promotion) && $promotion->apply_to == 'total') {
+    $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount();
+    $itemDiscount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
+    if($itemDiscount > 0) {
+      $itemTotal = $itemTotal - $itemDiscount;            
+    }
+    if($itemTotal <= 0) {
+      $discount = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount();
+      $shipping = $shipping + $itemTotal;
+      $itemTotal = 0;
+    }
+
+  }
+
+  if(is_object($promotion) && $promotion->apply_to == 'products'){
+    $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
+  }
+
+  if(is_object($promotion) && $promotion->apply_to == 'shipping'){
+    $shipping = $shipping - Cart66Session::get('Cart66Cart')->getDiscountAmount();
+    $discount = 0;
+  }
   
   // Calculate IPN URL
   $ipnPage = get_page_by_path('store/ipn');
@@ -42,7 +64,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cart66-action']) && $_P
       'NUMBER' => 'SHIPPING',
       'QTY' => 1
     );
-    $pp->addItem($itemData);
+    //$pp->addItem($itemData);
     $shipping = 0;
   }
   else {
@@ -57,6 +79,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cart66-action']) && $_P
     'SHIPPINGAMT' => $shipping,
     'NOTIFYURL' => $ipnUrl
   );
+  Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Setting Payment Details:\n".print_r($payment,true));
   $pp->setPaymentDetails($payment);
   
   // Add cart items to PayPal
@@ -87,9 +110,13 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cart66-action']) && $_P
       echo '<pre>Failed to connect via curl to PayPal. The most likely cause is that your PHP installation failed to verify that the CA cert is OK</pre>';
   }
   else {
-    echo "<pre>PayPal Response: $ack\n";
-    print_r($response);
-    echo "</pre>";
+    try {
+      throw new Cart66Exception(ucwords($response['L_SHORTMESSAGE0']), 66503);
+    }
+    catch(Cart66Exception $e) {
+      $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), array('Error Number: ' . $response['L_ERRORCODE0'], $response['L_LONGMESSAGE0']));
+      echo Cart66Common::getView('views/error-messages.php', $exception);
+    }
   }
 }
 ?>

@@ -26,7 +26,7 @@ if(empty($b['country'])){
 
 // Show errors
 if(count($errors)) {
-  echo Cart66Common::showErrors($errors);
+  //echo Cart66Common::showErrors($errors);
 }
 ?>
 
@@ -306,28 +306,28 @@ if(count($errors)) {
 
 			
 			<?php if(!Cart66Common::isLoggedIn()): ?>
-	          <?php if(Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() || Cart66Session::get('Cart66Cart')->hasMembershipProducts()): ?>
-	            <?php echo Cart66Common::getView('pro/views/account-form.php', array('account' => $account, 'embed' => false)); ?>
-	          <?php endif; ?>
-	        <?php endif; ?>
-			
-          <div id="Cart66CheckoutButtonDiv">
-            <label for="Cart66CheckoutButton" class="Cart66Hidden"><?php _e( 'Checkout' , 'cart66' ); ?></label>
-            <?php
-              $cartImgPath = Cart66Setting::getValue('cart_images_url');
-              if($cartImgPath) {
-                if(strpos(strrev($cartImgPath), '/') !== 0) {
-                  $cartImgPath .= '/';
-                }
-                $completeImgPath = $cartImgPath . 'complete-order.png';
-              }
-            ?>
-            <?php if($cartImgPath): ?>
-              <input id="Cart66CheckoutButton" type="image" src='<?php echo $completeImgPath ?>' value="<?php _e( 'Complete Order' , 'cart66' ); ?>" name="Complete Order"/>
-            <?php else: ?>
-              <input id="Cart66CheckoutButton" class="Cart66ButtonPrimary Cart66CompleteOrderButton" type="submit"  value="<?php _e( 'Complete Order' , 'cart66' ); ?>" name="Complete Order"/>
-            <?php endif; ?>
+        <?php if(Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() || Cart66Session::get('Cart66Cart')->hasMembershipProducts()): ?>
+          <?php echo Cart66Common::getView('pro/views/account-form.php', array('account' => $account, 'embed' => false)); ?>
+        <?php endif; ?>
+      <?php endif; ?>
+	
+      <div id="Cart66CheckoutButtonDiv">
+        <label for="Cart66CheckoutButton" class="Cart66Hidden"><?php _e( 'Checkout' , 'cart66' ); ?></label>
+        <?php
+          $cartImgPath = Cart66Setting::getValue('cart_images_url');
+          if($cartImgPath) {
+            if(strpos(strrev($cartImgPath), '/') !== 0) {
+              $cartImgPath .= '/';
+            }
+            $completeImgPath = $cartImgPath . 'complete-order.png';
+          }
+        ?>
+        <?php if($cartImgPath): ?>
+          <input id="Cart66CheckoutButton" type="image" src='<?php echo $completeImgPath ?>' value="<?php _e( 'Complete Order' , 'cart66' ); ?>" name="Complete Order"/>
+        <?php else: ?>
+          <input id="Cart66CheckoutButton" class="Cart66ButtonPrimary Cart66CompleteOrderButton" type="submit"  value="<?php _e( 'Complete Order' , 'cart66' ); ?>" name="Complete Order"/>
+        <?php endif; ?>
 
-            <p class="description"><?php _e( 'Your receipt will be on the next page and also immediately emailed to you. <strong>We respect your privacy!</strong>' , 'cart66' ); ?></p>
-          </div>
+        <p class="description"><?php _e( 'Your receipt will be on the next page and also immediately emailed to you. <strong>We respect your privacy!</strong>' , 'cart66' ); ?></p>
+      </div>
 </form>

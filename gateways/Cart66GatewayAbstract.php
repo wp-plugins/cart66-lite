@@ -91,72 +91,79 @@ abstract class Cart66GatewayAbstract {
   }
 
   public function setBilling($b) {
-    if(!(isset($b['state']) && !empty($b['state']))) {
-      $b['state'] = trim($b['state_text']);
-    }
-    unset($b['state_text']);
-    
-    $this->_billing = $b;
-    $skip = array('address2', 'billing-state_text');
-    foreach($b as $key => $value) {
-      if(!in_array($key, $skip)) {
-        $value = trim($value);
-        if($value == '') {
-          $keyName = ucwords(preg_replace('/([A-Z])/', " $1", $key));
-          $this->_errors['Billing ' . $keyName] = __('Billing ','cart66') . $keyName . __(' required','cart66');
-          $this->_jqErrors[] = "billing-$key";
+    if(is_array($b)) {
+      if(!(isset($b['state']) && !empty($b['state']))) {
+        if(isset($b['state_text'])) {
+          $b['state'] = trim($b['state_text']);
+        }
+      }
+      unset($b['state_text']);
+
+      $this->_billing = $b;
+      $skip = array('address2', 'billing-state_text');
+      foreach($b as $key => $value) {
+        if(!in_array($key, $skip)) {
+          $value = trim($value);
+          if($value == '') {
+            $keyName = ucwords(preg_replace('/([A-Z])/', " $1", $key));
+            $this->_errors['Billing ' . $keyName] = __('Billing ','cart66') . $keyName . __(' required','cart66');
+            $this->_jqErrors[] = "billing-$key";
+          }
         }
       }
     }
   } 
 
   public function setPayment($p) {
-    
-    // Remove all non-numeric characters from card number
-    if(isset($p['cardNumber'])) {
-      $cardNumber = $p['cardNumber'];
-      $p['cardNumber'] = preg_replace('/\D/', '', $cardNumber);
-    }
-    
-    $this->_payment = $p;
-    
-    foreach($p as $key => $value) {
-      $value = trim($value);
-      if($value == '') {
-        $keyName = preg_replace('/([A-Z])/', " $1", $key);
-        $this->_errors['Payment ' . $keyName] = __('Payment ','cart66') . $keyName . __(' required','cart66');
-        $this->_jqErrors[] = "payment-$key";
+    if(is_array($p)) {
+      // Remove all non-numeric characters from card number
+      if(isset($p['cardNumber'])) {
+        $cardNumber = $p['cardNumber'];
+        $p['cardNumber'] = preg_replace('/\D/', '', $cardNumber);
       }
-    }
-    if(strlen($p['cardNumber']) > 0 && strlen($p['cardNumber']) < 13) {
-      $this->_errors['Payment Card Number'] = __('Invalid credit card number','cart66');
-      $this->_jqErrors[] = "payment-cardNumber";
-    } 
 
-    // For subscription accounts
-    if(isset($p['password'])) {
-      if($p['password'] != $p['password2']) {
-        $this->_errors['Password'] = __("Passwords do not match","cart66");
-        $this->_jqErrors[] = 'payment-password';
+      $this->_payment = $p;
+
+      foreach($p as $key => $value) {
+        $value = trim($value);
+        if($value == '') {
+          $keyName = preg_replace('/([A-Z])/', " $1", $key);
+          $this->_errors['Payment ' . $keyName] = __('Payment ','cart66') . $keyName . __(' required','cart66');
+          $this->_jqErrors[] = "payment-$key";
+        }
+      }
+      if(strlen($p['cardNumber']) > 0 && strlen($p['cardNumber']) < 13) {
+        $this->_errors['Payment Card Number'] = __('Invalid credit card number','cart66');
+        $this->_jqErrors[] = "payment-cardNumber";
+      } 
+
+      // For subscription accounts
+      if(isset($p['password'])) {
+        if($p['password'] != $p['password2']) {
+          $this->_errors['Password'] = __("Passwords do not match","cart66");
+          $this->_jqErrors[] = 'payment-password';
+        }
       }
     }
   }
 
   public function setShipping($s) {
-    if(!(isset($s['state']) && !empty($s['state']))) {
-      $s['state'] = trim($s['state_text']);
-    }
-    unset($s['state_text']);
-    
-    $this->_shipping = $s;
-    $skip = array('address2', 'shipping-state_text');
-    foreach($s as $key => $value) {
-      if(!in_array($key, $skip)) {
-        $value = trim($value);
-        if($value == '') {
-          $keyName = preg_replace('/([A-Z])/', " $1", $key);
-          $this->_errors['Shipping ' . $keyName] = __('Shipping ','cart66') . $keyName . __(' required','cart66');
-          $this->_jqErrors[] = "shipping-$key";
+    if(is_array($s)) {
+      if(!(isset($s['state']) && !empty($s['state']))) {
+        $s['state'] = trim($s['state_text']);
+      }
+      unset($s['state_text']);
+
+      $this->_shipping = $s;
+      $skip = array('address2', 'shipping-state_text');
+      foreach($s as $key => $value) {
+        if(!in_array($key, $skip)) {
+          $value = trim($value);
+          if($value == '') {
+            $keyName = preg_replace('/([A-Z])/', " $1", $key);
+            $this->_errors['Shipping ' . $keyName] = __('Shipping ','cart66') . $keyName . __(' required','cart66');
+            $this->_jqErrors[] = "shipping-$key";
+          }
         }
       }
     }

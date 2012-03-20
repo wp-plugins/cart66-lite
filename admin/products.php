@@ -51,6 +51,8 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
   $product->download_path = '';
   $product->save();
 }
+$data['products'] = $product->getNonSubscriptionProducts('where id>0', null, '1');
+$data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
 ?>
 
 <?php if($errorMessage): ?>
@@ -61,7 +63,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
 
 <h2>Cart66 Products</h2>
 
-<form action="" method="post" enctype="multipart/form-data">
+<form action="" method="post" enctype="multipart/form-data" id="products-form">
   <input type="hidden" name="cart66-action" value="save product" />
   <input type="hidden" name="product[id]" value="<?php echo $product->id ?>" />
   <div id="widgets-left" style="margin-right: 50px;">
@@ -187,14 +189,21 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
                   <select name="product[gravity_form_qty_id]" id="gravity_form_qty_id">
                     <option value='0'><?php _e( 'None' , 'cart66' ); ?></option>
                     <?php
-                      $gr = new Cart66GravityReader($product->gravityFormId);
-                      $fields = $gr->getStandardFields();
-                      foreach($fields as $id => $label) {
-                        $selected = ($product->gravityFormQtyId == $id) ? 'selected="selected"' : '';
-                        echo "<option value='$id' $selected>$label</option>\n";
+                      try {
+                        $gr = new Cart66GravityReader($product->gravityFormId);
+                        $fields = $gr->getStandardFields();
+                        foreach($fields as $id => $label) {
+                          $selected = ($product->gravityFormQtyId == $id) ? 'selected="selected"' : '';
+                          echo "<option value='$id' $selected>$label</option>\n";
+                        }
+                      }
+                      catch(Cart66Exception $e) {
+                        $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage());
+                        $gravityError = Cart66Common::getView('views/error-messages.php', $exception);
                       }
                     ?>
                   </select>
+                  <?php echo isset($gravityError) ? $gravityError : ''; ?>
                   <span class="label_desc"><?php _e( 'Use one of the Gravity Form fields as the quantity for your product.' , 'cart66' ); ?></span>
                 </li>
               <?php endif; ?>
@@ -374,101 +383,125 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
   </div>
 
 </form>
-  
-<?php
-  $product = new Cart66Product();
-  $products = $product->getNonSubscriptionProducts();
-  if(count($products)):
-?>
-  <h3 style="margin-top: 20px;"><?php _e( 'Your Products' , 'cart66' ); ?></h3>
-  <table class="widefat Cart66HighlightTable" style="width: 95%">
-  <thead>
-    <tr>
-      <th colspan="8">Search: <input type="text" name="Cart66AccountSearchField" value="" id="Cart66AccountSearchField" /></th>
-    </tr>
-  	<tr>
-  		<th>ID</th>
-  		<th>Item Number</th>
-  		<th>Product Name</th>
-  		<th>Price</th>
-  		<th>Taxed</th>
-  		<th>Shipped</th>
-  		<th>Actions</th>
-  	</tr>
-  </thead>
-  <tbody>
-    <?php foreach($products as $p): ?>
-     <tr>
-       <td><?php echo $p->id ?></td>
-       <td><?php echo $p->itemNumber ?></td>
-       <td><?php echo $p->name ?>
-         <?php
-           if($p->gravityFormId > 0 && isset($gfTitles) && isset($gfTitles[$p->gravityFormId])) {
-             echo '<br/><em>Linked To Gravity Form: ' . $gfTitles[$p->gravityFormId] . '</em>';
-           }
-          ?>
-       </td>
-       <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $p->price ?></td>
-       <td><?php echo $p->taxable? ' Yes' : 'No'; ?></td>
-       <td><?php echo $p->shipped? ' Yes' : 'No'; ?></td>
-       <td>
-         <a href='?page=cart66-products&task=edit&id=<?php echo $p->id ?>'>Edit</a> | 
-         <a class='delete' href='?page=cart66-products&task=delete&id=<?php echo $p->id ?>'>Delete</a>
-       </td>
-     </tr>
-    <?php endforeach; ?>
-  </tbody>
-  </table>
-<?php endif; ?>
-
-<?php
-  $products = $product->getSpreedlyProducts();
-  if(count($products)):
-?>
-<h3 style="margin-top: 20px;"><?php _e( 'Your Spreedly Subscription Products' , 'cart66' ); ?></h3>
-<table class="widefat" style="width: 95%">
-<thead>
-  <tr>
-    <th colspan="8">Search: <input type="text" name="Cart66AccountSearchField" value="" id="Cart66AccountSearchField" /></th>
-  </tr>
-	<tr>
-		<th>ID</th>
-		<th>Item Number</th>
-		<th>Product Name</th>
-		<th>Price</th>
-		<th>Taxed</th>
-		<th>Shipped</th>
-		<th>Actions</th>
-	</tr>
-</thead>
-<tbody>
-  <?php foreach($products as $p): ?>
-   <tr>
-     <td><?php echo $p->id ?></td>
-     <td><?php echo $p->itemNumber ?></td>
-     <td><?php echo $p->name ?>
-       <?php
-         if($p->gravityFormId > 0 && isset($gfTitles) && isset($gfTitles[$p->gravityFormId])) {
-           echo '<br/><em>Linked To Gravity From: ' . $gfTitles[$p->gravityFormId] . '</em>';
-         }
-        ?>
-     </td>
-     <td><?php echo $p->getPriceDescription() ?></td>
-     <td><?php echo $p->taxable? ' Yes' : 'No'; ?></td>
-     <td><?php echo $p->shipped? ' Yes' : 'No'; ?></td>
-     <td>
-       <a href='?page=cart66-products&task=edit&id=<?php echo $p->id ?>'>Edit</a> | 
-       <a class='delete' href='?page=cart66-products&task=delete&id=<?php echo $p->id ?>'>Delete</a>
-     </td>
-   </tr>
-  <?php endforeach; ?>
-</tbody>
-</table>
-<?php endif; ?>
-
+<div class="wrap">
+  <?php if(isset($data['products']) && is_array($data['products'])): ?>
+    <h3 style="margin-top: 20px;"><?php _e( 'Your Products' , 'cart66' ); ?></h3>
+    <table class="promo-rows widefat Cart66HighlightTable" id="products_table">
+      <tr>
+        <thead>
+        	<tr>
+        	  <th><?php _e('ID', 'cart66'); ?></th>
+      			<th><?php _e('Item Number', 'cart66'); ?></th>
+      			<th><?php _e('Product Name', 'cart66'); ?></th>
+      			<th><?php _e('Price', 'cart66'); ?></th>
+      			<th><?php _e('Taxed', 'cart66'); ?></th>
+      			<th><?php _e('Shipped', 'cart66'); ?></th>
+      			<th><?php _e('Actions', 'cart66'); ?></th>
+        	</tr>
+        </thead>
+        <tfoot>
+        	<tr>
+        		<th><?php _e('ID', 'cart66'); ?></th>
+      			<th><?php _e('Item Number', 'cart66'); ?></th>
+      			<th><?php _e('Product Name', 'cart66'); ?></th>
+      			<th><?php _e('Price', 'cart66'); ?></th>
+      			<th><?php _e('Taxed', 'cart66'); ?></th>
+      			<th><?php _e('Shipped', 'cart66'); ?></th>
+      			<th><?php _e('Actions', 'cart66'); ?></th>
+        	</tr>
+        </tfoot>
+      </tr>
+    </table>
+  <?php endif; ?>
+  <?php if(isset($data['spreedly']) && is_array($data['spreedly']) && count($data['spreedly']) > 0): ?>
+    <h3 style="margin-top: 20px;"><?php _e( 'Your Spreedly Subscription Products' , 'cart66' ); ?></h3>
+    <table class="widefat Cart66HighlightTable" id="spreedly_table">
+      <tr>
+        <thead>
+        	<tr>
+        	  <th><?php _e('ID', 'cart66'); ?></th>
+      			<th><?php _e('Item Number', 'cart66'); ?></th>
+      			<th><?php _e('Product Name', 'cart66'); ?></th>
+      			<th><?php _e('Price', 'cart66'); ?></th>
+      			<th><?php _e('Taxed', 'cart66'); ?></th>
+      			<th><?php _e('Shipped', 'cart66'); ?></th>
+      			<th><?php _e('Actions', 'cart66'); ?></th>
+        	</tr>
+        </thead>
+        <tfoot>
+        	<tr>
+        		<th><?php _e('ID', 'cart66'); ?></th>
+      			<th><?php _e('Item Number', 'cart66'); ?></th>
+      			<th><?php _e('Product Name', 'cart66'); ?></th>
+      			<th><?php _e('Price', 'cart66'); ?></th>
+      			<th><?php _e('Taxed', 'cart66'); ?></th>
+      			<th><?php _e('Shipped', 'cart66'); ?></th>
+      			<th><?php _e('Actions', 'cart66'); ?></th>
+        	</tr>
+        </tfoot>
+      </tr>
+    </table>
+  <?php endif; ?>
+</div>
 <script type="text/javascript">
   (function($){
     $(document).ready(function(){
+      
+      $('#products_table').dataTable({
+        "bProcessing": true,
+        "bServerSide": true,
+        "bPagination": true,
+        "iDisplayLength": 30,
+        "aLengthMenu": [[30, 60, 150, -1], [30, 60, 150, "All"]],
+        "sPaginationType": "bootstrap",
+        "bAutoWidth": false,
+				"sAjaxSource": ajaxurl + "?action=products_table",
+        "aoColumns": [
+          null, 
+          { "bsortable": true, "fnRender": function(oObj) { return '<a href="?page=cart66-products&task=edit&id=' + oObj.aData[0] + '">' + oObj.aData[1] + '</a>'}},
+          null, null, 
+          { "bSearchable": false }, 
+          { "bSearchable": false },
+          { "bSearchable": false, "bSortable": false, "fnRender": function(oObj) { return '<a href="?page=cart66-products&task=edit&id=' + oObj.aData[0] + '"><?php _e( "Edit" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66-products&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a>' }
+        }],
+        "oLanguage": { "sZeroRecords": "<?php _e('No matching products found', 'cart66'); ?>" }
+      });
+      $('#spreedly_table').dataTable({
+        "bProcessing": true,
+        "bServerSide": true,
+        "bPagination": true,
+        "iDisplayLength": 30,
+        "aLengthMenu": [[30, 60, 150, -1], [30, 60, 150, "All"]],
+        "sPaginationType": "bootstrap",
+        "bAutoWidth": false,
+				"sAjaxSource": ajaxurl + "?action=spreedly_table",
+        "aoColumns": [
+          null, 
+          { "bsortable": true, "fnRender": function(oObj) { return '<a href="?page=cart66-products&task=edit&id=' + oObj.aData[0] + '">' + oObj.aData[1] + '</a>'}},
+          null, null, 
+          { "bSearchable": false }, 
+          { "bSearchable": false },
+          { "bSearchable": false, "bSortable": false, "fnRender": function(oObj) { return '<a href="?page=cart66-products&task=edit&id=' + oObj.aData[0] + '"><?php _e( "Edit" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66-products&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a>' }
+        }],
+        "oLanguage": { "sZeroRecords": "<?php _e('No matching Spreedly subscriptions found', 'cart66'); ?>" }
+      });
+      
+      $('#product-item_number').keyup(function() {
+        $('span.keyup-error').remove();
+        var inputVal = $(this).val();
+        var characterReg = /"/;
+        if(characterReg.test(inputVal)) {
+          $(this).after('<span class="keyup-error"><?php _e("No quotes allowed", "cart66"); ?></span>');
+        }
+      });
+      
+      $('#products-form').submit(function() {
+        if($('span.error').length > 0){
+          alert('There are errors on this page!');
+          return false;
+        }
+      });
+      
       toggleSubscriptionText();
       toggleMembershipProductAttrs();
 
@@ -507,7 +540,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
         }
       })
 
-      $('.delete').click(function() {
+      $('.delete').live('click', function() {
         return confirm('Are you sure you want to delete this item?');
       });
 
@@ -679,4 +712,4 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'xdownload' && isset($_GET['id']
 
     }
   })(jQuery);
-</script> 
+</script>

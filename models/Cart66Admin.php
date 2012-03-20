@@ -22,14 +22,9 @@ class Cart66Admin {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not loading Spreedly data because Spreedly class has not been loaded");
     }
     
-    if(class_exists('Cart66PayPalSubscription')) {
-      $ppsub = new Cart66PayPalSubscription();
-      $data['ppsubs'] = $ppsub->getModels('where id>0', 'order by name');
-    }
-    
     $data['subscriptions'] = $subscriptions;
     $view = Cart66Common::getView('admin/products.php', $data);
-    echo $view; 
+    echo $view;
   }
   
   public function settingsPage() {
@@ -73,7 +68,6 @@ class Cart66Admin {
     $view = Cart66Common::getView('admin/shipping.php');
     echo $view;
   }
-
 
   public function reportsPage() {
     $view = Cart66Common::getView('admin/reports.php');
@@ -120,7 +114,7 @@ class Cart66Admin {
         }
       }
 
-      $data['plans'] = $sub->getModels('where is_paypal_subscription>0', 'order by name');
+      $data['plans'] = $sub->getModels('where is_paypal_subscription>0', 'order by name', '1');
       $view = Cart66Common::getView('pro/admin/paypal-subscriptions.php', $data);
       echo $view;
     }
@@ -149,7 +143,8 @@ class Cart66Admin {
         // Look in query string for account id
         $account = new Cart66Account();
         $account->load($_REQUEST['accountId']);
-        $data['plan'] = $account->getCurrentAccountSubscription(true); // Return even if plan is expired
+        $id = $account->getCurrentAccountSubscriptionId(true);
+        $data['plan'] = new Cart66AccountSubscription($id); // Return even if plan is expired
         if(date('Y', strtotime($data['plan']->activeUntil)) <= 1970) {
           $data['activeUntil'] = '';
         }
@@ -213,15 +208,16 @@ class Cart66Admin {
             $sub->save();
             $account->clear();
           }
+          else {
+            $data['errors'] = $errors;
+          }
         }
 
       }
 
       $data['url'] = Cart66Common::replaceQueryString('page=cart66-accounts');
       $data['account'] = $account;
-      $data['accounts'] = $account->getModels('where id>0', 'order by last_name');
     }
-    
     
     $view = Cart66Common::getView('admin/accounts.php', $data);
     echo $view;

@@ -34,18 +34,6 @@ class Cart66Promotion extends Cart66ModelAbstract {
     return $min;
   }
   
-  // Displays the maximum redemption amounts in the admin page
-  public function maximumRedemptions() {
-    $max = $this->maximum_redemptions;
-    if($max > 0) {
-      $max = $max;
-    }
-    else {
-      $max = __('Unlimited', 'cart66');
-    }
-    return $max;
-  }
-  
   public function getCodeAt($position=1){
     $codes = $this->code;
     if(substr($codes,0,1) == ","){
@@ -324,7 +312,7 @@ class Cart66Promotion extends Cart66ModelAbstract {
     $isEffective = false;
     $startPromo = strtotime($this->effective_from);
     $endPromo = strtotime($this->effective_to);
-    $date = strtotime("today");
+    $date = Cart66Common::localTs();
     if(empty($this->effective_from) || $this->effective_from == "0000-00-00 00:00:00") {
       $startPromo = strtotime("-1 year");
     } 
@@ -564,7 +552,7 @@ class Cart66Promotion extends Cart66ModelAbstract {
      }
      
      // format 
-     $discount = number_format($discount,2);
+     $discount = number_format($discount, 2, '.', '');
      
      return $discount;
   }

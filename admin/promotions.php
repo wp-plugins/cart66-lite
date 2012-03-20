@@ -177,64 +177,42 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
     </div>
   </div>
 
-  <?php
-  $promos = $promo->getModels();
-  if(count($promos)):
-  ?>
-  <table class="promo-rows widefat">
-  <thead>
+  <table class="widefat Cart66HighlightTable" id="promotions_table">
     <tr>
-      <th colspan="9"><?php _e( 'Search' , 'cart66' ); ?>: <input type="text" name="Cart66AccountSearchField" value="" id="Cart66AccountSearchField" /></th>
+      <thead>
+      	<tr>
+      		<th><?php _e('ID', 'cart66'); ?></th>
+    			<th><?php _e('Name', 'cart66'); ?></th>
+    			<th><?php _e('Code', 'cart66'); ?></th>
+    			<th><?php _e('Amount', 'cart66'); ?></th>
+    			<th><?php _e('Minimum Order', 'cart66'); ?></th>
+    			<th><?php _e('Enabled', 'cart66'); ?></th>
+    			<th><?php _e('Effective', 'cart66'); ?></th>
+    			<th><?php _e('Used', 'cart66'); ?></th>
+    			<th><?php _e('Apply To', 'cart66'); ?></th>
+    			<th><?php _e('Actions', 'cart66'); ?></th>
+      	</tr>
+      </thead>
+      <tfoot>
+      	<tr>
+      		<th><?php _e('ID', 'cart66'); ?></th>
+    			<th><?php _e('Name', 'cart66'); ?></th>
+    			<th><?php _e('Code', 'cart66'); ?></th>
+    			<th><?php _e('Amount', 'cart66'); ?></th>
+    			<th><?php _e('Minimum Order', 'cart66'); ?></th>
+    			<th><?php _e('Enabled', 'cart66'); ?></th>
+    			<th><?php _e('Effective', 'cart66'); ?></th>
+    			<th><?php _e('Used', 'cart66'); ?></th>
+    			<th><?php _e('Apply To', 'cart66'); ?></th>
+    			<th><?php _e('Actions', 'cart66'); ?></th>
+      	</tr>
+      </tfoot>
+      <tbody>
+        
+      </tbody>
     </tr>
-  	<tr>
-  		<th><?php _e( 'Name' , 'cart66' ); ?></th>
-  		<th><?php _e( 'Code' , 'cart66' ); ?></th>
-  		<th><?php _e( 'Amount' , 'cart66' ); ?></th>
-  		<th><?php _e( 'Minimum Order' , 'cart66' ); ?></th>
-  		<th><?php _e( 'Enabled' , 'cart66' ); ?></th>
-  		<th><?php _e( 'Effective' , 'cart66' ); ?></th>
-  		<th><?php _e( 'Used' , 'cart66' ); ?></th>
-  		<th><?php _e( 'Apply To' , 'cart66' ); ?></th>
-  		<th><?php _e( 'Actions' , 'cart66' ); ?></th>
-  	</tr>
-  </thead>
-  <tfoot>
-      <tr>
-    		<th><?php _e( 'Name' , 'cart66' ); ?></th>
-    		<th><?php _e( 'Code' , 'cart66' ); ?></th>
-    		<th><?php _e( 'Amount' , 'cart66' ); ?></th>
-    		<th><?php _e( 'Minimum Order' , 'cart66' ); ?></th>
-    		<th><?php _e( 'Enabled' , 'cart66' ); ?></th>
-    		<th><?php _e( 'Effective' , 'cart66' ); ?></th>
-    		<th><?php _e( 'Used' , 'cart66' ); ?></th>
-    		<th><?php _e( 'Apply To' , 'cart66' ); ?></th>
-    		<th><?php _e( 'Actions' , 'cart66' ); ?></th>
-    	</tr>
-  </tfoot>
-  <tbody>
-    <?php foreach($promos as $p): ?>
-    <tr>
-      <td><a href='?page=cart66-promotions&task=edit&id=<?php echo $p->id ?>'><?php echo $p->name ?></a></td>
-      <td><?php echo $p->getCodeAt(); ?></td>
-      <td><?php echo $p->getAmountDescription() ?></td>
-      <td><?php echo $p->getMinOrderDescription() ?></td>
-      <td><?php echo $p->enable == 1 ? 'Yes' : 'No'; ?></td>
-      <td><?php echo $p->effectiveDates() ?></td>
-      <td><?php echo ($p->redemptions < 1) ? __('Never', 'cart66') : ( ($p->redemptions == 1) ? $p->redemptions . ' time' : $p->redemptions . ' times') ?></td>
-      <td>
-        <?php echo ($p->apply_to == 'products') ? "Products" : ( ($p->apply_to == 'shipping') ? "Shipping" : "Cart Total" ); ?>
-      </td>
-      <td>
-        <a href='?page=cart66-promotions&task=edit&id=<?php echo $p->id ?>'><?php _e( 'Edit' , 'cart66' ); ?></a> | 
-        <a class='delete' href='?page=cart66-promotions&task=delete&id=<?php echo $p->id ?>'><?php _e( 'Delete' , 'cart66' ); ?></a>
-      </td>
-    </tr>
-    <?php endforeach; ?>
-  </tbody>
   </table>
-  <?php endif; ?>
 </div>
-
 <script type="text/javascript">
 /* <![CDATA[ */
   (function($){
@@ -253,12 +231,36 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
               }
             }
           }, 'json');
-        } 
+        }
       });
-      $(".promo-rows tr:nth-child(even)").css("background-color", "#fff");
-      $('.delete').click(function() {
+      
+      $('#promotions_table').dataTable({
+        "bProcessing": true,
+        "bServerSide": true,
+        "bPagination": true,
+        "iDisplayLength": 30,
+        "aLengthMenu": [[30, 60, 150, -1], [30, 60, 150, "All"]],
+        "sPaginationType": "bootstrap",
+        "bAutoWidth": false,
+				"sAjaxSource": ajaxurl + "?action=promotions_table",
+				"aaSorting": [[8,'desc']],
+        "aoColumns": [
+          null, 
+          { "bsortable": true, "fnRender": function(oObj) { return '<a href="?page=cart66-promotions&task=edit&id=' + oObj.aData[0] + '">' + oObj.aData[1] + '</a>'}},
+          null, null, 
+          { "bSearchable": false }, 
+          { "bSearchable": false }, 
+          { "bSearchable": false }, 
+          { "bSearchable": false }, 
+          null, 
+          { "bSearchable": false, "bSortable": false, "fnRender": function(oObj) { return '<a href="?page=cart66-promotions&task=edit&id=' + oObj.aData[0] + '"><?php _e( "Edit" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66-promotions&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a>' }
+        }],
+        "oLanguage": { "sZeroRecords": "<?php _e('No matching promotions found', 'cart66'); ?>" }
+      });
+      $('.delete').live('click', function() {
         return confirm('Are you sure you want to delete this item?');
       });
+      $(".promo-rows tr:nth-child(even)").css("background-color", "#fff");
       setPromoSign();
       $('#promo-type').change(function () {
         setPromoSign();

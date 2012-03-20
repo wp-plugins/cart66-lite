@@ -36,6 +36,10 @@
           $('.' + kind + '-state_label').html("<?php _e( 'State' , 'cart66' ); ?>: ");
           $('.' + kind + '-zip_label').html("<?php _e( 'Zip code' , 'cart66' ); ?>: ");
         break;
+        case "AU":
+          $('.' + kind + '-state_label').html("<?php _e( 'State' , 'cart66' ); ?>: ");
+          $('.' + kind + '-zip_label').html("<?php _e( 'Post code' , 'cart66' ); ?>: ");
+        break;
         default:
           $('.' + kind + '-state_label').html("<?php _e( 'Province' , 'cart66' ); ?>: ");
           $('.' + kind + '-zip_label').html("<?php _e( 'Post code' , 'cart66' ); ?>: ");
