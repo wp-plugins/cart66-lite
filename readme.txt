@@ -12,6 +12,7 @@ Sell digital products and/or physical products with the Cart66 WordPress ecommer
 
 Cart66 is a simple to use yet powerful ecommerce plugin for WordPress.
 
+* [Process credit cards securely](http://www.mijireh.com "Secure credit card processing") using your payment gateway with [Mijireh](http://www.mijireh.com "Secure credit card processing")
 * Sell digital products with Amazon S3 integration
 * Sell physical products
 * Sell services
@@ -33,6 +34,7 @@ Some features in the video, such as the integration with Gravity Forms, are only
 
 Checkout using
 
+* [Mijireh Checkout - Secure credit card processing](http://www.mijireh.com "Secure credit card processing")
 * PayPal Website Payments Standard
 * PayPal Express Checkout
 * Manual Checkout (you collect payments on your own, with an invoice or over the phone for example)
@@ -83,6 +85,7 @@ We are not able to provide anything other than community based support for Cart6
 1. Cart66 Product Creation Form
 2. Cart66 Promotion Management
 3. Cart66 Product Management
+4. [Secure credit card processing with Mijireh](http://www.mijireh.com)
 
 == Changelog ==
 
