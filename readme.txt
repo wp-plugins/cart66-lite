@@ -89,6 +89,38 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.4.0 =
+* NEW: Secure credit card processing with [Mijireh](http://www.mijireh.com "Secure credit card processing")
+* NEW: Product links in cart
+* NEW: Printer friendly receipt link in orders page
+* NEW: Minimum cart amount feature
+* NEW: Option to skip PayPal account creation for PayPal Express
+* NEW: Link to edit products from product page
+* NEW: Cart66 Admin Bar menu
+* NEW: Ajax Add to Cart feature with javascript hooks
+* NEW: Optional US Territories to state list
+* NEW: Custom Button Text input for Add To Cart button
+* NEW: Span tags around price label for greater flexibility in display
+* NEW: Added Update Total and Apply Coupon button overrides
+* NEW: DataTables integration for all tables in the Cart66 Admin
+* UPDATED: Hook for meta generator to allow for easy removal
+* UPDATED: Default Character Set in MySQL tables to UTF-8
+* UPDATED: CSS for price and quantity elements
+* UPDATED: Version number meta for W3C compatibility
+* UPDATED: Download option to check for individual downloads
+* UPDATED: Timestamp for dashboard widgets
+* UPDATED: Australia Provinces to States
+* UPDATED: PayPal Standard ordered_on date function
+* UPDATED: Widgets.css backwards compatibility for WordPress 3.2-
+* UPDATED: Error messages when adding to the cart
+* UPDATED: Ajax Listener to prevent direct calls to admin-ajax.php
+* UPDATED: Subtotal in Advanced Cart Widget
+* UPDATED: Localization for Add To Cart buttons
+* UPDATED: Sessions to use longtext for user_data
+* UPDATED: Coupon code cleaning script
+* UPDATED: IP retrieval code for sessions
+
+
 = 1.3.0 =
 * NEW: Product specific promotions
 * NEW: Date ranges for promotions
