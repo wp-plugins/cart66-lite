@@ -89,6 +89,11 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.4.1 =
+* NEW: Option to use database backed sessions or native PHP sessions. Choose this feature from the "Main Settings" panel of the Cart66 Settings screen.
+* FIXED: Unable to update PayPal settiings
+* FIXED: DataTables processing error when WordPress is in debug mode
+
 = 1.4.0 =
 * NEW: Secure credit card processing with [Mijireh](http://www.mijireh.com "Secure credit card processing")
 * NEW: Product links in cart
