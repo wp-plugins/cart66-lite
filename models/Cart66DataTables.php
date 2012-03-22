@@ -490,7 +490,7 @@ Class Cart66DataTables {
   public function gfData() {
     global $wpdb;
     $gfTitles = array();
-    if(CART66_PRO) {
+    if(CART66_PRO && class_exists('RGFormsModel')) {
       require_once(CART66_PATH . "/pro/models/Cart66GravityReader.php");
       $forms = Cart66Common::getTableName('rg_form', '');
       $sql = "SELECT id, title from $forms where is_active=1 order by title";

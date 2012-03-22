@@ -6,7 +6,8 @@ $supportedGateways = array (
   'Cart66Eway',
   'Cart66MerchantWarrior',
   'Cart66PayLeap',
-  'Cart66Mijireh'
+  'Cart66Mijireh',
+  'Cart66Stripe'
 );
 
 $errors = array();

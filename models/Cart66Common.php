@@ -1376,7 +1376,7 @@ class Cart66Common {
     return $output;
   }
   
-  public static function userRoles($role) {
+  public static function cart66UserCan($role) {
     $access = false;
     $pageRoles = Cart66Setting::getValue('admin_page_roles');
     $pageRoles = unserialize($pageRoles);
@@ -1384,6 +1384,12 @@ class Cart66Common {
       $access = true;
     }
     return $access;
+  }
+
+  public static function getPageRoles($role) {
+    $pageRoles = Cart66Setting::getValue('admin_page_roles');
+    $pageRoles = unserialize($pageRoles);
+    return $pageRoles[$role];
   }
   
   public static function urlIsLive($url) {
@@ -1421,6 +1427,14 @@ class Cart66Common {
       // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Check Slurp Page Failed: " . print_r($post, 1));
     }
     return $isSlurp;
+  }
+  
+  public function sessionType() {
+    $type = Cart66Setting::getValue('session_type');
+    if(!$type) {
+      $type = 'database';
+    }
+    return $type;
   }
   
 }

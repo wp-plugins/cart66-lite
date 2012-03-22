@@ -242,6 +242,15 @@ else {
                 <p style="width: 450px;" class="label_desc"><?php _e( 'Be sure use an SSL certificate if you are using a payment gateway other than PayPal Website Payments Standard or PayPal Express Checkout.' , 'cart66' ); ?></p>
               </li>
               
+              <li><label style="display: inline-block; width: 120px; text-align: right;"><?php _e( 'Database Sessions' , 'cart66' ); ?>:</label>
+              <?php
+                $session_type = Cart66Common::sessionType();
+              ?>
+              <input type='radio' name='session_type' value="database" style='width: auto;' <?php if($session_type == 'database') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'><?php _e( 'Yes' , 'cart66' ); ?></label>
+              <input type='radio' name='session_type' value="native" style='width: auto;' <?php if($session_type == 'native') { echo "checked='checked'"; } ?>><label style='width: auto; padding-left: 5px;'><?php _e( 'No' , 'cart66' ); ?></label>
+              <p style="width: 450px;" class="label_desc"><?php _e( 'Database sessions offer better performance but if you have trouble with them, try using the standard PHP sessions by disabling database sessoins' , 'cart66' ); ?></p>
+              </li>
+              
               <?php if(CART66_PRO): ?>
                 <li><label style="display: inline-block; width: 120px; text-align: right;" for="track_inventory"><?php _e( 'Track inventory' , 'cart66' ); ?>:</label>
                 <?php
@@ -538,7 +547,7 @@ else {
           <p class="description"><a href="http://mijireh.com">Get Mijireh Now</a></p>
         <?php endif; ?>
         <div>
-          <form id="PayPalSettings" class="ajaxSettingForm" action="" method='post'>
+          <form id="MijirehSettings" class="ajaxSettingForm" action="" method='post'>
             <input type='hidden' name='action' value="save_settings" />
             <input type='hidden' name='_success' value="Your Mijireh settings have been saved.">
             <ul>
@@ -701,6 +710,7 @@ else {
             <input type="hidden" name="eway_sandbox" value="" />
             <input type='hidden' name='payleap_test_mode' value="" />
             <input type='hidden' name='mwarrior_test_mode' value="" />
+            <input type='hidden' name='stripe_test' value="" />
 
             <ul>
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='auth_url'><?php _e( 'Gateway' , 'cart66' ); ?>:</label>
@@ -711,6 +721,7 @@ else {
                   <option value="https://www.eway.com.au/gateway_cvn/xmlpayment.asp">eWay</option>
                   <option value="https://api.merchantwarrior.com/post/">Merchant Warrior</option>
                   <option value="https://secure1.payleap.com/TransactServices.svc/ProcessCreditCard">PayLeap</option>
+                  <option value="https://api.stripe.com/v1/charges">Stripe</option>
                   <option value="other"><?php _e( 'Other' , 'cart66' ); ?></option>
                 </select>
                 <p id="authorizenetTestMessage" class="description"><?php _e( 'The Authorize.net test server requires a developer test account which is different than your normal authorize.net account. You can sign up for one here: <a href="https://developer.authorize.net/testaccount/" target="_blank">https://developer.authorize.net/testaccount/' , 'cart66' ); ?></a></p>
@@ -751,6 +762,25 @@ else {
                   </li>
                 </div>
               </div>
+              
+              <div id="stripe_live">
+                <li>
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='stripe_api_key'><?php _e( 'Stripe API Key' , 'cart66' ); ?>:</label>
+                  <input type='text' name='stripe_api_key' id='stripe_api_key' style='width: 375px;' value="<?php echo Cart66Setting::getValue('stripe_api_key'); ?>" />
+                </li>
+                <li>  
+                  <label style="display: inline-block; width: 120px; text-align: right;" for='stripe_test'><?php _e( 'Stripe Test Mode' , 'cart66' ); ?>:</label>
+                  <input type="checkbox" name="stripe_test" id="stripe_test" class="stripe_test" value="1" <?php echo Cart66Setting::getValue('stripe_test') ? 'checked="checked"' : '' ?> />
+                </li>
+                <div id="stripe_test_display">
+                  <p class="description"><?php _e( 'These are the settings used for test transactions with Stripe.' , 'cart66' ); ?></p>
+                  <li>
+                    <label style="display: inline-block; width: 120px; text-align: right;" for='stripe_test_api_key'><?php _e( 'Stripe Test API Key' , 'cart66' ); ?>:</label>
+                    <input type='text' name='stripe_test_api_key' id='stripe_test_api_key' style='width: 375px;' value="<?php echo Cart66Setting::getValue('stripe_test_api_key'); ?>" />
+                  </li>
+                </div>
+              </div>
+              
               <div id="mwarrior_live">
                 <li>
                   <label style="display: inline-block; width: 120px; text-align: right;" for='mwarrior_currency'><?php _e( 'Currency' , 'cart66' ); ?>:</label>
@@ -1904,6 +1934,10 @@ else {
         ewayDisplay();
       });
       
+      $('#stripe_test').change(function() {
+        stripeDisplay();
+      });
+      
       $('#mwarrior_test_mode').change(function() {
         mwarriorDisplay();
       });
@@ -1929,6 +1963,7 @@ else {
       payleapDisplay();
       setGatewayDisplay();
       ewayDisplay();
+      stripeDisplay();
       mwarriorDisplay();
       setGoogleAnalytics();
     })
@@ -1977,6 +2012,14 @@ else {
       $jq("#mwarrior_live").hide();
     }
     
+    if($jq('#auth_url :selected').text() == 'Stripe'){
+      $jq("#stripe_live").show();
+      $jq("#api_login_id, #transaction_key").hide();
+    }
+    else{
+      $jq("#stripe_live").hide();
+    }
+    
     if($jq('#auth_url :selected').text() == 'Authorize.net' || $jq('#auth_url :selected').text() == 'Authorize.net Test') {
       $jq('#authnet-image').css('display', 'block');
     }
@@ -2012,6 +2055,15 @@ else {
     } 
     else { 
       $jq("#eway_sandbox_display").hide(); 
+    }
+  }
+  
+  function stripeDisplay() {
+    if ($jq('#stripe_test').is(':checked')) { 
+      $jq("#stripe_test_display").show(); 
+    } 
+    else { 
+      $jq("#stripe_test_display").hide(); 
     }
   }
   

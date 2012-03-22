@@ -123,7 +123,7 @@
   <?php echo Cart66Common::getView('views/ajax-cart-button-message.php', array('id' => $id, 'productName' => $data['product']->name));?>
 <?php endif; ?>
 
-<?php if(Cart66Common::userRoles('products') && Cart66Setting::getValue('enable_edit_product_links')): ?>
+<?php if(Cart66Common::cart66UserCan('products') && Cart66Setting::getValue('enable_edit_product_links')): ?>
   <div class='cart66_edit_product_link'>
     <?php if($data['subscription'] == 0): ?>
       <a href='<?php echo admin_url(); ?>admin.php?page=cart66-products&amp;task=edit&amp;id=<?php echo $id ?>'><?php _e( 'Edit this Product' , 'cart66' ); ?></a>

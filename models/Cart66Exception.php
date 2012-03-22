@@ -11,6 +11,7 @@
  * 66502 - Invalid PayPal Pro Configuration
  * 66503 - PayPal Express Error Message
  * 66504 - Invalid PayPal Standard Configuration
+ * 66505 - Invalid Stripe Configuration
  * 66510 - Invalid Authorize.net Configuration
  * 66520 - Invalid PayLeap Configuration
  * 66530 - Invalid eWay Configuration
@@ -46,8 +47,9 @@ class Cart66Exception extends Exception {
       case 66502:
         $exception['exception'] = __('In order to use PayPal Pro Checkout you must enter your PayPal API username, password and signature in the Cart66 Settings Panel', 'cart66');
         break;
-      default:
-        $exception['exception'] = __("Unfortunately there has been an error with the shopping cart.  Please contact the site Administrator for more information.<br />Error Code: $errorCode $errorMessage","cart66");
+      case 66503;
+        $exception['exception'] = __('In order to use Stripe Checkout you must enter your Stripe API Key in the Cart66 Settings Panel', 'cart66');
+        break;
       case 66504:
         $exception['exception'] = __('In order to use PayPal Standard Checkout you must enter your PayPal Email Address in the Cart66 Settings Panel', 'cart66');
         break;

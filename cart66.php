@@ -3,7 +3,7 @@
 Plugin Name: Cart66 Lite
 Plugin URI: http://www.cart66.com
 Description: Wordpress Shopping Cart
-Version: 1.4
+Version: 1.4.1
 Author: Reality 66
 Author URI: http://www.Reality66.com
 Text Domain: cart66
@@ -26,7 +26,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 if(!class_exists('Cart66')) {
   ob_start();
   define("CART66_PATH", plugin_dir_path( __FILE__ ) ); // e.g. /var/www/example.com/wordpress/wp-content/plugins/cart66
@@ -39,7 +38,7 @@ if(!class_exists('Cart66')) {
   
   define("CART66_ORDER_NUMBER", false);
   define("CART66_PRO", false);
-  define('CART66_VERSION_NUMBER', '1.4');
+  define('CART66_VERSION_NUMBER', '1.4.1');
   define("WPCURL", Cart66Common::getWpContentUrl());
   define("WPURL", Cart66Common::getWpUrl());
   define("MIJIREH_CHECKOUT", 'https://secure.mijireh.com');

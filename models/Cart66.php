@@ -35,6 +35,7 @@ class Cart66 {
   public function init() {
     $this->loadCoreModels();
     $this->initCurrencySymbols();
+    $this->setDefaultPageRoles();
     
     // Verify that upgrade has been run
     if(IS_ADMIN) {
@@ -42,22 +43,6 @@ class Cart66 {
       if(version_compare(CART66_VERSION_NUMBER, $dbVersion)) {
         $this->install();
       }
-    }
-    
-    // Set default admin page roles if there isn't any
-    $pageRoles = Cart66Setting::getValue('admin_page_roles');
-    if(empty($pageRoles)){
-     $defaultPageRoles = array(
-        'orders' => 'edit_pages',
-        'products' => 'manage_options',
-        'paypal-subscriptions' => 'manage_options',
-        'inventory' => 'manage_options',
-        'promotions' => 'manage_options',
-        'shipping' => 'manage_options',
-        'settings' => 'manage_options',
-        'reports' => 'manage_options',
-        'accounts' => 'manage_options'
-     ); Cart66Setting::setValue('admin_page_roles',serialize($defaultPageRoles)); 
     }
     
     // Define debugging and testing info
@@ -72,10 +57,13 @@ class Cart66 {
     add_action('template_redirect', array($this, 'ajaxTriggerCheck'));
     
 		// add Cart66 to the admin bar
-		add_action('admin_bar_menu', array($this, 'cart66_admin_bar_menu'), 35);
+		if(Cart66Common::cart66UserCan('orders')) {
+		  add_action('admin_bar_menu', array($this, 'cart66_admin_bar_menu'), 35);
+	  }
 		
     if(IS_ADMIN) {
       //add_action( 'admin_notices', 'cart66_data_collection' );
+
       add_action('admin_head', array( $this, 'registerBasicScripts'));
       add_action('admin_init', array($this, 'registerAdminScripts'));
       add_action('admin_init', array($this, 'registerCustomScripts'));
@@ -114,10 +102,8 @@ class Cart66 {
       add_action('media_buttons', array($this, 'addPageSlurpButton'), 12);
       
       // Load Dashboard Widget
-      $pageRoles = Cart66Setting::getValue('admin_page_roles');
-      $pageRoles = unserialize($pageRoles);
-      global $current_user;
-      if(current_user_can($pageRoles['orders'])) {
+      
+      if(Cart66Common::cart66UserCan('orders')) {
         add_action('wp_dashboard_setup', array('Cart66Dashboard', 'cart66_add_dashboard_widgets' ));
       }
       
@@ -218,18 +204,15 @@ class Cart66 {
       )
     );
 		
-		$pageRoles = Cart66Setting::getValue('admin_page_roles');
-    $pageRoles = unserialize($pageRoles);
-		
 		$cart66Pages = array(
-			"Orders" => array("role" => $pageRoles['orders'], "slug" => '_admin'),
-			"Products" => array("role" => $pageRoles['products'], "slug" => '-products'),
-			"Promotions" => array("role" => $pageRoles['promotions'], "slug" => '-promotions'),
-			"Settings" => array("role" => $pageRoles['settings'], "slug" => '-settings')
+			"Orders" => array("role" => 'orders', "slug" => '_admin'),
+			"Products" => array("role" => 'products', "slug" => '-products'),
+			"Promotions" => array("role" => 'promotions', "slug" => '-promotions'),
+			"Settings" => array("role" => 'settings', "slug" => '-settings')
 		);
-		
+		Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] pages array: " . print_r($cart66Pages, true));
 		foreach($cart66Pages as $page=>$meta){
-			if(current_user_can($meta['role'])){
+			if(Cart66Common::cart66UserCan($meta['role'])){
 				$wp_admin_bar->add_menu( array(
 					'id' => 'cart66-adminbar-'.$meta['slug'],
 			    'parent' => 'cart66',
@@ -345,6 +328,8 @@ class Cart66 {
     require_once(CART66_PATH . "/models/Cart66BaseModelAbstract.php");
     require_once(CART66_PATH . "/models/Cart66ModelAbstract.php");
     require_once(CART66_PATH . "/models/Cart66Session.php");
+    require_once(CART66_PATH . "/models/Cart66SessionDb.php");
+    require_once(CART66_PATH . "/models/Cart66SessionNative.php");
     require_once(CART66_PATH . "/models/Cart66Setting.php");
     require_once(CART66_PATH . "/models/Cart66Admin.php");
     require_once(CART66_PATH . "/models/Cart66Ajax.php");
@@ -429,6 +414,41 @@ class Cart66 {
     define("CART66_CURRENCY_SYMBOL", $cs);
     define("CART66_CURRENCY_SYMBOL_TEXT", $cst);
     define("CURRENCY_CODE", $ccd);
+  }
+  
+  public function setDefaultPageRoles() {
+    $defaultPageRoles = array(
+      'orders' => 'edit_pages',
+      'products' => 'manage_options',
+      'paypal-subscriptions' => 'manage_options',
+      'inventory' => 'manage_options',
+      'promotions' => 'manage_options',
+      'shipping' => 'manage_options',
+      'settings' => 'manage_options',
+      'reports' => 'manage_options',
+      'accounts' => 'manage_options',
+      'notifications' => 'manage_options'
+    );
+    // Set default admin page roles if there isn't any
+    $pageRoles = Cart66Setting::getValue('admin_page_roles');
+    if(empty($pageRoles)){
+      Cart66Setting::setValue('admin_page_roles',serialize($defaultPageRoles));
+    }
+    // Ensure that all admin page roles have been set.
+    else {
+      $updateRoles = false;
+      $pageRoles = unserialize($pageRoles);
+      foreach($defaultPageRoles as $key => $value) {
+        if(!array_key_exists($key, $pageRoles)) {
+          $pageRoles[$key] = $value;
+          $updateRoles = true;
+        }
+      }
+      if($updateRoles) {
+        Cart66Setting::setValue('admin_page_roles',serialize($pageRoles));
+      }      
+    }
+    return unserialize(Cart66Setting::getValue('admin_page_roles'));
   }
   
   public function registerBasicScripts() {
@@ -532,19 +552,17 @@ class Cart66 {
    */
   public function buildAdminMenu() {
     $icon = CART66_URL . '/images/cart66_logo_16.gif';
-    $pageRoles = Cart66Setting::getValue('admin_page_roles');
-    $pageRoles = unserialize($pageRoles);
     
-    add_menu_page('Cart66', 'Cart66', $pageRoles['orders'], 'cart66_admin', null, $icon);
-    add_submenu_page('cart66_admin', __('Orders', 'cart66'), __('Orders', 'cart66'), $pageRoles['orders'], 'cart66_admin', array('Cart66Admin', 'ordersPage'));
-    add_submenu_page('cart66_admin', __('Products', 'cart66'), __('Products', 'cart66'), $pageRoles['products'], 'cart66-products', array('Cart66Admin', 'productsPage'));
-    add_submenu_page('cart66_admin', __('PayPal Subscriptions', 'cart66'), __('PayPal Subscriptions', 'cart66'), $pageRoles['paypal-subscriptions'], 'cart66-paypal-subscriptions', array('Cart66Admin', 'paypalSubscriptions'));
-    add_submenu_page('cart66_admin', __('Inventory', 'cart66'), __('Inventory', 'cart66'), $pageRoles['inventory'], 'cart66-inventory', array('Cart66Admin', 'inventoryPage'));
-    add_submenu_page('cart66_admin', __('Promotions', 'cart66'), __('Promotions', 'cart66'), $pageRoles['promotions'], 'cart66-promotions', array('Cart66Admin', 'promotionsPage'));
-    add_submenu_page('cart66_admin', __('Shipping', 'cart66'), __('Shipping', 'cart66'), $pageRoles['shipping'], 'cart66-shipping', array('Cart66Admin', 'shippingPage'));
-    add_submenu_page('cart66_admin', __('Settings', 'cart66'), __('Settings', 'cart66'), $pageRoles['settings'], 'cart66-settings', array('Cart66Admin', 'settingsPage'));
-    add_submenu_page('cart66_admin', __('Reports', 'cart66'), __('Reports', 'cart66'), $pageRoles['reports'], 'cart66-reports', array('Cart66Admin', 'reportsPage'));
-    add_submenu_page('cart66_admin', __('Accounts', 'cart66'), __('Accounts', 'cart66'), $pageRoles['accounts'], 'cart66-accounts', array('Cart66Admin', 'accountsPage'));
+    add_menu_page('Cart66', 'Cart66', Cart66Common::getPageRoles('orders'), 'cart66_admin', null, $icon);
+    add_submenu_page('cart66_admin', __('Orders', 'cart66'), __('Orders', 'cart66'), Cart66Common::getPageRoles('orders'), 'cart66_admin', array('Cart66Admin', 'ordersPage'));
+    add_submenu_page('cart66_admin', __('Products', 'cart66'), __('Products', 'cart66'), Cart66Common::getPageRoles('products'), 'cart66-products', array('Cart66Admin', 'productsPage'));
+    add_submenu_page('cart66_admin', __('PayPal Subscriptions', 'cart66'), __('PayPal Subscriptions', 'cart66'), Cart66Common::getPageRoles('paypal-subscriptions'), 'cart66-paypal-subscriptions', array('Cart66Admin', 'paypalSubscriptions'));
+    add_submenu_page('cart66_admin', __('Inventory', 'cart66'), __('Inventory', 'cart66'), Cart66Common::getPageRoles('inventory'), 'cart66-inventory', array('Cart66Admin', 'inventoryPage'));
+    add_submenu_page('cart66_admin', __('Promotions', 'cart66'), __('Promotions', 'cart66'), Cart66Common::getPageRoles('promotions'), 'cart66-promotions', array('Cart66Admin', 'promotionsPage'));
+    add_submenu_page('cart66_admin', __('Shipping', 'cart66'), __('Shipping', 'cart66'), Cart66Common::getPageRoles('shipping'), 'cart66-shipping', array('Cart66Admin', 'shippingPage'));
+    add_submenu_page('cart66_admin', __('Settings', 'cart66'), __('Settings', 'cart66'), Cart66Common::getPageRoles('settings'), 'cart66-settings', array('Cart66Admin', 'settingsPage'));
+    add_submenu_page('cart66_admin', __('Reports', 'cart66'), __('Reports', 'cart66'), Cart66Common::getPageRoles('reports'), 'cart66-reports', array('Cart66Admin', 'reportsPage'));
+    add_submenu_page('cart66_admin', __('Accounts', 'cart66'), __('Accounts', 'cart66'), Cart66Common::getPageRoles('accounts'), 'cart66-accounts', array('Cart66Admin', 'accountsPage'));
   }
   
 
@@ -773,6 +791,7 @@ class Cart66 {
     add_shortcode('ipn',                          array($sc, 'processIPN'));
     add_shortcode('receipt',                      array($sc, 'showReceipt'));
     add_shortcode('spreedly_listener',            array($sc, 'spreedlyListener'));
+    add_shortcode('checkout_stripe',              array($sc, 'stripeCheckout'));
     add_shortcode('checkout_eway',                array($sc, 'ewayCheckout'));
     add_shortcode('checkout_mwarrior',            array($sc, 'mwarriorCheckout'));
 

@@ -321,9 +321,40 @@ class Cart66ShortcodeManager {
         }
       }
   }
-
-
   
+  public function stripeCheckout($attrs) {
+    if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+      $gatewayName = Cart66Common::postVal('cart66-gateway-name');
+      if($_SERVER['REQUEST_METHOD'] == 'POST' && $gatewayName != 'Cart66Stripe') {
+        return ($gatewayName == "Cart66ManualGateway") ? $this->manualCheckout() : "";
+      }
+
+      if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
+        require_once(CART66_PATH . "/pro/gateways/Cart66Stripe.php");
+
+        if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0 || Cart66Session::get('Cart66Cart')->hasSpreedlySubscriptions()) {
+          try {
+            $stripe = new Cart66Stripe();
+            $view = $this->_buildCheckoutView($stripe);
+          }
+          catch(Cart66Exception $e) {
+            $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage());
+            $view = Cart66Common::getView('views/error-messages.php', $exception);
+          }
+          return $view;
+        }
+        elseif(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of Stripe Checkout because the cart value is $0.00");
+          return $this->manualCheckout();
+        }
+
+      }
+      else {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering Stripe checkout form because the cart contains a PayPal subscription");
+      }
+    }
+  }
+
   public function payPalProCheckout($attrs) {
     if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
       $gatewayName = Cart66Common::postVal('cart66-gateway-name');
