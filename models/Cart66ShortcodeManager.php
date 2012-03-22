@@ -92,12 +92,13 @@ class Cart66ShortcodeManager {
   }
 
   public function showReceipt($attrs) {
-    $account = new Cart66Account();
+    $account = null;
     
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ouid'])) {
-      if(isset($_POST['account'])) {
+      if(CART66_PRO && isset($_POST['account'])) {
         $acctData = Cart66Common::postVal('account');
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] New Account Data: " . print_r($acctData, true));
+        $account = new Cart66Account();
         $account->firstName = $acctData['first_name'];
         $account->lastName = $acctData['last_name'];
         $account->email = $acctData['email'];
