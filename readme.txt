@@ -89,6 +89,9 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.4.3 =
+UPDATED: Continuing to try to improve session handling to resolve the "empty cart" problem some people have
+
 = 1.4.2 =
 * FIXED: Error on receipt page after requiring an unavailable class
 

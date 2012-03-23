@@ -19,6 +19,7 @@ class Cart66SessionNative {
   
   public static function get($key) {
     $value = false;
+    if(!isset($_SESSION)) { session_start(); }
     if(isset($_SESSION['cart66'][$key])) {
       $value = $_SESSION['cart66'][$key];
     }

@@ -37,7 +37,6 @@ class Cart66Session {
   }
   
   public static function get($key) {
-    if(!isset($_SESSION)) { session_start(); }
     $value = false;
     if(Cart66Common::sessionType() == 'database') {
       $value = Cart66SessionDb::get($key);
