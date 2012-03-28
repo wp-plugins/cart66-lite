@@ -89,6 +89,9 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= !.4.4 =
+* FIXED: Problem where the shipping address may be required even if the 'same as billing' checkbox is checked
+
 = 1.4.3 =
 UPDATED: Continuing to try to improve session handling to resolve the "empty cart" problem some people have
 
