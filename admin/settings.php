@@ -232,6 +232,19 @@ else {
                 </select>
                 </div>
               </li>
+              
+              <li><label style="display: inline-block; width: 120px; text-align: right;" for=""><?php _e( 'Accept Cards' , 'cart66' ); ?>:</label>
+                <input type="checkbox" name="auth_card_types[]" value="mastercard" style='width: auto;' 
+                <?php echo in_array('mastercard', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Mastercard</label>
+                <input type="checkbox" name="auth_card_types[]" value="visa" style='width: auto;'
+                <?php echo in_array('visa', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Visa</label>
+                <input type="checkbox" name="auth_card_types[]" value="amex" style='width: auto;'
+                <?php echo in_array('amex', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>American Express</label>
+                <input type="checkbox" name="auth_card_types[]" value="discover" style='width: auto;'
+                <?php echo in_array('discover', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Discover</label>
+                <p style="width: 450px;" class="label_desc">You also need to configure your Payment Gateway settings or your PayPal Pro Settings if you are accepting credit cards</p>
+              </li>
+              
               <li><label style="display: inline-block; width: 120px; text-align: right;"><?php _e( 'Use SSL' , 'cart66' ); ?>:</label>
               <?php
                 $force = Cart66Setting::getValue('auth_force_ssl');
@@ -727,16 +740,6 @@ else {
                 <p id="authorizenetTestMessage" class="description"><?php _e( 'The Authorize.net test server requires a developer test account which is different than your normal authorize.net account. You can sign up for one here: <a href="https://developer.authorize.net/testaccount/" target="_blank">https://developer.authorize.net/testaccount/' , 'cart66' ); ?></a></p>
               </li>
               
-              <li><label style="display: inline-block; width: 120px; text-align: right;" for=""><?php _e( 'Accept Cards' , 'cart66' ); ?>:</label>
-                <input type="checkbox" name="auth_card_types[]" value="mastercard" style='width: auto;' 
-                <?php echo in_array('mastercard', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Mastercard</label>
-                <input type="checkbox" name="auth_card_types[]" value="visa" style='width: auto;'
-                <?php echo in_array('visa', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Visa</label>
-                <input type="checkbox" name="auth_card_types[]" value="amex" style='width: auto;'
-                <?php echo in_array('amex', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>American Express</label>
-                <input type="checkbox" name="auth_card_types[]" value="discover" style='width: auto;'
-                <?php echo in_array('discover', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Discover</label>
-              </li>
               
               <li id="emulation_url_item">
                 <label style="display: inline-block; width: 120px; text-align: right;" for='emulation_url'><?php _e( 'Emulation URL' , 'cart66' ); ?>:</label>

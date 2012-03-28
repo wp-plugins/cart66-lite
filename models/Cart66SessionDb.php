@@ -95,10 +95,10 @@ class Cart66SessionDb {
     }
     
     if(self::$_validRequest) {
-      $sid = isset($_COOKIE['Cart66SID']) ? $_COOKIE['Cart66SID'] : false;
+      $sid = isset($_COOKIE['Cart66DBSID']) ? $_COOKIE['Cart66DBSID'] : false;
       /*
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] ***************************************************\n" .
-        "Starting session with Cart66SID: $sid\nREQUEST: " . $_SERVER['REQUEST_URI'] . "\nQUERY STRING: " . $_SERVER['QUERY_STRING']);
+        "Starting session with Cart66DBSID: $sid\nREQUEST: " . $_SERVER['REQUEST_URI'] . "\nQUERY STRING: " . $_SERVER['QUERY_STRING']);
       */
       self::_loadSession($sid);
     }
@@ -163,8 +163,8 @@ class Cart66SessionDb {
     self::$_data = $data;
     self::_save();
     
-    header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
-    setcookie("Cart66SID",self::$_data['session_id'] , false, "/", false);
+    // header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
+    setcookie("Cart66DBSID",self::$_data['session_id'] , false, "/", false);
     
     self::_deleteExpiredSessions();
     return $data['session_id'];
@@ -272,7 +272,7 @@ class Cart66SessionDb {
       self::$_data['id'] > 0 ? self::_update() : self::_insert();
 	  }
 	  else {
-	    $reqInfo = "\nCart66SID: $sid\nREQUEST: " . $_SERVER['REQUEST_URI'] . "\nQUERY STRING: " . $_SERVER['QUERY_STRING'];
+	    $reqInfo = "\nCart66DBSID: $sid\nREQUEST: " . $_SERVER['REQUEST_URI'] . "\nQUERY STRING: " . $_SERVER['QUERY_STRING'];
 	    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not saving session because the request is being ignored $reqInfo");
 	  }
 	}

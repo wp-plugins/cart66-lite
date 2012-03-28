@@ -44,6 +44,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
         else {
           if(count($errors)) {
             try {
+              Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Unable to process order: " . print_r($errors, true));
               throw new Cart66Exception(__('Your order could not be processed for the following reasons:', 'cart66'), 66500);
             }
             catch(Cart66Exception $e) {
@@ -67,13 +68,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     $gateway->setBilling(Cart66Common::postVal('billing'));
     $gateway->setPayment(Cart66Common::postVal('payment'));
     
-    // If shipping data is set, pass it to the gateway, it could be mijireh which does not have a "same as billing" checkbox
-    if(isset($_POST['shipping'])) {
-      $gateway->setShipping(Cart66Common::postVal('shipping'));
-    }
-    
+    // Note that mijireh does not have a "same as billing" checkbox
     if(isset($_POST['sameAsBilling'])) {
       $gateway->setShipping(Cart66Common::postVal('billing'));
+    }
+    elseif(isset($_POST['shipping'])) {
+      $gateway->setShipping(Cart66Common::postVal('shipping'));
     }
     
     $s = $gateway->getShipping();
@@ -88,6 +88,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
       $errors = $gateway->getErrors();     // Error info for server side error code
       if(count($errors)) {
         try {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Unable to process order: " . print_r($errors, true));
           throw new Cart66Exception(__('Your order could not be processed for the following reasons:', 'cart66'), 66500);
         }
         catch(Cart66Exception $e) {
@@ -114,6 +115,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
 
       if(!Cart66Session::get('Cart66CheckoutThrottle')->isReady($gateway->getCardNumberTail(), $oneTimeTotal)) {
         try {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Unable to process order: " . print_r($errors, true));
           throw new Cart66Exception(__('Your order could not be processed for the following reasons:', 'cart66'), 66500);
         }
         catch(Cart66Exception $e) {
@@ -166,6 +168,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           $errors = $account->getErrors();
           if(count($errors)) {
             try {
+              Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Unable to process order: " . print_r($errors, true));
               throw new Cart66Exception(__('Your order could not be processed for the following reasons:', 'cart66'), 66500);
             }
             catch(Cart66Exception $e) {
