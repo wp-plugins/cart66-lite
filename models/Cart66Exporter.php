@@ -58,23 +58,29 @@ class Cart66Exporter {
       $selectedItems = $wpdb->get_results($sql, ARRAY_A);
       $out .= '"' . implode('","', $o) . '"';
       $printItemRowPrefix = false;
-      foreach($selectedItems as $i) {
-        if($printItemRowPrefix) {
-          $out .= $itemRowPrefix;
+      if(!empty($selectedItems)) {
+        foreach($selectedItems as $i) {
+          if($printItemRowPrefix) {
+            $out .= $itemRowPrefix;
+          }
+
+          if($i['form_entry_ids'] && CART66_PRO){
+            $GReader = new Cart66GravityReader();
+            $i['form_entry_ids'] = $GReader->displayGravityForm($i['form_entry_ids'],true);
+            $i['form_entry_ids'] = str_replace("\"","''",$i['form_entry_ids']);
+          }
+
+          $i['description'] = str_replace(","," -",$i['description']);
+
+          $out .= ',"' . implode('","', $i) . '"';
+          $out .= "\n";
+          $printItemRowPrefix = true;
         }
-        
-        if($i['form_entry_ids'] && CART66_PRO){
-          $GReader = new Cart66GravityReader();
-          $i['form_entry_ids'] = $GReader->displayGravityForm($i['form_entry_ids'],true);
-          $i['form_entry_ids'] = str_replace("\"","''",$i['form_entry_ids']);
-        }
-        
-        $i['description'] = str_replace(","," -",$i['description']);
-        
-        $out .= ',"' . implode('","', $i) . '"';
-        $out .= "\n";
-        $printItemRowPrefix = true;
       }
+      else {
+        $out .= "\n";
+      }
+      
     }
     
     Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Report\n$out");

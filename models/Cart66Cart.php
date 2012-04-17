@@ -68,6 +68,7 @@ class Cart66Cart {
     else {
       Cart66Common::log("Item not added due to inventory failure");
       wp_redirect($_SERVER['HTTP_REFERER']);
+      exit;
     }
     //$this->_setAutoPromoFromPost();
     $this->_setPromoFromPost();
@@ -89,11 +90,18 @@ class Cart66Cart {
   }
   
   public function addItem($id, $qty=1, $optionInfo='', $formEntryId=0, $productUrl='', $ajax=false) {
-
-    $optionInfo = $this->_processOptionInfo($optionInfo);
+    $options_valid = true;
     $product = new Cart66Product($id);
     
-    if($product->id > 0) {
+    try {
+      $optionInfo = $this->_processOptionInfo($product, $optionInfo);
+    }
+    catch(Exception $e) {
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Exception due to invalid product option: " . $e->getMessage());
+      $options_valid = false;
+    }
+    
+    if($product->id > 0 && $options_valid) {
       
       $newItem = new Cart66CartItem($product->id, $qty, $optionInfo->options, $optionInfo->priceDiff, $productUrl);
       
@@ -637,6 +645,16 @@ class Cart66Cart {
     return ($i == count($this->getItems())) ? true : false;
   }
   
+  public function isAllNonShippedMembershipProducts(){
+    $i = 0;
+    foreach($this->getItems() as $item) {
+      if(($item->isMembershipProduct() || $item->isSubscription()) && !$item->isShipped()) {
+        $i++;
+      }
+    }
+    return ($i == count($this->getItems())) ? true : false;
+  }
+  
   public function hasMembershipProducts() {
     foreach($this->getItems() as $item) {
       if($item->isMembershipProduct()) {
@@ -816,7 +834,7 @@ class Cart66Cart {
       if($this->isAllDigital() && !$this->isAllMembershipProducts()) {
         return 'Download';
       }
-      elseif(!$this->requireShipping() || $this->isAllMembershipProducts()) {
+      elseif(!$this->requireShipping() || $this->isAllNonShippedMembershipProducts()) {
         return 'None';
       }
       else {
@@ -1147,34 +1165,75 @@ class Cart66Cart {
    *   $optionResult->options
    * @return object
    */
-  protected function _processOptionInfo($optionInfo) {
+  protected function _processOptionInfo($product, $optionInfo) {
+    $valid_options = array();
+    if($product->isGravityProduct()) {
+      $valid_options = Cart66GravityReader::getFormValuesArray($product->gravity_form_id);
+    }
+    else {
+      if(strlen($product->options_1) > 1) {
+        $valid_options[] = explode(',', str_replace(' ', '', $product->options_1));
+      }
+      if(strlen($product->options_2) > 1) {
+        $valid_options[] = explode(',', str_replace(' ', '', $product->options_2));
+      }
+    }
     $optionInfo = trim($optionInfo);
     $priceDiff = 0;
     $options = explode('~', $optionInfo);
     $optionList = array();
     foreach($options as $opt) {
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Working with option: $opt");
-      if(preg_match('/\+\s*\$/', $opt)) {
-        $opt = preg_replace('/\+\s*\$/', '+$', $opt);
-        list($opt, $pd) = explode('+$', $opt);
-        $optionList[] = trim($opt);
-        $priceDiff += $pd;
-      }
-      elseif(preg_match('/-\s*\$/', $opt)) {
-        $opt = preg_replace('/-\s*\$/', '-$', $opt);
-        list($opt, $pd) = explode('-$', $opt);
-        $optionList[] = trim($opt);
-        $pd = trim($pd);
-        $priceDiff -= $pd;
-      }
-      else {
-        $optionList[] = trim($opt);
+      if(strlen($opt) >= 1) {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Working with option: $opt\n" . print_r($valid_options, true));
+
+        // make sure product option is vallid
+        $check_option = str_replace(' ', '', $opt);
+
+        if($this->_validate_option($valid_options, $check_option)) {
+          if(preg_match('/\+\s*\$/', $opt)) {
+            $opt = preg_replace('/\+\s*\$/', '+$', $opt);
+            list($opt, $pd) = explode('+$', $opt);
+            $optionList[] = trim($opt);
+            $priceDiff += $pd;
+          }
+          elseif(preg_match('/-\s*\$/', $opt)) {
+            $opt = preg_replace('/-\s*\$/', '-$', $opt);
+            list($opt, $pd) = explode('-$', $opt);
+            $optionList[] = trim($opt);
+            $pd = trim($pd);
+            $priceDiff -= $pd;
+          }
+          else {
+            $optionList[] = trim($opt);
+          }
+        }
+        else {
+          throw new Exception("Invalid product option: $opt");
+        }
       }
     }
     $optionResult = new stdClass();
     $optionResult->priceDiff = $priceDiff;
     $optionResult->options = implode(', ', $optionList);
     return $optionResult;
+  }
+  
+  private function _validate_option(&$valid_options, $choice) {
+    $found = false;
+    
+    foreach($valid_options as $key => $option_group) {
+      foreach($option_group as $option) {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Validating option :: $choice == $option");
+        if($choice == $option) {
+          $found = true;
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Removing option group: $key");
+          unset($valid_options[$key]);
+          return $found;
+        }
+      }
+    }
+    
+    return $found;
   }
   
 }

@@ -445,7 +445,7 @@ class Cart66ShortcodeManager {
   }
 
   public function cart66Tests() {
-    $view = Cart66Common::getView('tests/tests.php');
+    $view = Cart66Common::getView('views/tests.php');
     $view = "<pre>$view</pre>";
     return $view;
   }
@@ -494,7 +494,7 @@ class Cart66ShortcodeManager {
         }
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Redirecting after login to: $url");
         wp_redirect($url);
-        exit();
+        exit;
       }
       else {
         $view .= "<p class='Cart66Error'>Login failed</p>";
@@ -863,7 +863,7 @@ class Cart66ShortcodeManager {
       if(!Cart66Common::isHttps()) {
         $sslUrl = "https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
         wp_redirect($sslUrl);
-        exit();
+        exit;
       }
     }
     

@@ -210,7 +210,7 @@ class Cart66 {
 			"Promotions" => array("role" => 'promotions', "slug" => '-promotions'),
 			"Settings" => array("role" => 'settings', "slug" => '-settings')
 		);
-		Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] pages array: " . print_r($cart66Pages, true));
+		//Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] pages array: " . print_r($cart66Pages, true));
 		foreach($cart66Pages as $page=>$meta){
 			if(Cart66Common::cart66UserCan($meta['role'])){
 				$wp_admin_bar->add_menu( array(
@@ -574,7 +574,7 @@ class Cart66 {
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
       global $post;
       $checkoutPage = get_page_by_path('store/checkout');
-      if( isset( $post->ID ) && $post->ID == $checkoutPage->ID) {
+      if(is_object($checkoutPage) && isset( $post->ID ) && $post->ID == $checkoutPage->ID) {
         $inventoryMessage = Cart66Session::get('Cart66Cart')->checkCartInventory();
         if(!empty($inventoryMessage)) { Cart66Session::set('Cart66InventoryWarning', $inventoryMessage); }
       }
@@ -590,14 +590,14 @@ class Cart66 {
         Cart66Session::drop('Cart66LiveRates');
       }
       
-      if( isset( $post->ID ) && $post->ID == $checkoutPage->ID) {
+      if(is_object($checkoutPage) && isset( $post->ID ) && $post->ID == $checkoutPage->ID) {
         if(Cart66Session::get('Cart66LiveRates') && get_class(Cart66Session::get('Cart66LiveRates')) == 'Cart66LiveRates') {
           if(!Cart66Session::get('Cart66LiveRates')->hasValidShippingService()) {
             Cart66Session::set('Cart66ShippingWarning', true);
             $viewCartPage = get_page_by_path('store/cart');
             $viewCartLink = get_permalink($viewCartPage->ID);
             wp_redirect($viewCartLink);
-            exit();
+            exit;
           }
         }
       }
@@ -628,7 +628,7 @@ class Cart66 {
           }
           if($sendBack) {
             wp_redirect($link);
-            exit();
+            exit;
           }
         }
       }
@@ -642,26 +642,26 @@ class Cart66 {
     $cartPage = get_page_by_path('store/cart');
     $sendBack = false;
     if(isset($post->ID)) {
-      
-      if($post->ID == $checkoutPage->ID || $post->ID == $cartPage->ID) {
-        if(Cart66Setting::getValue('minimum_cart_amount') == 1) {
-          $minAmount = number_format(Cart66Setting::getValue('minimum_amount'), 2, '.', '');
-          $subTotal = number_format(Cart66Session::get('Cart66Cart')->getSubTotal(), 2, '.', '');
-          if($post->ID == $checkoutPage->ID && $minAmount > $subTotal) {
-            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Minimum Cart amount is not yet met, send back to cart");
-            $link = get_permalink($cartPage->ID);
-            $sendBack = true;
-          }
-          else {
-            $sendBack = false;
-          }
-          if($sendBack) {
-            wp_redirect($link);
-            exit();
+      if(is_object($checkoutPage) && is_object($cartPage)) {
+        if($post->ID == $checkoutPage->ID || $post->ID == $cartPage->ID) {
+          if(Cart66Setting::getValue('minimum_cart_amount') == 1) {
+            $minAmount = number_format(Cart66Setting::getValue('minimum_amount'), 2, '.', '');
+            $subTotal = number_format(Cart66Session::get('Cart66Cart')->getSubTotal(), 2, '.', '');
+            if($post->ID == $checkoutPage->ID && $minAmount > $subTotal) {
+              Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Minimum Cart amount is not yet met, send back to cart");
+              $link = get_permalink($cartPage->ID);
+              $sendBack = true;
+            }
+            else {
+              $sendBack = false;
+            }
+            if($sendBack) {
+              wp_redirect($link);
+              exit;
+            }
           }
         }
       }
-      
     }
   }
   
@@ -688,7 +688,7 @@ class Cart66 {
           
           if($sendBack) {
             wp_redirect($link);
-            exit();
+            exit;
           }
           
         } // End if checkout page
@@ -841,16 +841,17 @@ class Cart66 {
   
   public function addPageSlurpButtonMeta() { 
     global $post;
-    if(Cart66Common::isSlurpPage()) { 
+    if(Cart66Common::isSlurpPage()) {
       add_meta_box(  
-          'slurp_meta_box', // $id  
-          'Mijireh Page Slurp', // $title  
-          array($this, 'drawPageSlurpMetaBox'), // $callback  
-          'page', // $page  
-          'normal', // $context  
-          'high'); // $priority  
-        }
+        'slurp_meta_box', // $id  
+        'Mijireh Page Slurp', // $title  
+        array($this, 'drawPageSlurpMetaBox'), // $callback  
+        'page', // $page  
+        'normal', // $context  
+        'high'); // $priority  
+    }
   }
+  
   public function drawPageSlurpMetaBox($post) {
     echo "<div id='mijireh_notice' class='mijireh-info alert-message info' data-alert='alert'>";
     echo  "<div class='mijireh-logo'><img src='" . CART66_URL . "/images/mijireh-checkout-logo.png' alt='Mijireh Checkout Logo'></div>";
@@ -1009,6 +1010,7 @@ class Cart66 {
         }
         else {
           wp_redirect(Cart66AccessManager::getDeniedLink());
+          exit;
         }
       }
     }

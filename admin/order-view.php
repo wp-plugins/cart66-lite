@@ -35,7 +35,7 @@ $order = $data['order'];
               if(RGFormsModel::get_lead($entryId)) {
                 $formId = Cart66GravityReader::getGravityFormIdForEntry($entryId);
                 echo "<tr><td colspan='5'>" . Cart66GravityReader::displayGravityForm($entryId) . "</td></tr>";
-                echo "<tr><td colspan='5' align='right' style='padding-bottom: 5px !important; '><a style='font-size: 10px;' href='" . $wpurl . "/wp-admin/admin.php?page=gf_entries&view=entry&id=" . $formId. "&lid=" . $entryId . "&pos=0'>View Gravity Forms Entry</a></td></tr>";
+                echo "<tr><td colspan='5' align='right' style='padding-bottom: 5px !important; '><a style='font-size: 10px;' href='" . $wpurl . "/wp-admin/admin.php?page=gf_entries&view=entry&id=" . $formId. "&lid=" . $entryId . "'>View Gravity Forms Entry</a></td></tr>";
               }
             }
             else {

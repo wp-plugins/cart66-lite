@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
   $url = str_replace('newsletter=1', 'newsletter=2', $url, $count);
   if($count == 1) {
     wp_redirect($url);
-    die();
+    exit;
   }
 }
 

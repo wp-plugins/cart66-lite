@@ -224,7 +224,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           // Send buyer to receipt page
           $receiptVars = strpos($receiptLink, '?') ? '&' : '?';
           $receiptVars .= "ouid=" . $newOrder->ouid;
-          header("Location: " . $receiptLink . $receiptVars);
+          wp_redirect($receiptLink . $receiptVars);
+          exit;
         } 
         else {
           $paymentProfileError = $profileResponse['L_SHORTMESSAGE0'] . ': ' . $profileResponse['L_LONGMESSAGE0'];

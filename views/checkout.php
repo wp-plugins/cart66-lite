@@ -233,7 +233,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           // Send buyer to receipt page
           $receiptVars = strpos($receiptLink, '?') ? '&' : '?';
           $receiptVars .= "ouid=" . $newOrder->ouid;
-          header("Location: " . $receiptLink . $receiptVars);
+          wp_redirect($receiptLink . $receiptVars);
+          exit;
         }
         else {
           // Attempt to discover reason for transaction failure
@@ -243,7 +244,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           }
           catch(Cart66Exception $e) {
             $gatewayResponse = $gateway->getTransactionResponseDescription();
-            $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), array('Error Number: ' . $gatewayResponse['errorcode'], strtolower($gatewayResponse['errormessage'])));
+            $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), array('Error: ' . $gatewayResponse['errorcode'], strtolower($gatewayResponse['errormessage'])));
             echo Cart66Common::getView('views/error-messages.php', $exception);
           }
           

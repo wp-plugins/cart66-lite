@@ -89,6 +89,15 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.4.7 =
+NEW: Email address verification on the checkout form
+NEW: Armed Forces AA, Armed Forces AP to state list
+UPDATED: Product option server side validation
+UPDATED: Use htmlspecialchars with product_url to prevent cross site scripting hacks
+UPDATED: All redirects to use wp_redirect();
+FIXED: PHP Warning caused by setting CURLOPT_FOLLOWLOCATION when safe_mode is on or open_basedir is set
+FIXED: Headers already sent error on receipt page
+
 = !.4.4 =
 * FIXED: Problem where the shipping address may be required even if the 'same as billing' checkbox is checked
 

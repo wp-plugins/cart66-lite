@@ -13,7 +13,6 @@ if(isset($_GET['ouid'])) {
   }
 }
 
-// TODO: Make sure affiliate payments work with Mijireh Checkout
 // Process Affiliate Payments
 // Begin processing affiliate information
 if(Cart66Session::get('ap_id')) {
@@ -74,7 +73,7 @@ if(isset($_GET['duid'])) {
         require_once(CART66_PATH . '/models/Cart66AmazonS3.php');
         $link = Cart66AmazonS3::prepareS3Url($product->s3Bucket, $product->s3File, '1 minute');
         wp_redirect($link);
-        exit();
+        exit;
       }
       else {
         $dir = Cart66Setting::getValue('product_folder');
@@ -134,7 +133,7 @@ if(CART66_PRO && $order->hasAccount() == 1) {
     
     <?php $account = $data['account']; ?>
     <form action="" method='post' id="account_form" class="phorm2">
-      <input type="text" name="ouid" value="<?php echo $order->ouid; ?>">
+      <input type="hidden" name="ouid" value="<?php echo $order->ouid; ?>">
       <ul class="shortLabels">
         <li>
           <label for="account-first_name">First name:</label><input type="text" name="account[first_name]" value="<?php echo $account->firstName ?>" id="account-first_name">

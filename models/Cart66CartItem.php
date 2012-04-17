@@ -19,6 +19,16 @@ class Cart66CartItem {
     // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] New Cart Item Option Info: $optionInfo");
   }
   
+  public function getPriceDifference($optionInfo){
+    $output = 0;
+    if(strlen($optionInfo) > 1){
+      $product = new Cart66Product($this->_productId);
+      $output = $product->getOptionPrice($optionInfo);
+    }
+    return $output;
+  }
+  
+  
   public function setProductId($id) {
     if(is_numeric($id) && $id > 0) {
       $this->_productId = $id;

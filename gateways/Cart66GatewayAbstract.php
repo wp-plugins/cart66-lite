@@ -135,7 +135,12 @@ abstract class Cart66GatewayAbstract {
       if(strlen($p['cardNumber']) > 0 && strlen($p['cardNumber']) < 13) {
         $this->_errors['Payment Card Number'] = __('Invalid credit card number','cart66');
         $this->_jqErrors[] = "payment-cardNumber";
-      } 
+      }
+      
+      if(!Cart66Common::isValidEmail($p['email'])) {
+        $this->_errors['Email'] = __("Email address is not valid","cart66");
+        $this->_jqErrors[] = 'payment-email';
+      }
 
       // For subscription accounts
       if(isset($p['password'])) {

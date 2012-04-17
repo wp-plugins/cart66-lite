@@ -18,6 +18,12 @@ class Cart66ManualGateway extends Cart66GatewayAbstract {
       $this->_errors['Phone'] = __('Phone number is required','cart66');
       $this->_jqErrors[] = "payment-phone";
     }
+    
+    if(!Cart66Common::isValidEmail($p['email'])) {
+      $this->_errors['Email'] = __("Email address is not valid","cart66");
+      $this->_jqErrors[] = 'payment-email';
+    }
+    
   }
   
    public function getCreditCardTypes() {

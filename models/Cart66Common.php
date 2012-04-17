@@ -847,7 +847,9 @@ class Cart66Common {
     $us['WV'] = 'West Virginia';
     $us['WI'] = 'Wisconsin';
     $us['WY'] = 'Wyoming';
-    $us['AE'] = 'Armed Forces';
+    $us['AA'] = 'Armed Forces (AA)';
+    $us['AE'] = 'Armed Forces (AE)';
+    $us['AP'] = 'Armed Forces (AP)';
     
     if($setting->getValue('include_us_territories') == 1){
       $us['AS'] = 'American Samoa';
@@ -1037,7 +1039,7 @@ class Cart66Common {
     if(self::isHttps()) {
       $protocol = 'https://';
     }
-    $url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $url = $protocol . $_SERVER['HTTP_HOST'] . htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8');
     return $url;
   }
   

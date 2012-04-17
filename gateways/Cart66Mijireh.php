@@ -78,10 +78,11 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
       $access_key = Cart66Setting::getValue('mijireh_access_key');
       $rest = new PestJSON(MIJIREH_CHECKOUT);
       $rest->setupAuth($access_key, '');
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Sending Order To Mijireh: " . print_r($order, true));
       $result = $rest->post('/api/1/orders', $order);
       wp_redirect($result['checkout_url']);
       //wp_redirect(MIJIREH_CHECKOUT .  '/checkout/' . $result['order_number']);
-      die();
+      exit;
     }
     catch(Exception $e) {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] REST Request Failed: " . $e->getMessage());
@@ -201,7 +202,7 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
     $receipt .= $vars;
     Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Redirecting to: $receipt");
     wp_redirect($receipt);
-    die();
+    exit;
   }
   
   /**

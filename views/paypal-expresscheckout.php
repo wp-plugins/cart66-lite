@@ -103,7 +103,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cart66-action']) && $_P
   if('SUCCESS' == $ack || 'SUCCESSWITHWARNING' == $ack) {
     Cart66Session::set('PayPalProToken', $response['TOKEN']);
     $expressCheckoutUrl = $pp->getExpressCheckoutUrl($response['TOKEN']);
-  	header("Location: $expressCheckoutUrl");
+  	wp_redirect($expressCheckoutUrl);
   	exit;
   }
   elseif(empty($ack)) {
