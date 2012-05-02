@@ -841,8 +841,14 @@ class Cart66ShortcodeManager {
         require_once(CART66_PATH . "/gateways/Cart66Mijireh.php");
 
         if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0 || Cart66Session::get('Cart66Cart')->hasSpreedlySubscriptions()) {
-          $mj = new Cart66Mijireh();
-          $view = $this->_buildCheckoutView($mj);
+          try {
+            $mj = new Cart66Mijireh();
+            $view = $this->_buildCheckoutView($mj);
+          }
+          catch(Cart66Exception $e) {
+            $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage());
+            $view = Cart66Common::getView('views/error-messages.php', $exception);
+          }
           return $view;
         }
         elseif(Cart66Session::get('Cart66Cart')->countItems() > 0) {

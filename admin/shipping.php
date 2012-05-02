@@ -429,7 +429,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
                 <label class="med"><?php _e( 'Pickup Type' , 'cart66' ); ?>:</label>
                 <select name='fedex[fedex_pickup_code]' id='fedex_pickup_code'>
                   <option value="REGULAR_PICKUP"><?php _e( 'Regular Pickup' , 'cart66' ); ?></option>
-                  <option value="REGULAR_COURIER"><?php _e( 'Regular Courier' , 'cart66' ); ?></option>
+                  <option value="REQUEST_COURIER"><?php _e( 'Request Courier' , 'cart66' ); ?></option>
                   <option value="DROP_BOX"><?php _e( 'Drop Box' , 'cart66' ); ?></option>
                   <option value="STATION"><?php _e( 'Station' , 'cart66' ); ?></option>
                   <option value="BUSINESS_SERVICE_CENTER"><?php _e( 'Business Service Center' , 'cart66' ); ?></option>

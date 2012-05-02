@@ -61,8 +61,10 @@ function addToCartAjax(formId, ajaxurl, productName, productUrl, buttonText) {
   var options2 = $jq('.cart66Options.options_2',$jq('#cartButtonForm_' + formId)).val();
   var itemQuantity = $jq('#Cart66UserQuantityInput_' + formId).val();
   var itemUserPrice = $jq('#Cart66UserPriceInput_' + formId).val();
+  var cleanProductId = formId.split('_');
+  cleanProductId = cleanProductId[0];
   var data = {
-	  cart66ItemId: formId,
+	  cart66ItemId: cleanProductId,
 	  itemName: productName,
 	  options_1: options1,
 	  options_2: options2,

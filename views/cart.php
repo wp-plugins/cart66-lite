@@ -412,7 +412,7 @@ if(count($items)): ?>
           }
         ?>
         <?php
-        if(number_format(Cart66Setting::getValue('minimum_amount'), 2, '.', '') > number_format(Cart66Session::get('Cart66Cart')->getGrandTotal(), 2, '.', '') && Cart66Setting::getValue('minimum_cart_amount') == 1): ?>
+        if(number_format(Cart66Setting::getValue('minimum_amount'), 2, '.', '') > number_format(Cart66Session::get('Cart66Cart')->getSubTotal(), 2, '.', '') && Cart66Setting::getValue('minimum_cart_amount') == 1): ?>
         <?php else: ?>
       <div id="checkoutShopping">
         <?php if($checkoutImg): ?>

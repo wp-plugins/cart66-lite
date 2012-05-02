@@ -1,7 +1,7 @@
 <?php
-$account = false;
+$account = isset($account) ? $account : false;
 if(CART66_PRO) {
-  $account = new Cart66Account();
+  $account = $account ? $account : new Cart66Account();
   if($accountId = Cart66Common::isLoggedIn()) {
     $account = new Cart66Account($accountId);
     $name = $account->firstName . '&nbsp;' . $account->lastName;
@@ -21,7 +21,7 @@ if(CART66_PRO) {
 }
 
 if(empty($b['country'])){
-   $b['country'] = Cart66Common::getHomeCountryCode();
+  $b['country'] = Cart66Common::getHomeCountryCode();
 }
 
 // Show errors
@@ -301,8 +301,8 @@ if(count($errors)) {
                 }
               ?>
             </li>
-		</ul>
           <?php endif; ?>
+      	</ul>
 
 			
 			<?php if(!Cart66Common::isLoggedIn()): ?>

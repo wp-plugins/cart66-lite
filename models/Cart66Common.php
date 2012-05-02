@@ -119,6 +119,7 @@ class Cart66Common {
     $approvedOverrideFiles = array(
       "views/cart.php",
       "views/cart-button.php",
+      "views/checkout.php",
       "views/account-login.php",
       "views/cart-sidebar.php",
       "views/cart-sidebar-advanced.php",
@@ -512,13 +513,13 @@ class Cart66Common {
         }
         else {
           $value = strip_tags($value);
-          $data[$key] = preg_replace('/[<>\\\\\/]/', '', $value);
+          $data[$key] = preg_replace('/[<>\\\\]/', '', $value);
         }
       }
     }
     else {
       $data= strip_tags($data);
-      $data = preg_replace('/[<>\\\\\/]/', '', $data);;
+      $data = preg_replace('/[<>\\\\]/', '', $data);;
     }
     return $data;
   }

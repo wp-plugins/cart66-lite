@@ -131,7 +131,12 @@ if(CART66_PRO && $order->hasAccount() == 1) {
       }
     ?>
     
-    <?php $account = $data['account']; ?>
+    <?php 
+      $account = $data['account'];
+      if(!is_object($account)) {
+        $account = new Cart66Account();
+      }
+    ?>
     <form action="" method='post' id="account_form" class="phorm2">
       <input type="hidden" name="ouid" value="<?php echo $order->ouid; ?>">
       <ul class="shortLabels">

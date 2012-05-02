@@ -20,7 +20,11 @@
   if(!isset($shippingCountryCode)) {
     $shippingCountryCode = 'US';
   }
-
+  
+  if(empty($b['country'])){
+     $b['country'] = Cart66Common::getHomeCountryCode();
+  }
+  
   $cart = Cart66Session::get('Cart66Cart');
   if($cart->requireShipping() || $cart->hasTaxableProducts()): ?>
 

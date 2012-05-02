@@ -212,10 +212,17 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           
           // Check for account creation
           $accountId = 0;
-          if($createAccount) { $account->save(); }
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Should an account be created? " . print_r($createAccount));
+          if($createAccount) { 
+            $account->save(); 
+            $accountId = $account->id;
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Just created account with id: accountId");
+          }
+          
           if($mp = Cart66Session::get('Cart66Cart')->getMembershipProduct()) { 
             $account->attachMembershipProduct($mp, $account->firstName, $account->lastName);
             $accountId = $account->id;
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Attached membership to account id: $accountId");
           }
 
           // Save the order locally

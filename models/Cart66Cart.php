@@ -1188,6 +1188,10 @@ class Cart66Cart {
 
         // make sure product option is vallid
         $check_option = str_replace(' ', '', $opt);
+        if($product->isGravityProduct()) {
+          $check_option = explode('|', $check_option);
+          $check_option = $check_option[0];
+        }
 
         if($this->_validate_option($valid_options, $check_option)) {
           if(preg_match('/\+\s*\$/', $opt)) {
@@ -1223,6 +1227,9 @@ class Cart66Cart {
     
     foreach($valid_options as $key => $option_group) {
       foreach($option_group as $option) {
+        $choice = preg_replace('[\W]', '', $choice);
+        $option = preg_replace('[\W]', '', $option);
+        
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Validating option :: $choice == $option");
         if($choice == $option) {
           $found = true;

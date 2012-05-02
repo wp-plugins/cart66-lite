@@ -575,6 +575,18 @@ else {
             </ul>
           </form>
         </div>
+        
+        <?php
+          $post = get_page_by_path('store/mijireh-secure-checkout');
+          $slurp_page = 'post.php?post=' . $post->ID . '&action=edit';
+        ?>
+        <p class="description">To get setup with Mijireh:</p>
+        <p class="description">
+        1. Enter you Mijireh Access Key<br/>
+        2. Make sure your store/checkout page has the [checkout_mijireh] shortcode on it.<br/>
+        3. Go to the <a href="<?php echo $slurp_page; ?>">Mijireh Secure Checkout</a> page and slurp it<br/>
+        4. Configure your gateways in Mijireh and go live<br/>
+        </p>
       </div>
     </div>
 

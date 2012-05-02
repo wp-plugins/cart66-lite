@@ -4,6 +4,13 @@ require_once(CART66_PATH . "/models/PestJSON.php");
 
 class Cart66Mijireh extends Cart66GatewayAbstract {
   
+  public function __construct() {
+    parent::__construct();
+    if(!Cart66Setting::getValue('mijireh_access_key')) {
+      throw new Cart66Exception('Invalid Mijireh Configuration', 66512);
+    }
+  }
+  
   public function getCreditCardTypes() {
     return array();
   }
@@ -18,7 +25,7 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
       'shipping' => $cart->getShippingCost(),
       'discount' => $cart->getDiscountAmount(),
       'subtotal' => $cart->getSubTotal(),
-      'total' => $cart->getGrandTotal() + $tax,
+      'total' => number_format($cart->getGrandTotal() + $tax, 2, '.', ''),
       'items' => array()
     );
     
@@ -52,12 +59,22 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
     // Add coupon code as meta_data
     foreach($cart->getItems() as $item) {
       $sku = $item->getItemNumber();
-      $order['items'][] = array(
+      $order_item_data = array(
         'sku' => $sku,
         'name' => $item->getFullDisplayName(),
         'price' => $item->getProductPrice(),
         'quantity' => $item->getQuantity()
       );
+      
+      if($custom_desc = $item->getCustomFieldDesc()) {
+        $order_item_data['name'] .= "\n" . $custom_desc;
+      }
+      
+      if($custom_info = $item->getCustomFieldInfo()) {
+        $order_item_data['name'] .= "\n" . $custom_info;
+      }
+      
+      $order['items'][] = $order_item_data;
       
       $option_info = trim($item->getOptionInfo());
       if(!empty($option_info)) {
@@ -72,6 +89,14 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
         }
       }
     }
+    
+    // DBG
+    /*
+    echo "<pre>";
+    print_r($order);
+    echo "</pre>";
+    die();
+    */
     
     try {
       //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Sending Order To Mijireh" . print_r($order, true));

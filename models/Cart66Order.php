@@ -234,7 +234,7 @@ class Cart66Order extends Cart66ModelAbstract {
    * Return values:
    *   1 = The account exists
    *   0 = There is no account associated with the order and there is no need for one
-   *  -1 = There is no account associated wit the order but there should be
+   *  -1 = There is no account associated with the order but there should be
    * 
    * @return int
    */
