@@ -4,7 +4,7 @@ Donate link: http://cart66.com
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales, shopping cart
 Requires at least: 2.8
 Tested up to: 3.2
-Stable tag: 1.4.7
+Stable tag: 1.4.8
 
 Sell digital products and/or physical products with the Cart66 WordPress ecommerce shopping cart plugin.
 
