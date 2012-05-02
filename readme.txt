@@ -89,6 +89,15 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.4.8 =
+UPDATED: Improved error messages for payment gateways
+UPDATED: Improved responsiveness of page slurp panel when using Mijireh Checkout
+UPDATED: Minimum order total to use subtotal instead of grand total
+UPDATED: Ajax add to cart for multiple form elements on a page
+FIXED: Product options with a forward slash not adding to the cart
+FIXED: Empty error message when Mijireh access key is blank
+FIXED: Issue with incorrect totals for large discounts in Mijireh Checkout
+
 = 1.4.7 =
 NEW: Email address verification on the checkout form
 NEW: Armed Forces AA, Armed Forces AP to state list
