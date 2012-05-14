@@ -13,7 +13,23 @@ class Cart66Dialog {
   }
   
   //Action target that displays the popup to insert a form to a post/page
-  function add_shortcode_popup(){
+  function add_shortcode_popup() {
+    global $current_screen;
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Thinking about adding code for shortcode popup: $current_screen->id");
+    
+    $add_popup = false;
+    if($current_screen->id == 'page' || 
+       $current_screen->id == 'post' ||
+       $current_screen->id == 'dashboard') {
+      $add_popup = true;
+    }
+    
+    if($add_popup) { 
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Adding code for shortcode popup");
+    }
+    else {
+      return;
+    }
     ?>
     <link type="text/css" rel="stylesheet" href="<?php echo CART66_URL; ?>/js/cart66.css" />
     <script language="javascript" type="text/javascript">

@@ -163,7 +163,7 @@ class Cart66SessionDb {
     self::$_data = $data;
     self::_save();
     
-    //header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
+    header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
     setcookie("Cart66DBSID",self::$_data['session_id'] , false, "/", false);
     
     self::_deleteExpiredSessions();

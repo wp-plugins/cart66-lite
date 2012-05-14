@@ -503,12 +503,14 @@ class Cart66Promotion extends Cart66ModelAbstract {
           // apply coupon to every item in the cart
           $counter = 0;
           foreach($cartItems as $item) {
+            $basePrice = $item->getBaseProductPrice();
+            $stayPositivePrice =  $this->stayPositive($basePrice,$this->getAmount($basePrice));
             for($i=1; $i <= $item->getQuantity(); $i++){
               if(!empty($this->max_uses_per_order) && $counter < ($this->max_uses_per_order)){
-                $discount+= $this->stayPositive($item->getBaseProductPrice(),$this->getAmount($item->getBaseProductPrice()));
+                $discount+= $stayPositivePrice;
               }
               if(empty($this->max_uses_per_order)){
-                $discount+= $this->stayPositive($item->getBaseProductPrice(),$this->getAmount($item->getBaseProductPrice()));
+                $discount+= $stayPositivePrice;
               }
               $counter++;
             }

@@ -50,7 +50,7 @@ class Cart66 {
     $sandbox = Cart66Setting::getValue('paypal_sandbox') ? true : false;
     define("CART66_DEBUG", $cart66Logging);
     define("SANDBOX", $sandbox);
-        
+    
     // Handle dynamic JS requests
     // See: http://ottopress.com/2010/dont-include-wp-load-please/ for why
     add_filter('query_vars', array($this, 'addAjaxTrigger'));
@@ -84,7 +84,7 @@ class Cart66 {
       add_action('wp_ajax_shortcode_products_table', array('Cart66Ajax', 'shortcodeProductsTable'));
       add_action('wp_ajax_page_slurp', array('Cart66Ajax', 'pageSlurp'));
       add_action('wp_ajax_dismiss_mijireh_notice', array('Cart66Ajax', 'dismissMijirehNotice'));
-            
+
       if(CART66_PRO) {
         add_action('wp_ajax_spreedly_table', array('Cart66DataTables', 'spreedlyTable'));
         add_action('wp_ajax_paypal_subscriptions_table', array('Cart66DataTables', 'paypalSubscriptionsTable'));
@@ -98,11 +98,9 @@ class Cart66 {
       
       // Load Page Slurp Button on checkout page
       add_action('add_meta_boxes', array($this, 'addPageSlurpButtonMeta')); 
-      
       add_action('media_buttons', array($this, 'addPageSlurpButton'), 12);
       
       // Load Dashboard Widget
-      
       if(Cart66Common::cart66UserCan('orders')) {
         add_action('wp_dashboard_setup', array('Cart66Dashboard', 'cart66_add_dashboard_widgets' ));
       }
@@ -122,7 +120,6 @@ class Cart66 {
         add_filter('pre_set_site_transient_update_plugins', array('Cart66ProCommon', 'getUpdatePluginsOption'));    //used by WP 3.0
         add_action('install_plugins_pre_plugin-information', array('Cart66ProCommon', 'showChangelog'));
       }
-
     }
     else {
       $this->initShortcodes();
@@ -491,10 +488,6 @@ class Cart66 {
   }
   
   public function registerAdminStyles() {
-    $slurpable = Cart66Common::isSlurpPage();
-    $notice = $slurpable ? 'Slurp Good' : 'Slurp Bad';
-    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Registering admin styles: $notice");
-    
     if(strpos($_SERVER['QUERY_STRING'], 'page=cart66') !== false || Cart66Common::isSlurpPage()) {
       if(version_compare(get_bloginfo('version'), '3.3', '<')) {
         $widgetCss = WPURL . '/wp-admin/css/widgets.css';

@@ -39,11 +39,11 @@ if(isset($data['message'])) {
     <li>
       <label class="short" for="login-password2">&nbsp;</label>
       <input type="password" id="login-password2" name="login[password2]" value="" />
-      <p class="description">Repeat new password</p>
+      <p class="description"><?php _e('Repeat new password', 'cart66'); ?></p>
     </li>
     <li>
       <label class="short" for="submit">&nbsp;</label>
-      <input type="submit" name="submit" value="Save" class="Cart66ButtonPrimary" />
+      <input type="submit" name="submit" value="<?php _e('Save', 'cart66'); ?>" class="Cart66ButtonPrimary" />
     </li>
   </ul>
 </form>

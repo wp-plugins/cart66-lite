@@ -1187,13 +1187,14 @@ class Cart66Cart {
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Working with option: $opt\n" . print_r($valid_options, true));
 
         // make sure product option is vallid
+        $is_gravity_form = false;
         $check_option = str_replace(' ', '', $opt);
-        if($product->isGravityProduct()) {
+        if($is_gravity_form = $product->isGravityProduct()) {
           $check_option = explode('|', $check_option);
           $check_option = $check_option[0];
         }
 
-        if($this->_validate_option($valid_options, $check_option)) {
+        if($this->_validate_option($valid_options, $check_option, $is_gravity_form)) {
           if(preg_match('/\+\s*\$/', $opt)) {
             $opt = preg_replace('/\+\s*\$/', '+$', $opt);
             list($opt, $pd) = explode('+$', $opt);
@@ -1222,7 +1223,7 @@ class Cart66Cart {
     return $optionResult;
   }
   
-  private function _validate_option(&$valid_options, $choice) {
+  private function _validate_option(&$valid_options, $choice, $is_gravity_form=false) {
     $found = false;
     
     foreach($valid_options as $key => $option_group) {
@@ -1234,7 +1235,12 @@ class Cart66Cart {
         if($choice == $option) {
           $found = true;
           Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Removing option group: $key");
-          unset($valid_options[$key]);
+
+          // Gravity forms have checkbox options which allow multiple options from the same group
+          if(!$is_gravity_form) {
+            unset($valid_options[$key]);
+          }
+          
           return $found;
         }
       }

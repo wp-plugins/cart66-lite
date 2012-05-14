@@ -1,4 +1,4 @@
-<h2>Cart66 Reports</h2>
+<h2><?php _e('Cart66 Reports', 'cart66'); ?></h2>
 
 <div class='wrap'>
   
@@ -15,7 +15,7 @@
   
   <br/>
   
-  <h3>Export Orders</h3>
+  <h3><?php _e('Export Orders', 'cart66'); ?></h3>
   
   <?php
     $firstDayLastMonth =  date("m/1/Y", strtotime('-1 month', Cart66Common::localTs()));
@@ -32,7 +32,7 @@
       <tr>
         <td><input type="text" name="start_date" value="<?php echo $firstDayLastMonth; ?>" id="start_date" /></td>
         <td><input type="text" name="end_date" value="<?php echo $lastDayLastMonth; ?>" id="end_date" /></td>
-        <td><input type="submit" name="submit" value="Export" id="submit" class="button-secondary" /></td>
+        <td><input type="submit" name="submit" value="<?php _e('Export', 'cart66'); ?>" id="submit" class="button-secondary" /></td>
       </tr>
       <tr>
         <td style="text-align: left; padding: 0px 5px;"><span class="description">mm/dd/yyyy</span></td>

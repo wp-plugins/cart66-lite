@@ -276,8 +276,7 @@ if(count($items)): ?>
           <th colspan='4' class="alignRight"><?php _e( 'Shipping Method' , 'cart66' ); ?>: &nbsp;
             <select name='shipping_method_id' id='shipping_method_id'>
               <?php foreach($shippingMethods as $name => $id): ?>
-              <option value='<?php echo $id ?>' 
-               <?php echo ($id == Cart66Session::get('Cart66Cart')->getShippingMethodId())? 'selected' : ''; ?>><?php echo $name ?></option>
+              <option value='<?php echo $id ?>' <?php echo ($id == Cart66Session::get('Cart66Cart')->getShippingMethodId())? 'selected' : ''; ?>><?php echo $name ?></option>
               <?php endforeach; ?>
             </select>
           </th>

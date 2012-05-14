@@ -1,4 +1,7 @@
 <?php
+/**
+ * This file is referenced from Cart66ShortcodeManager
+ */
 $supportedGateways = array (
   'Cart66AuthorizeNet',
   'Cart66PayPalPro',
@@ -13,6 +16,9 @@ $supportedGateways = array (
 $errors = array();
 $createAccount = false;
 $gateway = $data['gateway']; // Object instance inherited from Cart66GatewayAbstract 
+
+// Determine which gateway is in use
+$gatewayName = get_class($data['gateway']);
 
 if($_SERVER['REQUEST_METHOD'] == "POST") {
   $cart = Cart66Session::get('Cart66Cart');
@@ -99,7 +105,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
       $jqErrors = $gateway->getJqErrors(); // Error info for client side error code
     }
     
-    if(count($errors) == 0 || 1) {
+    if(count($errors) == 0) {
       // Calculate final billing amounts
       $taxLocation = $gateway->getTaxLocation();
       $tax = $gateway->getTaxAmount();
@@ -280,37 +286,70 @@ if(Cart66Common::isHttps()) {
   $url = str_replace('http:', 'https:', $url);
 }
 
-// Determine which gateway is in use
-$gatewayName = get_class($data['gateway']);
-
 // Make it easier to get to payment, billing, and shipping data
 $p = $gateway->getPayment();
 $b = $gateway->getBilling();
 $s = $gateway->getShipping();
 
+// Set initial country codes for billing and shipping addresses
 $billingCountryCode =  (isset($b['country']) && !empty($b['country'])) ? $b['country'] : Cart66Common::getHomeCountryCode();
 $shippingCountryCode = (isset($s['country']) && !empty($s['country'])) ? $s['country'] : Cart66Common::getHomeCountryCode();
 
 // Include the HTML markup for the checkout form
-$userViewFile = get_stylesheet_directory() . "/cart66-templates/views/checkout-form.php";
 $checkoutFormFile = CART66_PATH . 'views/checkout-form.php';
-
 if($gatewayName == 'Cart66Mijireh') {
   $checkoutFormFile = CART66_PATH . 'views/mijireh/shipping_address.php';
 }
-
-if(file_exists($userViewFile) && filesize($userViewFile)>10 && CART66_PRO && Cart66Common::isRegistered()) {
-	$checkoutFormFile = $userViewFile;
+else {
+  $userViewFile = get_stylesheet_directory() . '/cart66-templates/views/checkout-form.php';
+  if(file_exists($userViewFile) && filesize($userViewFile) > 10 && CART66_PRO && Cart66Common::isRegistered()) {
+  	$checkoutFormFile = $userViewFile;
+  }
 }
-
 Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Using Checkout Form File :: $checkoutFormFile");
 
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
-  include_once($checkoutFormFile);
+include($checkoutFormFile);
+
+// Include the client side javascript validation
+$same_as_billing = false;
+if($_SERVER['REQUEST_METHOD'] == 'GET' && Cart66Setting::getValue('sameAsBillingOff') != 1) {
+  $same_as_billing = true;
 }
-else {
-  include($checkoutFormFile);
+elseif(isset($_POST['sameAsBilling']) && $_POST['sameAsBilling'] == '1') {
+  $same_as_billing = true;
+}
+$shipping_address_display = (!$same_as_billing || $gatewayName == 'Cart66Mijireh') ? 'block' : 'none';
+
+$billing_country = '';
+if(isset($b['country']) && !empty($b['country'])) {
+  $billing_country = $b['country'];
+  $shipping_country = $s['country'];
 }
 
-// Include the client side javascript validation                 
-include_once(CART66_PATH . '/views/client/checkout.php'); 
+$error_field_names = array();
+if(isset($jqErrors) && is_array($jqErrors)) {
+  foreach($jqErrors as $field_name) {
+    $error_field_names[] = '#' . $field_name;
+  }
+}
+
+$checkout_data = array(
+  'zones' => Cart66Common::getZones(),
+  'same_as_billing' => $same_as_billing,
+  'shipping_address_display' => $shipping_address_display,
+  'billing_country' => $billing_country,
+  'shipping_country' => $shipping_country,
+  'billing_state' => $b['state'],
+  'shipping_state' => $s['state'],
+  'cart_type' => $p['cardType'],
+  'form_name' => '#' . $gatewayName . '_form',
+  'error_field_names' => $error_field_names,
+  'text_state' => __('State', 'cart66'),
+  'text_zip_code' => __('Zip code', 'cart66'),
+  'text_post_code' => __('Post code', 'cart66'),
+  'text_province' => __('Province', 'cart66')
+);
+
+$path = CART66_URL . '/js/checkout.js';
+wp_enqueue_script('checkout_js', $path, array('jquery'), false, true);
+wp_localize_script('checkout_js', 'C66', $checkout_data);

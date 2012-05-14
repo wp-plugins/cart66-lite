@@ -159,6 +159,11 @@ $order = $data['order'];
   ?>" target="_blank"><?php _e( 'View Receipt Online' , 'cart66' ); ?></a><br />
   <a href='#' id="print_version"><?php _e( 'Printer Friendly Receipt' , 'cart66' ); ?></a></p>
 
+  <?php if($order->account_id): ?>
+    <a href="?page=cart66-accounts&amp;accountId=<?php echo $order->account_id; ?>"><?php _e('View Account', 'cart66'); ?></a>
+  <?php endif; ?>
+  
+
   <?php
     if($order !== false) {
       $printView = Cart66Common::getView('views/receipt_print_version.php', array('order' => $order));
@@ -173,6 +178,7 @@ $order = $data['order'];
               myWindow = window.open('','Your_Receipt','resizable=yes,scrollbars=yes,width=550,height=700');
               myWindow.document.open("text/html","replace");
               myWindow.document.write(decodeURIComponent('<?php echo rawurlencode($printView); ?>' + ''));
+              myWindow.document.close();
               return false;
             });
           })

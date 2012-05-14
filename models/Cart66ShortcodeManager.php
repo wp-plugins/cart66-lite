@@ -234,7 +234,7 @@ class Cart66ShortcodeManager {
         if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
           require_once(CART66_PATH . "/pro/gateways/Cart66PayLeap.php");
 
-          if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+          if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0 || Cart66Session::get('Cart66Cart')->hasSpreedlySubscriptions()) {
             try {
               $payleap = new Cart66PayLeap();
               $view = $this->_buildCheckoutView($payleap);
@@ -267,7 +267,7 @@ class Cart66ShortcodeManager {
       if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
         require_once(CART66_PATH . "/pro/gateways/Cart66Eway.php");
 
-        if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+        if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0 || Cart66Session::get('Cart66Cart')->hasSpreedlySubscriptions()) {
           try {
             $eway = new Cart66Eway();
             $view = $this->_buildCheckoutView($eway);
@@ -300,7 +300,7 @@ class Cart66ShortcodeManager {
         if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
           require_once(CART66_PATH . "/pro/gateways/Cart66MWarrior.php");
 
-          if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+          if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0 || Cart66Session::get('Cart66Cart')->hasSpreedlySubscriptions()) {
             try {
               $mwarrior = new Cart66MerchantWarrior();
               $view = $this->_buildCheckoutView($mwarrior);
@@ -364,7 +364,7 @@ class Cart66ShortcodeManager {
       }
 
       if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions()) {
-        if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+        if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0 || Cart66Session::get('Cart66Cart')->hasSpreedlySubscriptions()) {
           try {
             $paypal = new Cart66PayPalPro();
             $view = $this->_buildCheckoutView($paypal);

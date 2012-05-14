@@ -93,7 +93,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
                   <span class="label_desc"><?php _e('Set the minimum amount required for this promotion to apply', 'cart66'); ?>.</span>
                 </li>
                 <li>
-                  <div class="desc">Required Quantity:</div>
+                  <div class="desc"><?php _e('Required Quantity', 'cart66'); ?>:</div>
                   <div class="dateRange">
                   <div class="group">
                     <label for="promo-min_quantity"><?php _e( 'Minimum quantity' , 'cart66' ); ?>:</label>
@@ -107,7 +107,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
                   </div>
                 </li>
                 <li>
-                  <div class="desc">Date range:</div>
+                  <div class="desc"><?php _e('Date range', 'cart66'); ?>:</div>
                   <div class="dateRange">
                   <div class="group">
                   <label for="from"><?php _e( 'From' , 'cart66' ); ?></label>
@@ -147,7 +147,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
                   <p class="label_desc"><?php _e('Enter the names of products in your inventory that this promotion will be applied to.  You can enter as many products as you want.  If you want this promotion to apply to all orders, leave this field blank.  If you have selected to apply this promotion to shipping or the cart total, this promotion will only apply if the products in this list match the products in the cart.', 'cart66'); ?></p>
                 </li>
                 <li>
-                  <div class="desc">Additional settings:</div>
+                  <div class="desc"><?php _e('Additional settings', 'cart66'); ?>:</div>
                   <div class="collection checkbox">
                     <input type="hidden" name='promo[enable]' value="" />  
                     <input type="checkbox" name='promo[enable]' id='promo-enable' value="1" <?php echo ($promo->enable == '1' || !isset($promo->id)) ? 'checked="checked"' : ''; ?> />
@@ -166,7 +166,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
                   <?php if($promo->id > 0): ?>
                     <a href='?page=cart66-promotions' class='button-secondary linkButton'><?php _e( 'Cancel' , 'cart66' ); ?></a>
                   <?php endif; ?>
-                  <input type='submit' name='submit' class="button-primary" value='Save' />
+                  <input type='submit' name='submit' class="button-primary" value='<?php _e('Save', 'cart66'); ?>' />
                   </div>
                 </li>
               </ul>
@@ -255,7 +255,22 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
           null, 
           { "bSearchable": false, "bSortable": false, "fnRender": function(oObj) { return '<a href="?page=cart66-promotions&task=edit&id=' + oObj.aData[0] + '"><?php _e( "Edit" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66-promotions&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a>' }
         }],
-        "oLanguage": { "sZeroRecords": "<?php _e('No matching promotions found', 'cart66'); ?>" }
+        "oLanguage": { 
+          "sZeroRecords": "<?php _e('No matching Promotions found', 'cart66'); ?>", 
+          "sSearch": "<?php _e('Search', 'cart66'); ?>:", 
+          "sInfo": "<?php _e('Showing', 'cart66'); ?> _START_ <?php _e('to', 'cart66'); ?> _END_ <?php _e('of', 'cart66'); ?> _TOTAL_ <?php _e('entries', 'cart66'); ?>", 
+          "sInfoEmpty": "<?php _e('Showing 0 to 0 of 0 entries', 'cart66'); ?>", 
+          "oPaginate": {
+            "sNext": "<?php _e('Next', 'cart66'); ?>", 
+            "sPrevious": "<?php _e('Previous', 'cart66'); ?>", 
+            "sLast": "<?php _e('Last', 'cart66'); ?>", 
+            "sFirst": "<?php _e('First', 'cart66'); ?>"
+          }, 
+          "sInfoFiltered": "(<?php _e('filtered from', 'cart66'); ?> _MAX_ <?php _e('total entries', 'cart66'); ?>)", 
+          "sLengthMenu": "<?php _e('Show', 'cart66'); ?> _MENU_ <?php _e('entries', 'cart66'); ?>", 
+          "sLoadingRecords": "<?php _e('Loading', 'cart66'); ?>...", 
+          "sProcessing": "<?php _e('Processing', 'cart66'); ?>..." 
+        }
       });
       $('.delete').live('click', function() {
         return confirm('Are you sure you want to delete this item?');

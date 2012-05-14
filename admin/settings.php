@@ -139,7 +139,7 @@ else {
               
               <li>
                 <label style="display: inline-block; width: 120px; text-align: right;" >&nbsp;</label>
-                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" />
+                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" />
                 <?php if(!empty($orderNumberFailed)): ?>
                   <span style="color: red;"><?php _e( 'Invalid Order Number' , 'cart66' ); ?></span>
                 <?php endif; ?>
@@ -192,7 +192,7 @@ else {
                   ?>
                 </select>
                 <input type="hidden" name="include_us_territories" value="">
-                <input type="checkbox" name="include_us_territories" value="1" <?php echo (Cart66Setting::getValue('include_us_territories')) ? "checked='checked'" : ""; ?>> Include US Territories
+                <input type="checkbox" name="include_us_territories" value="1" <?php echo (Cart66Setting::getValue('include_us_territories')) ? "checked='checked'" : ""; ?>> <?php _e('Include US Territories', 'cart66'); ?>
                 <p class="label_desc"><?php _e( 'Your home country will be the default country on your checkout form' , 'cart66' ); ?></p>
               </li>
               <li>
@@ -242,7 +242,7 @@ else {
                 <?php echo in_array('amex', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>American Express</label>
                 <input type="checkbox" name="auth_card_types[]" value="discover" style='width: auto;'
                 <?php echo in_array('discover', $cardTypes) ? 'checked="checked"' : '' ?>><label style='width: auto; padding-left: 5px;'>Discover</label>
-                <p style="width: 450px;" class="label_desc">You also need to configure your Payment Gateway settings or your PayPal Pro Settings if you are accepting credit cards</p>
+                <p style="width: 450px;" class="label_desc"><?php _e('You also need to configure your Payment Gateway settings or your PayPal Pro Settings if you are accepting credit cards', 'cart66'); ?></p>
               </li>
               
               <li><label style="display: inline-block; width: 120px; text-align: right;"><?php _e( 'Use SSL' , 'cart66' ); ?>:</label>
@@ -277,7 +277,7 @@ else {
 
               <li>
                 <label style="display: inline-block; width: 120px; text-align: right;" >&nbsp;</label>
-                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" />
+                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" />
               </li>
 
             </ul>
@@ -380,7 +380,7 @@ else {
               <?php endif; ?>
               
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             </ul>
           </form>
         </div>
@@ -491,7 +491,7 @@ else {
                   <option value="0"><?php _e( 'Don\'t tax shipping' , 'cart66' ); ?></option>
                   <option value="1"><?php _e( 'Tax shipping' , 'cart66' ); ?></option>
                 </select>
-                <input type='submit' name='submit' class="button-primary" style='width: 60px; margin: 10px; margin-right: 0px;' value="Save" />
+                <input type='submit' name='submit' class="button-primary" style='width: 60px; margin: 10px; margin-right: 0px;' value="<?php _e('Save', 'cart66'); ?>" />
               </li>
             </ul>
           </form>
@@ -549,15 +549,15 @@ else {
       </div>
       <div class="widget-holder">
         <?php if(!Cart66Setting::getValue('mijireh_access_key')): ?>
-          <p class="description"><a href="http://www.mijireh.com">Secure credit card processing. Get started for FREE</a>.</p>
+          <p class="description"><a href="http://www.mijireh.com"><?php _e('Secure credit card processing. Get started for FREE', 'cart66'); ?></a>.</p>
         <?php endif; ?>
         
-        <p class="description">Accept credit cards with peace of mind using <a href="http://www.mijireh.com">Mijreh</a>. 
-          You focus on the selling while Mijireh takes care of the security.</p>
+        <p class="description"><?php _e('Accept credit cards with peace of mind using', 'cart66'); ?> <a href="http://www.mijireh.com"><?php _e('Mijireh', 'cart66'); ?></a>. 
+          <?php _e('You focus on the selling while Mijireh takes care of the security', 'cart66'); ?>.</p>
         
-        <p class="description">Note: Mijireh checkout will not process recurring payments.</p>
+        <p class="description"><?php _e('Note: Mijireh checkout will not process recurring payments', 'cart66'); ?>.</p>
         <?php if(!$has_mijireh): ?>
-          <p class="description"><a href="http://mijireh.com">Get Mijireh Now</a></p>
+          <p class="description"><a href="http://mijireh.com"><?php _e('Get Mijireh Now', 'cart66'); ?></a></p>
         <?php endif; ?>
         <div>
           <form id="MijirehSettings" class="ajaxSettingForm" action="" method='post'>
@@ -570,7 +570,7 @@ else {
               </li>
               <li>
                 <label style="display: inline-block; width: 120px; text-align: right;">&nbsp;</label>
-                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" />
+                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" />
               </li>
             </ul>
           </form>
@@ -699,7 +699,7 @@ else {
               </li>
 
               <li><label style="display: inline-block; width: 120px; text-align: right;">&nbsp;</label>
-                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
                 
               <?php if(CART66_PRO): ?>
                 <li><p class='label_desc' style='color: #999'><?php _e( 'Note: The Website Payments Pro solution can only be implemented by UK, Canadian and US Merchants.' , 'cart66' ); ?>
@@ -869,7 +869,7 @@ else {
               </li>
 
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" />
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" />
               </li>
             </ul>
           </form>
@@ -932,7 +932,7 @@ else {
               </div>
 
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             </ul>
           </form>
         </div>
@@ -978,7 +978,7 @@ else {
                 <p style="margin-left: 125px;" class="description"><?php _e( 'This text will appear at the top of the reset email message above the new password.' , 'cart66' ); ?></p></li>
 
                 <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
               </ul>
             </form>
           </div>
@@ -1010,7 +1010,7 @@ else {
                 <p style="margin-left: 125px;" class="description"><?php _e( 'The message that appears when a logged in member\'s subscription does not allow them to view the post.' , 'cart66' ); ?></p></li>
 
                 <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+                <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
               </ul>
             </form>
           </div>
@@ -1039,7 +1039,7 @@ else {
               <p style="margin-left: 125px;" class="description"><?php _e( 'Separate values with commas. (ex. new,complete,cancelled)' , 'cart66' ); ?></p></li>
 
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             </ul>
           </form>
         </div>
@@ -1076,7 +1076,7 @@ else {
               </li>
 
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             </ul>
           </form>
         </div>
@@ -1110,7 +1110,7 @@ else {
             </li>
 
             <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-            <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+            <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             
             </ul>
           </form>
@@ -1224,7 +1224,7 @@ else {
               <input type='text' name='amazons3_key' id='amazons3_key' style="width: 75%;" value="<?php echo Cart66Setting::getValue('amazons3_key'); ?>" />
               
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             </ul>
           </form>
         </div>
@@ -1290,7 +1290,7 @@ else {
               ?>
               
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             </ul>
           </form>
           <?php else: ?>
@@ -1383,7 +1383,7 @@ else {
                 <div style="clear:both;">&nbsp;</div>
               </li>
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             </ul>
             
           </form>  
@@ -1421,11 +1421,11 @@ else {
               </p>
               
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             </ul>
           </form>
           <?php else: ?>
-            <p class="description" style="font-style: normal; color: #333; width: 600px;"><a href="http://www.idevdirect.com/14717499.html">iDevAffiliate</a> <?php _e( 'is The Industry Leader in self managed affiliate program software. Started in 1999, iDevAffiliate is the original in self managed affiliate software! iDevAffiliate was hand coded from scratch by the same team that provides their technical support! iDevAffilaite is also the affilate software that runs our' , 'cart66' ); ?> <a href="http://affiliates.reality66.com/idevaffiliate/">Cart66 Affilaite Program</a>.</p>
+            <p class="description" style="font-style: normal; color: #333; width: 600px;"><a href="http://www.idevdirect.com/14717499.html">iDevAffiliate</a> <?php _e( 'is The Industry Leader in self managed affiliate program software. Started in 1999, iDevAffiliate is the original in self managed affiliate software! iDevAffiliate was hand coded from scratch by the same team that provides their technical support! iDevAffilaite is also the affilate software that runs our' , 'cart66' ); ?> <a href="http://affiliates.reality66.com/idevaffiliate/"><?php _e('Cart66 Affiliate Program', 'cart66'); ?></a>.</p>
             <p class="description"><?php _e( 'This feature is only available in <a href="http://cart66.com">Cart66 Professional</a>.' , 'cart66' ); ?></p>
           <?php endif; ?>
         </div>
@@ -1467,7 +1467,7 @@ else {
               -->
               
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             </ul>
           </form>
           <?php else: ?>
@@ -1512,11 +1512,11 @@ else {
               <li><label style="display: inline-block; width: 150px; text-align: right;" for="cart_terms_replacement_text"><?php _e( 'Replacement Text' , 'cart66' ); ?>:</label>
               <input type='text' name='cart_terms_replacement_text' id='cart_terms_replacement_text' style='width: 375px;' 
               value="<?php echo Cart66Setting::getValue('cart_terms_replacement_text') ? Cart66Setting::getValue('cart_terms_replacement_text') : 'Please accept the terms of service to checkout.'; ?>" />
-              <p style="margin-left:155px;" class="description">Enter the text to be displayed instead of the checkout button, prior to the customer accepting the terms of service.</p>
+              <p style="margin-left:155px;" class="description"><?php _e('Enter the text to be displayed instead of the checkout button, prior to the customer accepting the terms of service', 'cart66'); ?>.</p>
              </li>              
 
               <li><label style="display: inline-block; width: 150px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             
             </ul>
           </form>
@@ -1560,7 +1560,7 @@ else {
               value="<?php echo Cart66Setting::getValue('cart_images_url'); ?>" /></li>
 
               <li><label style="display: inline-block; width: 150px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             
             </ul>
           </form>
@@ -1585,7 +1585,7 @@ else {
               <input type='text' name='styles_url' id='styles_url' style='width: 375px;' value="<?php echo Cart66Setting::getValue('styles_url'); ?>" /></li>
 
               <li><label style="display: inline-block; width: 120px; text-align: right;" for='submit'>&nbsp;</label>
-              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="Save" /></li>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value="<?php _e('Save', 'cart66'); ?>" /></li>
             </ul>
           </form>
         </div>

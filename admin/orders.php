@@ -6,7 +6,7 @@
     $status = $_GET['status'];
   }
 ?>
-<h2>Cart66 Orders</h2>
+<h2><?php _e('Cart66 Orders', 'cart66'); ?></h2>
 
 <div class='wrap' style='margin-bottom:60px;'>
   
@@ -100,7 +100,22 @@
           null,
           { "bSearchable": false, "bSortable": false, "fnRender": function(oObj) { return '<a href="#" onClick="printView(' + oObj.aData[0] + ')" id="print_version_' + oObj.aData[0] + '"><?php _e( "Receipt" , "cart66" ); ?></a> | <a href="?page=cart66_admin&task=view&id=' + oObj.aData[0] + '"><?php _e( "View" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66_admin&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a>' }
         }],
-        "oLanguage": { "sZeroRecords": "<?php _e('No matching Orders found', 'cart66'); ?>" }
+        "oLanguage": { 
+          "sZeroRecords": "<?php _e('No matching Orders found', 'cart66'); ?>", 
+          "sSearch": "<?php _e('Search', 'cart66'); ?>:", 
+          "sInfo": "<?php _e('Showing', 'cart66'); ?> _START_ <?php _e('to', 'cart66'); ?> _END_ <?php _e('of', 'cart66'); ?> _TOTAL_ <?php _e('entries', 'cart66'); ?>", 
+          "sInfoEmpty": "<?php _e('Showing 0 to 0 of 0 entries', 'cart66'); ?>", 
+          "oPaginate": {
+            "sNext": "<?php _e('Next', 'cart66'); ?>", 
+            "sPrevious": "<?php _e('Previous', 'cart66'); ?>", 
+            "sLast": "<?php _e('Last', 'cart66'); ?>", 
+            "sFirst": "<?php _e('First', 'cart66'); ?>"
+          }, 
+          "sInfoFiltered": "(<?php _e('filtered from', 'cart66'); ?> _MAX_ <?php _e('total entries', 'cart66'); ?>)", 
+          "sLengthMenu": "<?php _e('Show', 'cart66'); ?> _MENU_ <?php _e('entries', 'cart66'); ?>", 
+          "sLoadingRecords": "<?php _e('Loading', 'cart66'); ?>...", 
+          "sProcessing": "<?php _e('Processing', 'cart66'); ?>..." 
+        }
       }).css('width','');;
       $('.delete').live('click', function() {
         return confirm('Are you sure you want to delete this item?');

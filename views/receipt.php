@@ -403,6 +403,7 @@ if(CART66_PRO && $order->hasAccount() == 1) {
             myWindow = window.open('','Your_Receipt','resizable=yes,scrollbars=yes,width=550,height=700');
             myWindow.document.open("text/html","replace");
             myWindow.document.write(decodeURIComponent('<?php echo rawurlencode($printView); ?>' + ''));
+            myWindow.document.close();
             return false;
           });
         })

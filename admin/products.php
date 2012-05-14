@@ -61,7 +61,7 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
 
 
 
-<h2>Cart66 Products</h2>
+<h2><?php _e('Cart66 Products', 'cart66'); ?></h2>
 
 <form action="" method="post" enctype="multipart/form-data" id="products-form">
   <input type="hidden" name="cart66-action" value="save product" />
@@ -138,7 +138,7 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
                 <p class="label_desc"><?php _e( 'For subscriptions, tax is only collected on the one time fee.' , 'cart66' ); ?></p>
               </li>
               <li>
-                <label class="long" for="product-shipped">Shipped:</label>
+                <label class="long" for="product-shipped"><?php _e('Shipped', 'cart66'); ?>:</label>
                 <select id="product-shipped" name='product[shipped]'>
                   <option value='1' <?php echo ($product->shipped === '1')? 'selected="selected"' : '' ?>><?php _e( 'Yes' , 'cart66' ); ?></option>
                   <option value='0' <?php echo ($product->shipped === '0')? 'selected="selected"' : '' ?>><?php _e( 'No' , 'cart66' ); ?></option>
@@ -217,7 +217,10 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
                       <option value='0' <?php echo $product->isMembershipProduct == 0 ? 'selected="selected"' : ''; ?> ><?php _e( 'No' , 'cart66' ); ?></option>
                       <option value='1' <?php echo $product->isMembershipProduct == 1 ? 'selected="selected"' : ''; ?> ><?php _e( 'Yes' , 'cart66' ); ?></option>
                     </select>
-                    <span class="label_desc"><?php _e( 'Should purchasing this product create a membership account?' , 'cart66' ); ?></span>
+                    <p class="label_desc">
+                      <?php _e( 'Should purchasing this product create a membership account?' , 'cart66' ); ?><br/>
+                      <?php _e( 'If this is a spreedly subscription it already creates a membership account so leave this set to \'No\'.' , 'cart66' ); ?>
+                    </p>
                   </li>
                   <li class="member_product_attrs">
                     <label class="long" for="product-feature_level"><?php _e( 'Feature level' , 'cart66' ); ?>:</label>
@@ -228,10 +231,10 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
                     <label for="product-billing_interval" class="long" for="membership_duration"><?php _e( 'Duration' , 'cart66' ); ?>:</label>
                     <input type="text" name="product[billing_interval]" value="<?php echo $product->billingInterval > 0 ? $product->billingInterval : ''; ?>" id="product-billing_interval" style="width: 5em;" />
                     <select name="product[billing_interval_unit]" id="product-billing_interval_unit">
-                      <option value="days"   <?php echo $product->billingIntervalUnit == 'days' ? 'selected="selected"' : ''; ?> >Days</option>
-                      <option value="weeks"  <?php echo $product->billingIntervalUnit == 'weeks' ? 'selected="selected"' : ''; ?> >Weeks</option>
-                      <option value="months" <?php echo $product->billingIntervalUnit == 'months' ? 'selected="selected"' : ''; ?> >Months</option>
-                      <option value="years"  <?php echo $product->billingIntervalUnit == 'years' ? 'selected="selected"' : ''; ?> >Years</option>
+                      <option value="days"   <?php echo $product->billingIntervalUnit == 'days' ? 'selected="selected"' : ''; ?> ><?php _e('Days', 'cart66'); ?></option>
+                      <option value="weeks"  <?php echo $product->billingIntervalUnit == 'weeks' ? 'selected="selected"' : ''; ?> ><?php _e('Weeks', 'cart66'); ?></option>
+                      <option value="months" <?php echo $product->billingIntervalUnit == 'months' ? 'selected="selected"' : ''; ?> ><?php _e('Months', 'cart66'); ?></option>
+                      <option value="years"  <?php echo $product->billingIntervalUnit == 'years' ? 'selected="selected"' : ''; ?> ><?php _e('Years', 'cart66'); ?></option>
                     </select>
                   
                     <span style="padding: 0px 10px;"><?php _e( 'or' , 'cart66' ); ?></span>
@@ -376,7 +379,7 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
         <?php if($product->id > 0): ?>
         <a href='?page=cart66-products' class='button-secondary linkButton' style=""><?php _e( 'Cancel' , 'cart66' ); ?></a>
         <?php endif; ?>
-        <input type='submit' name='submit' class="button-primary" style='width: 60px;' value='Save' />
+        <input type='submit' name='submit' class="button-primary" style='width: 60px;' value='<?php _e('Save', 'cart66'); ?>' />
       </div>
   
     </div>
@@ -464,7 +467,22 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
           { "bSearchable": false },
           { "bSearchable": false, "bSortable": false, "fnRender": function(oObj) { return '<a href="?page=cart66-products&task=edit&id=' + oObj.aData[0] + '"><?php _e( "Edit" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66-products&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a>' }
         }],
-        "oLanguage": { "sZeroRecords": "<?php _e('No matching products found', 'cart66'); ?>" }
+        "oLanguage": { 
+          "sZeroRecords": "<?php _e('No matching Products found', 'cart66'); ?>", 
+          "sSearch": "<?php _e('Search', 'cart66'); ?>:", 
+          "sInfo": "<?php _e('Showing', 'cart66'); ?> _START_ <?php _e('to', 'cart66'); ?> _END_ <?php _e('of', 'cart66'); ?> _TOTAL_ <?php _e('entries', 'cart66'); ?>", 
+          "sInfoEmpty": "<?php _e('Showing 0 to 0 of 0 entries', 'cart66'); ?>", 
+          "oPaginate": {
+            "sNext": "<?php _e('Next', 'cart66'); ?>", 
+            "sPrevious": "<?php _e('Previous', 'cart66'); ?>", 
+            "sLast": "<?php _e('Last', 'cart66'); ?>", 
+            "sFirst": "<?php _e('First', 'cart66'); ?>"
+          }, 
+          "sInfoFiltered": "(<?php _e('filtered from', 'cart66'); ?> _MAX_ <?php _e('total entries', 'cart66'); ?>)", 
+          "sLengthMenu": "<?php _e('Show', 'cart66'); ?> _MENU_ <?php _e('entries', 'cart66'); ?>", 
+          "sLoadingRecords": "<?php _e('Loading', 'cart66'); ?>...", 
+          "sProcessing": "<?php _e('Processing', 'cart66'); ?>..." 
+        }
       });
       $('#spreedly_table').dataTable({
         "bProcessing": true,
@@ -483,7 +501,22 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
           { "bSearchable": false },
           { "bSearchable": false, "bSortable": false, "fnRender": function(oObj) { return '<a href="?page=cart66-products&task=edit&id=' + oObj.aData[0] + '"><?php _e( "Edit" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66-products&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a>' }
         }],
-        "oLanguage": { "sZeroRecords": "<?php _e('No matching Spreedly subscriptions found', 'cart66'); ?>" }
+        "oLanguage": { 
+          "sZeroRecords": "<?php _e('No matching Spreedly Subscriptions found', 'cart66'); ?>", 
+          "sSearch": "<?php _e('Search', 'cart66'); ?>:", 
+          "sInfo": "<?php _e('Showing', 'cart66'); ?> _START_ <?php _e('to', 'cart66'); ?> _END_ <?php _e('of', 'cart66'); ?> _TOTAL_ <?php _e('entries', 'cart66'); ?>", 
+          "sInfoEmpty": "<?php _e('Showing 0 to 0 of 0 entries', 'cart66'); ?>", 
+          "oPaginate": {
+            "sNext": "<?php _e('Next', 'cart66'); ?>", 
+            "sPrevious": "<?php _e('Previous', 'cart66'); ?>", 
+            "sLast": "<?php _e('Last', 'cart66'); ?>", 
+            "sFirst": "<?php _e('First', 'cart66'); ?>"
+          }, 
+          "sInfoFiltered": "(<?php _e('filtered from', 'cart66'); ?> _MAX_ <?php _e('total entries', 'cart66'); ?>)", 
+          "sLengthMenu": "<?php _e('Show', 'cart66'); ?> _MENU_ <?php _e('entries', 'cart66'); ?>", 
+          "sLoadingRecords": "<?php _e('Loading', 'cart66'); ?>...", 
+          "sProcessing": "<?php _e('Processing', 'cart66'); ?>..." 
+        }
       });
       
       $('#product-item_number').keyup(function() {
@@ -522,12 +555,20 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
         if($(this).val() != 0){
           $(".userPriceSettings, .isUserPrice").hide();
           $("#product-is_user_price").val("0");
+          
+          $("#membershipProductFields").hide();
+          $("#product-membership_product").val("0");
+          $("#product-feature_level").val('');
+          $("#product-billing_interval").val('');
+          $("#product-lifetime_membership").attr('checked', false);
+          toggleMembershipProductAttrs();
         }
         else{
           $(".isUserPrice").show();
           if($(".isUserPrice").val() == 1){
             $(".userPriceSettings").show();
           }
+          $("#membershipProductFields").show();
         }
       })
 
