@@ -34,6 +34,18 @@ class Cart66Promotion extends Cart66ModelAbstract {
     return $min;
   }
   
+  // If a minimium order is set it will display that amount, otherwise apply to all orders
+  public function getMaxOrderDescription() { // CHANGE AND COMBINE WITH ABOVE
+    $max = $this->maxOrder;
+    if($max > 0) {
+      $max = CART66_CURRENCY_SYMBOL . $min;
+    }
+    else {
+      $max = __('Apply to All Orders', 'cart66');
+    }
+    return $max;
+  }
+  
   public function getCodeAt($position=1){
     $codes = $this->code;
     if(substr($codes,0,1) == ","){
@@ -139,6 +151,7 @@ class Cart66Promotion extends Cart66ModelAbstract {
       $this->_data['code'] = $this->cleanCodes($this->_data['code']);
       
       $this->min_order = ($this->min_order == "") ? null : $this->min_order;
+      $this->max_order = ($this->max_order == "") ? null : $this->max_order;
       $this->effective_from = (!empty($this->effective_from) && $this->effective_from != "0000-00-00 00:00:00") ? date("Y-m-d H:i:s",strtotime($this->effective_from)) : null;
       $this->effective_to =  (!empty($this->effective_to) && $this->effective_to != "0000-00-00 00:00:00") ? date("Y-m-d H:i:s",strtotime($this->effective_to)) : null;
       
@@ -190,6 +203,10 @@ class Cart66Promotion extends Cart66ModelAbstract {
     
     if(!$this->minAmountMet()){
       $this->_errors[] = __('The minimum required order total for that promotion has not been met.','cart66');
+    }
+    
+    if(!$this->maxAmountMet()){
+      $this->_errors[] = __('The maximum required order total for that promotion has not been met.','cart66');
     }
     
     if(!$this->minQuantityMet()){
@@ -342,12 +359,21 @@ class Cart66Promotion extends Cart66ModelAbstract {
     $cart66Cart = Cart66Session::get('Cart66Cart');
     $cartProducts = $cart66Cart->getProductsAndIds();
     $products = explode(',', $this->products);
-    foreach($products as $p) {
-      if (in_array($p, $cartProducts)) {
-        $eligibleProductsInCart = true;
-      }
-      elseif(empty($this->products)){
-        $eligibleProductsInCart = true;
+    if(empty($this->products)) {
+      $eligibleProductsInCart = true;
+    }
+    else {
+      foreach($cartProducts as $cp) {
+        if($this->exclude_from_products == 0) {
+          if(in_array($cp, $products)) {
+            $eligibleProductsInCart = true;
+          }
+        }
+        elseif($this->exclude_from_products == 1) {
+          if(!in_array($cp, $products)) {
+            $eligibleProductsInCart = true;
+          }
+        }
       }
     }
     return $eligibleProductsInCart;
@@ -378,6 +404,16 @@ class Cart66Promotion extends Cart66ModelAbstract {
       $minAmountMet = true;
     }
     return $minAmountMet;
+  }
+  
+  // Check to see if the amount in the cart meets the maximum order set in the promotion
+  public function maxAmountMet() {
+    $maxAmountMet = false;
+    if($this->max_order >= Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() || $this->max_order == null || $this->max_order == '0.00') { 
+      //_promotion and getNonSubscriptionAmount are cart functions
+      $maxAmountMet = true;
+    }
+    return $maxAmountMet;
   }
   
   public function minQuantityMet(){
@@ -521,20 +557,39 @@ class Cart66Promotion extends Cart66ModelAbstract {
         else{
           // coupon applies to specific products
           foreach($cartItems as $item) {
-            if (in_array($item->getProductId(), $products)) {
-              // add up discount
-              $itemQuantity = $item->getQuantity();
-              
-							if($this->max_uses_per_order > 0){
-								$usesRemaining = $this->max_uses_per_order - $usedThisOrder;
-	              $allowedQuantity = ($usesRemaining <= $itemQuantity) ? $usesRemaining : $itemQuantity;
-							}
-							else{
-								$allowedQuantity = $itemQuantity;
-							}
-							
-              $productDiscount = $this->getAmount($item->getBaseProductPrice());
-              $discount += $allowedQuantity * $this->stayPositive($item->getBaseProductPrice(),$productDiscount);
+            if($this->exclude_from_products == 0) {
+              if(in_array($item->getProductId(), $products)) {
+                // add up discount
+                $itemQuantity = $item->getQuantity();
+
+                if($this->max_uses_per_order > 0){
+                  $usesRemaining = $this->max_uses_per_order - $usedThisOrder;
+                  $allowedQuantity = ($usesRemaining <= $itemQuantity) ? $usesRemaining : $itemQuantity;
+                }
+                else{
+                  $allowedQuantity = $itemQuantity;
+                }
+
+                $productDiscount = $this->getAmount($item->getBaseProductPrice());
+                $discount += $allowedQuantity * $this->stayPositive($item->getBaseProductPrice(),$productDiscount);
+              }
+            }
+            elseif($this->exclude_from_products == 1) {
+              if(!in_array($item->getProductId(), $products)) {
+                // add up discount
+                $itemQuantity = $item->getQuantity();
+
+                if($this->max_uses_per_order > 0){
+                  $usesRemaining = $this->max_uses_per_order - $usedThisOrder;
+                  $allowedQuantity = ($usesRemaining <= $itemQuantity) ? $usesRemaining : $itemQuantity;
+                }
+                else{
+                  $allowedQuantity = $itemQuantity;
+                }
+
+                $productDiscount = $this->getAmount($item->getBaseProductPrice());
+                $discount += $allowedQuantity * $this->stayPositive($item->getBaseProductPrice(),$productDiscount);
+              }
             }
           }
         }

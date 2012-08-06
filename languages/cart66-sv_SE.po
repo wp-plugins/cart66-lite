@@ -1,0 +1,3591 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SV_SE 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-04-30 15:06+0100\n"
+"PO-Revision-Date: 2012-05-01 09:46+0100\n"
+"Last-Translator: Christina <chrille_1977@bredband.net>\n"
+"Language-Team: Chrille_1977_SE <chrille_1977@bredband.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;gettext;gettext_noop\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Language: Swedish\n"
+"X-Poedit-Country: SWEDEN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../admin/accounts.php:8
+#: ../admin/inventory.php:34
+msgid "Account functionality is only available in <a href='http://cart66.com'>Cart66 Professional</a>"
+msgstr "Kontofunktionen är endast tillgänglig via <a href='http://cart66.com'>Cart66 Professional</a>"
+
+#: ../admin/inventory.php:22
+msgid "Inventory updated"
+msgstr "Inventeringen uppdaterad"
+
+#: ../admin/order-view.php:7
+#: ../admin/orders.php:53
+#: ../admin/orders.php:66
+#: ../admin/settings.php:124
+#: ../admin/settings.php:135
+msgid "Order Number"
+msgstr "Ordernummer"
+
+#: ../admin/order-view.php:14
+#: ../admin/products.php:75
+#: ../admin/shipping.php:780
+#: ../admin/shipping.php:825
+msgid "Product"
+msgstr "Produkt"
+
+#: ../admin/order-view.php:15
+msgid "Quantity"
+msgstr "Antal"
+
+#: ../admin/order-view.php:16
+#: ../admin/products.php:105
+#: ../admin/products.php:396
+#: ../admin/products.php:407
+#: ../admin/products.php:425
+#: ../admin/products.php:436
+msgid "Price"
+msgstr "Pris"
+
+#: ../admin/order-view.php:17
+#: ../admin/order-view.php:94
+msgid "Total"
+msgstr "Totalt"
+
+#: ../admin/order-view.php:42
+msgid "This order requires Gravity Forms in order to view all of the order information"
+msgstr "Den här order kräver \"Gravity Forms\" för att visa all orderinformation."
+
+#: ../admin/order-view.php:55
+msgid "Sub Total"
+msgstr "Deltotal"
+
+#: ../admin/order-view.php:61
+msgid "Discount"
+msgstr "Rabatt"
+
+#: ../admin/order-view.php:68
+#: ../admin/promotions.php:78
+#: ../admin/settings.php:1667
+msgid "Shipping"
+msgstr "Frakt"
+
+#: ../admin/order-view.php:75
+msgid "Tax"
+msgstr "Moms"
+
+#: ../admin/order-view.php:85
+msgid "Coupon"
+msgstr "Kupong"
+
+#: ../admin/order-view.php:104
+msgid "Billing Information"
+msgstr "Fakturerings information"
+
+#: ../admin/order-view.php:105
+msgid "Contact Information"
+msgstr "Kontakt information"
+
+#: ../admin/order-view.php:125
+msgid "Shipping Information"
+msgstr "Leverans information"
+
+#: ../admin/order-view.php:159
+msgid "View Receipt Online"
+msgstr "Visa kvitto online"
+
+#: ../admin/order-view.php:160
+msgid "Printer Friendly Receipt"
+msgstr "Utskriftsvänligt kvitto"
+
+#: ../admin/order-view.php:189
+msgid "Order Status"
+msgstr "Orderstatus"
+
+#: ../admin/order-view.php:205
+msgid "Back To Orders"
+msgstr "Tillbaka till order"
+
+#: ../admin/orders.php:19
+msgid "Filter Orders by Status"
+msgstr "Filtrera order per status"
+
+#: ../admin/orders.php:41
+msgid ""
+"You should consider setting order status options such as new and complete on the \n"
+"        <a href='?page=cart66-settings'>Cart66 Settings page</a>."
+msgstr "Du borde överväga att sätta val för orderstatus som \"Ny\" och \"Avslutad\" på sidan <a href='?page=cart66-settings'>Cart66 Settings page</a>."
+
+#: ../admin/orders.php:52
+#: ../admin/orders.php:65
+#: ../admin/products.php:393
+#: ../admin/products.php:404
+#: ../admin/products.php:422
+#: ../admin/products.php:433
+#: ../admin/promotions.php:184
+#: ../admin/promotions.php:198
+msgid "ID"
+msgstr "ID"
+
+#: ../admin/orders.php:54
+#: ../admin/orders.php:55
+#: ../admin/orders.php:67
+#: ../admin/orders.php:68
+#: ../admin/promotions.php:185
+#: ../admin/promotions.php:199
+msgid "Name"
+msgstr "Namn"
+
+#: ../admin/orders.php:56
+#: ../admin/orders.php:69
+#: ../admin/promotions.php:84
+#: ../admin/promotions.php:187
+#: ../admin/promotions.php:201
+#: ../admin/settings.php:371
+#: ../admin/shipping.php:636
+msgid "Amount"
+msgstr "Summa"
+
+#: ../admin/orders.php:57
+#: ../admin/orders.php:70
+msgid "Date"
+msgstr "Datum"
+
+#: ../admin/orders.php:58
+#: ../admin/orders.php:71
+msgid "Delivery"
+msgstr "Leverans"
+
+#: ../admin/orders.php:59
+#: ../admin/orders.php:72
+msgid "Status"
+msgstr "Status"
+
+#: ../admin/orders.php:60
+#: ../admin/orders.php:73
+#: ../admin/products.php:399
+#: ../admin/products.php:410
+#: ../admin/products.php:428
+#: ../admin/products.php:439
+#: ../admin/promotions.php:193
+#: ../admin/promotions.php:207
+#: ../admin/settings.php:506
+#: ../admin/shipping.php:926
+msgid "Actions"
+msgstr "Åtgärder"
+
+#: ../admin/orders.php:101
+msgid "Receipt"
+msgstr "Kvitto"
+
+#: ../admin/orders.php:101
+msgid "View"
+msgstr "Visa"
+
+#: ../admin/orders.php:101
+#: ../admin/products.php:465
+#: ../admin/products.php:484
+#: ../admin/promotions.php:256
+#: ../admin/settings.php:530
+#: ../admin/shipping.php:760
+#: ../admin/shipping.php:845
+#: ../admin/shipping.php:941
+msgid "Delete"
+msgstr "Radera"
+
+#: ../admin/orders.php:103
+msgid "No matching Orders found"
+msgstr "Hittar inga matchande ordrar"
+
+#: ../admin/products.php:18
+msgid "The product could not be saved for the following reasons"
+msgstr "Produkten kunde inte sparas på grund av följande"
+
+#: ../admin/products.php:23
+msgid "The file upload failed"
+msgstr "Uppladdning av filen misslyckades"
+
+#: ../admin/products.php:81
+msgid "Product name"
+msgstr "Produktnamn"
+
+#: ../admin/products.php:85
+msgid "Item number"
+msgstr "Artikelnummer"
+
+#: ../admin/products.php:87
+msgid "Unique item number required."
+msgstr "Unikt artikelnummer krävs."
+
+#: ../admin/products.php:92
+msgid "Attach Spreedly subscription"
+msgstr "Bifoga prenumeration"
+
+#: ../admin/products.php:110
+msgid "Price description"
+msgstr "Prisförklaring"
+
+#: ../admin/products.php:112
+msgid "If you would like to customize the display of the price"
+msgstr "Om du vill justera visningen av priset"
+
+#: ../admin/products.php:115
+msgid "User defined price"
+msgstr "Användardefinerat pris"
+
+#: ../admin/products.php:117
+#: ../admin/products.php:134
+#: ../admin/products.php:143
+#: ../admin/products.php:218
+#: ../admin/settings.php:171
+#: ../admin/settings.php:211
+#: ../admin/settings.php:253
+#: ../admin/settings.php:262
+#: ../admin/settings.php:272
+#: ../admin/settings.php:329
+#: ../admin/settings.php:340
+#: ../admin/settings.php:351
+#: ../admin/settings.php:365
+msgid "Yes"
+msgstr "Ja"
+
+#: ../admin/products.php:118
+#: ../admin/products.php:135
+#: ../admin/products.php:144
+#: ../admin/products.php:217
+#: ../admin/settings.php:173
+#: ../admin/settings.php:213
+#: ../admin/settings.php:254
+#: ../admin/settings.php:263
+#: ../admin/settings.php:273
+#: ../admin/settings.php:330
+#: ../admin/settings.php:341
+#: ../admin/settings.php:352
+#: ../admin/settings.php:366
+msgid "No"
+msgstr "Nej"
+
+#: ../admin/products.php:119
+msgid "Allow the customer to specify a price."
+msgstr "Tillåt kund att specificera ett pris"
+
+#: ../admin/products.php:124
+msgid "Min price"
+msgstr "Min. pris"
+
+#: ../admin/products.php:126
+msgid "Max price"
+msgstr "Max pris"
+
+#: ../admin/products.php:128
+msgid "Set to $0.00 for no limit "
+msgstr "Ange 0 för att inte sätta någon gräns"
+
+#: ../admin/products.php:132
+#: ../admin/products.php:397
+#: ../admin/products.php:408
+#: ../admin/products.php:426
+#: ../admin/products.php:437
+msgid "Taxed"
+msgstr "Momsad"
+
+#: ../admin/products.php:137
+msgid "Do you want to collect sales tax when this item is purchased?"
+msgstr "Vill du lägga på moms när varan köps?"
+
+#: ../admin/products.php:138
+msgid "For subscriptions, tax is only collected on the one time fee."
+msgstr "För prenumerationer är moms en engångsbelopp"
+
+#: ../admin/products.php:146
+msgid "Does this product require shipping"
+msgstr "Måste varan skickas?"
+
+#: ../admin/products.php:149
+msgid "Weight"
+msgstr "Vikt"
+
+#: ../admin/products.php:151
+msgid ""
+"Shipping weight in pounds. Used for live rates calculations. Weightless items ship free.<br/>\n"
+"                  If using live rates and you want an item to have free shipping you can enter 0 for the weight."
+msgstr "Vikt anges i pounds. Används för beräkning av frakt. Anges ingen vikt är det fraktfritt. <br/>Om du använder frakt per vara och du vill att det ska vara fraktfritt, ange 0 som vikt."
+
+#: ../admin/products.php:155
+msgid "Min quantity"
+msgstr "Min. antal"
+
+#: ../admin/products.php:157
+msgid "Max quantity"
+msgstr "Max antal"
+
+#: ../admin/products.php:159
+msgid ""
+"Limit the quantity that can be added to the cart. Set to 0 for unlimited.<br/>\n"
+"                  If you are selling digital products you may want to limit the quantity of the product to 1."
+msgstr "Ange en max antal som kan läggas i varukorgen. Ange 0 för obegränsat.<br/>Om du säljer digitala produkter kan du vilja begränsa antalet till 1."
+
+#: ../admin/products.php:166
+msgid "Attach Gravity Form"
+msgstr "Bifoga \"Gravity form\""
+
+#: ../admin/products.php:168
+#: ../admin/products.php:190
+msgid "None"
+msgstr "Ingen"
+
+#: ../admin/products.php:185
+msgid "A Gravity Form may only be linked to one product"
+msgstr "\"Gravity form\" kan endast länkas till en produkt."
+
+#: ../admin/products.php:188
+msgid "Quantity field"
+msgstr "Fält för antal"
+
+#: ../admin/products.php:207
+msgid "Use one of the Gravity Form fields as the quantity for your product."
+msgstr "Använd ett av \"Gravity form\" fälten som antal för din produkt."
+
+#: ../admin/products.php:215
+msgid "Membership Product"
+msgstr "Medlemskapsprodukt"
+
+#: ../admin/products.php:220
+msgid "Should purchasing this product create a membership account?"
+msgstr "Ska köp av den här varan skapa ett medlemskap?"
+
+#: ../admin/products.php:223
+msgid "Feature level"
+msgstr "Anpassad nivå"
+
+#: ../admin/products.php:225
+msgid "Enter the feature level. No spaces are allowed."
+msgstr "Ange den anpassade nivån. Mellanslag är ej tillåtet."
+
+#: ../admin/products.php:228
+msgid "Duration"
+msgstr "Varaktighet"
+
+#: ../admin/products.php:237
+#: ../admin/products.php:307
+#: ../admin/settings.php:485
+msgid "or"
+msgstr "eller"
+
+#: ../admin/products.php:238
+msgid "Lifetime"
+msgstr "Livstid"
+
+#: ../admin/products.php:249
+msgid "Digital Product Options"
+msgstr "Val för digital produkt"
+
+#: ../admin/products.php:253
+msgid "Limit The Number Of Times This File Can Be Downloaded"
+msgstr "Begränsa antalet gånger som filen kan laddas ner"
+
+#: ../admin/products.php:256
+msgid "Download limit"
+msgstr "Gräns för nedladdning"
+
+#: ../admin/products.php:258
+msgid "Max number of times customer may download product. Enter 0 for no limit."
+msgstr "Max antal gånger en kund får ladda ner den här produkten. Ange 0 för obegränsat."
+
+#: ../admin/products.php:263
+msgid "Deliver Digital Products With Amazon S3"
+msgstr "Leverera digitala produkter med \"Amazon S3\""
+
+#: ../admin/products.php:266
+msgid "Bucket"
+msgstr "Bucket"
+
+#: ../admin/products.php:268
+msgid "The Amazon S3 bucket name that is holding the digital file."
+msgstr "\" Amazon S3 bucket\" namn där den digitala filen finns."
+
+#: ../admin/products.php:274
+msgid "File"
+msgstr "Fil"
+
+#: ../admin/products.php:276
+msgid "The Amazon S3 file name of your digital product."
+msgstr "Namnet på din \"Amazon S3\" digitala produkt."
+
+#: ../admin/products.php:279
+msgid "How do I force the file to download rather than being displayed in the browser?"
+msgstr "Hur tvingar jag filen att laddas ner istället för att visas i webbläsaren?"
+
+#: ../admin/products.php:280
+msgid ""
+"If you want your digital product to download rather than display in the web browser, log into your Amazon S3 account and click on the file that you want to force to download and enter the following Meta Data in the file's properties:<br/>\n"
+"                Key = Content-Type | Value = application/octet-stream<br/>\n"
+"                Key = Content-Disposition | Value = attachment"
+msgstr "Om du vill att din digitala produkt ska laddas ner istället för att visas i webbläsaren, logga in på ditt \"Amazon S3\" konto och klicka på filen du vill tvinga att laddas ner och ange följande Meta data i filens egenskaper: <br/>                Key = Content-Type | Value = application/octet-stream<br/>                Key = Content-Disposition | Value = attachment"
+
+#: ../admin/products.php:290
+msgid "<strong>WARNING:</strong> The digital products folder does not exist. Please update your <strong>Digital Product Settings</strong> on the <a href='?page=cart66-settings'>settings page</a>."
+msgstr "<strong>VARNING:</strong> Mappen för den digitala produkten existerar inte. Uppdatera dina <strong>Inställningar för Digitala produkter</strong> under <a href='?page=cart66-settings'>Inställningar</a>."
+
+#: ../admin/products.php:291
+msgid "<strong>WARNING:</strong> WordPress cannot write to your digital products folder. Please make your digital products file writeable or change your digital products folder in the <strong>Digital Product Settings</strong> on the <a href='?page=cart66-settings'>settings page</a>."
+msgstr "<strong>VARNING:</strong> WordPress har inte skrivrättigheter till mappen för digitala produkter. Kontrollera att att filen är skrivbar (777) och/eller ändra mapp för digitala produkter under <strong>Inställningar för Digitala produkter</strong> under <a href='?page=cart66-settings'>Inställningar</a>."
+
+#: ../admin/products.php:295
+msgid ""
+"Before you can upload your digital product, please specify a folder for your digital products in the<br/>\n"
+"                <strong>Digital Product Settings</strong> on the <a href='?page=cart66-settings'>settings page</a>."
+msgstr "Innan du kan börja ladda upp dina digitala filer, ange en mapp för de digitala produkterna vid<br/> <strong>Inställningar för Digitala produkter</strong> under <a href='?page=cart66-settings'>Inställningar</a>."
+
+#: ../admin/products.php:299
+msgid "Deliver Digital Products From Your Server"
+msgstr "Leverera digitala produker från din server"
+
+#: ../admin/products.php:302
+msgid "Upload product"
+msgstr "Ladda upp produkt"
+
+#: ../admin/products.php:304
+msgid "If you FTP your product to your product folder, enter the name of the file you uploaded in the field below."
+msgstr "Om du laddar upp din produkt via FTP, ange namnet på filen du laddat upp i fältet nedan."
+
+#: ../admin/products.php:307
+msgid "File name"
+msgstr "Fil namn"
+
+#: ../admin/products.php:313
+msgid "Delete this file from the server"
+msgstr "Radera filen från servern"
+
+#: ../admin/products.php:316
+msgid "<strong>WARNING:</strong> This file is not in your products folder"
+msgstr "<strong>VARNING:</strong> Den här filen finns inte i din produktmapp"
+
+#: ../admin/products.php:325
+msgid "NOTE: If you are delivering large digital files, please consider using Amazon S3."
+msgstr "OBSERVERA: Om du leverar stora filer, överväg att använda \"Amazon S3\"."
+
+#: ../admin/products.php:326
+msgid "View local delivery information"
+msgstr "Visa lokal leveransinformation."
+
+#: ../admin/products.php:327
+msgid ""
+"There are several settings built into PHP that affect the size of the files you can upload. These settings are set by your web host and can usually be configured for your specific needs.Please contact your web hosting company if you need help change any of the settings below.\n"
+"              <br/><br/>\n"
+"              If you need to upload a file larger than what is allowed via this form, you can FTP the file to the products folder"
+msgstr "Det är flera inställningar som byggts in i PHP som påverkar storleken på filerna som du kan ladda upp. Dom inställningar är gjorda av ditt webbhotell och kan normalt sett konfigureras för dina specifika behov. Kontakta ditt webbhotell om du behöver hjälp med inställningarna nedan. <br/><br/>Om du behöver ladda upp en större fil än vad som tillåts via formuläret, kan du göra det via FTP."
+
+#: ../admin/products.php:330
+msgid "then enter the name of the file in the \"File name\" field above."
+msgstr "ange sedan filnamnet i fältet \"Filnamn\" ovanför."
+
+#: ../admin/products.php:332
+msgid "Max Upload Filesize"
+msgstr "Max filstorlek"
+
+#: ../admin/products.php:332
+msgid "Max Postsize"
+msgstr "Max storlek"
+
+#: ../admin/products.php:341
+msgid "Product Variations"
+msgstr "Produktvariationer"
+
+#: ../admin/products.php:347
+msgid "Option Group 1"
+msgstr "Val grupp 1"
+
+#: ../admin/products.php:349
+msgid "Small, Medium +$2.00, Large +$4.00"
+msgstr "Small, Medium +2.00, Large +4.00"
+
+#: ../admin/products.php:352
+msgid "Option Group 2"
+msgstr "Val grupp 2"
+
+#: ../admin/products.php:354
+msgid "Red, White, Blue"
+msgstr "Röd, Vit, Blå"
+
+#: ../admin/products.php:357
+msgid "Custom field"
+msgstr "Anpassad fält"
+
+#: ../admin/products.php:359
+msgid "No custom field"
+msgstr "Inget anpassat fält"
+
+#: ../admin/products.php:360
+msgid "Single line text field"
+msgstr "Enrads textfält"
+
+#: ../admin/products.php:361
+msgid "Multi line text field"
+msgstr "Flerrads textfält"
+
+#: ../admin/products.php:363
+msgid "Include a free form text area so your buyer can provide custom information such as a name to engrave on the product."
+msgstr "Inkludera ett valfritt textformulär så att kunden kan ange information, som exempelvis en ingraverad text i ett smycke"
+
+#: ../admin/products.php:366
+msgid "Instructions"
+msgstr "Instruktioner"
+
+#: ../admin/products.php:368
+msgid "Tell your buyer what to enter into the custom text field. (Ex. Please enter the name you want to engrave)"
+msgstr "Berätta för din kund vad som ska anges i fältet (Ex. Ange text som ska ingraveras)"
+
+#: ../admin/products.php:377
+#: ../admin/promotions.php:167
+#: ../admin/shipping.php:731
+#: ../admin/shipping.php:906
+msgid "Cancel"
+msgstr "Ångra"
+
+#: ../admin/products.php:388
+msgid "Your Products"
+msgstr "Dina produkter"
+
+#: ../admin/products.php:394
+#: ../admin/products.php:405
+#: ../admin/products.php:423
+#: ../admin/products.php:434
+msgid "Item Number"
+msgstr "Artikelnummer"
+
+#: ../admin/products.php:395
+#: ../admin/products.php:406
+#: ../admin/products.php:424
+#: ../admin/products.php:435
+msgid "Product Name"
+msgstr "Produkt namn"
+
+#: ../admin/products.php:398
+#: ../admin/products.php:409
+#: ../admin/products.php:427
+#: ../admin/products.php:438
+msgid "Shipped"
+msgstr "Levererad"
+
+#: ../admin/products.php:417
+msgid "Your Spreedly Subscription Products"
+msgstr "Dina prenumerationsprodukter"
+
+#: ../admin/products.php:465
+#: ../admin/products.php:484
+#: ../admin/promotions.php:256
+#: ../admin/shipping.php:759
+#: ../admin/shipping.php:844
+#: ../admin/shipping.php:940
+msgid "Edit"
+msgstr "Redigera"
+
+#: ../admin/products.php:467
+msgid "No matching products found"
+msgstr "Hittar inga matchande produkter"
+
+#: ../admin/products.php:486
+msgid "No matching Spreedly subscriptions found"
+msgstr "Inga matchande prenumerationer hittades"
+
+#: ../admin/products.php:494
+msgid "No quotes allowed"
+msgstr "Inga citat tillåtna"
+
+#: ../admin/promotions.php:18
+msgid "The promotion could not be saved for the following reasons"
+msgstr "Kampanjen kunde inte sparas på grund av följande"
+
+#: ../admin/promotions.php:48
+msgid "Promotion"
+msgstr "Kampanj"
+
+#: ../admin/promotions.php:57
+msgid "Promotion name"
+msgstr "Namn på kampanj"
+
+#: ../admin/promotions.php:59
+msgid "Promotion name required"
+msgstr "Namn på kampanj krävs"
+
+#: ../admin/promotions.php:62
+msgid "Promotion code"
+msgstr "Kampanjnummer"
+
+#: ../admin/promotions.php:64
+msgid "Unique promotion code required"
+msgstr "Ett unikt kampanjnummer krävs"
+
+#: ../admin/promotions.php:67
+msgid "Type of promotion"
+msgstr "Typ av kampanj"
+
+#: ../admin/promotions.php:69
+msgid "Money Amount"
+msgstr "Belopp"
+
+#: ../admin/promotions.php:70
+msgid "Percentage"
+msgstr "Procent"
+
+#: ../admin/promotions.php:72
+msgid "Select if this promotion will be applied using a specific dollar amount or a percentage of the total"
+msgstr "Välj om kampanjen ska vara ett specifikt belopp eller ett procenttal av totalen"
+
+#: ../admin/promotions.php:75
+msgid "Apply to"
+msgstr "Använd på"
+
+#: ../admin/promotions.php:77
+#: ../admin/settings.php:1627
+msgid "Products"
+msgstr "Produkter"
+
+#: ../admin/promotions.php:79
+msgid "Cart Total"
+msgstr "Varukorg total"
+
+#: ../admin/promotions.php:81
+msgid "Select if this promotion will apply to specific products, shipping or the entire cart total"
+msgstr "Välj om kampanjen ska gälla specifika produkter, frakt eller ordertotalen."
+
+#: ../admin/promotions.php:88
+msgid "Set the promotion amount"
+msgstr "Ange kampanjens belopp"
+
+#: ../admin/promotions.php:91
+msgid "Minimum order"
+msgstr "Minimum order"
+
+#: ../admin/promotions.php:93
+msgid "Set the minimum amount required for this promotion to apply"
+msgstr "Ange min. belopp som krävs för att kampanjen ska kunna tillämpas"
+
+#: ../admin/promotions.php:99
+msgid "Minimum quantity"
+msgstr "Min. antal"
+
+#: ../admin/promotions.php:103
+msgid "Maximum quantity"
+msgstr "Max antal"
+
+#: ../admin/promotions.php:106
+msgid "Set the minimum and/or maximum quantity required for this promotion to apply"
+msgstr "Ange min. och/eller max antal som krävs för att kampanjen ska kunna tillämpas"
+
+#: ../admin/promotions.php:113
+msgid "From"
+msgstr "Från"
+
+#: ../admin/promotions.php:117
+msgid "To"
+msgstr "Till"
+
+#: ../admin/promotions.php:120
+msgid "Select the date and time that this promotion will start and end. You may leave either blank"
+msgstr "Välj datum och tid som den här kampanjen ska börja och sluta. Du kan även låta det vara tomt."
+
+#: ../admin/promotions.php:124
+msgid "Maximum redemptions"
+msgstr "Max antal "
+
+#: ../admin/promotions.php:127
+#: ../admin/promotions.php:191
+#: ../admin/promotions.php:205
+msgid "Used"
+msgstr "Använd"
+
+#: ../admin/promotions.php:132
+msgid "Never"
+msgstr "Aldrig"
+
+#: ../admin/promotions.php:136
+msgid "Set the maximum number of times this promotion can be redeemed"
+msgstr "Ange max antal gånger som kampanjen kan användas"
+
+#: ../admin/promotions.php:139
+msgid "Maximum redemptions per order"
+msgstr "Max antal per order"
+
+#: ../admin/promotions.php:141
+msgid "Set the maximum number of times this promotion can be redeemed per order"
+msgstr "Ange max antal gånger kampanjen kan användas per order"
+
+#: ../admin/promotions.php:144
+msgid "Eligible Products"
+msgstr "Tillämpa på produkter"
+
+#: ../admin/promotions.php:147
+msgid "Enter the names of products in your inventory that this promotion will be applied to.  You can enter as many products as you want.  If you want this promotion to apply to all orders, leave this field blank.  If you have selected to apply this promotion to shipping or the cart total, this promotion will only apply if the products in this list match the products in the cart."
+msgstr "Ange namn på produkterna bland dina inventarier som den här kampanjen ska tillämpas på. Du kan ange så många produkter du vill. Om du vill att denna kampanj ska tillämpas på alla ordrar, lämna fältet tomt. Om du har valt att tillämpa kampanjen på frakten eller ordertotalen kommer den här kampanjen bara tillämpas om produkterna i den här listan matchar produkterna i varukorgen."
+
+#: ../admin/promotions.php:154
+#: ../admin/shipping.php:624
+msgid "Enable"
+msgstr "Tillgänglig"
+
+#: ../admin/promotions.php:155
+msgid "Do you want this promotion to be valid"
+msgstr "Vill du att kampanjen ska vara gällande"
+
+#: ../admin/promotions.php:158
+msgid "Auto Apply"
+msgstr "Lägg till automatiskt"
+
+#: ../admin/promotions.php:159
+msgid "Do you want this promotion to automatically apply when all conditions are met? (no user input required)"
+msgstr "Vill du att kampanjen ska läggas till automatiskt om villkoren fylls? (Kunden behöver inte ange någon kampanj)"
+
+#: ../admin/promotions.php:186
+#: ../admin/promotions.php:200
+msgid "Code"
+msgstr "Kod"
+
+#: ../admin/promotions.php:188
+#: ../admin/promotions.php:202
+msgid "Minimum Order"
+msgstr "Minimum order"
+
+#: ../admin/promotions.php:189
+#: ../admin/promotions.php:203
+msgid "Enabled"
+msgstr "Tillgänglig"
+
+#: ../admin/promotions.php:190
+#: ../admin/promotions.php:204
+msgid "Effective"
+msgstr "Giltig"
+
+#: ../admin/promotions.php:192
+#: ../admin/promotions.php:206
+msgid "Apply To"
+msgstr "Använd på"
+
+#: ../admin/promotions.php:258
+msgid "No matching promotions found"
+msgstr "Inga matchande kampanjer hittades"
+
+#: ../admin/reports.php:5
+msgid "Product Sales"
+msgstr "Produktförsäljning"
+
+#: ../admin/reports.php:12
+msgid "Sales reports are only available in <a href=\"http://cart66.com\">Cart66 Professional</a>."
+msgstr "Försäljningsrapporter är endast tillgängliga i <a href=\"http://cart66.com\">Cart66 Professional</a>."
+
+#: ../admin/reports.php:28
+msgid "Start Date"
+msgstr "Startdatum"
+
+#: ../admin/reports.php:29
+msgid "End Date"
+msgstr "Slutdatum"
+
+#: ../admin/settings.php:84
+msgid "Success"
+msgstr "Lyckades"
+
+#: ../admin/settings.php:112
+msgid "Cart66 Settings"
+msgstr "Cart66 Instälningar"
+
+#: ../admin/settings.php:127
+msgid ""
+"Please enter your Cart66 order number to get automatic upgrades and support.<br/>\n"
+"          If you do not have an order number please <a href=\"http://www.Cart66.com\">buy a license</a>."
+msgstr "Ange ditt Cart66 ordernummer för att få automatiska uppgraderingar och support.<br/>Har du inte något ordernummer, <a href=\"http://www.Cart66.com\">köp en licens</a>."
+
+#: ../admin/settings.php:144
+msgid "Invalid Order Number"
+msgstr "Ogiltigt ordernummer"
+
+#: ../admin/settings.php:159
+msgid "Main Settings"
+msgstr "Huvudinställningar"
+
+#: ../admin/settings.php:169
+msgid "Hide system pages"
+msgstr "Dölj systemfiler"
+
+#: ../admin/settings.php:174
+msgid ""
+"Hiding system pages will hide all the pages that Cart66 installs \n"
+"                  from your site's navigation. Express, IPN, and Receipt will always be hidden. Selecting 'Yes' will also hide\n"
+"                  Store, Cart, and Checkout which you may want to have your customers access through the Cart66 Shopping Cart widget rather than your site's main navigation."
+msgstr "Att dölja systemfiler kommer att dölja alla sidor som Cart66 installerat  på din sida. Express, IPN och Kvitto kommer alltid att vara dolda. Väljer du \"Ja\" så kommer även Butik, Varukorg och Kassa att döljas vilket du kanske vill ha tillgängligt i kundernas varukorg."
+
+#: ../admin/settings.php:179
+msgid "Home country"
+msgstr "Hemland"
+
+#: ../admin/settings.php:196
+msgid "Your home country will be the default country on your checkout form"
+msgstr "Ditt hemland kommer att vara standard landet vid kassan"
+
+#: ../admin/settings.php:199
+msgid "Currency symbol"
+msgstr "Valutasymbol"
+
+#: ../admin/settings.php:201
+msgid "Use the HTML entity such as &amp;pound; for &pound; British Pound Sterling or &amp;euro; for &euro; Euro"
+msgstr "Använd HTML som ex. \"&amp;pound;\" för &pound; British Pound Sterling el. \"&amp;euro;\" för &euro; Euro"
+
+#: ../admin/settings.php:204
+msgid "Currency character"
+msgstr "Valutasymbol"
+
+#: ../admin/settings.php:206
+msgid "Do NOT use the HTML entity. This is the currency character used for the email receipts."
+msgstr "Använd INTE HTML! Det här är valutan som anges på kundernas kvitto via e-post."
+
+#: ../admin/settings.php:209
+msgid "International sales"
+msgstr "Internationell försäljning"
+
+#: ../admin/settings.php:217
+msgid "Ship to countries"
+msgstr "Leverera till länder"
+
+#: ../admin/settings.php:236
+msgid "Accept Cards"
+msgstr "Acceptera kort"
+
+#: ../admin/settings.php:248
+msgid "Use SSL"
+msgstr "Använd SSL"
+
+#: ../admin/settings.php:255
+msgid "Be sure use an SSL certificate if you are using a payment gateway other than PayPal Website Payments Standard or PayPal Express Checkout."
+msgstr "Använder du något annat betalsätt än PayPal, använd SSL certifikat."
+
+#: ../admin/settings.php:258
+msgid "Database Sessions"
+msgstr "Databas session"
+
+#: ../admin/settings.php:264
+msgid "Database sessions offer better performance but if you have trouble with them, try using the standard PHP sessions by disabling database sessoins"
+msgstr "Databas sessioner har bättre prestanda men om du har har problem med dom, prova att använda standard PHP session genom att avaktivera databas session."
+
+#: ../admin/settings.php:268
+msgid "Track inventory"
+msgstr "Spåra inventarie"
+
+#: ../admin/settings.php:274
+msgid "This feature uses ajax. If you have javascript errors in your theme clicking Add To Cart buttons will not add products to the cart."
+msgstr "Denna funktion använder ajax. Har du något problem med javascript i ditt thema kommer det inte \"Lägg i varukorgen\" knappen att fungera."
+
+#: ../admin/settings.php:293
+msgid "Cart and Checkout Settings"
+msgstr "Inställningar för varukorg och kassa"
+
+#: ../admin/settings.php:303
+msgid "Shipping Form"
+msgstr "Fraktformulär"
+
+#: ../admin/settings.php:308
+msgid "Show \"Same as Billing\""
+msgstr "Visa \"Samma som fakturaadress\""
+
+#: ../admin/settings.php:309
+msgid "Always show the shipping form"
+msgstr "Visa alltid leveransadressformuläret"
+
+#: ../admin/settings.php:310
+msgid "Choose whether or not to display the shipping address form on the checkout page by default."
+msgstr "Välj om du vill eller inte vill visa leveransadressformuläret som standard vid kassan"
+
+#: ../admin/settings.php:313
+msgid "User Price Label"
+msgstr "Använd etikett för pris"
+
+#: ../admin/settings.php:315
+msgid "Defaults to \"Enter an amount: \""
+msgstr "Standard för \"Ange ett belopp: \""
+
+#: ../admin/settings.php:318
+msgid "User Quantity Label"
+msgstr "Använd etikett för antal"
+
+#: ../admin/settings.php:320
+msgid "Defaults to \"Quantity: \""
+msgstr "Standard för \"Antal: \""
+
+#: ../admin/settings.php:324
+msgid "AJAX Add To Cart"
+msgstr "AJAX Lägg i varukorg"
+
+#: ../admin/settings.php:331
+msgid "This changes the default action when adding a product shortcode to a page or post"
+msgstr "Detta ändrar standardinställningen när du lägger till en produkts snabbkod i ett inlägg eller en sida"
+
+#: ../admin/settings.php:335
+msgid "Product Links in Cart"
+msgstr "Produktlänk i varukorgen"
+
+#: ../admin/settings.php:342
+msgid "Use this option to add a link back to the original product page"
+msgstr "Använd detta val för att lägga till en länk till produktsidan"
+
+#: ../admin/settings.php:346
+msgid "Edit Product Links"
+msgstr "Redigera produktlänkar"
+
+#: ../admin/settings.php:353
+msgid "Use this option to enable the edit product links on your product pages"
+msgstr "Använd detta val för att göra redigeringen av produktlänk på dina produktsidor tillgänglig"
+
+#: ../admin/settings.php:359
+msgid "Minimum Cart Amount Settings"
+msgstr "Inställningar för min. belopp i varukorg"
+
+#: ../admin/settings.php:361
+msgid "Min. Amount"
+msgstr "Minimum Belopp"
+
+#: ../admin/settings.php:367
+msgid "This feature allows you to set a minimum cart amount before your customers can checkout."
+msgstr "Denna funktion tillåter dig att ange ett minimum varkorgsbelopp innan kundera kan checka ut"
+
+#: ../admin/settings.php:373
+msgid "Set the amount required in order for a customer to checkout"
+msgstr "Anbge beloppet som krävs för att kunderna ska kunna checka ut"
+
+#: ../admin/settings.php:376
+msgid "Min. Amount Label"
+msgstr "Etikett för minimum belopp"
+
+#: ../admin/settings.php:378
+msgid "Defaults to \"You have not yet reached the required minimum amount in order to checkout.\""
+msgstr "Standard för \"Du har inte nått upp till min. orderbelopp för att kunna slutföra din beställning.\""
+
+#: ../admin/settings.php:395
+msgid "Tax Rates"
+msgstr "Momssats"
+
+#: ../admin/settings.php:398
+msgid ""
+"If you would like to collect sales tax please enter the tax rate information below. \n"
+"          You may enter tax rates for zip codes or states. If you are entering zip codes, you can enter individual \n"
+"          zip codes or zip code ranges. A zip code range is entered with the low value separated from the high value\n"
+"          by a dash. For example, 23000-25000. Zip code tax rates take precedence over state tax rates.\n"
+"          You may also choose whether or not you want to apply taxes to shipping charges."
+msgstr "Om du vill lägga på moms, ange momsinformation nedan.Du kan ange moms per postnummer eller stat. Om du anger per postnummer kan du ange indivuduellt postnummer eller en serie. "
+
+#: ../admin/settings.php:404
+msgid ""
+"NOTE: If you are using PayPal Website Payments Standard you must set up the tax rate \n"
+"          information <strong>in your paypal account</strong>."
+msgstr "OBSERVERA: Om du använder PayPal standard måste du ange momsinformation <strong>i ditt PayPal konto</strong>."
+
+#: ../admin/settings.php:411
+msgid "State"
+msgstr "Län"
+
+#: ../admin/settings.php:414
+msgid "All Sales"
+msgstr "All försäljning"
+
+#: ../admin/settings.php:486
+msgid "Zip"
+msgstr "Postnummer"
+
+#: ../admin/settings.php:488
+#: ../admin/settings.php:504
+#: ../admin/shipping.php:827
+msgid "Rate"
+msgstr "Kurs"
+
+#: ../admin/settings.php:491
+msgid "Don't tax shipping"
+msgstr "Moms används ej för frakt"
+
+#: ../admin/settings.php:492
+msgid "Tax shipping"
+msgstr "Moms för frakt"
+
+#: ../admin/settings.php:503
+msgid "Location"
+msgstr "Plats"
+
+#: ../admin/settings.php:505
+msgid "Tax Shipping"
+msgstr "Moms för frakt"
+
+#: ../admin/settings.php:526
+msgid "yes"
+msgstr "ja"
+
+#: ../admin/settings.php:526
+msgid "no"
+msgstr "nej"
+
+#: ../admin/settings.php:548
+msgid "Mijireh Settings - Secure Credit Card Processing"
+msgstr "Mijireh inställningar - Säkerhetinställningar för kort"
+
+#: ../admin/settings.php:568
+msgid "Access Key"
+msgstr "Access Key"
+
+#: ../admin/settings.php:586
+msgid "PayPal Settings"
+msgstr "PayPal inställningar"
+
+#: ../admin/settings.php:589
+msgid ""
+"If you have signed up for the PayPal Pro account or if you plan to use PayPal Express Checkout, \n"
+"          please configure you settings below."
+msgstr "Om du har ett PayPal Pro konto eller om du planerar att använda PayPal Express,konfigurera inställningarna nedan."
+
+#: ../admin/settings.php:598
+msgid "PayPal Email"
+msgstr "PayPal e-post"
+
+#: ../admin/settings.php:602
+msgid "Default Currency"
+msgstr "Standard valuta"
+
+#: ../admin/settings.php:617
+msgid "Shopping URL"
+msgstr "Butik URL"
+
+#: ../admin/settings.php:619
+msgid "Used when buyers click 'Continue Shopping' in the PayPal Cart."
+msgstr "Används när kunderna klickar på \"Fortsätt handla\" vid PayPals varukorg."
+
+#: ../admin/settings.php:622
+msgid "Return URL"
+msgstr "Återvänd till URL"
+
+#: ../admin/settings.php:625
+msgid "Where buyers are sent after paying at PayPal."
+msgstr "Dit kunderna skickas efter att ha betalat med PayPal."
+
+#: ../admin/settings.php:628
+msgid "Notification URL"
+msgstr "Meddelande URL"
+
+#: ../admin/settings.php:636
+msgid "Instant Payment Notification (IPN)"
+msgstr "Instant Payment Notification (IPN)"
+
+#: ../admin/settings.php:640
+msgid "PayPal API Settings for Express Checkout"
+msgstr "PayPal API inställningar för Express Checkout"
+
+#: ../admin/settings.php:643
+#: ../admin/settings.php:826
+#: ../admin/settings.php:840
+msgid "API Username"
+msgstr "API Användarnamn"
+
+#: ../admin/settings.php:648
+msgid "API Password"
+msgstr "API Lösenord"
+
+#: ../admin/settings.php:653
+msgid "API Signature"
+msgstr "API Signatur"
+
+#: ../admin/settings.php:662
+msgid "Dont Require PayPal account for Express Checkout"
+msgstr "Kräv inte PayPal konto för PayPal Express"
+
+#: ../admin/settings.php:671
+msgid "Allow Express Checkout customers to checkout without a PayPal Account"
+msgstr "Tillåt Express kunder att checka ut utan ett PayPal konto"
+
+#: ../admin/settings.php:678
+msgid "Use PayPal Sandbox"
+msgstr "Använd PayPal "
+
+#: ../admin/settings.php:686
+msgid "Send transactions to <a href=\"https://developer.paypal.com\">PayPal's developer sandbox</a>."
+msgstr "Skicka transaktion till <a href=\"https://developer.paypal.com\">PayPal's developer sandbox</a>."
+
+#: ../admin/settings.php:693
+msgid "Note: The Website Payments Pro solution can only be implemented by UK, Canadian and US Merchants."
+msgstr "Observera: Website Payments Pro solution kan bara användas i England, Kanada och USA."
+
+#: ../admin/settings.php:694
+msgid "Learn more"
+msgstr "Lär dig mer"
+
+#: ../admin/settings.php:696
+msgid "Note: The Website Payments Pro solution is only available in <a href=\"http://cart66.com\">Cart66 Professional</a> and can only be implemented by UK, Canadian and US Merchants."
+msgstr "Observera: The Website Payments Pro solution är endast tillgänglig i <a href=\"http://cart66.com\">Cart66 Professional</a> och kan bara användas av England, Kanada och USA."
+
+#: ../admin/settings.php:710
+msgid "Payment Gateway Settings"
+msgstr "Payment Gateway Inställningar"
+
+#: ../admin/settings.php:714
+msgid "These settings configure your connection to your Authorize.net AIM compatible payment gateway."
+msgstr "Dessa inställningar konfigurerar din anslutning till Authorize.net AIM compatible payment gateway"
+
+#: ../admin/settings.php:729
+msgid "Gateway"
+msgstr "Gateway"
+
+#: ../admin/settings.php:738
+msgid "Other"
+msgstr "Annan"
+
+#: ../admin/settings.php:740
+msgid "The Authorize.net test server requires a developer test account which is different than your normal authorize.net account. You can sign up for one here: <a href=\"https://developer.authorize.net/testaccount/\" target=\"_blank\">https://developer.authorize.net/testaccount/"
+msgstr "Authorize.net test server kräver ett testkonto för utveckling, vilket är annorlunda mot ett normalt konto. Du kan registrera dig för ett konto här: <a href=\"https://developer.authorize.net/testaccount/\" target=\"_blank\">https://developer.authorize.net/testaccount/"
+
+#: ../admin/settings.php:745
+msgid "Emulation URL"
+msgstr "Emulering länk"
+
+#: ../admin/settings.php:747
+msgid "Autorize.net AIM emulation URL"
+msgstr "Autorize.net AIM emulering URL"
+
+#: ../admin/settings.php:753
+msgid "eWay Customer ID"
+msgstr "eWay kund ID"
+
+#: ../admin/settings.php:757
+msgid "eWay Sandbox"
+msgstr "eWay Sandbox"
+
+#: ../admin/settings.php:761
+msgid "These are the settings used for test transactions with eWay."
+msgstr "Dessa inställningar används för testtransaktioner med eWay."
+
+#: ../admin/settings.php:763
+msgid "Sandbox ID"
+msgstr "Sandbox ID"
+
+#: ../admin/settings.php:771
+msgid "Stripe API Key"
+msgstr "Stripe API Key"
+
+#: ../admin/settings.php:775
+msgid "Stripe Test Mode"
+msgstr "Stripe Testläge"
+
+#: ../admin/settings.php:779
+msgid "These are the settings used for test transactions with Stripe."
+msgstr "Dessa inställningar används för testtransaktioner med Stripe."
+
+#: ../admin/settings.php:781
+msgid "Stripe Test API Key"
+msgstr "Stripe Test API Key"
+
+#: ../admin/settings.php:789
+msgid "Currency"
+msgstr "Valuta"
+
+#: ../admin/settings.php:796
+#: ../admin/settings.php:812
+msgid "API Passphrase"
+msgstr "API Passphrase"
+
+#: ../admin/settings.php:799
+#: ../admin/settings.php:815
+msgid "MerchantUUID"
+msgstr "MerchantUUID"
+
+#: ../admin/settings.php:802
+#: ../admin/settings.php:818
+msgid "API key"
+msgstr "API key"
+
+#: ../admin/settings.php:806
+msgid "Test Mode"
+msgstr "Testläge"
+
+#: ../admin/settings.php:810
+msgid "These are the settings used for test transactions with Merchant Warrior."
+msgstr "Detta är inställningarna som används för test transaktioner för Merchant Warrior."
+
+#: ../admin/settings.php:830
+#: ../admin/settings.php:844
+msgid "Transaction Key"
+msgstr "Transaction Key"
+
+#: ../admin/settings.php:834
+msgid "PayLeap Test Mode"
+msgstr "PayLeap Testläge"
+
+#: ../admin/settings.php:838
+msgid "These are the settings used for test transactions with PayLeap."
+msgstr "Detta är inställningarna som används för test transaktioner för PayLeap."
+
+#: ../admin/settings.php:850
+msgid "API Login ID"
+msgstr "API Login ID"
+
+#: ../admin/settings.php:852
+msgid "Where can I find my Authorize.net API Login ID and Transaction Key?"
+msgstr "Vart kan jag hitta mitt Authorize.net API Login ID och Transaction Key"
+
+#: ../admin/settings.php:855
+msgid "Transaction key"
+msgstr "Transaction key"
+
+#: ../admin/settings.php:867
+msgid "With <a href=\"http://cart66.com\">Cart66 Professional</a> you can accept credit cards directly on your website using:"
+msgstr "Med <a href=\"http://cart66.com\">Cart66 Professional</a> kan du acceptera kortbetalningar direkt via din hemsida via: "
+
+#: ../admin/settings.php:873
+msgid "Any other gateway that implements the Authorize.net AIM interface"
+msgstr "En annan gateway som implementerar Authorize.net AIM interface"
+
+#: ../admin/settings.php:884
+msgid "Email Receipt Settings"
+msgstr "Inställningar för kvitto via e-post"
+
+#: ../admin/settings.php:888
+msgid "These are the settings used for sending email receipts to your customers after they place an order."
+msgstr "Dessa är inställningar för att skicka kvitto via e-post till dina kunder efter att dom lagt en order."
+
+#: ../admin/settings.php:894
+#: ../admin/settings.php:946
+msgid "From Name"
+msgstr "Från namn"
+
+#: ../admin/settings.php:897
+msgid ""
+"The name of the person from whom the email receipt will be sent. \n"
+"                  You may want this to be your company name."
+msgstr "Namnet på avsändaren  Exempelvis ditt företags namn"
+
+#: ../admin/settings.php:900
+#: ../admin/settings.php:952
+msgid "From Address"
+msgstr "Från adress"
+
+#: ../admin/settings.php:903
+msgid "The email address the email receipt will be from."
+msgstr "Avsändarens e-postadress"
+
+#: ../admin/settings.php:906
+msgid "Receipt Subject"
+msgstr "Meddelanderubrik"
+
+#: ../admin/settings.php:909
+msgid "The subject of the email receipt"
+msgstr "Rubriken för e-postmeddelandet"
+
+#: ../admin/settings.php:911
+msgid "Receipt Intro"
+msgstr "Introduktion på kvittot"
+
+#: ../admin/settings.php:914
+msgid "This text will appear at the top of the receipt email message above the list of items purchased."
+msgstr "Denna text kommer att synas längst upp på kvittot i e-postmeddelandet, ovanför de köpta varorna."
+
+#: ../admin/settings.php:916
+msgid "Copy Receipt To"
+msgstr "Skicka kopia av kvitto till"
+
+#: ../admin/settings.php:918
+msgid "Use commas to separate addresses."
+msgstr "Använd kommatecken för att separera e-postadresser."
+
+#: ../admin/settings.php:936
+msgid "Password Reset Email Settings"
+msgstr "Inställningar för återställande av lösenord"
+
+#: ../admin/settings.php:940
+msgid "These are the settings used for sending password reset emails your subscribers who forget their passwords."
+msgstr "Dessa inställningar använd för att skicka e-post för återställande av lösenord till prenumeranter som glömt bort sitt lösenord."
+
+#: ../admin/settings.php:949
+msgid ""
+"The name of the person from whom the email will be sent. \n"
+"                  You may want this to be your company name."
+msgstr "Namnet på personen från vilken e-posten skickas ifrån Exempelvis ditt företags namn"
+
+#: ../admin/settings.php:955
+msgid "The email address the email will be from."
+msgstr "Avsändarens e-postadress"
+
+#: ../admin/settings.php:958
+msgid "Email Subject"
+msgstr "Meddeladerubrik"
+
+#: ../admin/settings.php:961
+msgid "The subject of the email."
+msgstr "Rubriken för e-postmeddelandet"
+
+#: ../admin/settings.php:963
+msgid "Email Intro"
+msgstr "Meddelandeintroduktion"
+
+#: ../admin/settings.php:966
+msgid "This text will appear at the top of the reset email message above the new password."
+msgstr "Den här texten visas längst upp i meddelanden, ovanför det nya lösenordet."
+
+#: ../admin/settings.php:980
+msgid "Blog Post Access Denied Messages"
+msgstr "Meddelande för nekad åtkomst till blogginlägg"
+
+#: ../admin/settings.php:984
+msgid "These are the messages your visitors will see when attempting to access a blog post that they do not have permission to view."
+msgstr "Det här är meddelandena som besökarna ser när dom försöker komma åt ett blogginlägg som du inte gett tillåtelse att visa."
+
+#: ../admin/settings.php:990
+msgid "Not logged in"
+msgstr "Inte inloggad"
+
+#: ../admin/settings.php:993
+msgid "The message that appears when a private posted is accessed by a visitor who is not logged in."
+msgstr "Meddelandet som visas när ett privat inlägg visas av en besökare som inte är inloggad."
+
+#: ../admin/settings.php:995
+msgid "Access denied"
+msgstr "Åtkomst nekas"
+
+#: ../admin/settings.php:998
+msgid "The message that appears when a logged in member's subscription does not allow them to view the post."
+msgstr "Meddelandet som visas när en inloggad medlems prenumeration inte tillåtet att sidan visas."
+
+#: ../admin/settings.php:1014
+msgid "Status Options"
+msgstr "Val för orderstatus"
+
+#: ../admin/settings.php:1017
+msgid "Define the order status options to suit your business needs. For example, you may want to have new, complete, and canceled."
+msgstr "Ange orderstatus val så att det passar ditt företags behov. Exempelvis, \"Ny, Levererad, Avbruten\""
+
+#: ../admin/settings.php:1024
+msgid "Order statuses"
+msgstr "Orderstatusar"
+
+#: ../admin/settings.php:1027
+msgid "Separate values with commas. (ex. new,complete,cancelled)"
+msgstr "Separera värden med kommatecken (ex. Ny, Avslutad, Avbruten)"
+
+#: ../admin/settings.php:1041
+msgid "Digital Product Settings"
+msgstr "Inställningar för digital produkt"
+
+#: ../admin/settings.php:1044
+msgid "Enter the absolute path to where you want to store your digital products. We suggest you choose a folder that is not web accessible. To help you figure out the path to your digital products folder, this is the absolute path to the page you are viewing now."
+msgstr "Ange katalogen där du vill spara dina digitala produkter. Vi föreslår att mappen inte är tillgänglig via webben. För att hjälpa dig välja en katalog för dina digitala produkter, här är katalogen till sidan du visar nu"
+
+#: ../admin/settings.php:1046
+msgid "Please note you should NOT enter a web url starting with http:// Your filesystem path will start with just a /"
+msgstr "Notera att du INTE ska ange en URL som börjar med http://. Katalogen till din hemsida börjar med ett \"/\""
+
+#: ../admin/settings.php:1053
+msgid "Product folder"
+msgstr "Produktmapp"
+
+#: ../admin/settings.php:1060
+msgid "<strong>WARNING:</strong> This directory does not exist."
+msgstr "<strong>VARNING:</strong>  Katalogen existerar inte."
+
+#: ../admin/settings.php:1061
+msgid "<strong>WARNING:</strong> WordPress cannot write to this folder."
+msgstr "<strong>VARNING:</strong> WordPress kan inte skriva till den här mappen."
+
+#: ../admin/settings.php:1079
+msgid "Store Home Page"
+msgstr "Butikens hemsida"
+
+#: ../admin/settings.php:1082
+msgid ""
+"This is the link to the page of your site that you consider to be the home page of your store.\n"
+"          You can choose to have customers go back to the last page they were on when they clicked \"Add to Cart\" or you can force the continue shopping button to always go to the store home page."
+msgstr "Det här är länken till den sidan på din hemsida som du anser vara startsidan på butiken. Du kan välja att låta kunderna gå tillbaka till föregående sida, eller så kan du tvinga dom att alltid gå tillbaka till startsidan."
+
+#: ../admin/settings.php:1090
+msgid "Continue Shopping"
+msgstr "Fortsätt handla"
+
+#: ../admin/settings.php:1092
+msgid "Send customer back to the last page"
+msgstr "Skicka tillbaka kunderna till föregående sida"
+
+#: ../admin/settings.php:1093
+msgid "Always go to the store home page"
+msgstr "Gå alltid till startsidan för butiken"
+
+#: ../admin/settings.php:1096
+msgid "Store URL"
+msgstr "Butikens URL"
+
+#: ../admin/settings.php:1114
+msgid "Google Analytics Ecommerce Tracking"
+msgstr "Google Analytics Ecommerce Tracking"
+
+#: ../admin/settings.php:1117
+msgid "Collect transaction and purchase data for your website using the Google Analytics tracking code.  If you already use another analytics plugin, make sure you specify that here so that your site does not track the receipt page twice."
+msgstr "Hämta hem transaktioner och försäljningsdata till din hemsida med Google Analytics tracking code. Om du redan använder en annan analys plugin, se till att specificera det här så att din hemsida inte loggar ett kvitto fler gånger."
+
+#: ../admin/settings.php:1125
+msgid "Enable for my site"
+msgstr "Gör tillgänglig för min hemsida"
+
+#: ../admin/settings.php:1130
+msgid "Other plugins"
+msgstr "Andra plugins"
+
+#: ../admin/settings.php:1132
+msgid "Yes, I want to use Cart66 with other Google Analytics plugins"
+msgstr "Ja, jag vill avnända Cart66 med andra Google Analytics plugins"
+
+#: ../admin/settings.php:1133
+msgid "No, I want to use Cart66 to track on its own"
+msgstr "Nej, jag vill använda Cart66 separat"
+
+#: ../admin/settings.php:1137
+msgid "Web Product ID"
+msgstr "Web Product ID"
+
+#: ../admin/settings.php:1139
+msgid "Starts with UA-XXXXXXXX-X"
+msgstr "Börjar med UA-XXXXXXXX-X"
+
+#: ../admin/settings.php:1149
+#: ../admin/settings.php:1288
+#: ../admin/settings.php:1417
+#: ../admin/settings.php:1463
+#: ../admin/settings.php:1512
+msgid "This feature is only available in <a href=\"http://cart66.com\">Cart66 Professional</a>."
+msgstr "Denna funktion är endas tillgänglig i  <a href=\"http://cart66.com\">Cart66 Professional</a>."
+
+#: ../admin/settings.php:1159
+msgid "Spreedly Account Information"
+msgstr "Spreedly Account Information"
+
+#: ../admin/settings.php:1162
+msgid "Configure your Spreedly account information to sell subscriptions."
+msgstr "Konfigurera informationen för Spreedly för att sälja prenumerationer."
+
+#: ../admin/settings.php:1169
+msgid "Short site name"
+msgstr "Kortnamn för siten"
+
+#: ../admin/settings.php:1171
+msgid "Look in your spreedly account under Site Details for the short site name (Used in URLs, etc)"
+msgstr "Titta i Spreedly under Detaljer för kortnamnet (Används i URLs etc)"
+
+#: ../admin/settings.php:1173
+msgid "API token"
+msgstr "API token"
+
+#: ../admin/settings.php:1176
+msgid "Look in your spreedly account under Site Details for the API Authentication Token."
+msgstr "Titta i Spreedly under Detaljer för API Authentication Token."
+
+#: ../admin/settings.php:1178
+msgid "Log out link"
+msgstr "Logga ut länk"
+
+#: ../admin/settings.php:1181
+msgid "Append a logout link to your site's navigation.<br/>Note, this only works with themes that build the navigation using the wp_list_pages() function. See the documentation for other log out options when using WordPress 3.0 Menus."
+msgstr "Lägg till en logga ut länk under sidan navigationsmeny.<br/> Observera, detta fungerar bara med teman som har en inbyggt navigationsmeny som använder funktionen \"wp_list_pages()\". Se dokumentationen för andra utloggningsalternativ när du använder WordPress 3.0 menyer"
+
+#: ../admin/settings.php:1197
+msgid "Amazon S3 Settings"
+msgstr "Inställningar för Amazon S3"
+
+#: ../admin/settings.php:1200
+msgid "Amazon S3 provides a simple web services interface for delivering digital content. It gives you access to the same highly scalable, reliable, secure, fast, inexpensive infrastructure that Amazon uses to run its own global network of web sites. Deliver you Cart66 digital products through your Amazon S3 account to increase security and performance when selling digital products."
+msgstr "Amazon S3 erbjuder en enkel webblösning för att leverera digitalt innehåll. Det ger dig tillgång till samma höga, säkra, snabba infrastruktur som Amazon använder på sitt eget globala nätverket av webbsidor. Leverera dina Cart66 digitala produkter genom ditt Amazon S3 konto för att utöka säkerheten och prestandand när du säljer digitala produkter."
+
+#: ../admin/settings.php:1201
+msgid "Configure your Amazon S3 account information so Cart66 can distribute secure digital downloads from your Amazon S3 account."
+msgstr "Konfigurera ditt Amazon S3 konto så att Cart66 kan leverera säkra digitala nedladdningen direkt från ditt Amazon S3 konto."
+
+#: ../admin/settings.php:1208
+msgid "Access Key ID"
+msgstr "Access Key ID"
+
+#: ../admin/settings.php:1211
+msgid "Secret Key"
+msgstr "Secret Key"
+
+#: ../admin/settings.php:1227
+msgid "Constant Contact Settings"
+msgstr "Kontaktinställningar"
+
+#: ../admin/settings.php:1230
+msgid "Configure your Constant Contact account information so your buyers can opt in to your newsletter."
+msgstr "Konfigurera ditt Constant Contact konto så att kunderna kan välja att köpa ditt nyhetsbrev."
+
+#: ../admin/settings.php:1238
+#: ../admin/shipping.php:344
+msgid "Username"
+msgstr "Användarnamn"
+
+#: ../admin/settings.php:1241
+#: ../admin/shipping.php:348
+#: ../admin/shipping.php:413
+msgid "Password"
+msgstr "Lösenord"
+
+#: ../admin/settings.php:1244
+#: ../admin/settings.php:1323
+msgid "Opt-in Message"
+msgstr "Meddelande för bekräftelse"
+
+#: ../admin/settings.php:1247
+#: ../admin/settings.php:1326
+msgid "Provide a message to tell your buyers what your newsletter is about.<br/>For example, you might want to say something like \"Yes! I would like to subscribe to:\""
+msgstr "Ange ett meddelande för att berätta för dina kunder vad ditt nyhetsbrev handlar om <br/> Till exempel kanske du vill ange något i stil med  \"Ja, jag vill prenumerera på:\""
+
+#: ../admin/settings.php:1285
+msgid ""
+"Constant Contact is\n"
+"              an industry leader in email marketing. Constant Contact provides email marketing software that makes it easy to \n"
+"              create professional HTML email campaigns with no tech skills."
+msgstr "Constant Contact ärett branschledande företag inom e-postmarknadsföring. Constant Contact erbjuder e-postmarknadsföring som gör det enkelt att                skapa professionella HTML e-postkampanjer utan tekniska kunskaper."
+
+#: ../admin/settings.php:1300
+msgid "MailChimp Settings"
+msgstr "Inställningar för MailChimp"
+
+#: ../admin/settings.php:1309
+msgid "Configure your <a href=\"http://eepurl.com/dtQBb\" target=\"_blank\">Mail Chimp</a> account information so your buyers can opt in to your newsletter."
+msgstr "Konfigurera ditt  <a href=\"http://eepurl.com/dtQBb\" target=\"_blank\">Mail Chimp</a> konto så att kunderna kan välja att köpa ditt nyhetsbrev."
+
+#: ../admin/settings.php:1319
+msgid "MailChimp API Key"
+msgstr "MailChimp API Key"
+
+#: ../admin/settings.php:1321
+msgid "Need an API key? Find out how to get one"
+msgstr "Behöver du en API key? Ta reda på hur du kan få et"
+
+#: ../admin/settings.php:1328
+msgid "Double Opt-In"
+msgstr "Dubbel bekräftelse"
+
+#: ../admin/settings.php:1332
+msgid "Send a Double Opt-In email"
+msgstr "Skicka ett e-post för dubbel bekräftelse"
+
+#: ../admin/settings.php:1336
+msgid "Don't send a Double Opt-In email"
+msgstr "Skicka inte e-post för dubbel bekräftelse"
+
+#: ../admin/settings.php:1337
+msgid "Send a double opt-in confirmation message. <strong>Abusing this may cause your account to be suspended.</strong>"
+msgstr "Skicka dubbla val bekräftelsemeddelande. <strong> Missbrukande av detta kan orsaka att ditt konto spärras. </strong>"
+
+#: ../admin/settings.php:1337
+msgid "Read more about Opt-Ins"
+msgstr "Läs mer om dubbel bekräftelse"
+
+#: ../admin/settings.php:1340
+msgid "Show Lists"
+msgstr "Visa lista"
+
+#: ../admin/settings.php:1389
+#: ../admin/settings.php:1677
+msgid "Settings"
+msgstr "Inställningar"
+
+#: ../admin/settings.php:1392
+msgid "Configure your iDevAffiliate account information so Cart66 can award commissions to your affiliates."
+msgstr "Konfigurera ditt iDevAffiliate konto så att Cart66 kan ge provisioner för dina insatser."
+
+#: ../admin/settings.php:1403
+msgid "Copy and paste your iDevAffiliate \"3rd Party Affiliate Call\" URL. It will looks like"
+msgstr "Kopiera och klistra in din  iDevAffiliate \"3rd Party Affiliate Call\" URL. Det ser ut i stil med"
+
+#: ../admin/settings.php:1405
+msgid "Be sure to leave the XXX's in place and Cart66 will replace the XXX's with the appropriate values for each sale."
+msgstr "Var noga med att lämna XXX: en som dom är så ersätter Cart66 XXX-tecknen med lämpliga värden för varje försäljning."
+
+#: ../admin/settings.php:1407
+msgid "Note: To disable iDevAffiliate integration, simply delete this URL and click Save."
+msgstr "Observera: Om du vill inaktivera iDevAffiliate integration, radera denna URL och klicka på Spara."
+
+#: ../admin/settings.php:1416
+msgid "is The Industry Leader in self managed affiliate program software. Started in 1999, iDevAffiliate is the original in self managed affiliate software! iDevAffiliate was hand coded from scratch by the same team that provides their technical support! iDevAffilaite is also the affilate software that runs our"
+msgstr "är branschledande med sin programvara. Grundades 1999, och iDevAffiliate är originalet! iDevAffiliate var handkodat från början av samma team som ger deras tekniska support! iDevAffilaite är också programvaran som driver våra"
+
+#: ../admin/settings.php:1428
+msgid "Zendesk Account Information"
+msgstr "Zendesk kontoinformation"
+
+#: ../admin/settings.php:1431
+msgid "Configure your Zendesk account information to enable remote authentication."
+msgstr "Konfigurera ditt Zendesk konto för att möjliggöra fjärrautentiering."
+
+#: ../admin/settings.php:1439
+msgid "Token"
+msgstr "Token"
+
+#: ../admin/settings.php:1442
+msgid "Look in your Zendesk account under \"Settings > Security > Authentication > Single Sign-On\" for the Authentication Token."
+msgstr "Ta fram ditt Zendesk konto under \"Settings > Security > Authentication > Single Sign-On\"  för Authentication Token."
+
+#: ../admin/settings.php:1444
+msgid "Prefix"
+msgstr "Prefix"
+
+#: ../admin/settings.php:1447
+msgid "The prefix is the first part of your zendesk account URL.<br/>For example, if your Zendesk URL is http://<strong style=\"font-size: 14px;\">mycompany</strong>.zendesk.com Then your prefix is mycompany."
+msgstr "Prefixet är första delen av din Zendesk konto URL. <br/>Till exempel, om din Zendesk URL är http://<strong style=\"font-size: 14px;\">mittbolag</strong>.zendesk.com Så är ditt prefix mittbolag."
+
+#: ../admin/settings.php:1462
+msgid "is the industry leader in web-based help desk software with an elegant support ticket system and a self-service customer support platform. Agile, smart, and convenient."
+msgstr "är branschledande inom webbaserad helpdesk programvara med ett elegant supportsystem och en självbetjänad kundsupports plattform. Smidig, smart och bekvämt."
+
+#: ../admin/settings.php:1473
+msgid "Terms of Service"
+msgstr "Allmänna villkor"
+
+#: ../admin/settings.php:1476
+msgid "Require customer acceptance of your terms of service."
+msgstr "Kräv kundernas godkännande av dina användarvillkor."
+
+#: ../admin/settings.php:1483
+msgid "Require Terms"
+msgstr "Kräv villkor"
+
+#: ../admin/settings.php:1488
+msgid "Terms Title"
+msgstr "Titel för villkor"
+
+#: ../admin/settings.php:1492
+msgid "Terms Text"
+msgstr "Villkorstext"
+
+#: ../admin/settings.php:1496
+msgid "Acceptance Label"
+msgstr "Etikett för godkännande"
+
+#: ../admin/settings.php:1498
+msgid "I Agree, proceed to Checkout"
+msgstr "Jag godkänner, fortsätt med utcheckningen"
+
+#: ../admin/settings.php:1500
+msgid "Replacement Text"
+msgstr "Ersättningstext"
+
+#: ../admin/settings.php:1523
+msgid "Customize Cart Images"
+msgstr "Ändra varukorgens bilder"
+
+#: ../admin/settings.php:1526
+msgid "If you would like to use your own shopping cart images (Add To Cart, Checkout, etc), enter the URL to the directory where you will be storing the images. The path should be outside the plugins/cart66 directory so that they are not lost when you upgrade your Cart66 intallation to a new version."
+msgstr "Om du vill använda dina egna bilder i kundvagnen (Lägg i varukorg, Kassan, etc), skriv in URL till den katalog där du kommer att spara bilderna. Sökvägen bör ligga utanför plugins/cart66 katalogen så att de inte försvinner när du uppgraderar din Cart66 till en ny version."
+
+#: ../admin/settings.php:1527
+msgid "For example you may want to store your custom cart images here"
+msgstr "Till exempel kanske du vill spara bilderna här"
+
+#: ../admin/settings.php:1529
+msgid "Be sure that your path ends in a trailing slash like the example above and that you have all of the image names below in your directory"
+msgstr "Se till att din sökväg slutar i ett snedstreck som i exemplet ovan och att du har alla bildernas namn nedan i din katalog"
+
+#: ../admin/settings.php:1546
+msgid "URL to image directory"
+msgstr "URL till bildkatalogen"
+
+#: ../admin/settings.php:1563
+msgid "Customize Styles"
+msgstr "Anpassa stilen"
+
+#: ../admin/settings.php:1566
+msgid "If you would like to override the default styles, you may enter the URL to your custom style sheet."
+msgstr "Om du hellre vill använda en egen CSS fil, ange URL till filen nedan"
+
+#: ../admin/settings.php:1572
+msgid "URL to CSS"
+msgstr "URL till CSS fil"
+
+#: ../admin/settings.php:1608
+msgid "Set the role required to access the areas of the Cart66 plugin. Note that the ability to edit these settings requires the \"manage_options\" capability normally assigned to Administrators."
+msgstr "Ställ in den roll som krävs för att komma åt delar av Cart66 plugin. Observera att möjligheten att redigera dessa inställningar kräver \"manage_options\" behörighet som normalt tilldelas administratörer."
+
+#: ../admin/settings.php:1613
+msgid "The admin page roles have been saved."
+msgstr "Administratörsrollerna har blivit sparade"
+
+#: ../admin/settings.php:1617
+msgid "Orders"
+msgstr "Order"
+
+#: ../admin/settings.php:1619
+#: ../admin/settings.php:1629
+#: ../admin/settings.php:1639
+#: ../admin/settings.php:1649
+#: ../admin/settings.php:1659
+#: ../admin/settings.php:1669
+#: ../admin/settings.php:1679
+#: ../admin/settings.php:1689
+#: ../admin/settings.php:1699
+#: ../admin/settings.php:1709
+msgid "Administrator"
+msgstr "Administratör"
+
+#: ../admin/settings.php:1620
+#: ../admin/settings.php:1630
+#: ../admin/settings.php:1640
+#: ../admin/settings.php:1650
+#: ../admin/settings.php:1660
+#: ../admin/settings.php:1670
+#: ../admin/settings.php:1680
+#: ../admin/settings.php:1690
+#: ../admin/settings.php:1700
+#: ../admin/settings.php:1710
+msgid "Editor"
+msgstr "Redigerare"
+
+#: ../admin/settings.php:1621
+#: ../admin/settings.php:1631
+#: ../admin/settings.php:1641
+#: ../admin/settings.php:1651
+#: ../admin/settings.php:1661
+#: ../admin/settings.php:1671
+#: ../admin/settings.php:1681
+#: ../admin/settings.php:1691
+#: ../admin/settings.php:1701
+#: ../admin/settings.php:1711
+msgid "Author"
+msgstr "Författare"
+
+#: ../admin/settings.php:1622
+#: ../admin/settings.php:1632
+#: ../admin/settings.php:1642
+#: ../admin/settings.php:1652
+#: ../admin/settings.php:1662
+#: ../admin/settings.php:1672
+#: ../admin/settings.php:1682
+#: ../admin/settings.php:1692
+#: ../admin/settings.php:1702
+#: ../admin/settings.php:1712
+msgid "Contributor"
+msgstr "Medarbetare"
+
+#: ../admin/settings.php:1637
+msgid "PayPal Subscriptions"
+msgstr "PayPal prenumerationer"
+
+#: ../admin/settings.php:1647
+msgid "Inventory"
+msgstr "Inventarier"
+
+#: ../admin/settings.php:1657
+msgid "Promotions"
+msgstr "Kampanjer"
+
+#: ../admin/settings.php:1687
+msgid "Notifications"
+msgstr "Meddelande"
+
+#: ../admin/settings.php:1697
+msgid "Reports"
+msgstr "Rapporter"
+
+#: ../admin/settings.php:1707
+msgid "Accounts"
+msgstr "Konton"
+
+#: ../admin/settings.php:1718
+#: ../admin/settings.php:1767
+#: ../admin/shipping.php:397
+#: ../admin/shipping.php:488
+#: ../admin/shipping.php:548
+#: ../admin/shipping.php:609
+#: ../admin/shipping.php:641
+#: ../admin/shipping.php:733
+msgid "Save"
+msgstr "Spara"
+
+#: ../admin/settings.php:1732
+msgid "Error Logging &amp; Debugging"
+msgstr "Felloggar & Felsökning"
+
+#: ../admin/settings.php:1743
+msgid "Enable logging"
+msgstr "Möjliggör loggning"
+
+#: ../admin/settings.php:1747
+msgid "Only enable logging when testing your site. The log file will grow quickly."
+msgstr "Aktivera endast loggning när du testar din webbplats. Loggfilen kommer att växa snabbt."
+
+#: ../admin/settings.php:1751
+msgid "Disable caching"
+msgstr "Inaktivera caching"
+
+#: ../admin/settings.php:1753
+msgid "never"
+msgstr "aldrig"
+
+#: ../admin/settings.php:1754
+msgid "on cart pages"
+msgstr "på alla varukorgsidor"
+
+#: ../admin/settings.php:1755
+msgid "on all pages"
+msgstr "på alla sidor"
+
+#: ../admin/settings.php:1757
+msgid "Send HTTP headers to prevent pages from being cached by web browsers."
+msgstr "Skicka HTTP-huvuden för att förhindra att sidor cachas av webbläsare."
+
+#: ../admin/settings.php:1761
+msgid "Delete database when uninstalling"
+msgstr "Radera databas vid avinstallation"
+
+#: ../admin/settings.php:1763
+msgid "<strong>WARNING:</strong> Cart66 Lite and Cart66 Professional share the same database. If you are upgrading from Cart66 Lite to Professional and want to keep all your settings, <strong>do not delete the database</strong> when uninstalling Cart66 Lite."
+msgstr "<strong> VARNING: </strong> Cart66 Lite och Cart66 Professional delar samma databas. Om du uppgraderar från Cart66 Lite Professional och vill hålla alla dina inställningar, <strong>ta inte bort databasen </strong> när du avinstallerar Cart66 Lite."
+
+#: ../admin/settings.php:1789
+msgid "Debugging Data"
+msgstr "Felsökning av Data"
+
+#: ../admin/shipping.php:260
+msgid "Live Shipping Rates"
+msgstr "Ackumulerande fraktpriser"
+
+#: ../admin/shipping.php:262
+msgid "Using live shipping rates overrides all other types of shipping settings."
+msgstr "Användande av ackumulerande fraktpriser åsidosätter alla andra typer av fraktinställningar."
+
+#: ../admin/shipping.php:266
+msgid "Live shipping rates are enabled."
+msgstr "Ackumulerade fraktpriser är aktiverade."
+
+#: ../admin/shipping.php:272
+msgid "Live shipping rates are not enabled."
+msgstr "Ackumulerade fraktpriser är avaktiverade."
+
+#: ../admin/shipping.php:286
+msgid "USPS Shipping"
+msgstr "USPS Frakt"
+
+#: ../admin/shipping.php:287
+msgid "UPS Shipping"
+msgstr "UPS Frakt"
+
+#: ../admin/shipping.php:288
+msgid "FedEx Shipping"
+msgstr "FedEx frakt"
+
+#: ../admin/shipping.php:289
+msgid "Australia Post Shipping"
+msgstr "Australia Post frakt"
+
+#: ../admin/shipping.php:290
+msgid "Canada Post Shipping"
+msgstr "Canada Post Frakt"
+
+#: ../admin/shipping.php:291
+msgid "Local Pickup"
+msgstr "Lokalt utlämningsställe"
+
+#: ../admin/shipping.php:292
+#: ../admin/shipping.php:647
+msgid "Rate Tweaker"
+msgstr "Pris tweaker"
+
+#: ../admin/shipping.php:296
+msgid "loading..."
+msgstr "laddar..."
+
+#: ../admin/shipping.php:299
+msgid "USPS Shipping Account Information"
+msgstr "USPS Shipping kontoinformation"
+
+#: ../admin/shipping.php:300
+msgid "If you intend to use United States Postal Service real-time shipping quotes please provide your USPS account information.<br/>This feature requires a <strong>production USPS account.</strong> A test account will not work."
+msgstr "Om du tänker använda United States Postal Service realtid fraktbud ange din USPS kontoinformation. <br/> Denna funktion kräver ett <strong> riktigt USPS konto. </strong> Ett testkonto fungerar inte."
+
+#: ../admin/shipping.php:305
+msgid "Webtools username"
+msgstr "Webtools användarnamn"
+
+#: ../admin/shipping.php:309
+#: ../admin/shipping.php:360
+#: ../admin/shipping.php:425
+#: ../admin/shipping.php:509
+#: ../admin/shipping.php:570
+msgid "Ship from zip"
+msgstr "Frakta från postnummer"
+
+#: ../admin/shipping.php:313
+msgid "Select the USPS shipping methods you would like to offer to your customers."
+msgstr "Välj det USPS fraktsätt som du vill erbjuda dina kunder."
+
+#: ../admin/shipping.php:314
+#: ../admin/shipping.php:379
+#: ../admin/shipping.php:452
+#: ../admin/shipping.php:514
+#: ../admin/shipping.php:575
+msgid "Select All"
+msgstr "Välj alla"
+
+#: ../admin/shipping.php:338
+msgid "UPS Shipping Account Information"
+msgstr "UPS Shipping kontoinformation"
+
+#: ../admin/shipping.php:339
+#: ../admin/shipping.php:617
+msgid "If you intend to use UPS real-time shipping quotes please provide your UPS account information."
+msgstr "Om du tänker använda UPS realtid fraktbud ange din USP kontoinformation."
+
+#: ../admin/shipping.php:352
+msgid "API Key"
+msgstr "API Key"
+
+#: ../admin/shipping.php:356
+msgid "Account number"
+msgstr "Kontonummer"
+
+#: ../admin/shipping.php:364
+#: ../admin/shipping.php:429
+msgid "Pickup Type"
+msgstr "Utlämningssätt"
+
+#: ../admin/shipping.php:373
+#: ../admin/shipping.php:446
+msgid "Commercial Only"
+msgstr "Enbart företag"
+
+#: ../admin/shipping.php:375
+#: ../admin/shipping.php:448
+msgid "Check this box if you only ship to commercial addresses"
+msgstr "Klicka i denna ruta om du vill frakta till en företagsadress"
+
+#: ../admin/shipping.php:378
+msgid "Select the UPS shipping methods you would like to offer to your customers."
+msgstr "Välj de UPS fraktsätt som du vill erbjuda dina kunder."
+
+#: ../admin/shipping.php:379
+#: ../admin/shipping.php:452
+#: ../admin/shipping.php:514
+#: ../admin/shipping.php:575
+msgid "Clear All"
+msgstr "Rensa allt"
+
+#: ../admin/shipping.php:403
+msgid "FedEx Shipping Account Information"
+msgstr "FedEx Kontoinformation"
+
+#: ../admin/shipping.php:404
+msgid "If you intend to use FedEx real-time shipping quotes please provide your FedEx account information. This feature requires a <strong>production FedEx</strong> account. A test account will not work."
+msgstr "Om du tänker använda FedEx med ackumulerade fraktpriser, ange din FedEx kontoinformation. Denna funktion kräver ett <strong>normalt FedEx</strong> konto. Testkonto fungerar inte."
+
+#: ../admin/shipping.php:409
+#: ../admin/shipping.php:505
+msgid "Developer Key"
+msgstr "Developer Key"
+
+#: ../admin/shipping.php:417
+msgid "Account Number"
+msgstr "Kontonummer "
+
+#: ../admin/shipping.php:421
+msgid "Meter Number"
+msgstr "Meternummer"
+
+#: ../admin/shipping.php:431
+msgid "Regular Pickup"
+msgstr "Vanlig avhämtning"
+
+#: ../admin/shipping.php:432
+msgid "Regular Courier"
+msgstr "Vanlig post"
+
+#: ../admin/shipping.php:433
+msgid "Drop Box"
+msgstr "Avlämningsbox"
+
+#: ../admin/shipping.php:434
+msgid "Station"
+msgstr "Station"
+
+#: ../admin/shipping.php:435
+msgid "Business Service Center"
+msgstr "Företagscenter"
+
+#: ../admin/shipping.php:439
+msgid "Your Location"
+msgstr "Din plats"
+
+#: ../admin/shipping.php:441
+msgid "Commercial"
+msgstr "Företag"
+
+#: ../admin/shipping.php:442
+msgid "Residential"
+msgstr "Privatperson"
+
+#: ../admin/shipping.php:451
+msgid "Select the FedEx shipping methods you would like to offer to your customers."
+msgstr "Välj de FedEx fraktsätt som du vill erbjuda dina kunder."
+
+#: ../admin/shipping.php:494
+msgid "Australia Post Shipping Account Information"
+msgstr "Australia Post kontoinformation"
+
+#: ../admin/shipping.php:495
+msgid "If you intend to use Australia Post real-time shipping quotes please provide your Australia Post account information."
+msgstr "Om du tänker använda Australia Post med ackumulerade fraktpriser, ange din Australia Post kontoinformation."
+
+#: ../admin/shipping.php:513
+msgid "Select the Australia Post shipping methods you would like to offer to your customers."
+msgstr "Välj de Australia Post fraktsätt som du vill erbjuda dina kunder."
+
+#: ../admin/shipping.php:555
+msgid "Canada Post Shipping Account Information"
+msgstr "Canada Post  kontoinformation"
+
+#: ../admin/shipping.php:556
+msgid "If you intend to use Canada Post real-time shipping quotes please provide your Canada Post account information."
+msgstr "Om du tänker använda Canada Post med ackumulerade fraktpriser, ange din Canada Post kontoinformation."
+
+#: ../admin/shipping.php:566
+msgid "Merchant ID"
+msgstr "Merchant ID"
+
+#: ../admin/shipping.php:574
+msgid "Select the Canada Post shipping methods you would like to offer to your customers."
+msgstr "Välj de Canada Post fraktsätt som du vill erbjuda dina kunder."
+
+#: ../admin/shipping.php:616
+msgid "Local Pickup Option"
+msgstr "Lokal avhämtningsplats"
+
+#: ../admin/shipping.php:625
+msgid "Check this box if you want to enable a local pickup or \"in-store\" option"
+msgstr "Kryssa i den här rutan om du vill möjliggöra en lokal avhämtningsplats eller val för \"i butik\""
+
+#: ../admin/shipping.php:628
+msgid "Push to End"
+msgstr "Tryck för att avsluta"
+
+#: ../admin/shipping.php:629
+msgid "Check this box if you want to put the local pickup option at the end of the live rates"
+msgstr "Kryssa i rutan om du vill ange val för lokal avhämtningsplats i slutet av ackumulerade priser"
+
+#: ../admin/shipping.php:632
+msgid "Label"
+msgstr "Etikett"
+
+#: ../admin/shipping.php:650
+msgid "Current Tweak Factor"
+msgstr "Aktuell Tweak faktor"
+
+#: ../admin/shipping.php:675
+msgid "Tweak by percentage"
+msgstr "Tweak med procent"
+
+#: ../admin/shipping.php:676
+msgid "Tweak by fixed amount"
+msgstr "Tweak med fast belopp"
+
+#: ../admin/shipping.php:682
+msgid "What is this?"
+msgstr "Vad är det här?"
+
+#: ../admin/shipping.php:686
+msgid "How The Rate Tweaker Works"
+msgstr "Hur kostnadstweaker fungerar"
+
+#: ../admin/shipping.php:687
+msgid "The rate tweaker provides a way to adjust the live rate quotes by increasing or decreasing all of the calculated rates by a specified amount. You may choose to modify the rates by a percentage amount or by fixed amount. Enter a positive value to increase the calculated rates or negative value to reduce them. The rate tweaker will never reduce shipping rates below zero."
+msgstr "Kostnads Tweaker är ett sätt att justera ackumulerade fraktkostnader genom att öka eller minska alla de beräknade priserna med ett visst belopp. Du kan välja att ändra priser med en procentsats belopp eller med ett fast belopp. Ange ett positivt värde för att öka de beräknade priserna eller ett negativt värde för att minska dem. Kostnads Tweaker kommer aldrig att minska fraktkostnader under noll."
+
+#: ../admin/shipping.php:688
+#, php-format
+msgid "For example, if you want to increase all the calculated rates by 15% select \"Tweak by percentage\" and enter 15 in the text field then click \"Save\""
+msgstr ""
+
+#: ../admin/shipping.php:689
+msgid "If you want to take $5.00 off all the shipping rates select \"Tweak by fixed amount\" and enter -5 in the text field then click \"Save\""
+msgstr "Om du vill rabattera 5,00 på alla fraktkostnader välj \"Tweak med fast belopp\" och skriv -5 i textfältet och klicka sedan på \"Spara \""
+
+#: ../admin/shipping.php:690
+msgid "To stop using the rate tweaker, enter 0 and click \"save\""
+msgstr "För att sluta använda kostnad tweaker, skriv 0 och klicka på \"spara\""
+
+#: ../admin/shipping.php:698
+msgid "Shipping Methods"
+msgstr "Fraktsätt"
+
+#: ../admin/shipping.php:699
+msgid ""
+"Create the shipping methods you will offer your customers. If no shipping\n"
+"    price is defined for a product, the default rates entered here will be used\n"
+"    to calculate shipping costs."
+msgstr "Skapa de fraktsätt som du kommer att erbjuda dina kunder. Om ingen fraktkostnad är definierad för en produkt, kommer standarkostnaden som anges här användas för att beräkna fraktkostnader."
+
+#: ../admin/shipping.php:709
+#: ../admin/shipping.php:788
+#: ../admin/shipping.php:826
+#: ../admin/shipping.php:891
+#: ../admin/shipping.php:924
+msgid "Shipping method"
+msgstr "Fraktsätt"
+
+#: ../admin/shipping.php:711
+msgid "ex. FedEx Ground"
+msgstr "ex. FedEx vägtransporter"
+
+#: ../admin/shipping.php:715
+#: ../admin/shipping.php:747
+msgid "Default rate"
+msgstr "Standardpris"
+
+#: ../admin/shipping.php:718
+msgid "Rate if only one item is ordered"
+msgstr "Pris om bara en vara beställs"
+
+#: ../admin/shipping.php:725
+msgid "Rate for each additional item"
+msgstr "Kostnad för varje ytterligare produkt"
+
+#: ../admin/shipping.php:746
+msgid "Shipping Method"
+msgstr "Fraktsätt"
+
+#: ../admin/shipping.php:748
+msgid "Default bundle rate"
+msgstr "Standard ackumulerat pris"
+
+#: ../admin/shipping.php:768
+msgid "Product Shipping Prices"
+msgstr "Fraktkostnad produkt"
+
+#: ../admin/shipping.php:770
+msgid "The shipping prices you set up here override the default shipping prices for the shipping methods above."
+msgstr "Fraktkostnaderna du anger här åsidosätter standardkostnaderna för fraktsätten ovan."
+
+#: ../admin/shipping.php:796
+msgid "Shipping rate"
+msgstr "Fraktkostnad"
+
+#: ../admin/shipping.php:815
+msgid "You must enter at least one shipping method and at least one product for these setting to appear."
+msgstr "Du måste ange minst ett fraktsätt och minst en produkt för att dessa inställningar ska synas."
+
+#: ../admin/shipping.php:828
+msgid "Bundle rate"
+msgstr "Ackumulerat pris"
+
+#: ../admin/shipping.php:852
+msgid "Cart Price Shipping Rates"
+msgstr "Fraktkostnader för Varukorgen"
+
+#: ../admin/shipping.php:854
+msgid ""
+"You can set the shipping cost based on the total cart value. For example, you \n"
+"      may want to offer free shipping on orders over $50. To do that set minimum cart amount to $50 and the\n"
+"      shipping cost to $0."
+msgstr "Du kan ställa in fraktkostnad som baserad på det totala ordervärdet. Till exempel, du kanske vill erbjuda fri frakt på beställningar över 50. För att göra det ange ett min. belopp för ordertotalen till 50 och fraktkostnad till $ 0."
+
+#: ../admin/shipping.php:857
+msgid ""
+"You can also set up tiered shipping costs based on the cart amount. For example,\n"
+"      if you want to charge $10 shipping on orders between $0 - $24.99 and $5 shipping on orders between $25 - $49.99\n"
+"      and free shipping on orders $50 or more you would set that up with three shipping rules as follows."
+msgstr "Du kan också ställa in differentierade fraktkostnader som baseras på beloppet i varukorgen. Till exempel  Om du vill debitera 10 kr frakt på beställningar mellan 0 - 24,99 och 5 frakt på beställningar mellan 25 - 49,99  och fri frakt på beställningar på 50 eller mer du skulle du ange det med de tre fraktregler som följer."
+
+#: ../admin/shipping.php:863
+#: ../admin/shipping.php:886
+#: ../admin/shipping.php:923
+msgid "Minimum cart amount"
+msgstr "Min. belopp i varukorg"
+
+#: ../admin/shipping.php:864
+#: ../admin/shipping.php:899
+#: ../admin/shipping.php:925
+msgid "Shipping cost"
+msgstr "Fraktkostnad"
+
+#: ../admin/shipping.php:913
+msgid "You must have entered at least one shipping method before you can configure these settings."
+msgstr "Du måste ange minst ett fraktsätt innan du kan konfigurera dessa inställningar."
+
+#: ../gateways/Cart66GatewayAbstract.php:109
+msgid "Billing "
+msgstr "Betalning"
+
+#: ../gateways/Cart66GatewayAbstract.php:109
+#: ../gateways/Cart66GatewayAbstract.php:131
+#: ../gateways/Cart66GatewayAbstract.php:169
+msgid " required"
+msgstr "krav"
+
+#: ../gateways/Cart66GatewayAbstract.php:131
+msgid "Payment "
+msgstr "Betalning"
+
+#: ../gateways/Cart66GatewayAbstract.php:136
+msgid "Invalid credit card number"
+msgstr "Ogiltigt kortnummer"
+
+#: ../gateways/Cart66GatewayAbstract.php:141
+#: ../gateways/Cart66ManualGateway.php:23
+msgid "Email address is not valid"
+msgstr "E-post adress är ogiltig "
+
+#: ../gateways/Cart66GatewayAbstract.php:148
+#: ../gateways/Cart66Mijireh.php:108
+msgid "Passwords do not match"
+msgstr "Lösenorden matchar inte"
+
+#: ../gateways/Cart66GatewayAbstract.php:169
+msgid "Shipping "
+msgstr "Frakt"
+
+#: ../gateways/Cart66GatewayAbstract.php:239
+msgid "Unable to determine tax rate because shipping data is unavailable"
+msgstr "Kunde inte fastställa momssatsen eftersom att fraktinformationen inte är tillgänglig"
+
+#: ../gateways/Cart66GatewayAbstract.php:316
+msgid "There must be at least one item in the cart."
+msgstr "Det måste finnas minst en vara i varukorgen."
+
+#: ../gateways/Cart66ManualGateway.php:13
+msgid "Email address is required"
+msgstr "E-postadress krävs"
+
+#: ../gateways/Cart66ManualGateway.php:18
+msgid "Phone number is required"
+msgstr "Telefonnummer krävs"
+
+#: ../js/cart66Dialog.php:108
+#: ../js/cart66Dialog.php:114
+#: ../models/Cart66ButtonManager.php:19
+#: ../models/Cart66Dialog.php:170
+#: ../models/Cart66Dialog.php:194
+msgid "Add to Cart"
+msgstr "Lägg i varukorg"
+
+#: ../js/cart66Dialog.php:108
+#: ../js/cart66Dialog.php:114
+#: ../models/Cart66Dialog.php:188
+#: ../models/Cart66Dialog.php:194
+msgid "Cart66 Add To Cart Button"
+msgstr "Cart66 Lägg i varukorg knapp"
+
+#: ../js/cart66Dialog.php:110
+msgid "Add To Cart"
+msgstr "Lägg i varukorg"
+
+#: ../js/cart66Dialog.php:242
+msgid "Pick a product"
+msgstr "Välj en produkt"
+
+#: ../js/cart66Dialog.php:243
+msgid "Shortcode Reference"
+msgstr "Referens för kortkod"
+
+#: ../js/cart66Dialog.php:251
+#: ../models/Cart66Dialog.php:228
+msgid "Your products"
+msgstr "Dina produkter"
+
+#: ../js/cart66Dialog.php:255
+#: ../models/Cart66Dialog.php:246
+msgid "CSS style"
+msgstr "CSS style"
+
+#: ../js/cart66Dialog.php:259
+#: ../models/Cart66Dialog.php:260
+msgid "Show price"
+msgstr "Visa pris"
+
+#: ../js/cart66Dialog.php:267
+#: ../models/Cart66Dialog.php:266
+msgid "Button path"
+msgstr "Sökväg till knapp"
+
+#: ../js/cart66Dialog.php:271
+#: ../models/Cart66Dialog.php:270
+msgid "Preview"
+msgstr "Förhandsgranska"
+
+#: ../js/cart66Dialog.php:451
+msgid "Insert"
+msgstr "Lägg till"
+
+#: ../models/Cart66.php:229
+msgid "Store Pages"
+msgstr "Butikens sidor"
+
+#: ../models/Cart66.php:870
+#: ../models/Cart66.php:871
+msgid "Feature Levels"
+msgstr "Funktionsnivåer"
+
+#: ../models/Cart66Ajax.php:151
+#: ../models/Cart66Ajax.php:178
+#: ../models/Cart66Ajax.php:206
+msgid "We have successfully added"
+msgstr "Vi har framgångsrikt lagt till"
+
+#: ../models/Cart66Ajax.php:151
+#: ../models/Cart66Ajax.php:178
+#: ../models/Cart66Ajax.php:206
+msgid "to the cart"
+msgstr "till varukorgen"
+
+#: ../models/Cart66Ajax.php:160
+#: ../models/Cart66Cart.php:1114
+msgid "The quantity for"
+msgstr "kvantitet för"
+
+#: ../models/Cart66Ajax.php:160
+#: ../models/Cart66Cart.php:1114
+msgid "could not be changed to"
+msgstr "Kunde inte ändras till"
+
+#: ../models/Cart66Ajax.php:160
+#: ../models/Cart66Cart.php:1114
+msgid "because we only have"
+msgstr "för att vi bara har"
+
+#: ../models/Cart66Ajax.php:160
+#: ../models/Cart66Cart.php:1114
+msgid "in stock"
+msgstr "I lager"
+
+#: ../models/Cart66Ajax.php:160
+#: ../models/Cart66Ajax.php:187
+#: ../models/Cart66Ajax.php:214
+msgid "Your cart has been updated based on our available inventory"
+msgstr "Din varukorg har uppdaterats på grund av lagertillgänglighet"
+
+#: ../models/Cart66Ajax.php:168
+#: ../models/Cart66Ajax.php:194
+#: ../models/Cart66Ajax.php:220
+msgid "We could not add"
+msgstr "Vi kunde inte lägga till"
+
+#: ../models/Cart66Ajax.php:168
+#: ../models/Cart66Ajax.php:194
+#: ../models/Cart66Ajax.php:220
+msgid "to the cart because we are out of stock"
+msgstr "till varukorgen för att vi har slut i lager"
+
+#: ../models/Cart66Ajax.php:187
+#: ../models/Cart66Ajax.php:214
+msgid "We only added"
+msgstr "Vi la bara till"
+
+#: ../models/Cart66Ajax.php:187
+#: ../models/Cart66Ajax.php:214
+msgid "to the cart because that is all we have in stock"
+msgstr "för att vi har enbart det i lager"
+
+#: ../models/Cart66Ajax.php:324
+msgid "Warning"
+msgstr "Varning"
+
+#: ../models/Cart66ButtonManager.php:8
+msgid "Could not load product information"
+msgstr "Kunde inte ladda produktinformationen"
+
+#: ../models/Cart66CartWidget.php:76
+msgid "Title"
+msgstr "Titel"
+
+#: ../models/Cart66CartWidget.php:80
+msgid "Choose Cart Widget Type:"
+msgstr "Välj typ av varukorgswidget:"
+
+#: ../models/Cart66CartWidget.php:82
+msgid "Standard"
+msgstr "Standard"
+
+#: ../models/Cart66CartWidget.php:83
+msgid "Advanced"
+msgstr "Avancerad"
+
+#: ../models/Cart66CartWidget.php:89
+msgid "Show shipping in widget"
+msgstr "Visa frakt i widget"
+
+#: ../models/Cart66Common.php:373
+msgid "ORDER NUMBER"
+msgstr "ORDERNUMMER"
+
+#: ../models/Cart66Common.php:382
+msgid "Item"
+msgstr "Vara"
+
+#: ../models/Cart66Common.php:386
+msgid "Item Price"
+msgstr "á pris"
+
+#: ../models/Cart66Common.php:387
+msgid "Item Total"
+msgstr "Summa vara"
+
+#: ../models/Cart66Common.php:406
+msgid "TOTAL"
+msgstr "TOTALT"
+
+#: ../models/Cart66Common.php:409
+msgid "SHIPPING INFORMATION"
+msgstr "LEVERANSINFORMATION"
+
+#: ../models/Cart66Common.php:418
+msgid "Delivery via"
+msgstr "Leveranssätt"
+
+#: ../models/Cart66Common.php:422
+msgid "BILLING INFORMATION"
+msgstr "BETALINFORMATION"
+
+#: ../models/Cart66Common.php:433
+msgid "Phone"
+msgstr "Telefon"
+
+#: ../models/Cart66Common.php:437
+msgid "Email"
+msgstr "E-post"
+
+#: ../models/Cart66Common.php:450
+msgid "DOWNLOAD LINK"
+msgstr "NEDLADDNINGSLÄNK"
+
+#: ../models/Cart66Common.php:450
+msgid "Click the link below to download your order."
+msgstr "Klicka på länken nedan för att ladda ner din beställning"
+
+#: ../models/Cart66Common.php:453
+msgid "VIEW RECEIPT ONLINE"
+msgstr "VISA KVITTO ONLINE"
+
+#: ../models/Cart66Common.php:453
+msgid "Click the link below to view your receipt online."
+msgstr "Klicka på länken nedan för att visa ditt kvitto online."
+
+#: ../models/Cart66Common.php:955
+msgid "We're sorry.<br/>Your order could not be completed for the following reasons"
+msgstr "Vi ber om ursäkt. <br/> Din beställning kunde inte slutföras på grund av följande skäl"
+
+#: ../models/Cart66Common.php:1367
+msgid " hours to go"
+msgstr "timmar kvar"
+
+#: ../models/Cart66Common.php:1371
+msgid " minute ago"
+msgstr "minut sedan"
+
+#: ../models/Cart66Common.php:1371
+msgid " minutes to go"
+msgstr "minuter kvar"
+
+#: ../models/Cart66Common.php:1375
+msgid " seconds to go"
+msgstr "sekunder kvar"
+
+#: ../models/Cart66Dashboard.php:7
+msgid "Cart66 Recent Orders"
+msgstr "Cart66 senaste ordrar"
+
+#: ../models/Cart66Dashboard.php:8
+msgid "Cart66 Statistics"
+msgstr "Cart66 statistik"
+
+#: ../models/Cart66Dashboard.php:49
+msgid "You have no orders yet... Start Selling!"
+msgstr "Du har inga ordrar än... Börja sälj!"
+
+#: ../models/Cart66Dashboard.php:53
+msgid "Cart66 Products"
+msgstr "Produkter"
+
+#: ../models/Cart66Dashboard.php:54
+msgid "Cart66 Inventory"
+msgstr "Cart66 Inventering"
+
+#: ../models/Cart66Dashboard.php:55
+msgid "Cart66 Shipping"
+msgstr "Cart66 Frakt"
+
+#: ../models/Cart66Dashboard.php:63
+msgid "Order Details"
+msgstr "Orderdetaljer"
+
+#: ../models/Cart66Dashboard.php:76
+#: ../models/Cart66Dashboard.php:340
+msgid "Order Total"
+msgstr "Ordertotal"
+
+#: ../models/Cart66Dashboard.php:150
+msgid "View All Orders"
+msgstr "Visa alla ordrar"
+
+#: ../models/Cart66Dashboard.php:151
+msgid "View Reports"
+msgstr "Visa rapport"
+
+#: ../models/Cart66Dashboard.php:155
+msgid "Recent Orders Total"
+msgstr "Total för senaste ordrar"
+
+#: ../models/Cart66Dashboard.php:199
+msgid "How many recent orders would you like to display?"
+msgstr "Hur många senaste ordrar vill du visa?"
+
+#: ../models/Cart66Dashboard.php:205
+msgid "Display Status Column"
+msgstr "Visa status kolumn"
+
+#: ../models/Cart66Dashboard.php:210
+msgid "Display Order Number Column"
+msgstr "Visa Ordernummer kolumn"
+
+#: ../models/Cart66Dashboard.php:215
+msgid "Display Delivery Column"
+msgstr "Visa frakt kolumn"
+
+#: ../models/Cart66Dashboard.php:259
+msgid "Summary"
+msgstr "Summa"
+
+#: ../models/Cart66Dashboard.php:260
+msgid "Today/Yesterday"
+msgstr "Idag/Igår"
+
+#: ../models/Cart66Dashboard.php:262
+#: ../models/Cart66Dashboard.php:436
+#: ../models/Cart66Dashboard.php:459
+msgid "Daily Average"
+msgstr "Dagligt snitt"
+
+#: ../models/Cart66Dashboard.php:263
+msgid "Estimate"
+msgstr "Uppskattning"
+
+#: ../models/Cart66Dashboard.php:273
+msgid "Last Updated"
+msgstr "Senast uppdaterad"
+
+#: ../models/Cart66Dashboard.php:283
+msgid " Daily Average"
+msgstr "Dagligt snitt"
+
+#: ../models/Cart66Dashboard.php:291
+#: ../models/Cart66Dashboard.php:328
+msgid "Today's Total"
+msgstr "Dagens Total"
+
+#: ../models/Cart66Dashboard.php:299
+#: ../models/Cart66Dashboard.php:331
+msgid "Yesterday's Total"
+msgstr "Gårdagens Total"
+
+#: ../models/Cart66Dashboard.php:315
+msgid "Estimated"
+msgstr "Uppskattat"
+
+#: ../models/Cart66Dashboard.php:339
+msgid "Today's Order Details"
+msgstr "Dagens orderdetaljer"
+
+#: ../models/Cart66Dashboard.php:371
+msgid "No orders yet today"
+msgstr "Inga ordrar idag än"
+
+#: ../models/Cart66Dashboard.php:387
+msgid "Sales"
+msgstr "Försäljning"
+
+#: ../models/Cart66Dashboard.php:388
+msgid "Income"
+msgstr "Inkomster"
+
+#: ../models/Cart66Dashboard.php:432
+#: ../models/Cart66Dashboard.php:455
+msgid "Total Income"
+msgstr "Totala inkomster"
+
+#: ../models/Cart66Dashboard.php:471
+msgid "Today"
+msgstr "Idag"
+
+#: ../models/Cart66Dashboard.php:479
+msgid "Total Days in"
+msgstr "Totala dagar i"
+
+#: ../models/Cart66Dashboard.php:487
+msgid "Remaining Days in"
+msgstr "Återstående dagar i"
+
+#: ../models/Cart66Dashboard.php:495
+msgid "Estimated Remaining Income"
+msgstr "Återstående uppskattad inkomst"
+
+#: ../models/Cart66Dashboard.php:653
+msgid "There is a new version of Cart66 available"
+msgstr "Det finns en ny version av Cart66 tillgänglig"
+
+#: ../models/Cart66Dashboard.php:654
+msgid "You are currently running Cart66"
+msgstr "Du använder för närvarande Cart66"
+
+#: ../models/Cart66Dashboard.php:656
+msgid "The latest version of Cart66 is"
+msgstr "Den senaste versionen av Cart66 är"
+
+#: ../models/Cart66Dashboard.php:657
+msgid "View Details"
+msgstr "Visa Detaljer"
+
+#: ../models/Cart66Dashboard.php:659
+msgid "Upgrade Automatically"
+msgstr "Uppgradera automatiskt"
+
+#: ../models/Cart66Dashboard.php:660
+msgid "Dismiss"
+msgstr "Avfärda"
+
+#: ../models/Cart66Dialog.php:8
+#: ../models/Cart66Dialog.php:10
+msgid "Add Cart66 Shortcodes"
+msgstr "Lägg till Cart66 kortkoder"
+
+#: ../models/Cart66Dialog.php:53
+msgid "Price:"
+msgstr "Pris:"
+
+#: ../models/Cart66Dialog.php:68
+msgid "No Products"
+msgstr "Inga produkter"
+
+#: ../models/Cart66Dialog.php:218
+msgid "Shortcodes"
+msgstr "Kortkoder"
+
+#: ../models/Cart66Dialog.php:225
+msgid "Insert A Product"
+msgstr "Lägg till en produkt"
+
+#: ../models/Cart66Dialog.php:233
+msgid "User Defined"
+msgstr "Användardefinerad"
+
+#: ../models/Cart66Dialog.php:234
+msgid "Predefined"
+msgstr "Fördefinerad"
+
+#: ../models/Cart66Dialog.php:235
+msgid "Off"
+msgstr "Av"
+
+#: ../models/Cart66Dialog.php:238
+msgid "Default Quantity"
+msgstr "Standard antal"
+
+#: ../models/Cart66Dialog.php:242
+msgid "Button Text"
+msgstr "Knapptext"
+
+#: ../models/Cart66Dialog.php:250
+msgid "Ajax Add To Cart"
+msgstr "Ajax Lägg i varukorg"
+
+#: ../models/Cart66Dialog.php:263
+msgid "Price Only"
+msgstr "Endast pris"
+
+#: ../models/Cart66Dialog.php:280
+msgid "Listens for PayPal Express callbacks <br/>Belongs on system page store/express"
+msgstr "Lyssnar efter PayPal Express callbacks <br/> hör hemma på systemsidor butik/express"
+
+#: ../models/Cart66Dialog.php:281
+msgid "PayPal Instant Payment Notification <br/>Belongs on system page store/ipn"
+msgstr "PayPal betalningsmeddelande<br/> hör hemma på systemsidor butik / IPN"
+
+#: ../models/Cart66Dialog.php:282
+msgid "Shows the customer's receipt after a successful sale <br/>Belongs on system page store/receipt"
+msgstr "Visar kundens kvitto efter en framgångsrik försäljning <br/> hör hemma på systemsidor butik / kvitto"
+
+#: ../models/Cart66Dialog.php:285
+msgid "Create add to cart button"
+msgstr "Skapa \"Lägg i varukorgen\" knapp"
+
+#: ../models/Cart66Dialog.php:286
+msgid "Show the shopping cart"
+msgstr "Visa varukorgen"
+
+#: ../models/Cart66Dialog.php:287
+msgid "Show the shopping cart in read-only mode"
+msgstr "Visa varukorgen i skrivskyddat läge"
+
+#: ../models/Cart66Dialog.php:288
+msgid "Mijireh Checkout Accept Credit Cards - PCI Compliant"
+msgstr "Mijireh utcheckning accepterar kreditkort - PCI kompatibelt"
+
+#: ../models/Cart66Dialog.php:289
+msgid "Checkout form that does not process credit cards"
+msgstr "Utcheckningsformulär som inte hanterar kontokort"
+
+#: ../models/Cart66Dialog.php:290
+msgid "PayPal Website Payments Standard checkout button"
+msgstr "PayPal Standard utcheckningsknapp"
+
+#: ../models/Cart66Dialog.php:291
+msgid "PayPal Express checkout button"
+msgstr "PayPal Express utcheckningsknapp"
+
+#: ../models/Cart66Dialog.php:292
+msgid "Clear the contents of the shopping cart"
+msgstr "Rensa innehållet i varukorgen"
+
+#: ../models/Cart66Dialog.php:293
+msgid "Show the Cart66 sidebar widget"
+msgstr "Visa Cart66 sidfotswidget"
+
+#: ../models/Cart66Dialog.php:294
+msgid "Display content one time immediately after a sale"
+msgstr "Visa innehåll en gång direkt efter en försäljning"
+
+#: ../models/Cart66Dialog.php:298
+msgid "Show link to manage subscription account information"
+msgstr "Visa länk för att hantera prenumerationens kontoinformation"
+
+#: ../models/Cart66Dialog.php:299
+msgid "Account login form"
+msgstr "Inloggningsformulär för konto"
+
+#: ../models/Cart66Dialog.php:300
+msgid "Logs user out of account"
+msgstr "Logga ut användare från konto"
+
+#: ../models/Cart66Dialog.php:301
+msgid "Show link to log out of account"
+msgstr "Visa länk för utloggning från konto"
+
+#: ../models/Cart66Dialog.php:302
+msgid "Show a member when their account expires"
+msgstr "Visa medlemmen när deras konto upphör"
+
+#: ../models/Cart66Dialog.php:303
+msgid "Link to cancel PayPal subscription"
+msgstr "Länk för att avsluta PayPal prenumeration"
+
+#: ../models/Cart66Dialog.php:304
+msgid "PayLeap checkout form"
+msgstr "PayLeap utcheckningsformulär"
+
+#: ../models/Cart66Dialog.php:305
+msgid "Authorize.net (or AIM compatible gateway) checkout form"
+msgstr "Authorize.net (eller AIM compatible gateway) utcheckningsformulär"
+
+#: ../models/Cart66Dialog.php:306
+msgid "Eway checkout form"
+msgstr "Eway utcheckningsformulär"
+
+#: ../models/Cart66Dialog.php:307
+msgid "Merchant Warrior checkout form"
+msgstr "Merchant Warrior utcheckningsformulär"
+
+#: ../models/Cart66Dialog.php:308
+msgid "PayPal Pro checkout form"
+msgstr "PayPal utcheckningsformulär"
+
+#: ../models/Cart66Dialog.php:309
+msgid "Show the terms of service agreement"
+msgstr "Visa villkor"
+
+#: ../models/Cart66Dialog.php:310
+msgid "Show the name of the subscription feature level for the currently logged in user"
+msgstr "Visa namnet på prenumerationens funktionsnivår för den inloggade användaren"
+
+#: ../models/Cart66Dialog.php:311
+msgid "Show the name of the subscription for the currently logged in user"
+msgstr "Visa namnet på prenumeration för den inloggade användaren"
+
+#: ../models/Cart66Dialog.php:312
+msgid "Listens for remote login calls from Zendesk"
+msgstr "Lyssna efter fjärrinloggning från Zendesk"
+
+#: ../models/Cart66Dialog.php:313
+msgid "Hide content from members without the listed feature levels - opposite of [show_to]"
+msgstr "Dölj innehållet från medlemmar som saknar uppräknade funktionsnivåer - motsatsen till [show_to]"
+
+#: ../models/Cart66Dialog.php:314
+msgid "Show content only to members with the listed feature levels - opposite of [hide_from]"
+msgstr "Visa bara innehåll för medlemmar med de listade funktionsnivåer - motsatsen till [hide_from]"
+
+#: ../models/Cart66Dialog.php:317
+msgid "Listens for spreedly account changes <br/>Belongs on system page store/spreedly"
+msgstr "Lyssnar efter spreedly kontoförändringar <br/> Hör hemma på systemsidor butik / spreedly"
+
+#: ../models/Cart66Dialog.php:322
+msgid "Insert A System Shortcode"
+msgstr "Lägg till en systemkortkod"
+
+#: ../models/Cart66Dialog.php:325
+msgid "Shortcode Quick Reference"
+msgstr "Snabbreferens för kortkod"
+
+#: ../models/Cart66Dialog.php:345
+msgid "System Shortcodes"
+msgstr "Systemets kortkoder"
+
+#: ../models/Cart66Dialog.php:366
+msgid "Insert Shortcode"
+msgstr "Lägg till kortkod"
+
+#: ../models/Cart66Exception.php:31
+msgid "Cart66 is not able to perform the requested action"
+msgstr "Cart66 kunde inte uföra den begärda åtgärden"
+
+#: ../models/Cart66Exception.php:45
+msgid "In order to use PayPal Express Checkout you must enter your PayPal API username, password and signature in the Cart66 Settings Panel"
+msgstr "För att använda PayPal Express måste du ange dina PayPal API uppgifter vid Cart66 Inställningar."
+
+#: ../models/Cart66Exception.php:48
+msgid "In order to use PayPal Pro Checkout you must enter your PayPal API username, password and signature in the Cart66 Settings Panel"
+msgstr "För att använda PayPal Pro måste du ange dina PayPal API uppgifter vid Cart66 Inställningar."
+
+#: ../models/Cart66Exception.php:51
+msgid "In order to use Stripe Checkout you must enter your Stripe API Key in the Cart66 Settings Panel"
+msgstr "För att använda Stripe, måste du ange dina Stripe användaruppgifter vid Cart66 Inställningar"
+
+#: ../models/Cart66Exception.php:54
+msgid "In order to use PayPal Standard Checkout you must enter your PayPal Email Address in the Cart66 Settings Panel"
+msgstr "För att använda PayPal Standard måste du ange dina PayPal API uppgifter vid Cart66 Inställningar."
+
+#: ../models/Cart66Exception.php:57
+msgid "In order to use the Authorize.net Gateway, you must enter your API Login ID and Transaction Key in the Cart66 Settings Panel"
+msgstr "För att använda Authorize.net Gateway, måste du ange dina Authorize.net Gateway användaruppgifter vid Cart66 Inställningar"
+
+#: ../models/Cart66Exception.php:60
+msgid "In order to use the Authorize.net AIM Emulation gateway, you must enter your emulation URL in the Cart66 Settings Panel"
+msgstr "För att använda Authorize.net AIM Emulation Gateway, måste du ange dina emulation användaruppgifter vid Cart66 Inställningar"
+
+#: ../models/Cart66Exception.php:63
+msgid "In order to use the PayLeap Gateway, you must enter your API Username and Transaction Key in the Cart66 Settings Panel"
+msgstr "För att kunna använda PayLeap Gateway, måste du ange PayLeap API användarnamn och Transaction Key vid Cart66 inställningar. "
+
+#: ../models/Cart66Exception.php:66
+msgid "In order to use the eWay Gateway, you must enter your Customer ID in the Cart66 Settings Panel"
+msgstr "För att använda eWay Gateway, måste du ange dina eWay Gateway användaruppgifter vid Cart66 Inställningar"
+
+#: ../models/Cart66Exception.php:69
+msgid "In order to use the Merchant Warrior Gateway, you must enter your Merchant Warrior API Passphrase, MerchantUUID and API Key in the Cart66 Settings Panel"
+msgstr "För att använda Merchant Warrior Gateway, måste du ange dina Merchant Warrior användaruppgifter vid Cart66 Inställningar"
+
+#: ../models/Cart66Exception.php:72
+msgid "cURL is not correctly compiled or installed on your PHP server. cURL is an essential part of Cart66 and is a required function.<br />Please check with your hosting provider to make sure it is enabled and correctly compiled with OpenSSL."
+msgstr "cURL är inte kompatibel eller korrekt installerad på din PHP server. cURL är en viktig del av Cart66 och är en krävd funktion. <br /> Hör med ditt webbhotell och se till att den är aktiverad och kompatibel med OpenSSL."
+
+#: ../models/Cart66Exporter.php:13
+msgid "Order ID"
+msgstr "Ordernummer"
+
+#: ../models/Cart66Exporter.php:16
+msgid "Billing First Name"
+msgstr "Faktureringsadress Förnamn"
+
+#: ../models/Cart66Exporter.php:17
+msgid "Billing Last Name"
+msgstr "Faktureringsadress Efternamn"
+
+#: ../models/Cart66Exporter.php:18
+msgid "Billing Address"
+msgstr "Faktureringsadress Adress"
+
+#: ../models/Cart66Exporter.php:19
+msgid "Billing Address 2"
+msgstr "Faktureringsadress Adress"
+
+#: ../models/Cart66Exporter.php:20
+msgid "Billing City"
+msgstr "Faktureringsadress Ort"
+
+#: ../models/Cart66Exporter.php:21
+msgid "Billing State"
+msgstr "Faktureringsadress Län"
+
+#: ../models/Cart66Exporter.php:22
+msgid "Billing Country"
+msgstr "Faktureringsadress Land"
+
+#: ../models/Cart66Exporter.php:23
+msgid "Billing Zip Code"
+msgstr "Faktureringsadress Postnummer"
+
+#: ../models/Cart66Exporter.php:24
+msgid "Shipping First Name"
+msgstr "Leveranssadress Förnamn"
+
+#: ../models/Cart66Exporter.php:25
+msgid "Shipping Last Name"
+msgstr "Leveranssadress Efternamn"
+
+#: ../models/Cart66Exporter.php:26
+msgid "Shipping Address"
+msgstr "Leveranssadress Adress"
+
+#: ../models/Cart66Exporter.php:27
+msgid "Shipping Address 2"
+msgstr "Leveranssadress Adress"
+
+#: ../models/Cart66Exporter.php:28
+msgid "Shipping City"
+msgstr "Leveranssadress Ort"
+
+#: ../models/Cart66Exporter.php:29
+msgid "Shipping State"
+msgstr "Leveranssadress Län"
+
+#: ../models/Cart66Exporter.php:30
+msgid "Shipping Country"
+msgstr "Leveranssadress Land"
+
+#: ../models/Cart66Exporter.php:31
+msgid "Shipping Zip Code"
+msgstr "Leveranssadress Postnummer"
+
+#: ../models/Cart66Exporter.php:35
+msgid "Discount Amount"
+msgstr "Rabatt summa"
+
+#: ../models/Cart66Exporter.php:36
+msgid "Shipping Cost"
+msgstr "Fraktkostnad"
+
+#: ../models/Cart66Exporter.php:37
+msgid "Subtotal"
+msgstr "Deltotal"
+
+#: ../models/Cart66Exporter.php:40
+msgid "IP Address"
+msgstr "IP Adress"
+
+#: ../models/Cart66Exporter.php:41
+msgid "Delivery Method"
+msgstr "Fraktsätt"
+
+#: ../models/Cart66Product.php:762
+msgid "Unable to upload file"
+msgstr "Kunde inte ladda upp fil"
+
+#: ../models/Cart66Promotion.php:32
+msgid "Apply to All Orders"
+msgstr "Tillämpa på alla ordrar"
+
+#: ../models/Cart66Promotion.php:90
+msgid "No Start Date"
+msgstr "Inget startdatum"
+
+#: ../models/Cart66Promotion.php:95
+msgid "No End Date"
+msgstr "Inget slutdatum"
+
+#: ../models/Cart66Promotion.php:100
+msgid "Ongoing"
+msgstr "Pågående"
+
+#: ../models/Cart66Promotion.php:183
+msgid "That promotion is not valid."
+msgstr "Den kampanjen är ogiltig"
+
+#: ../models/Cart66Promotion.php:188
+msgid "That promotion is not enabled."
+msgstr "Den kampanjen är inte tillgänglig"
+
+#: ../models/Cart66Promotion.php:192
+msgid "The minimum required order total for that promotion has not been met."
+msgstr "Lägsta ordertotalen för kampanjen har inte nåtts"
+
+#: ../models/Cart66Promotion.php:196
+msgid "The minimum quantity required for that promotion has not been met."
+msgstr "Lägsta orderantalet för kampanjen har inte nåtts"
+
+#: ../models/Cart66Promotion.php:200
+msgid "The maximum quantity allowed for that promotion has been exceeded."
+msgstr "Maximalt tillåtna antal för kampanjen har överstigits"
+
+#: ../models/Cart66Promotion.php:204
+msgid "This promotion is not currently active."
+msgstr "Denna kampanj är inte aktiv"
+
+#: ../models/Cart66Promotion.php:208
+msgid "This promotion has been redeemed the maximum number of times allowed."
+msgstr "Denna kampanj har redan använts max tillåtna antal gånger"
+
+#: ../models/Cart66Promotion.php:212
+msgid "Your cart does not contain any eligible products for this promotion."
+msgstr "Din varukorg innehåller inte några varor som omfattas av kampanjen"
+
+#: ../models/Cart66Promotion.php:233
+msgid "Promotion Name is required"
+msgstr "Namn för kampanjen krävs"
+
+#: ../models/Cart66Promotion.php:237
+msgid "Promotion Code is required"
+msgstr "Nummer på kampanjen krävs"
+
+#: ../models/Cart66Promotion.php:243
+msgid " The Effective Dates are invalid, the ending date must be after the starting date."
+msgstr "Slutdatum är ogiltigt. Slutdatum måste ligga efter startdatum."
+
+#: ../models/Cart66Promotion.php:254
+msgid "The Promotion Code(s) must be unique. The code \""
+msgstr "Kampanjnummer måste vara unikt. Koden \""
+
+#: ../views/account-info.php:13
+msgid "Update Your Account Information"
+msgstr "Uppdatera din kontoinformation"
+
+#: ../views/account-info.php:15
+#: ../views/checkout-form.php:45
+#: ../views/checkout-form.php:114
+msgid "First name"
+msgstr "Förnamn"
+
+#: ../views/account-info.php:19
+#: ../views/checkout-form.php:50
+#: ../views/checkout-form.php:119
+msgid "Last name"
+msgstr "Efternamn"
+
+#: ../views/account-info.php:31
+msgid "Update Your Password"
+msgstr "Uppdatera ditt lösenord"
+
+#: ../views/account-info.php:32
+msgid "Leave blank to keep current password."
+msgstr "Lämna tomt för att behålla nuvarande lösenord"
+
+#: ../views/account-info.php:37
+msgid "Enter a new password."
+msgstr "Ange ett nytt lösenord"
+
+#: ../views/account-login.php:20
+msgid "Forgot my password"
+msgstr "Glömt lösenord"
+
+#: ../views/account-login.php:27
+msgid "Enter your username and we will send you a new password.<br/> The email will be sent to the email address you used for your account."
+msgstr "Ange användarnamn så skickar vi ett nytt lösenord.<br/> E-postmeddelande kommer att skickas till den adress som är registrerad på ditt konto."
+
+#: ../views/ajax-cart-button-message.php:2
+msgid "Inventory Restriction"
+msgstr "Begränsning av inventering"
+
+#: ../views/ajax-cart-button-message.php:4
+#: ../views/ajax-cart-button-message.php:9
+msgid "OK"
+msgstr "OK"
+
+#: ../views/ajax-cart-button-message.php:7
+msgid "Inventory Failure"
+msgstr "Inventeringen misslyckades"
+
+#: ../views/cart-button.php:69
+msgid "Enter an amount: "
+msgstr "Ange ett antal:"
+
+#: ../views/cart-button.php:85
+msgid "Quantity: "
+msgstr "Antal:"
+
+#: ../views/cart-button.php:97
+msgid "Cart66 Professional"
+msgstr "Cart66 Professional"
+
+#: ../views/cart-button.php:97
+msgid "is required to sell subscriptions"
+msgstr "krävs för att sälja prenumerationer"
+
+#: ../views/cart-button.php:107
+msgid "Out of stock"
+msgstr "Slut på lager"
+
+#: ../views/cart-button.php:113
+msgid "We're Sorry"
+msgstr "Vi beklagar"
+
+#: ../views/cart-button.php:129
+msgid "Edit this Product"
+msgstr "Redigera den här produkten"
+
+#: ../views/cart-button.php:131
+#: ../views/cart-button.php:133
+msgid "Edit this Subscription"
+msgstr "Redigera den här prenumeration"
+
+#: ../views/cart-button.php:163
+#: ../views/cart-button.php:170
+msgid "Adding..."
+msgstr "lägger till..."
+
+#: ../views/cart-sidebar-advanced.php:7
+#: ../views/cart-sidebar-advanced.php:171
+msgid "You have"
+msgstr "Du har"
+
+#: ../views/cart-sidebar-advanced.php:9
+#: ../views/cart-sidebar-advanced.php:171
+msgid "in your shopping cart"
+msgstr "i din varukorg"
+
+#: ../views/cart-sidebar-advanced.php:65
+#: ../views/cart.php:206
+#: ../views/cart.php:266
+msgid "Shipping to"
+msgstr "Leverera till"
+
+#: ../views/cart-sidebar-advanced.php:71
+msgid "change"
+msgstr "ändra"
+
+#: ../views/cart-sidebar-advanced.php:97
+#: ../views/cart-sidebar-advanced.php:118
+#: ../views/cart.php:240
+msgid "Enter Your Zip Code"
+msgstr "Ange ditt postnummer"
+
+#: ../views/cart-sidebar-advanced.php:167
+#: ../views/cart-sidebar-advanced.php:172
+#: ../views/cart-sidebar.php:14
+msgid "View Cart"
+msgstr "Visa varukorg"
+
+#: ../views/cart-sidebar-advanced.php:167
+#: ../views/cart.php:421
+#: ../views/checkout-form.php:315
+msgid "Checkout"
+msgstr "Checka ut"
+
+#: ../views/cart-sidebar.php:16
+msgid "Check out"
+msgstr "Checka ut"
+
+#: ../views/cart-sidebar.php:18
+msgid "Your cart is empty."
+msgstr "Din varukorg är tom."
+
+#: ../views/cart.php:81
+msgid "Please Provide Your Zip Code"
+msgstr "Vad god ange ditt postnummer"
+
+#: ../views/cart.php:82
+msgid "Before you can checkout, please provide the zip code for where we will be shipping your order and click"
+msgstr "Innan du kan checka ut, ange postnummer ditt leveransen ska skicka och klicka"
+
+#: ../views/cart.php:82
+msgid "Calculate Shipping"
+msgstr "Beräkna frakt"
+
+#: ../views/cart.php:90
+msgid "No Shipping Service Selected"
+msgstr "Inget fraktbolag är valt än"
+
+#: ../views/cart.php:91
+msgid "We cannot process your order because you have not selected a shipping method. If there are no shipping services available, we may not be able to ship to your location."
+msgstr "Vi kan inte behandla din order då du inte har valt något fraktsätt. Finns inga fraktsätt angivna är det möjligt att vi ej kan leverera till din adress."
+
+#: ../views/cart.php:99
+msgid "Too Many Subscriptions"
+msgstr "För många prenumerationer"
+
+#: ../views/cart.php:100
+msgid "Only one subscription may be purchased at a time."
+msgstr "Endast en prenumeration kan köpas åt gången."
+
+#: ../views/cart.php:114
+msgid "Your current subscription will be canceled when you purchase your new subscription."
+msgstr "Din nuvarande prenumeration kommer att avslutas när du köper din nya prenumeration."
+
+#: ../views/cart.php:186
+msgid "Show Details"
+msgstr "Visa detaljer"
+
+#: ../views/cart.php:266
+msgid "via"
+msgstr "via"
+
+#: ../views/cart.php:303
+#: ../views/cart.php:305
+msgid "Update Total"
+msgstr "Uppdatera totalen"
+
+#: ../views/cart.php:353
+msgid "Do you have a coupon?"
+msgstr "Har du en kupong?"
+
+#: ../views/cart.php:364
+#: ../views/cart.php:366
+msgid "Apply Coupon"
+msgstr "Använd kupong"
+
+#: ../views/cart.php:446
+msgid "Your Cart Is Empty"
+msgstr "Din kundvagn är tom"
+
+#: ../views/checkout-form.php:39
+msgid "Order Information"
+msgstr "Orderinformation"
+
+#: ../views/checkout-form.php:55
+#: ../views/checkout-form.php:124
+msgid "Address"
+msgstr "Adress"
+
+#: ../views/checkout-form.php:60
+msgid "Address 2"
+msgstr "Adress"
+
+#: ../views/checkout-form.php:65
+#: ../views/checkout-form.php:134
+msgid "City"
+msgstr "Stad"
+
+#: ../views/checkout-form.php:85
+#: ../views/checkout-form.php:154
+msgid "Zip code"
+msgstr "Postnummer"
+
+#: ../views/checkout-form.php:90
+#: ../views/checkout-form.php:159
+msgid "Country"
+msgstr "Land"
+
+#: ../views/checkout-form.php:106
+msgid "Same as billing address"
+msgstr "Samma som faktureringsadress"
+
+#: ../views/checkout-form.php:177
+msgid "Payment Information"
+msgstr "Betalningsinformation"
+
+#: ../views/checkout-form.php:191
+msgid "Card Number"
+msgstr "Kortnummer"
+
+#: ../views/checkout-form.php:196
+msgid "Expiration"
+msgstr "Giltigt t. om."
+
+#: ../views/checkout-form.php:229
+msgid "Security ID"
+msgstr "CVV kod"
+
+#: ../views/checkout-form.php:231
+msgid "Security code on back of card"
+msgstr "CVV kod på baksidan av kortet"
+
+#: ../views/checkout-form.php:326
+#: ../views/checkout-form.php:328
+msgid "Complete Order"
+msgstr "Slutför beställning"
+
+#: ../views/checkout-form.php:331
+msgid "Your receipt will be on the next page and also immediately emailed to you. <strong>We respect your privacy!</strong>"
+msgstr "Ditt kvitto kommer att visas på nästa sida och även skickas till dig via e-post."
+
+#: ../views/checkout.php:48
+#: ../views/checkout.php:92
+#: ../views/checkout.php:119
+#: ../views/checkout.php:172
+msgid "Your order could not be processed for the following reasons:"
+msgstr "Din order kunde inte genomföras på grund av följande:"
+
+#: ../views/checkout.php:243
+msgid "Your order could not be completed for the following reasons:"
+msgstr "Din order kunde inte slutföras på grund av följande:"
+
+#: ../views/newsletter-signup.php:51
+msgid "First name:"
+msgstr "Förnamn:"
+
+#: ../views/newsletter-signup.php:55
+msgid "Last name:"
+msgstr "Efternamn:"
+
+#: ../views/newsletter-signup.php:59
+msgid "Email:"
+msgstr "E-post:"
+
+#: ../views/newsletter-signup.php:65
+msgid "Sign Up"
+msgstr "Registrera dig"
+
+#: ../views/newsletter-signup.php:70
+msgid "Thank you for subscribing!"
+msgstr "Tack för att du prenumererar!"
+
+#: ../views/paypal-checkout.php:159
+msgid "You must configure your payment settings"
+msgstr "Du måste konfigurera dina inställningar för betalning"
+
+#: ../views/paypal-express.php:406
+msgid "Create Your Account"
+msgstr "Skapa konto"
+
+#: ../views/paypal-express.php:425
+msgid "Repeat Password"
+msgstr "Upprepa lösenord"
+
+#: ../views/paypal-express.php:444
+#: ../views/paypal-express.php:459
+msgid "Your receipt will be on the next page and also emailed to you."
+msgstr "Ditt kvitto fås på nästa sida och kommer även att skickas till dig via e-post."
+
+#: ../views/receipt.php:86
+msgid "You have exceeded the maximum number of downloads for this product"
+msgstr "Du har överskridit maximalt antal nedladdningar för denna produkt"
+
+#: ../views/receipt.php:160
+msgid "Create Account"
+msgstr "Skapa konto "
+
+#: ../views/receipt.php:383
+msgid "Receipt not available"
+msgstr "Kvitto är inte tillgängligt"
+
+#: ../views/receipt_print_version.php:12
+msgid "Your Receipt"
+msgstr "Ditt kvitto"
+
+#: ../views/client/checkout.php:41
+#: ../views/client/checkout.php:45
+msgid "Post code"
+msgstr "Postadress"
+
+#: ../views/client/checkout.php:44
+msgid "Province"
+msgstr "Län"
+
+#: ../views/mijireh/shipping_address.php:48
+msgid "Your Address"
+msgstr "Din adress"
+
+#: ../views/mijireh/shipping_address.php:116
+msgid "Continue"
+msgstr "Fortsätt"
+
+#~ msgid "Search by last name, email, or order number"
+#~ msgstr "Sök via efternamn, e-post eller ordernummer"
+
+#~ msgid "Search String"
+#~ msgstr "Söksträng"
+
+#~ msgid "Search"
+#~ msgstr "Sök"
+
+#~ msgid "Unlimited"
+#~ msgstr "Obegränsad"
+
+#~ msgid "Account"
+#~ msgstr "Konto"
+
+#~ msgid "Leave blank unless changing"
+#~ msgstr "Lämna tomt om du inte vill ändra"
+
+#~ msgid "Active until"
+#~ msgstr "Aktiv till och med"
+
+#~ msgid "Bill every"
+#~ msgstr "Debitera varje"
+
+#~ msgid "Days"
+#~ msgstr "Dagar"
+
+#~ msgid "Weeks"
+#~ msgstr "Veckor"
+
+#~ msgid "Months"
+#~ msgstr "Månader"
+
+#~ msgid "Years"
+#~ msgstr "År"
+
+#~ msgid "What's this?"
+#~ msgstr "Vad är de här?"
+
+#~ msgid "Offer trial period"
+#~ msgstr "Erbjud prova-på period"
+
+#~ msgid "Set up trial period"
+#~ msgstr "Ställ in prova-på period"
+
+#~ msgid "No Trial"
+#~ msgstr "Ingen prova-på"
+
+#~ msgid "The amount of time between billings"
+#~ msgstr "Tid mellan faktureringar"
+
+#~ msgid "Trial price"
+#~ msgstr "Prova-på pris"
+
+#~ msgid "Trial cycles"
+#~ msgstr "Prova-på perioder"
+
+#~ msgid ""
+#~ "How many times to you want to bill your customer during the trial? For "
+#~ "example, if you wanted to offer a trial price of $5.00 per month and "
+#~ "wanted the trial period to last for 3 months you would set the following: "
+#~ "<br/> Trial period: 1 Month &mdash; Trial price: $5.00 &mdash;  Trial "
+#~ "cycles: 3."
+#~ msgstr ""
+#~ "Hur många gånger vill du fakturera kunden under prova-på perioden? "
+#~ "Exempelvis, om du vill erbjuda ett prova-på period för 50 kr per månad "
+#~ "och vill att det ska pågå i 3 månader skulle du ange följande:<br/> Prova-"
+#~ "på period: 1 Månad &mdash; Prova-på pris: 50.00 &mdash;  Prova-på "
+#~ "tillfällen: 3."
+
+#~ msgid "Start payments in"
+#~ msgstr "Börja betalningar i "
+
+#~ msgid ""
+#~ "When do you want the first recurring payment to be made? The initial "
+#~ "payment will be charged at checkout. Usually, your first recurring "
+#~ "payment is the 2nd payment you receive from the subscriber.<br/><br/> For "
+#~ "example, if you are charging monthly for a service that begins "
+#~ "immediately upon checkout, collect the first monthly payment as an "
+#~ "\"initial payment\" and start collecting the recurring payments in 1 "
+#~ "month."
+#~ msgstr ""
+#~ "När vill du att första betalningen ska ske? Ursprunglig betalning kommer "
+#~ "att ske vid kassan. Normalt sett, första återkommande betalningen är den "
+#~ "andra betalningen från prenumeranten.<br/><br/>Till exempel, om du "
+#~ "debiterar per månad för en tjänst som börjar omgående, debitera första "
+#~ "månadsbetalningen som en \"ursprunglig betalning\" och börja sedan "
+#~ "debitera varje månad."
+
+#~ msgid ""
+#~ "(Optional) If you leave this blank, Cart66 will display a price "
+#~ "description based on the information that defines this subscription. You "
+#~ "may customize that message and briefly describe how you plan to bill your "
+#~ "customer. This will be the message that showsup next to your add to cart "
+#~ "buttons and also in the shopping cart."
+#~ msgstr ""
+#~ "(Valfri) Om du lämnar fältet blankt kommer Cart55 att visa en förklaring "
+#~ "baserad på information som definerar prenumerationen. Du kan ändra det "
+#~ "meddelandet och lätt förklara hur du tänker fakturera dina kunder. Detta "
+#~ "kommer att vara meddeladet som visas nästa gång du lägger till "
+#~ "varukorgsknappen och även i varukorgen."
+
+#~ msgid ""
+#~ "This feature is only available in <a href=\"http://cart66.com\">Cart66 "
+#~ "Professional</a>"
+#~ msgstr ""
+#~ "Denna funktion är endast tillgänglig i <a href=\"http://cart66.com"
+#~ "\">Cart66 Professional</a>"
+
+#~ msgid "Your PayPal Subscription Plans"
+#~ msgstr "Din PayPal prenumerationsplan"
+
+#~ msgid "Initial Payment"
+#~ msgstr "Ursprunglig betalning"
+
+#~ msgid "Price Description"
+#~ msgstr "Prisförklaring"
+
+#~ msgid "Additional Payments"
+#~ msgstr "Ytterligare betalningar"
+
+#~ msgid "Trial"
+#~ msgstr "Prova-på"
+
+#~ msgid "Start In"
+#~ msgstr "Starta i"
+
+#~ msgid "Total Sales"
+#~ msgstr "Total försäljning"
+
+#~ msgid "sales"
+#~ msgstr "försäljning"
+
+#~ msgid "income"
+#~ msgstr "inkomst"
+
+#~ msgid "You have not yet created any products"
+#~ msgstr "Du har inte skapat några produkter än"
+
+#~ msgid ""
+#~ "Product sales reports are only available in <a href=\"http://cart66.com"
+#~ "\">Cart66 Professional</a>"
+#~ msgstr ""
+#~ "Produktförsäljningsrapporter är endast tillgängliga i <a href=\"http://"
+#~ "cart66.com\">Cart66 Professional</a>"
+
+#~ msgid "Daily Income Totals"
+#~ msgstr "Totalen för daglig inkomst"
+
+#~ msgid "The Authorize.net Gateway Is Not Configured Correctly"
+#~ msgstr "Authorize.net Gateway är inte konfigurerat korrekt."
+
+#~ msgid "The eWay Gateway Is Not Configured Correctly"
+#~ msgstr "eWay Gateway är inte konfigurerat korrekt."
+
+#~ msgid "The Merchant Warrior Gateway Is Not Configured Correctly"
+#~ msgstr "Merchant Warrior Gateway är inte konfigurerat korrekt."
+
+#~ msgid "The PayLeap Gateway Is Not Configured Correctly"
+#~ msgstr "PayLeap Gateway är inte konfigurerat korrekt."
+
+#~ msgid "Username required"
+#~ msgstr "Användarnamn krävs"
+
+#~ msgid "Username unavailable"
+#~ msgstr "Användarnamn ej tillgängligt"
+
+#~ msgid "Account password is required"
+#~ msgstr "Lösenord krävs"
+
+#~ msgid "Item number is required"
+#~ msgstr "Artikelnummer krävs"
+
+#~ msgid "The item number must be unique"
+#~ msgstr "Artikelnumret måste vara unikt"
+
+#~ msgid "Subscription name is required"
+#~ msgstr "Namn på prenumerationen krävs"
+
+#~ msgid "Feature level is required"
+#~ msgstr "Anpassad nivå krävs"
+
+#~ msgid "The price must be greater than zero"
+#~ msgstr "Priset måste vara mer än noll"
+
+#~ msgid "The billing interval must be a number greater than zero"
+#~ msgstr "Prisintervallen måste vara mer än noll"
+
+#~ msgid "items in your shopping cart"
+#~ msgstr "varor i din varukorg"
+
+#~ msgid "PayPal Express Checkout Is Not Configured"
+#~ msgstr "PayPal Express är inte konfigurerad"
+
+#~ msgid ""
+#~ "You may create promotion codes (coupon codes) to reduce the total cost \n"
+#~ "    of your customer's purchase by either a specific money amount"
+#~ msgstr ""
+#~ "Du kan skapa kampanjkoder/Kupongkoder för att reducera den totala "
+#~ "summan \n"
+#~ "på en kunds beställning genom att antingen ange ett specifikt belopp"
+
+#~ msgid ""
+#~ "You may also set a minimum order amount that must be reached before the "
+#~ "promotion code may be \n"
+#~ "    used. For example, you may create a promotion for 10% off all orders "
+#~ "over"
+#~ msgstr ""
+#~ "Du kan även ange ett minimum orderbelopp som måste uppnås innan "
+#~ "kampanjkoden kan användas.\n"
+#~ "Till exempel kan du skapa en kampanj på 10% rabatt för alla order över"
+
+#~ msgid "NOTE: Promotion code discounts do not affect shipping costs."
+#~ msgstr "OBSERVERA: Kampanjrabatter tillämpas inte på frakter."
+
+#~ msgid "Leave blank to apply this promotion to all orders."
+#~ msgstr "Lämna tomt för att tillämpa kampanjen på alla ordrar"
+

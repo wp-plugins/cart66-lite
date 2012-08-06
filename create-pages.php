@@ -93,3 +93,14 @@ if(!$p) {
   $page['post_status'] = 'private';
   wp_insert_post($page);
 }
+
+// Insert the page to include the default Unsubscribe shortcode for membership reminders
+$p = get_page_by_path('store/unsubscribe');
+if(!$p && CART66_PRO) {
+  $page['post_title'] = 'Unsubscribe';
+  $page['post_name'] = 'unsubscribe';
+  $page['post_content'] = "[email_opt_out]";
+  $page['post_parent'] = $parentId;
+  $page['post_status'] = 'private';
+  wp_insert_post($page);
+}

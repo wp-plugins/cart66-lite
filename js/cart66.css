@@ -1,6 +1,7 @@
 /* @override 
 	http://plugin.cart66/wp-content/plugins/cart66-gh/js/cart66.css
 	http://wordpress3.3/wp-content/plugins/cart66-gh/js/cart66.css
+	http://wordpress3.3/wp-content/plugins/cart66/js/cart66.css
 */
 
 #cart66 div.panel_wrapper{
@@ -353,6 +354,9 @@ padding-left: 10px;
  ************************************************************/
  #mijireh_notice div, #mijireh_notice h2 {
    margin-top:0;
+ }
+#mijireh_notice h2 {
+font-size:1.3em
  }
 .mijireh-info {
   *zoom: 1;

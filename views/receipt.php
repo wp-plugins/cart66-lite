@@ -112,9 +112,15 @@ if(Cart66Setting::getValue('enable_google_analytics') == 1 && Cart66Setting::get
 <?php 
 if(CART66_PRO && $order->hasAccount() == 1) {
   $logInLink = Cart66AccessManager::getLogInLink();
+  $memberHomePageLink = Cart66AccessManager::getMemberHomePageLink();
   if($logInLink !== false) {
     echo '<h2>Your Account Is Ready</h2>';
-    echo "<p><a href=\"$logInLink\">Log into your account</a>.</p>";
+    if(Cart66Common::isLoggedIn() && $memberHomePageLink !== false) {
+      echo "<p><a href=\"$memberHomePageLink\">" . __("Members Home","cart66") . "</a>.</p>";
+    }
+    else {
+      echo "<p><a href=\"$logInLink\">" . __("Log into your account","cart66") . "</a>.</p>";
+    }
   }
 }
 ?>
@@ -245,6 +251,29 @@ if(CART66_PRO && $order->hasAccount() == 1) {
       </td>
     <?php endif; ?>
   </tr>
+  <?php if(CART66_PRO && Cart66Setting::getValue('enable_advanced_notifications') ==1): ?>
+    <tr>
+      <td colspan="3" class="receipt_tracking_numbers">
+        <?php 
+        $tracking = explode(',', $order->tracking_number);
+        if(!empty($order->tracking_number)) {
+          $i = 1;
+          foreach($tracking as $key => $value) {
+            $number = substr(strstr($value, '_'), 1);
+            $carrier = mb_strstr($value,'_', true);
+            $carrierName = Cart66AdvancedNotifications::convertCarrierNames($carrier);
+            $link = Cart66AdvancedNotifications::getCarrierLink($carrier, $number); ?>
+            <div id="tracking_<?php echo $i; ?>_<?php echo $carrierName; ?>" class="tracking_number">
+              <span class="carrier_<?php echo $carrierName; ?>"><?php echo $carrierName ?></span><span class="tracking_text"> <?php _e("Tracking Number","cart66") ?></span><span class="tracking_divider">:</span>
+              <span class="tracking_link"><a href="<?php echo $link; ?>" target="_blank" id="<?php echo $carrierName . '_' . $number; ?>"><?php echo $number ?></a></span>
+            </div>
+          <?php 
+            $i++;
+          }
+        } ?>
+      </td>
+    </tr>
+  <?php endif; ?>
 </table>
 
 
@@ -279,7 +308,7 @@ if(CART66_PRO && $order->hasAccount() == 1) {
     ?>
     <tr>
       <td>
-        <?php echo nl2br($item->description) ?>
+        <b><?php echo nl2br($item->description) ?></b>
         <?php
           $product->load($item->product_id);
           if($product->isDigital()) {
@@ -372,6 +401,12 @@ if(CART66_PRO && $order->hasAccount() == 1) {
 </table>
 
 <p><a href='#' id="print_version"><?php _e( 'Printer Friendly Receipt' , 'cart66' ); ?></a></p>
+
+<?php if(Cart66Setting::getValue('enable_performance_based_integration')): ?>
+  <!-- Begin Performance-Based.com Affiliate Integration -->
+  <img src="https://net.performance-based.com/l/298?amount=<?php echo $order->total; ?>;id=<?php echo $order->trans_id; ?>" height="1" width="1" border="0" />
+  <!-- End Performance-Based.com Affiliate Integration -->
+<?php endif; ?>
 
 <!-- Begin Newsletter Signup Form -->
 <?php include(CART66_PATH . '/views/newsletter-signup.php'); ?>

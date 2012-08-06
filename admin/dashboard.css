@@ -151,17 +151,17 @@ div.pane .dailyAverage { float:left;}
 #cart66_statistics_widget { overflow:auto; }
 #cart66_statistics_widget .inside { padding:0;margin:0; }
 #cart66_statistics_widget .tabs { border-bottom:#e3e3e3 1px solid;text-align:center;margin-right:-10px; }
-#cart66_statistics_widget .tabbed ul.tabs { float: left;display: inline;width: 100%;margin: 0;padding: 0; }
-#cart66_statistics_widget .tabbed ul.tabs li { list-style: none;float: left;margin: 0;padding: 0; border-right: 1px solid #e3e3e3;}
-#cart66_statistics_widget .tabbed ul.tabs li a { overflow: hidden;display: block;padding:5px 8px;font-size:14px; }
-#cart66_statistics_widget .tabbed ul.tabs li a:hover,#cart66_statistics_widget .tabbed ul.tabs li a.tab-current {
+#cart66_statistics_widget .cart66Tabbed ul.tabs { float: left;display: inline;width: 100%;margin: 0;padding: 0; }
+#cart66_statistics_widget .cart66Tabbed ul.tabs li { list-style: none;float: left;margin: 0;padding: 0; border-right: 1px solid #e3e3e3;}
+#cart66_statistics_widget .cart66Tabbed ul.tabs li a { overflow: hidden;display: block;padding:5px 8px;font-size:14px; }
+#cart66_statistics_widget .cart66Tabbed ul.tabs li a:hover,#cart66_statistics_widget .cart66Tabbed ul.tabs li a.tab-current {
 	background-color: #e0e9ed;
 	color: #d54e21;
 	}
-#cart66_statistics_widget .tabbed div { float: left;display: block;width: 100%;}
-#cart66_statistics_widget .tabbed div.t2, .tabbed div.t3, .tabbed div.t4, .tabbed div.s2 { display: none; }
-#cart66_statistics_widget .tabbed .pane { padding:0;max-height:480px;overflow:auto;display:none; }
-#cart66_statistics_widget .tabbed h2 { padding:0; }
+#cart66_statistics_widget .cart66Tabbed div { float: left;display: block;width: 100%;}
+#cart66_statistics_widget .cart66Tabbed div.t2, .cart66Tabbed div.t3, .cart66Tabbed div.t4, .cart66Tabbed div.s2 { display: none; }
+#cart66_statistics_widget .cart66Tabbed .pane { padding:0;max-height:480px;overflow:auto;display:none; }
+#cart66_statistics_widget .cart66Tabbed h2 { padding:0; }
 #cart66_statistics_widget .summaryDetails td, #cart66_statistics_widget #productTable td, #cart66_statistics_widget #productTable th, #cart66_statistics_widget #statSummary td, #todaysOrders th, #dailyAverage td, #estimatedSummary th, #estimatedSummary td {
 	padding: 1em;
 	}
@@ -237,6 +237,10 @@ font-size: 1.6em;
 /* Upgrade message */
 #cart66_upgrade_message {
   padding:10px; position:relative;display:none;margin:5px 9px 0 8px;
+  display:none;
+}
+#cart66_upgrade_message img {
+  float:left;padding-right:10px;
 }
 p.left {
   float:left;margin:0;
@@ -260,4 +264,184 @@ p.left img {
 }
 #wp-admin-bar-cart66.hover .cart66AdminBarIcon{
 	background-image: url(../images/cart66_tiny_type.png);
+}
+
+#cart66_page_errors {
+  margin-top:2em;
+}
+#cart66_page_errors ul li{
+	list-style-type:decimal;
+	margin-left:2em;
+}
+.debugPageList{
+	margin-left:90px;
+	margin-top:-15px;
+}
+.debugPageList li{
+	margin:0;
+}
+.debugPageList .Cart66PageError{
+	color:red;
+	font-weight:bold;
+}
+
+/************************************************************
+ * Alert Messages
+ ************************************************************/
+
+
+.alert-message.alert-danger, .alert-message.alert-danger:hover, .alert-message.alert-error, .alert-message.alert-error:hover, .alert-message.success, .alert-message.success:hover, .alert-message.info, .alert-message.info:hover {
+  color: white;
+}
+.alert-message .close {
+  position: relative;
+  top: -2px;
+  right: -5px;
+  line-height: 18px;
+}
+.alert-message .close {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 18px;
+  color: #000000;
+  text-shadow: 0 1px 0 #ffffff;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+}
+.alert-message .close:hover {
+  color: #000000;
+  text-decoration: none;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+  cursor: pointer;
+}
+
+.alert-message.alert-danger, .alert-message.alert-error {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ee5f5b), color-stop(100%, #c43c35));
+  background-image: -webkit-linear-gradient(#ee5f5b, #c43c35);
+  background-image: -moz-linear-gradient(#ee5f5b, #c43c35);
+  background-image: -o-linear-gradient(#ee5f5b, #c43c35);
+  background-image: -ms-linear-gradient(#ee5f5b, #c43c35);
+  background-image: linear-gradient(#ee5f5b, #c43c35);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  border-color: #c43c35 #c43c35 #882a25;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+.alert-message.success {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #62c462), color-stop(100%, #57a957));
+  background-image: -webkit-linear-gradient(#62c462, #57a957);
+  background-image: -moz-linear-gradient(#62c462, #57a957);
+  background-image: -o-linear-gradient(#62c462, #57a957);
+  background-image: -ms-linear-gradient(#62c462, #57a957);
+  background-image: linear-gradient(#62c462, #57a957);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  border-color: #57a957 #57a957 #3d773d;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+.alert-message.info {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5bc0de), color-stop(100%, #339bb9));
+  background-image: -webkit-linear-gradient(#5bc0de, #339bb9);
+  background-image: -moz-linear-gradient(#5bc0de, #339bb9);
+  background-image: -o-linear-gradient(#5bc0de, #339bb9);
+  background-image: -ms-linear-gradient(#5bc0de, #339bb9);
+  background-image: linear-gradient(#5bc0de, #339bb9);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  border-color: #339bb9 #339bb9 #22697d;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+:root .alert-message,
+:root .btn {
+  border-radius: 0 \0;
+}
+
+.alert-message {
+  position: relative;
+  padding: 7px 15px!important;
+  margin-bottom: 18px;
+  margin-right:25px;
+  color: #404040;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fceec1), color-stop(100%, #eedc94));
+  background-image: -webkit-linear-gradient(#fceec1, #eedc94);
+  background-image: -moz-linear-gradient(#fceec1, #eedc94);
+  background-image: -o-linear-gradient(#fceec1, #eedc94);
+  background-image: -ms-linear-gradient(#fceec1, #eedc94);
+  background-image: linear-gradient(#fceec1, #eedc94);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  border-color: #eedc94 #eedc94 #e4c652;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  border-width: 1px;
+  border-style: solid;
+  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  -o-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.alert-message a {
+  font-weight: bold;
+  color: #404040;
+}
+.alert-message.alert-danger p a, .alert-message.alert-error p a, .alert-message.success p a, .alert-message.info p a, .alert-message.info h1 a, .alert-message.info h2 a {
+  color: white;
+}
+.alert-message h5 {
+  line-height: 18px;
+}
+.alert-message p {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.alert-message div {
+  margin-top: 5px;
+  margin-bottom: 2px;
+  line-height: 28px;
+}
+.alert-message .btn {
+  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+  -o-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.alert-message.block-message {
+  background-image: none;
+  background-color: #fdf5d9;
+  padding: 14px!important;
+  border-color: #fceec1;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  -o-box-shadow: none;
+  box-shadow: none;
+}
+.alert-message.block-message ul, .alert-message.block-message p {
+  margin-right: 30px;
+}
+.alert-message.block-message ul {
+  margin-bottom: 0;
+}
+.alert-message.block-message li {
+  color: #404040;
+}
+.alert-message.block-message .alert-actions {
+  margin-top: 5px;
+}
+.alert-message.block-message.alert-error, .alert-message.block-message.success, .alert-message.block-message.info {
+  color: #404040;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.alert-message.block-message.alert-error {
+  background-color: #fddfde;
+  border-color: #fbc7c6;
+}
+.alert-message.block-message.success {
+  background-color: #d1eed1;
+  border-color: #bfe7bf;
+}
+.alert-message.block-message.info {
+  background-color: #ddf4fb;
+  border-color: #c6edf9;
+}
+.alert-message.block-message.alert-danger p a, .alert-message.block-message.alert-error p a, .alert-message.block-message.success p a, .alert-message.block-message.info p a {
+  color: #404040;
 }

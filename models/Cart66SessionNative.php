@@ -37,7 +37,7 @@ class Cart66SessionNative {
   public function dump() {
     $out = "Cart66 Native Session Dump:\n\n";
     $out .= print_r($_SESSION['cart66']);
-    echo $out;
+    return $out;
   }
 
 }

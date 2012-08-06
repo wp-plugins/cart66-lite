@@ -87,7 +87,7 @@
         "aLengthMenu": [[30, 60, 150, -1], [30, 60, 150, "All"]],
         "sPaginationType": "bootstrap",
         "bAutoWidth": false,
-				"sAjaxSource": ajaxurl + "?action=orders_table",
+        "sAjaxSource": ajaxurl + "?action=orders_table",
         "aaSorting": [[5, 'desc']],
         "aoColumns": [
           { "bVisible": false },
@@ -98,8 +98,8 @@
           { "bSearchable": false },
           { "bSearchable": false },
           null,
-          { "bSearchable": false, "bSortable": false, "fnRender": function(oObj) { return '<a href="#" onClick="printView(' + oObj.aData[0] + ')" id="print_version_' + oObj.aData[0] + '"><?php _e( "Receipt" , "cart66" ); ?></a> | <a href="?page=cart66_admin&task=view&id=' + oObj.aData[0] + '"><?php _e( "View" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66_admin&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a>' }
-        }],
+          { "bSearchable": false, "bSortable": false, "fnRender": function(oObj) { return oObj.aData[8] != "" ? '<a href="#" onClick="printView(' + oObj.aData[0] + ')" id="print_version_' + oObj.aData[0] + '"><?php _e( "Receipt" , "cart66" ); ?></a> | <a href="?page=cart66_admin&task=view&id=' + oObj.aData[0] + '"><?php _e( "View" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66_admin&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a> | <a href="#" class="Cart66ViewOrderNote" rel="note_' + oObj.aData[0] + '"><?php _e( "Notes" , "cart66" ); ?></a><div class="Cart66OrderNote" id="note_' + oObj.aData[0] + '"><a href="#" class="Cart66CloseNoteView" rel="note_' + oObj.aData[0] + '" alt="Close Notes Window"><img src="<?php echo CART66_URL ?>/images/window-close.png" /></a><h3>' + oObj.aData[1] + '</h3><p>' + oObj.aData[8] + '</p></div>' : '<a href="#" onClick="printView(' + oObj.aData[0] + ')" id="print_version_' + oObj.aData[0] + '"><?php _e( "Receipt" , "cart66" ); ?></a> | <a href="?page=cart66_admin&task=view&id=' + oObj.aData[0] + '"><?php _e( "View" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66_admin&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a>'; },"aTargets": [ 9 ] }
+        ],
         "oLanguage": { 
           "sZeroRecords": "<?php _e('No matching Orders found', 'cart66'); ?>", 
           "sSearch": "<?php _e('Search', 'cart66'); ?>:", 
@@ -116,7 +116,17 @@
           "sLoadingRecords": "<?php _e('Loading', 'cart66'); ?>...", 
           "sProcessing": "<?php _e('Processing', 'cart66'); ?>..." 
         }
-      }).css('width','');;
+      }).css('width','');
+      $('.Cart66ViewOrderNote').live('click', function () {
+        var id = $(this).attr('rel');
+        $('#' + id).show();
+        return false;
+      });
+      $('.Cart66CloseNoteView').live('click', function () {
+        var id = $(this).attr('rel');
+        $('#' + id).hide();
+        return false;
+      });
       $('.delete').live('click', function() {
         return confirm('Are you sure you want to delete this item?');
       });

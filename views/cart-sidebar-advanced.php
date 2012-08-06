@@ -56,7 +56,12 @@
             </tr>
         
             <?php if(isset($data['shipping'] ) && $data['shipping'] == true): ?>
-                
+                <tr class="Cart66ShippingRow">
+                  <td colspan="2">
+                    <span class="Cart66CartShippingLabel"><?php _e( 'Shipping' , 'cart66' ); ?></span><span class="Cart66MetaSep">: </span>
+                    <span class="Cart66CurSymbol"><?php echo CART66_CURRENCY_SYMBOL ?></span><span class="Cart66Shipping"><?php echo number_format($shipping, 2); ?></span>
+                  </td>
+                </tr>
                 <?php if(CART66_PRO && Cart66Setting::getValue('use_live_rates')): ?>
 
                   <?php if(Cart66Session::get('cart66_shipping_zip')): ?>
@@ -150,7 +155,7 @@
                     </tr>
                   <?php endif; ?>
                 <?php endif; ?>
-
+                
             <?php endif; ?>
               
           <?php if($tax > 0): ?>

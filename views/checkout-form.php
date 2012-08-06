@@ -30,10 +30,10 @@ if(count($errors)) {
 }
 ?>
 
-<form action="" method='post' id="<?php echo $gatewayName ?>_form" class="phorm2<?php if(Cart66Session::get('Cart66Cart')->requireShipping() && $gatewayName != 'Cart66ManualGateway'): echo ' shipping'; endif; ?><?php if($lists = Cart66Setting::getValue('constantcontact_list_ids')): echo ' constantcontact'; endif; ?><?php if($lists = Cart66Setting::getValue('mailchimp_list_ids')): echo ' mailchimp'; endif; ?><?php if(Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() || Cart66Session::get('Cart66Cart')->hasMembershipProducts()): echo ' subscription'; endif; ?>">
-  <input type="hidden" name="cart66-gateway-name" value="<?php echo $gatewayName ?>"/>
+<form action="" method='post' id="<?php echo $gatewayName ?>_form" class="phorm2<?php if(Cart66Session::get('Cart66Cart')->requireShipping() && $gatewayName != 'Cart66ManualGateway'): echo ' shipping'; endif; ?><?php if($lists = Cart66Setting::getValue('constantcontact_list_ids') && Cart66Setting::getValue('constantcontact_username')): echo ' constantcontact'; endif; ?><?php if($lists = Cart66Setting::getValue('mailchimp_list_ids') && Cart66Setting::getValue('mailchimp_apikey')): echo ' mailchimp'; endif; ?><?php if(Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() || Cart66Session::get('Cart66Cart')->hasMembershipProducts()): echo ' subscription'; endif; ?>">
+  <input type="hidden" name="cart66-gateway-name" value="<?php echo $gatewayName ?>" id="cart66-gateway-name" />
 <div id="ccInfo">
-	<div id="billingInfo">
+  <div id="billingInfo">
         <ul id="billingAddress" class="shortLabels" >
           <?php if($gatewayName == 'Cart66ManualGateway' && !Cart66Session::get('Cart66Cart')->requireShipping()): ?>
             <li><h2><?php _e( 'Order Information' , 'cart66' ); ?></h2></li>
@@ -67,8 +67,8 @@ if(count($errors)) {
           </li>
 
           <li><label for="billing-state_text" class="short billing-state_label"><?php _e( 'State' , 'cart66' ); ?>:</label>
-            <input type="text" name="billing[state_text]" value="<?php Cart66Common::showValue($b['state']); ?>" id="billing-state_text" class="state_text_field" />
-            <select id="billing-state" class="required" title="State billing address" name="billing[state]">
+            <input type="text" name="billing[state_text]" value="<?php Cart66Common::showValue($b['state']); ?>" id="billing-state_text" class="ajax-tax state_text_field" />
+            <select id="billing-state" class="ajax-tax required" title="State billing address" name="billing[state]">
               <option value="0">&nbsp;</option>
               <?php
                 Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Country code on checkout form: $billingCountryCode");
@@ -80,10 +80,15 @@ if(count($errors)) {
               ?>
             </select>
           </li>
-
+          <li id="billing_tax_update" class="tax-block <?php echo Cart66Session::get('Cart66Tax') > 0 ? 'show-tax-block' : 'hide-tax-block'; ?>">
+            <span class="tax-update">
+              <label class="short">&nbsp;</label>
+              <p class="summary-message cart66-align-center tax-update-message"><span class="tax-rate"><?php echo Cart66Session::get('Cart66TaxRate'); ?>%</span> <?php _e('tax', 'cart66'); ?>,  <span class="tax-amount"><?php echo CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Tax'), 2); ?></span></p>
+            </span>
+          </li>
           <li>
             <label for="billing-zip" class="billing-zip_label"><?php _e( 'Zip code' , 'cart66' ); ?>:</label>
-            <input type="text" id="billing-zip" name="billing[zip]" value="<?php Cart66Common::showValue($b['zip']); ?>">
+            <input type="text" id="billing-zip" name="billing[zip]" value="<?php Cart66Common::showValue($b['zip']); ?>" class="ajax-tax" />
           </li>
 
           <li>
@@ -137,8 +142,8 @@ if(count($errors)) {
 
           <li>
             <label for="shipping-state_text" class="short shipping-state_label"><?php _e( 'State' , 'cart66' ); ?>:</label>
-            <input type="text" name="shipping[state_text]" value="<?php Cart66Common::showValue($s['state']); ?>" id="shipping-state_text" class="state_text_field" />
-            <select id="shipping-state" class="shipping_countries required" title="State shipping address" name="shipping[state]">
+            <input type="text" name="shipping[state_text]" value="<?php Cart66Common::showValue($s['state']); ?>" id="shipping-state_text" class="ajax-tax state_text_field" />
+            <select id="shipping-state" class="ajax-tax shipping_countries required" title="State shipping address" name="shipping[state]">
               <option value="0">&nbsp;</option>              
               <?php
                 $zone = Cart66Common::getZones($shippingCountryCode);
@@ -149,10 +154,15 @@ if(count($errors)) {
               ?>
             </select>
           </li>
-
+          <li id="shipping_tax_update" class="tax-block <?php echo Cart66Session::get('Cart66Tax') > 0 ? 'show-tax-block' : 'hide-tax-block'; ?>">
+            <span class="tax-update">
+              <label class="short">&nbsp;</label>
+              <p class="alert-message cart66-align-center tax-update-message"><span class="tax-rate"><?php echo Cart66Session::get('Cart66TaxRate'); ?>%</span> <?php _e('tax', 'cart66'); ?>,  <span class="tax-amount"><?php echo CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Tax'), 2); ?></span></p>
+            </span>
+          </li>
           <li>
             <label for="shipping-zip" class="shipping-zip_label"><?php _e( 'Zip code' , 'cart66' ); ?>:</label>
-            <input type="text" id="shipping-zip" name="shipping[zip]" value="<?php Cart66Common::showValue($s['zip']); ?>">
+            <input type="text" id="shipping-zip" name="shipping[zip]" value="<?php Cart66Common::showValue($s['zip']); ?>" class="ajax-tax" />
           </li>
 
           <li>
@@ -243,10 +253,10 @@ if(count($errors)) {
           </li>
           </ul>
 
-	</div><!-- #paymentInfo -->
-</div><!-- #ccInfo -->
-         <?php if($lists = Cart66Setting::getValue('constantcontact_list_ids')): ?>
-	<ul id="constantContact">
+        </div><!-- #paymentInfo -->
+      </div><!-- #ccInfo -->
+         <?php if($lists = Cart66Setting::getValue('constantcontact_list_ids') && Cart66Setting::getValue('constantcontact_username')): ?>
+           <ul id="constantContact">
             <li>
               <?php
                 if(!$optInMessage = Cart66Setting::getValue('constantcontact_opt_in_message')) {
@@ -264,7 +274,8 @@ if(count($errors)) {
             </li>
           <?php endif; ?>
           
-          <?php if($lists = Cart66Setting::getValue('mailchimp_list_ids')): ?>
+          <?php if($lists = Cart66Setting::getValue('mailchimp_list_ids') && Cart66Setting::getValue('mailchimp_apikey')): ?>
+            <ul id="mailChimp">
             <li>
               <?php
                 if(!$optInMessage = Cart66Setting::getValue('mailchimp_opt_in_message')) {
@@ -322,10 +333,53 @@ if(count($errors)) {
             $completeImgPath = $cartImgPath . 'complete-order.png';
           }
         ?>
+        <?php
+          $url = Cart66Common::appendWurlQueryString('cart66AjaxCartRequests');
+          if(Cart66Common::isHttps()) {
+            $url = preg_replace('/http[s]*:/', 'https:', $url);
+          }
+          else {
+            $url = preg_replace('/http[s]*:/', 'http:', $url);
+          }
+        ?>
+        <?php if(Cart66Setting::getValue('checkout_order_summary')): ?>
+          <div class="confirm-order-modal summary-message tax-block <?php echo Cart66Session::get('Cart66Tax') > 0 ? 'show-tax-block' : 'hide-tax-block'; ?>">
+            <table class="order-summary" cellpadding="0" cellspacing="0">
+              <div class="cart66-align-center"><h2><?php _e('Order Summary', 'cart66'); ?></h2></div>
+              <tbody>
+                <tr>
+                  <td class="subtotal-column cart66-align-right"><strong><?php _e('Subtotal', 'cart66'); ?></strong>:</td>
+                  <td class="cart66-align-right"><?php echo CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Cart')->getSubTotal(), 2); ?></td>
+                </tr>
+                <?php if(Cart66Session::get('Cart66Cart')->requireShipping()): ?>
+                  <tr>
+                    <td class="cart66-align-right"><strong><?php _e('Shipping', 'cart66'); ?></strong>:</td>
+                    <td class="cart66-align-right"><?php echo CART66_CURRENCY_SYMBOL . Cart66Session::get('Cart66Cart')->getShippingCost(); ?></td>
+                  </tr>
+                <?php endif; ?>
+                <?php if(Cart66Session::get('Cart66Promotion')): ?>
+                  <tr>
+                    <td class="cart66-align-right"><strong><?php _e('Discount', 'cart66'); ?></strong>:</td>
+                    <td class="cart66-align-right">-&nbsp;<?php echo CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2); ?></td>
+                  </tr>
+                <?php endif; ?>
+                <tr>
+                  <td class="cart66-align-right"><strong><span class="ajax-spin"><img src="<?php echo CART66_URL; ?>/images/ajax-spin.gif" /></span> <?php _e('Tax', 'cart66'); ?>  (<span class="tax-rate"><?php echo Cart66Session::get('Cart66TaxRate'); ?>%</span>)</strong>:</td>
+                  <td class="cart66-align-right"><span class="tax-amount"><?php echo CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Tax'), 2); ?></span></td>
+                </tr>
+                <tr>
+                  <td class="cart66-align-right"><strong><span class="ajax-spin"><img src="<?php echo CART66_URL; ?>/images/ajax-spin.gif" /></span> <?php _e('Total', 'cart66'); ?></strong>:</td>
+                  <td class="cart66-align-right"><span class="grand-total-amount"><?php echo CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Cart')->getGrandTotal() + Cart66Session::get('Cart66Tax'), 2); ?></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        <?php endif; ?>
+        <input type="hidden" name="confirm_url" value="<?php echo $url; ?>" id="confirm-url" />
         <?php if($cartImgPath): ?>
-          <input id="Cart66CheckoutButton" type="image" src='<?php echo $completeImgPath ?>' value="<?php _e( 'Complete Order' , 'cart66' ); ?>" name="Complete Order"/>
+          <input id="Cart66CheckoutButton" class="confirm-order" type="image" src='<?php echo $completeImgPath ?>' value="<?php _e( 'Complete Order' , 'cart66' ); ?>" name="Complete Order"/>
         <?php else: ?>
-          <input id="Cart66CheckoutButton" class="Cart66ButtonPrimary Cart66CompleteOrderButton" type="submit"  value="<?php _e( 'Complete Order' , 'cart66' ); ?>" name="Complete Order"/>
+          <input id="Cart66CheckoutButton" class="confirm-order Cart66ButtonPrimary Cart66CompleteOrderButton" type="submit"  value="<?php _e( 'Complete Order' , 'cart66' ); ?>" name="Complete Order"/>
         <?php endif; ?>
 
         <p class="description"><?php _e( 'Your receipt will be on the next page and also immediately emailed to you. <strong>We respect your privacy!</strong>' , 'cart66' ); ?></p>

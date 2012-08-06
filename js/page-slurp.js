@@ -1,5 +1,22 @@
-(function($) {
+function inline_save_callback(){
+	
+		var data = {
+			action: 'cart66_page_check'
+		}
+	
+		jQuery.post(ajaxurl, data, function(alert){
+			//console.log("page check: " + alert)
+			
+			jQuery("#cart66_page_errors").replaceWith(alert);
+		
+		}).error(function(response) {
+			//console.log(response)
+	  })
 
+}
+
+(function($) {
+	
   $('#page_slurp').click(function() {
     var page_id = $(this).attr('rel');
     var data = {

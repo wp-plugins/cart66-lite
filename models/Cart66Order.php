@@ -162,6 +162,24 @@ class Cart66Order extends Cart66ModelAbstract {
     return false;
   }
   
+  public function updateNotes($notes) {
+    if($this->id > 0) {
+      $data['notes'] = $notes;
+      $this->_db->update($this->_tableName, $data, array('id' => $this->id), array('%s'));
+      return $notes;
+    }
+    return false;
+  }
+  
+  public function updateTracking($trackingNumber) {
+    if($this->id > 0) {
+      $data['tracking_number'] = $trackingNumber;
+      $this->_db->update($this->_tableName, $data, array('id' => $this->id), array('%s'));
+      return $trackingNumber;
+    }
+    return false;
+  }
+  
   public function updateViewed() {
     global $post;
     $receiptPage = get_page_by_path('store/receipt');
@@ -259,6 +277,16 @@ class Cart66Order extends Cart66ModelAbstract {
       }
     }
     return 0; // No account exists and none is needed.
+  }
+  
+  public function getOrderIdByAccountId($accountId){
+    $is_loaded = false;
+    $sql = $this->_db->prepare("SELECT id from $this->_tableName where account_id=%s", $accountId);
+    $id = $this->_db->get_var($sql);
+    if(is_numeric($id)) {
+      $is_loaded = $id;
+    }
+    return $is_loaded;
   }
   
 }

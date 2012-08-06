@@ -19,7 +19,8 @@ create table if not exists `[prefix]products` (
   `is_paypal_subscription` tinyint default 0,
   `max_quantity` int(10) unsigned not null default 0,
   `gravity_form_id` int(10) unsigned not null default 0,
-  `gravity_form_qty_id` int(10) unsigned not null default 0,
+  `gravity_form_qty_id` varchar(10) not null default '0',
+  `gravity_form_pricing` tinyint(1) unsigned not null default 0,
   `feature_level` varchar(255) not null,
   `setup_fee` decimal(12,2) not null,
   `billing_interval` int(10) unsigned not null,
@@ -121,6 +122,7 @@ create table if not exists `[prefix]orders` (
   `coupon` varchar(50) null,
   `discount_amount` decimal(12,2) not null,
   `trans_id` varchar(25) not null,
+  `authorization` varchar(50) not null,
   `shipping` decimal(12,2) not null,
   `subtotal` decimal(12,2) not null,
   `tax` decimal(8,3) not null,
@@ -194,6 +196,22 @@ create table if not exists `[prefix]account_subscriptions` (
   primary key(`id`)
 ) DEFAULT CHARSET=utf8;
 
+create table if not exists `[prefix]membership_reminders` (
+  `id` int(10) unsigned not null auto_increment,
+  `enable` int(10) unsigned not null,
+  `subscription_plan_id` int(10) unsigned not null,
+  `interval` int(10) unsigned not null,
+  `interval_unit` varchar(50) not null,
+  `from_name` varchar(100),
+  `from_email` varchar(100),
+  `copy_to` varchar(255),
+  `subject` varchar(100),
+  `reminder_send_html_emails` int(10) unsigned not null,
+  `reminder_html_email` longtext not null,
+  `reminder_plain_email` longtext not null,
+  primary key(`id`)
+) DEFAULT CHARSET=utf8;
+
 create table if not exists `[prefix]pp_recurring_payments` (
   `id` int(10) unsigned not null auto_increment,
   `account_id` int(10) unsigned not null,
@@ -220,6 +238,32 @@ create table if not exists`[prefix]sessions` (
   `user_data` longtext default '' not null,
   unique key `sid` (`session_id`),
   primary key (`id`)
+) DEFAULT CHARSET=utf8;
+
+create table if not exists `[prefix]email_log` (
+  `id` int(10) unsigned not null auto_increment,
+  `send_date` datetime,
+  `from_email` varchar(100) not null,
+  `from_name` varchar(100) not null,
+  `to_email` varchar(100) not null,
+  `to_name` varchar(100) not null,
+  `headers` varchar(255) not null,
+  `subject` varchar(255) not null,
+  `body` longtext not null,
+  `attachments` varchar(100) not null,
+  `order_id` int(10) unsigned,
+  `email_type` varchar(100) not null,
+  `copy` varchar(100) not null,
+  `status` varchar(100) not null,
+  primary key(`id`)
+) DEFAULT CHARSET=utf8;
+
+create table if not exists `[prefix]order_fulfillment` (
+  `id` int(10) unsigned not null auto_increment,
+  `name` varchar(100) null,
+  `email` varchar(100) not null,
+  `products` varchar(255) not null,
+  primary key(`id`)
 ) DEFAULT CHARSET=utf8;
 
 --  Upgrading to Cart66 1.0.1
@@ -310,3 +354,17 @@ alter table `[prefix]tax_rates` modify `rate` decimal(12,3) not null;
 
 -- Upgrading to Cart66 1.3.4
 alter table `[prefix]promotions` modify `products` longtext not null;
+
+-- Upgrading to Cart66 1.5.0
+alter table `[prefix]orders` add column `tracking_number` varchar(255);
+alter table `[prefix]orders` add column `notes` text not null;
+alter table `[prefix]orders` add column `authorization` varchar(50) not null;
+alter table `[prefix]products` add column `gravity_form_pricing` tinyint(1) unsigned not null default 0;
+alter table `[prefix]products` modify `gravity_form_qty_id` varchar(10) not null default '0';
+alter table `[prefix]orders` add column `authorization` varchar(50) not null;
+alter table `[prefix]promotions` add column `max_order` decimal(12,2) not null;
+alter table `[prefix]promotions` add column `exclude_from_products` tinyint(3) not null default 0;
+alter table `[prefix]accounts` add column `opt_out` tinyint(1) not null default 0;
+alter table `[prefix]account_subscriptions` add column `product_id` int(10) unsigned not null;
+alter table `[prefix]membership_reminders` modify `interval` varchar(255);
+alter table `[prefix]email_log` modify `headers` text not null;

@@ -1,3 +1,44 @@
+var ajaxManager = (function() {
+  $jq = jQuery.noConflict();
+  var requests = [];
+  
+  return {
+    addReq: function(opt) {
+      requests.push(opt);
+    },
+    removeReq: function(opt) {
+      if($jq.inArray(opt, requests) > -1) {
+        requests.splice($jq.inArray(opt, requests), 1);
+      }
+    },
+    run: function() {
+      var self = this, orgSuc;
+      
+      if(requests.length) {
+        oriSuc = requests[0].complete;
+      
+        requests[0].complete = function() {
+          if(typeof oriSuc === 'function') {
+            oriSuc();
+          }
+          requests.shift();
+          self.run.apply(self, []);
+        };   
+
+        $jq.ajax(requests[0]);
+      } else {
+        self.tid = setTimeout(function() {
+          self.run.apply(self, []);
+        }, 1000);
+      }
+    },
+    stop:  function() {
+      requests = [];
+      clearTimeout(this.tid);
+    }
+  };
+}());
+ajaxManager.run();
 (function($){
   $(document).ready(function(){
     $('.modalClose').click(function() {
@@ -28,7 +69,7 @@ function getCartButtonFormData(formId) {
 function inventoryCheck(formId, ajaxurl, useAjax, productName, productUrl, addingText) {
   $jq = jQuery.noConflict();
   var mydata = getCartButtonFormData('cartButtonForm_' + formId);
-  $jq.ajax({
+  ajaxManager.addReq({
     type: "POST",
     url: ajaxurl + '=1',
     data: mydata,
@@ -73,7 +114,7 @@ function addToCartAjax(formId, ajaxurl, productName, productUrl, buttonText) {
 	  product_url: productUrl
   };
   
-  $jq.ajax({
+  ajaxManager.addReq({
     type: "POST",
     url: ajaxurl + '=2',
     data: data,
@@ -120,7 +161,7 @@ function ajaxUpdateCartWidgets(ajaxurl) {
   var data = {
 	  action: "ajax_cart_elements"
   };
-  $jq.ajax({
+  ajaxManager.addReq({
     type: "POST",
     url: ajaxurl + '=3',
     data: data,
@@ -130,11 +171,11 @@ function ajaxUpdateCartWidgets(ajaxurl) {
       $jq('#Cart66AdvancedSidebarAjax, #Cart66WidgetCartContents').show();
       $jq('.Cart66WidgetViewCartCheckoutEmpty, #Cart66WidgetCartEmpty').hide();
       $jq('#Cart66WidgetCartLink').each(function(){
-        content = "<span id=\"Cart66WidgetCartCount\">" + response.summary.count + "</span>";
-        content += "<span id=\"Cart66WidgetCartCountText\">" + response.summary.items + "</span>";
-        content += "<span id=\"Cart66WidgetCartCountDash\"> – </span>"
-        content += "<span id=\"Cart66WidgetCartPrice\">" + response.summary.currencySymbol + response.summary.amount + "</span>";
-        $jq(this).html(content).fadeIn('slow');
+        widgetContent = "<span id=\"Cart66WidgetCartCount\">" + response.summary.count + "</span>";
+        widgetContent += "<span id=\"Cart66WidgetCartCountText\">" + response.summary.items + "</span>";
+        widgetContent += "<span id=\"Cart66WidgetCartCountDash\"> – </span>"
+        widgetContent += "<span id=\"Cart66WidgetCartPrice\">" + response.summary.currencySymbol + response.summary.amount + "</span>";
+        $jq(this).html(widgetContent).fadeIn('slow');
       });
       $jq('.Cart66RequireShipping').each(function(){
         if(response.shipping == 1) {
@@ -142,23 +183,23 @@ function ajaxUpdateCartWidgets(ajaxurl) {
         }
       })
       $jq('#Cart66WidgetCartEmptyAdvanced').each(function(){
-        content = "You have " + response.summary.count + " " + response.summary.items + " (" + response.summary.currencySymbol + response.summary.amount + ") in your shopping cart";
-        $jq(this).html(content).fadeIn('slow');
+        widgetContent = "You have " + response.summary.count + " " + response.summary.items + " (" + response.summary.currencySymbol + response.summary.amount + ") in your shopping cart";
+        $jq(this).html(widgetContent).fadeIn('slow');
       });
       $jq("#Cart66AdvancedWidgetCartTable .product_items").remove();
       $jq.each(response.products.reverse(), function(index, array){  
-        content = "<tr class=\"product_items\"><td>";
-        content += "<span class=\"Cart66ProductTitle\">" + array.productName + "</span>";
-        content += "<span class=\"Cart66QuanPrice\">";
-        content += "<span class=\"Cart66ProductQuantity\">" + array.productQuantity + "</span>";
-        content += "<span class=\"Cart66MetaSep\"> x </span>"; 
-        content += "<span class=\"Cart66CurSymbol\">" + array.currencySymbol + "</span> ";
-        content += "<span class=\"Cart66ProductPrice\">" + array.productPrice + "</span>";
-        content += "</span>";
-        content += "</td><td class=\"Cart66ProductSubtotalColumn\">";
-        content += "<span class=\"Cart66ProductSubtotal\">" + array.productSubtotal + "</span>";
-        content += "</td></tr>";
-        $jq("#Cart66AdvancedWidgetCartTable tbody").prepend(content).fadeIn("slow");  
+        widgetContent = "<tr class=\"product_items\"><td>";
+        widgetContent += "<span class=\"Cart66ProductTitle\">" + array.productName + "</span>";
+        widgetContent += "<span class=\"Cart66QuanPrice\">";
+        widgetContent += "<span class=\"Cart66ProductQuantity\">" + array.productQuantity + "</span>";
+        widgetContent += "<span class=\"Cart66MetaSep\"> x </span>"; 
+        widgetContent += "<span class=\"Cart66CurSymbol\">" + array.currencySymbol + "</span> ";
+        widgetContent += "<span class=\"Cart66ProductPrice\">" + array.productPrice + "</span>";
+        widgetContent += "</span>";
+        widgetContent += "</td><td class=\"Cart66ProductSubtotalColumn\">";
+        widgetContent += "<span class=\"Cart66ProductSubtotal\">" + array.productSubtotal + "</span>";
+        widgetContent += "</td></tr>";
+        $jq("#Cart66AdvancedWidgetCartTable tbody").prepend(widgetContent).fadeIn("slow");  
       });
       $jq('.Cart66Subtotal').each(function(){
         $jq(this).html(response.subtotal)

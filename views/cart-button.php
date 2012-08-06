@@ -97,7 +97,7 @@
           <div class='Cart66ProRequired'><a href='http://www.cart66.com'><?php _e( 'Cart66 Professional' , 'cart66' ); ?></a> <?php _e( 'is required to sell subscriptions' , 'cart66' ); ?></div>
       <?php else: ?>
         <?php if($data['addToCartPath']): ?> 
-          <input type='image' value='<?php echo $data['buttonText'] ?>' src='<?php echo $data['addToCartPath'] ?>' class='purAddToCart' name='addToCart_<?php echo $id ?>' id='addToCart_<?php echo $id ?>'/>
+          <input type='image' value='<?php echo $data['buttonText'] ?>' src='<?php echo $data['addToCartPath'] ?>' class="purAddToCartImage" name='addToCart_<?php echo $id ?>' id='addToCart_<?php echo $id ?>'/>
         <?php else: ?>
           <input type='submit' value='<?php echo $data['buttonText'] ?>' class='Cart66ButtonPrimary purAddToCart' name='addToCart_<?php echo $id ?>' id='addToCart_<?php echo $id ?>' />
         <?php endif; ?>
@@ -154,20 +154,21 @@
     else {
       $url = preg_replace('/http[s]*:/', 'http:', $url);
     }
+    $product_name = str_replace("'", "\'", $data["product"]->name);
   ?>
   $(document).ready(function(){
     $('.Cart66AjaxWarning').hide();
     $('#addToCart_<?php echo $id ?>').click(function() {
       $('#task_<?php echo $id ?>').val('ajax');
       <?php if($trackInventory): ?>
-        inventoryCheck('<?php echo $id ?>', '<?php echo $url ?>', '<?php echo $data["ajax"] ?>', '<?php echo $data["product"]->name; ?>', '<?php echo Cart66Common::getCurrentPageUrl(); ?>', '<?php _e( "Adding..." , "cart66" ); ?>');
+        inventoryCheck('<?php echo $id ?>', '<?php echo $url ?>', '<?php echo $data["ajax"] ?>', '<?php echo $product_name; ?>', '<?php echo Cart66Common::getCurrentPageUrl(); ?>', '<?php _e( "Adding..." , "cart66" ); ?>');
       <?php else: ?>
         <?php if($data['ajax'] == 'no'): ?>
           $('#task_<?php echo $id ?>').val('addToCart');
           $('#cartButtonForm_<?php echo $id ?>').submit();
           return false;
         <?php elseif($data['ajax'] == 'yes' || $data['ajax'] == 'true'): ?>
-          buttonTransform('<?php echo $id ?>', '<?php echo $url ?>', '<?php echo $data["product"]->name; ?>', '<?php echo Cart66Common::getCurrentPageUrl(); ?>', '<?php _e( "Adding..." , "cart66" ); ?>');
+          buttonTransform('<?php echo $id ?>', '<?php echo $url ?>', '<?php echo $product_name; ?>', '<?php echo Cart66Common::getCurrentPageUrl(); ?>', '<?php _e( "Adding..." , "cart66" ); ?>');
         <?php endif; ?>
       <?php endif; ?>
       return false;

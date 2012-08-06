@@ -88,9 +88,18 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
                   <span class="label_desc"><?php _e('Set the promotion amount', 'cart66'); ?>.</span>
                 </li>
                 <li>
-                  <label class="long" for="promo-min_order"><?php _e( 'Minimum order' , 'cart66' ); ?>:</label>
-                  <?php echo CART66_CURRENCY_SYMBOL ?> <input type="text" id="promo-min_order" name="promo[min_order]" value="<?php echo $promo->minOrder ?>">
-                  <span class="label_desc"><?php _e('Set the minimum amount required for this promotion to apply', 'cart66'); ?>.</span>
+                  <div class="desc"><?php _e('Required Amount', 'cart66'); ?>:</div>
+                  <div class="dateRange">
+                  <div class="group">
+                    <label for="promo-min_order"><?php _e( 'Minimum order amount' , 'cart66' ); ?>:</label>
+                    <?php echo CART66_CURRENCY_SYMBOL ?> <input type="text" id="promo-min_order" name="promo[min_order]" value="<?php echo $promo->minOrder ?>">
+                  </div>
+                  <div class="group">
+                    <label for="promo-max_order"><?php _e( 'Maximum order amount' , 'cart66' ); ?>:</label>
+                    <?php echo CART66_CURRENCY_SYMBOL ?> <input type="text" id="promo-max_order" name="promo[max_order]" value="<?php echo $promo->maxOrder ?>">
+                  </div>
+                  <span class="label_desc"><?php _e('Set the minimum and/or maximum amount required for this promotion to apply', 'cart66'); ?>.</span>
+                  </div>
                 </li>
                 <li>
                   <div class="desc"><?php _e('Required Quantity', 'cart66'); ?>:</div>
@@ -141,10 +150,14 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
                   <span class="label_desc"><?php _e('Set the maximum number of times this promotion can be redeemed per order', 'cart66'); ?>.</span>
                 </li>
                 <li>
-                  <label class="long" for="promo-products"><?php _e( 'Eligible Products' , 'cart66' ); ?>:</label>
+                  <label class="long" for="promo-products"><?php _e( 'Products' , 'cart66' ); ?>:</label>
+                  <input type="radio" name="promo[exclude_from_products]" id="promo-exclude_from_products_no" value="" <?php echo ($promo->exclude_from_products != 1) ? 'checked="checked"' : ''; ?>/> <?php _e('Apply to the following products', 'cart66'); ?>
+                  <input type="radio" name="promo[exclude_from_products]" id="promo-exclude_from_products_yes" value="1" <?php echo ($promo->exclude_from_products == 1) ? 'checked="checked"' : ''; ?>/> <?php _e('Exclude the following products', 'cart66'); ?>
+                </li>
+                <li>
                   <input type="text" id="promo-products" name="promo[products]" value='<?php echo $promo->products ?>' />
                   <input type='hidden' name='promo-products-hidden' id="promo-products-hidden" value='<?php echo $promo->products ?>' /><br />
-                  <p class="label_desc"><?php _e('Enter the names of products in your inventory that this promotion will be applied to.  You can enter as many products as you want.  If you want this promotion to apply to all orders, leave this field blank.  If you have selected to apply this promotion to shipping or the cart total, this promotion will only apply if the products in this list match the products in the cart.', 'cart66'); ?></p>
+                  <p class="label_desc"><?php _e('Enter the names of products in your inventory that this promotion will either be be applied to or that will be excluded from this promotion.  You can enter as many products as you want.  If you want this promotion to apply to all orders, leave this field blank.  If you have selected to apply this promotion to shipping or the cart total and are including these products, this promotion will only apply if the products in this list match the products in the cart and vice versa.', 'cart66'); ?></p>
                 </li>
                 <li>
                   <div class="desc"><?php _e('Additional settings', 'cart66'); ?>:</div>

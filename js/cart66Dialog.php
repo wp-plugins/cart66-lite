@@ -379,6 +379,10 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
         
         <?php if(CART66_PRO): ?>
         <tr>
+          <td><div class="shortcode" onclick="shortcode('email_opt_out');"><a title="Insert [email_opt_out]">[email_opt_out]</a></div></td>
+          <td>Allow Cart66 members to opt out of receiving notifications about the status of their account.</td>
+        </tr>
+        <tr>
           <td><div class="shortcode" onclick="shortcode('hide_from level');"><a title="Insert [hide_from]">[hide_from level=""]</a></div></td>
           <td>Hide content from members without the listed feature levels - opposite of [show_to]</td>
         </tr>
@@ -435,7 +439,7 @@ $tinyURI = get_bloginfo('wpurl')."/wp-includes/js/tinymce";
           <td>Shows the customer's receipt after a successful sale <br/>Belongs on system page store/receipt</td>
         </tr>
         
-        <?php if(CART66_PRO && false): ?>
+        <?php if(CART66_PRO): ?>
         <tr>
           <td><div class="shortcode" onclick="shortcode('spreedly_listener');"><a title="Insert [spreedly_listener]">[spreedly_listener]</a></div></td>
           <td>Listens for spreedly account changes <br/>Belongs on system page store/spreedly</td>

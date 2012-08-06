@@ -73,27 +73,27 @@ class Cart66Common {
     echo isset($value)? $value : '';
   }
   
-  public static function getView($filename, $data=null) {
-
+  public static function getView($filename, $data=null, $notices=true) {
     $notice = '';
     if(strpos($filename, 'admin') !== false) {
-      
       $mijireh_notice = Cart66Setting::getValue('mijireh_notice');
       if($mijireh_notice != 1) {
-        $notice = '<div id="mijireh_notice" class="mijireh-info alert-message info" data-alert="alert">
-        <a href="#" id="mijireh_dismiss" class="close">&times;</a>
-          <div class="mijireh-logo"><img src="' . CART66_URL . '/images/mijireh-checkout-logo.png" alt="Mijireh Checkout Logo"></div>
-          <div class="mijireh-blurb">
-          <h2>Cart66 now supports Mijireh Checkout!</h2>
-          <p>Accept credit cards on a fully PCI compliant ecommerce platform</p>
-          <ul>
-            <li>No need for SSL certificates or a dedicated IP addresss</li>
-            <li>No need to pay for for quarterly security scans</li>
-            <li>No need to give up control of your design</li>
-          </ul>
-          <h1><a href="http://mijireh.com" target="_new">Start now for FREE!</a></h1>
-          </div>
-        </div>';
+        if($notices) {
+          $notice = '<div id="mijireh_notice" class="mijireh-info alert-message info" data-alert="alert">
+          <a href="#" id="mijireh_dismiss" class="close">&times;</a>
+            <div class="mijireh-logo"><img src="' . CART66_URL . '/images/mijireh-checkout-logo.png" alt="Mijireh Checkout Logo"></div>
+            <div class="mijireh-blurb">
+            <h2>Cart66 now supports Mijireh Checkout!</h2>
+            <p>Accept credit cards on a fully PCI compliant ecommerce platform</p>
+            <ul>
+              <li>No need for SSL certificates or a dedicated IP addresss</li>
+              <li>No need to pay for for quarterly security scans</li>
+              <li>No need to give up control of your design</li>
+            </ul>
+            <h1><a href="http://mijireh.com" target="_new">Start now for FREE!</a></h1>
+            </div>
+          </div>';
+        }
       }
       
       if(CART66_PRO && !self::isRegistered()) {
@@ -102,14 +102,16 @@ class Cart66Common {
         if(CART66_ORDER_NUMBER !== false) {
           $hardCoded = "<br/><br/><em>An invalid order number has be hard coded<br/> into the main cart66.php file.</em>";
         }
-        $notice .= '
-          <div class="unregistered alert-message alert-error">
-            <p>This is not a registered copy of Cart66.<br/>
-            Please <a href="' . $settingsUrl . '">enter your order number</a> or
-            <a href="http://www.cart66.com/pricing">buy a license for your site.</a> ' . $hardCoded . '
-            </p>
-          </div>
-        ';
+        if($notices) {
+          $notice .= '
+            <div class="unregistered alert-message alert-error">
+              <p>This is not a registered copy of Cart66.<br/>
+              Please <a href="' . $settingsUrl . '">enter your order number</a> or
+              <a href="http://www.cart66.com/pricing">buy a license for your site.</a> ' . $hardCoded . '
+              </p>
+            </div>
+          ';
+        }
       }
       
     }
@@ -125,7 +127,14 @@ class Cart66Common {
       "views/cart-sidebar-advanced.php",
       "views/receipt.php",
       "views/receipt_print_version.php",
-      "pro/views/terms.php"
+      "pro/views/terms.php",
+      "pro/views/emails/default-email-followup.php",
+      "pro/views/emails/default-email-fulfillment.php",
+      "pro/views/emails/default-email-receipt.php",
+      "pro/views/emails/default-email-reminder.php",
+      "pro/views/emails/default-email-status.php",
+      "pro/views/emails/email-products.php",
+      "pro/views/emails/email-receipt.php",
     );
     $overrideDirectory = $themeDirectory."/cart66-templates";
     $userViewFile = $overrideDirectory."/$filename";
@@ -162,7 +171,7 @@ class Cart66Common {
     include $filename;
     $contents = ob_get_contents();
     ob_end_clean();
-
+    
     return $notice . $contents;
   }
   
@@ -191,6 +200,13 @@ class Cart66Common {
       }
     }
     
+  }
+  
+  public static function clearLog(){
+    $filename = CART66_PATH . "/log.txt"; 
+    if(file_exists($filename) && is_writable($filename)) {
+      file_put_contents($filename, '');
+    }
   }
 
   public static function getRandNum($numChars = 7) {
@@ -312,187 +328,38 @@ class Cart66Common {
     return $isUnique;
   }
   
-  
-  /**
-   * Configure mail for use with either standard wp_mail or when using the WP Mail SMTP plugin
-   */
-  public static function mail($to, $subject, $msg, $headers=null) {
-    //Disable mail headers if the WP Mail SMTP plugin is in use.
-    //if(function_exists('wp_mail_smtp_activate')) { $headers = null; }
-    return wp_mail($to, $subject, $msg, $headers);
-  }
-  
-  
-  /**
-   * Send email receipt and copies thereof.
-   * Return true if all the emails that were supposed to be sent got sent.
-   * Note that just because the email was sent does not mean the receipient received it.
-   * All sorts of things can go awry after the email leaves the server before it is in the
-   * recipient's inbox. 
-   * 
-   * @param int $orderId
-   * @return bool
-   */
-  public static function sendEmailReceipts($orderId) {
-    $isSent = false;
-    $newOrder = new Cart66Order($orderId);
-    $msg = self::getEmailReceiptMessage($newOrder);
-    $to = $newOrder->email;
-    $subject = Cart66Setting::getValue('receipt_subject');
-    
-    $headers = 'From: '. Cart66Setting::getValue('receipt_from_name') .' <' . Cart66Setting::getValue('receipt_from_address') . '>' . "\r\n\\";
-    $msgIntro = Cart66Setting::getValue('receipt_intro');    
-    
-    if($newOrder) {
-      $isSent = self::mail($to, $subject, $msg, $headers);
-      if(!$isSent) {
-        self::log("Mail not sent to: $to");
-      }
-
-      $others = Cart66Setting::getValue('receipt_copy');
-      if($others) {
-        $list = explode(',', $others);
-        $msg = "THIS IS A COPY OF THE RECEIPT\n\n$msg";
-        foreach($list as $e) {
-          $e = trim($e);
-          $isSent = wp_mail($e, $subject, $msg, $headers);
-          if(!$isSent) {
-            self::log("Mail not sent to: $e");
-          }
-          else {
-            self::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Receipt also mailed to: $e");
-          }
-        }
-      } 
-    }
-    return $isSent;
-  }
-  
-  public static function getEmailReceiptMessage($order) {
-     $product = new Cart66Product();
-
-     $msg = __("ORDER NUMBER","cart66") . ": " . $order->trans_id . "\n\n";
-     $hasDigital = false;
-     foreach($order->getItems() as $item) {
-       $product->load($item->product_id);
-       if($hasDigital == false) {
-         $hasDigital = $product->isDigital();
-       }
-       $price = $item->product_price * $item->quantity;
-       // $msg .= "Item: " . $item->item_number . ' ' . $item->description . "\n";
-       $msg .= __("Item","cart66") . ": " . $item->description . "\n";
-       if($item->quantity > 1) {
-         $msg .= __("Quantity","cart66") . ": " . $item->quantity . "\n";
-       }
-       $msg .= __("Item Price","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price, 2) . "\n";
-       $msg .= __("Item Total","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price * $item->quantity, 2) . "\n\n";
-
-       if($product->isGravityProduct()) {
-         $msg .= Cart66GravityReader::displayGravityForm($item->form_entry_ids, true);
-       }
-     }
-
-     if($order->shipping_method != 'None' && $order->shipping_method != 'Download') {
-       $msg .= __("Shipping","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . $order->shipping . "\n";
-     }
-
-     if(!empty($order->coupon) && $order->coupon != 'none') {
-       $msg .= __("Coupon","cart66") . ": " . $order->coupon . "\n";
-     }
-
-     if($order->tax > 0) {
-       $msg .= __("Tax","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->tax, 2) . "\n";
-     }
-
-     $msg .= "\n" . __("TOTAL","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->total, 2) . "\n";
-
-     if($order->shipping_method != 'None' && $order->shipping_method != 'Download') {
-       $msg .= "\n\n" . __("SHIPPING INFORMATION","cart66") . "\n\n";
-
-       $msg .= $order->ship_first_name . ' ' . $order->ship_last_name . "\n";
-       $msg .= $order->ship_address . "\n";
-       if(!empty($order->ship_address2)) {
-         $msg .= $order->ship_address2 . "\n";
-       }
-       $msg .= $order->ship_city . ' ' . $order->ship_state . ' ' . $order->ship_zip . "\n" . $order->ship_country . "\n";
-
-       $msg .= "\n" . __("Delivery via","cart66") . ": " . $order->shipping_method . "\n";
-     }
-
-
-     $msg .= "\n\n" . __("BILLING INFORMATION","cart66") . "\n\n";
-
-     $msg .= $order->bill_first_name . ' ' . $order->bill_last_name . "\n";
-     $msg .= $order->bill_address . "\n";
-     if(!empty($order->bill_address2)) {
-       $msg .= $order->bill_address2 . "\n";
-     }
-     $msg .= $order->bill_city . ' ' . $order->bill_state . ' ' . $order->bill_zip . "\n" . $order->bill_country . "\n";
-
-     if(!empty($order->phone)) {
-       $phone = self::formatPhone($order->phone);
-       $msg .= "\n" . __("Phone","cart66") . ": $phone\n";
-     }
-
-     if(!empty($order->email)) {
-       $msg .= __("Email","cart66") . ': ' . $order->email . "\n";
-     }
-
-     $receiptPage = get_page_by_path('store/receipt');
-     $link = get_permalink($receiptPage->ID);
-     if(strstr($link,"?")){
-       $link .= '&ouid=' . $order->ouid;
-     }
-     else{
-       $link .= '?ouid=' . $order->ouid;
-     }
-
-     if($hasDigital) {
-       $msg .= "\n" . __('DOWNLOAD LINK','cart66') . "\n" . __('Click the link below to download your order.','cart66') . "\n$link";
-     }
-     else {
-       $msg .= "\n" . __('VIEW RECEIPT ONLINE','cart66') . "\n" . __('Click the link below to view your receipt online.','cart66') . "\n$link";
-     }
-
-     $setting = new Cart66Setting();
-     $msgIntro = Cart66Setting::getValue('receipt_intro');
-     $msg = $msgIntro . " \n----------------------------------\n\n" . $msg;
-
-     return $msg;
-   }
-  
   public static function randomString($numChars = 7) {
-		$letters = "";
-		mt_srand((double)microtime()*1000000);
-		for ($i = 0; $i < $numChars; $i++) { 
-			$randval = chr(mt_rand(ord("a"), ord("z")));
-			$letters .= $randval;
-		}
-		return $letters;
-	}
-	
-	public static function isValidDate($val) {
-	  $isValid = false;
-		if(preg_match("/\d{1,2}\/\d{1,2}\/\d{4}/", $val)) {
-			list($month, $day, $year) = split("/", $val);
-			if(is_numeric($month) && is_numeric($day) && is_numeric($year) ) {
-				if($month > 12 || $month < 1) {
-					$isValid = false;
-				}
-				elseif($day > 31 || $day < 1) {
-					$isValid = false;
-				}
-				elseif($year < 1900) {
-					$isValid = false;
-				}
-				else {
-					$isValid = true;
-				}
-			}
-		}
-		return $isValid;
-	}
-
+    $letters = "";
+    mt_srand((double)microtime()*1000000);
+    for ($i = 0; $i < $numChars; $i++) { 
+      $randval = chr(mt_rand(ord("a"), ord("z")));
+      $letters .= $randval;
+    }
+    return $letters;
+  }
+  
+  public static function isValidDate($val) {
+    $isValid = false;
+    if(preg_match("/\d{1,2}\/\d{1,2}\/\d{4}/", $val)) {
+      list($month, $day, $year) = split("/", $val);
+      if(is_numeric($month) && is_numeric($day) && is_numeric($year) ) {
+        if($month > 12 || $month < 1) {
+          $isValid = false;
+        }
+        elseif($day > 31 || $day < 1) {
+          $isValid = false;
+        }
+        elseif($year < 1900) {
+          $isValid = false;
+        }
+        else {
+          $isValid = true;
+        }
+      }
+    }
+    return $isValid;
+  }
+  
   /**
    * Strip slashes and escape sequences from POST values and returened the scrubbed value.
    * If the key is not set, return false.
@@ -569,83 +436,247 @@ class Cart66Common {
   
   public static function getCountries($all=false) {
     $countries = array(
-       'AR'=>'Argentina',
-       'AU'=>'Australia',
-       'AT'=>'Austria',
-       'BS'=>'Bahamas',
-       'BB'=>'Barbados',
-       'BE'=>'Belgium',
-       'BR'=>'Brazil',
-       'BG'=>'Bulgaria',
-       'CA'=>'Canada',
-       'CL'=>'Chile',
-       'CN'=>'China',
-       'CO'=>'Colombia',
-       'CR'=>'Costa Rica',
-       'HR'=>'Croatia',
-       'CY'=>'Cyprus',
-       'CZ'=>'Czech Republic',
-       'DK'=>'Denmark',
-       'EC'=>'Ecuador',
-       'EE'=>'Estonia',
-       'EG'=>'Egypt',
-       'FI'=>'Finland',
-       'FR'=>'France',
-       'DE'=>'Germany',
-       'GR'=>'Greece',
-       'GP'=>'Guadeloupe',
-       'HK'=>'Hong Kong',
-       'HU'=>'Hungary',
-       'IS'=>'Iceland',
-       'IN'=>'India',
-       'ID'=>'Indonesia',
-       'IE'=>'Ireland',
-       'IL'=>'Israel',
-       'IT'=>'Italy',
-       'JM'=>'Jamaica',
-       'JP'=>'Japan',
-       'KE'=>'Kenya',
-       'LV'=>'Latvia',
-       'LS'=>'Lesotho',
-       'LT'=>'Lithuania',
-       'LU'=>'Luxembourg',
-       'MY'=>'Malaysia',
-       'MT'=>'Malta',
-       'MX'=>'Mexico',
-       'NL'=>'Netherlands',
-       'NZ'=>'New Zealand',
-       'NO'=>'Norway',
-       'PK'=>'Pakistan',
-       'PE'=>'Peru',
-       'PH'=>'Philippines',
-       'PL'=>'Poland',
-       'PT'=>'Portugal',
-       'PR'=>'Puerto Rico',
-       'RO'=>'Romania',
-       'RU'=>'Russia',
-       'SA'=>'Saudi Arabia',
-       'SG'=>'Singapore',
-       'SK'=>'Slovakia',
-       'SI'=>'Slovenia',
-       'ZA'=>'South Africa',
-       'KR'=>'South Korea',
-       'ES'=>'Spain',
-       'VC'=>'St. Vincent',
-       'SE'=>'Sweden',
-       'CH'=>'Switzerland',
-       'SY'=>'Syria',
-       'TW'=>'Taiwan',
-       'TH'=>'Thailand',
-       'TT'=>'Trinidad and Tobago',
-       'TR'=>'Turkey',
-       'UA'=>'Ukraine',
-       'AE'=>'United Arab Emirates',
-       'GB'=>'United Kingdom',
-       'US'=>'United States',
-       'UY'=>'Uruguay',
-       'VU'=>'Vanuatu',
-			 'VN'=>'Vietnam',
-       'VE'=>'Venezuela');
+      'AF'=>'Afghanistan',
+      'AX'=>'Åland Islands',
+      'AL'=>'Albania',
+      'DZ'=>'Algeria',
+      'AD'=>'Andorra',
+      'AO'=>'Angola',
+      'AI'=>'Anguilla',
+      'AG'=>'Antigua and Barbuda',
+      'AR'=>'Argentina',
+      'AM'=>'Armenia',
+      'AW'=>'Aruba',
+      'AU'=>'Australia',
+      'AT'=>'Austria',
+      'AZ'=>'Azerbaijan',
+      'BS'=>'Bahamas',
+      'BH'=>'Bahrain',
+      'BD'=>'Bangladesh',
+      'BB'=>'Barbados',
+      'BY'=>'Belarus',
+      'BE'=>'Belgium',
+      'BZ'=>'Belize',
+      'BJ'=>'Benin',
+      'BM'=>'Bermuda',
+      'BT'=>'Bhutan',
+      'BO'=>'Bolivia',
+      'BQ'=>'Bonaire',
+      'BA'=>'Bosnia-Herzegovina',
+      'BW'=>'Botswana',
+      'BV'=>'Bouvet Island',
+      'BR'=>'Brazil',
+      'IO'=>'British Indian Ocean Territory',
+      'BN'=>'Brunei',
+      'BF'=>'Burkina Faso',
+      'BI'=>'Burundi',
+      'BG'=>'Bulgaria',
+      'KH'=>'Cambodia',
+      'CM'=>'Cameroon',
+      'CA'=>'Canada',
+      'CV'=>'Cape Verde',
+      'KY'=>'Cayman Islands',
+      'CF'=>'Central African Republic',
+      'TD'=>'Chad',
+      'CL'=>'Chile',
+      'CN'=>'China',
+      'CX'=>'Christmas Island',
+      'CC'=>'Cocos Islands',
+      'CO'=>'Colombia',
+      'KM'=>'Comoros',
+      'CD'=>'Democratic Republic of Congo',
+      'CG'=>'Congo',
+      'CK'=>'Cook Islands',
+      'CR'=>'Costa Rica',
+      'CI'=>'Côte d\'Ivoire',
+      'HR'=>'Croatia',
+      'CU'=>'Cuba',
+      'CW'=>'Curaçao',
+      'CY'=>'Cyprus',
+      'CZ'=>'Czech Republic',
+      'DK'=>'Denmark',
+      'DJ'=>'Djibouti',
+      'DM'=>'Dominica',
+      'DO'=>'Dominican Republic',
+      'EC'=>'Ecuador',
+      'EG'=>'Egypt',
+      'SV'=>'El Salvador',
+      'GQ'=>'Equatorial Guinea',
+      'ER'=>'Eritrea',
+      'EE'=>'Estonia',
+      'ET'=>'Ethiopia',
+      'FK'=>'Falkland Islands',
+      'FO'=>'Faroe Islands',
+      'FJ'=>'Fiji',
+      'FI'=>'Finland',
+      'FR'=>'France',
+      'GF'=>'French Guiana',
+      'PF'=>'French Polynesia',
+      'TF'=>'French Southern Territories',
+      'GA'=>'Gabon',
+      'GM'=>'Gambia',
+      'GE'=>'Georgia',
+      'DE'=>'Germany',
+      'GH'=>'Ghana',
+      'GI'=>'Gibraltar',
+      'GR'=>'Greece',
+      'GL'=>'Greenland',
+      'GD'=>'Grenada',
+      'GP'=>'Guadeloupe',
+      'GU'=>'Guam',
+      'GT'=>'Guatemala',
+      'GN'=>'Guinea',
+      'GW'=>'Guinea-Bissau',
+      'GY'=>'Guyana',
+      'HT'=>'Haiti',
+      'VA'=>'Holy See',
+      'HN'=>'Honduras',
+      'HK'=>'Hong Kong',
+      'HU'=>'Hungary',
+      'IS'=>'Iceland',
+      'IN'=>'India',
+      'ID'=>'Indonesia',
+      'IR'=>'Iran',
+      'IQ'=>'Iraq',
+      'IE'=>'Ireland',
+      'IM'=>'Isle of Man',
+      'IL'=>'Israel',
+      'IT'=>'Italy',
+      'JM'=>'Jamaica',
+      'JP'=>'Japan',
+      'JE'=>'Jersey',
+      'JO'=>'Jordan',
+      'KZ'=>'Kazakhstan',
+      'KE'=>'Kenya',
+      'KI'=>'Kiribati',
+      'KW'=>'Kuwait',
+      'KG'=>'Kyrgyzstan',
+      'LA'=>'Laos',
+      'LV'=>'Latvia',
+      'LB'=>'Lebanon',
+      'LS'=>'Lesotho',
+      'LR'=>'Liberia',
+      'LY'=>'Libya',
+      'LI'=>'Liechtenstein',
+      'LT'=>'Lithuania',
+      'LU'=>'Luxembourg',
+      'MO'=>'Macao',
+      'MK'=>'Macedonia',
+      'MG'=>'Madagascar',
+      'MW'=>'Malawi',
+      'MY'=>'Malaysia',
+      'MV'=>'Maldives',
+      'ML'=>'Mali',
+      'MT'=>'Malta',
+      'MH'=>'Marshall Islands',
+      'MR'=>'Mauritania',
+      'MU'=>'Mauritius',
+      'YT'=>'Mayotte',
+      'MX'=>'Mexico',
+      'FM'=>'Micronesia',
+      'MD'=>'Moldova',
+      'MC'=>'Monaco',
+      'MN'=>'Mongolia',
+      'ME'=>'Montenegro',
+      'MA'=>'Morocco',
+      'MZ'=>'Mozambique',
+      'MM'=>'Myanmar',
+      'NA'=>'Namibia',
+      'NR'=>'Nauru',
+      'NP'=>'Nepal',
+      'NL'=>'Netherlands',
+      'NZ'=>'New Zealand',
+      'NI'=>'Nicaragua',
+      'NE'=>'Niger',
+      'NG'=>'Nigeria',
+      'NU'=>'Niue',
+      'NF'=>'Norfolk Island',
+      'KP'=>'North Korea',
+      'NO'=>'Norway',
+      'OM'=>'Oman',
+      'PW'=>'Palau',
+      'PS'=>'Palestinian Territories',
+      'PK'=>'Pakistan',
+      'PA'=>'Panama',
+      'PG'=>'Papua New Guinea',
+      'PY'=>'Paraguay',
+      'PE'=>'Peru',
+      'PH'=>'Philippines',
+      'PN'=>'Pitcairn',
+      'PL'=>'Poland',
+      'PT'=>'Portugal',
+      'PR'=>'Puerto Rico',
+      'QA'=>'Qatar',
+      'RE'=>'Réunion',
+      'RO'=>'Romania',
+      'RU'=>'Russia',
+      'RW'=>'Rwanda',
+      'BL'=>'Saint Barthélemy',
+      'SH'=>'Saint Helena, Ascension and Tristan da Cunha',
+      'KN'=>'Saint Kitts and Nevis',
+      'LC'=>'Saint Lucia',
+      'MF'=>'Saint Martin',
+      'PM'=>'Saint Pierre and Miquelon',
+      'VC'=>'Saint Vincent and the Grenadines',
+      'WS'=>'Samoa',
+      'SM'=>'San Marino',
+      'ST'=>'Sao Tome and Principe',
+      'SA'=>'Saudi Arabia',
+      'SN'=>'Senegal',
+      'RS'=>'Serbia',
+      'SC'=>'Seychelles',
+      'SL'=>'Sierra Leone',
+      'SG'=>'Singapore',
+      'SX'=>'Sint Maarten',
+      'SK'=>'Slovakia',
+      'SI'=>'Slovenia',
+      'LK'=>'Sri Lanka',
+      'SB'=>'Solomon Islands',
+      'SO'=>'Somalia',
+      'ZA'=>'South Africa',
+      'GS'=>'South Georgia and South Sandwich Islands',
+      'KR'=>'South Korea',
+      'SS'=>'South Sudan',
+      'ES'=>'Spain',
+      'VC'=>'St. Vincent',
+      'SD'=>'Sudan',
+      'SR'=>'Suriname',
+      'SJ'=>'Svalbard and Jan Mayen',
+      'SZ'=>'Swaziland',
+      'SE'=>'Sweden',
+      'CH'=>'Switzerland',
+      'SY'=>'Syria',
+      'TW'=>'Taiwan',
+      'TJ'=>'Tajikistan',
+      'TZ'=>'Tanzania',
+      'TH'=>'Thailand',
+      'TL'=>'Timor-Leste',
+      'TG'=>'Togo',
+      'TK'=>'Tokelau',
+      'TO'=>'Tonga',
+      'TT'=>'Trinidad and Tobago',
+      'TN'=>'Tunisia',
+      'TR'=>'Turkey',
+      'TM'=>'Turkmenistan',
+      'TC'=>'Turks and Caicos Islands',
+      'TV'=>'Tuvalu',
+      'UG'=>'Uganda',
+      'UA'=>'Ukraine',
+      'AE'=>'United Arab Emirates',
+      'GB'=>'United Kingdom',
+      'US'=>'United States',
+      'UM'=>'United States Minor Outlying Islands',
+      'UY'=>'Uruguay',
+      'UZ'=>'Uzbekistan',
+      'VU'=>'Vanuatu',
+      'VN'=>'Vietnam',
+      'VG'=>'British Virgin Islands',
+      'VI'=>'US Virgin Islands',
+      'VE'=>'Venezuela',
+      'YE'=>'Yemen',
+      'ZM'=>'Zambia',
+      'ZW'=>'Zimbabwe'
+    );
     
     // Put home country at the top of the list
     $setting = new Cart66Setting();
@@ -738,6 +769,7 @@ class Cart66Common {
     
     $au = array();
     $au['0'] = '';
+    $au['ACT'] = 'Australian Capital Territory';
     $au['NSW'] = 'New South Wales';
     $au['NT'] = 'Northern Territory';
     $au['QLD'] = 'Queensland';
@@ -750,32 +782,32 @@ class Cart66Common {
     $br = array();
     $br['0'] = '';
     $br['Acre'] = 'Acre';
-		$br['Alagoas'] = 'Alagoas';
-		$br['Amapa'] = 'Amapa';
-		$br['Amazonas'] = 'Amazonas';
-		$br['Bahia'] = 'Bahia';
-		$br['Ceara'] = 'Ceara';
-		$br['Distrito Federal'] = 'Distrito Federal';
-		$br['Espirito Santo'] = 'Espirito Santo';
-		$br['Goias'] = 'Goias';
-		$br['Maranhao'] = 'Maranhao';
-		$br['Mato Grosso'] = 'Mato Grosso';
-		$br['Mato Grosso do Sul'] = 'Mato Grosso do Sul';
-		$br['Minas Gerais'] = 'Minas Gerais';
-		$br['Para'] = 'Para';
-		$br['Paraiba'] = 'Paraiba';
-		$br['Parana'] = 'Parana';
-		$br['Pernambuco'] = 'Pernambuco';
-		$br['Piaui'] = 'Piaui';
-		$br['Rio de Janeiro'] = 'Rio de Janeiro';
-		$br['Rio Grande do Norte'] = 'Rio Grande do Norte';
-		$br['Rio Grande do Sul'] = 'Rio Grande do Sul';
-		$br['Rondonia'] = 'Rondonia';
-		$br['Roraima'] = 'Roraima';
-		$br['Santa Catarina'] = 'Santa Catarina';
-		$br['Sao Paulo'] = 'Sao Paulo';
-		$br['Sergipe'] = 'Sergipe';
-		$br['Tocantins'] = 'Tocantins';
+    $br['Alagoas'] = 'Alagoas';
+    $br['Amapa'] = 'Amapa';
+    $br['Amazonas'] = 'Amazonas';
+    $br['Bahia'] = 'Bahia';
+    $br['Ceara'] = 'Ceara';
+    $br['Distrito Federal'] = 'Distrito Federal';
+    $br['Espirito Santo'] = 'Espirito Santo';
+    $br['Goias'] = 'Goias';
+    $br['Maranhao'] = 'Maranhao';
+    $br['Mato Grosso'] = 'Mato Grosso';
+    $br['Mato Grosso do Sul'] = 'Mato Grosso do Sul';
+    $br['Minas Gerais'] = 'Minas Gerais';
+    $br['Para'] = 'Para';
+    $br['Paraiba'] = 'Paraiba';
+    $br['Parana'] = 'Parana';
+    $br['Pernambuco'] = 'Pernambuco';
+    $br['Piaui'] = 'Piaui';
+    $br['Rio de Janeiro'] = 'Rio de Janeiro';
+    $br['Rio Grande do Norte'] = 'Rio Grande do Norte';
+    $br['Rio Grande do Sul'] = 'Rio Grande do Sul';
+    $br['Rondonia'] = 'Rondonia';
+    $br['Roraima'] = 'Roraima';
+    $br['Santa Catarina'] = 'Santa Catarina';
+    $br['Sao Paulo'] = 'Sao Paulo';
+    $br['Sergipe'] = 'Sergipe';
+    $br['Tocantins'] = 'Tocantins';
     $zones['BR'] = $br;
     
     $ca = array();
@@ -794,6 +826,25 @@ class Cart66Common {
     $ca['SK'] = 'Saskatchewan';
     $ca['YT'] = 'Yukon Territory';
     $zones['CA'] = $ca;
+    
+    $my['0'] = '';
+    $my['KUL'] = 'Kuala Lumpur (Federal Territory)';
+    $my['LBN'] = 'Labuan (Federal Territory)';
+    $my['PJY'] = 'Putrajaya (Federal Territory)';
+    $my['JHR'] = 'Johor';
+    $my['KDH'] = 'Kedah';
+    $my['KTN'] = 'Kelantan';
+    $my['MLK'] = 'Melaka';
+    $my['NSN'] = 'Negeri Sembilan';
+    $my['PHG'] = 'Pahang';
+    $my['PRK'] = 'Perak';
+    $my['PLS'] = 'Perlis';
+    $my['PNG'] = 'Penang';
+    $my['SBH'] = 'Sabah';
+    $my['SWK'] = 'Sarawak';
+    $my['SGR'] = 'Selangor';
+    $my['TRG'] = 'Terengganu';
+    $zones['MY'] = $my;
     
     $us = array();
     $us['0'] = '';
@@ -862,18 +913,21 @@ class Cart66Common {
       $us['MH'] = 'Marshall Islands';
       $us['PW'] = 'Palua';
     }
-  
+    
     $zones['US'] = $us;
     
     switch ($code) {
       case 'AU':
         $zones = $zones['AU'];
         break;
-  	  case 'BR':
-    		$zones = $zones['BR'];
-  		  break;
+      case 'BR':
+        $zones = $zones['BR'];
+        break;
       case 'CA':
         $zones = $zones['CA'];
+        break;
+      case 'MY':
+        $zones = $zones['MY'];
         break;
       case 'US':
         $zones = $zones['US'];
@@ -1162,7 +1216,7 @@ class Cart66Common {
           header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
           header("Cache-Control: private",false);
           header("Content-Type: application/octet-stream;");
-          header("Content-Disposition: attachment; filename=\"".$fileName."\";" );
+          header('Content-Disposition: attachment; filename="' . $fileName . '"');
           header("Content-Transfer-Encoding: binary");
           header("Content-Length: $bytes");
 
@@ -1335,21 +1389,24 @@ class Cart66Common {
     $output = false;
     if(!empty($datestamp) && $datestamp != '0000-00-00 00:00:00') {
       $totaldelay = Cart66Common::localTs() - strtotime($datestamp);
-      if($days=floor($totaldelay/86400)) {
+      if(Cart66Common::localTs() == strtotime($datestamp)) {
+        $output = __('Now', 'cart66');
+      }
+      elseif($days=floor($totaldelay/86400)) {
         $totaldelay = $totaldelay % 86400;
         $output = date('m/d/Y', strtotime($datestamp));
       }
       elseif($hours=floor($totaldelay/3600)) {
         $totaldelay = $totaldelay % 3600;
-        $output = $hours . ' ' . _n('hour', 'hours', $hours, 'cart66') . ' ago';
+        $output = $hours . ' ' . _n('hour', 'hours', $hours, 'cart66') . __(" ago","cart66");
       }
       elseif($minutes=floor($totaldelay/60)) {
         $totaldelay = $totaldelay % 60;
-        $output = $minutes . ' ' . _n('minute', 'minutes', $minutes, 'cart66') . ' ago';
+        $output = $minutes . ' ' . _n('minute', 'minutes', $minutes, 'cart66') . __(" ago","cart66");
       }
       elseif($seconds=floor($totaldelay/1)) {
         $totaldelay = $totaldelay % 1;
-        $output = $seconds . ' ' . _n('second', 'seconds', $seconds, 'cart66') . ' ago';
+        $output = $seconds . ' ' . _n('second', 'seconds', $seconds, 'cart66') . __(" ago","cart66");
       }
     }
     return $output;
@@ -1359,21 +1416,24 @@ class Cart66Common {
     $output = false;
     if(!empty($datestamp) && $datestamp != '0000-00-00 00:00:00') {
       $timeleft = strtotime($datestamp) - Cart66Common::localTs();
-      if($days=floor($timeleft/86400)) {
+      if(Cart66Common::localTs() == strtotime($datestamp)) {
+        $output = __('Now', 'cart66');
+      }
+      elseif($days=floor($timeleft/86400)) {
         $timeleft = $timeleft % 86400;
         $output = date('m/d/Y', strtotime($datestamp));
       }
       elseif($hours=floor($timeleft/3600)) {
         $timeleft = $timeleft % 3600;
-        $output = $hours . __(' hours to go', 'cart66');
+        $output = $hours . ' ' . _n('hour', 'hours', $hours, 'cart66') . __(" to go","cart66");
       }
       elseif($minutes=floor($timeleft/60)) {
         $timeleft = $timeleft % 60;
-        $output = ($minutes == 1) ? $minutes . __(' minute ago', 'cart66') : $minutes . __(' minutes to go', 'cart66');
+        $output = $minutes . ' ' . _n('minute', 'minutes', $minutes, 'cart66') . __(" to go","cart66");
       }
       elseif($seconds=floor($timeleft/1)) {
         $timeleft = $timeleft % 1;
-        $output = $seconds . __(' seconds to go', 'cart66');
+        $output = $seconds . ' ' . _n('second', 'seconds', $seconds, 'cart66') . __(" to go","cart66");
       }
     }
     return $output;
@@ -1396,7 +1456,14 @@ class Cart66Common {
   }
   
   public static function urlIsLive($url) {
-    return @fopen($url, 'r');
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_NOBODY, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); 
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_exec($ch);
+    $response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return ($response_code == '200') ? true : false;
   }
   
   public static function displayVersionInfo() {
@@ -1432,6 +1499,24 @@ class Cart66Common {
     return $isSlurp;
   }
   
+  /**
+   * Return an array just like explode, but trim the values of the array.
+   * 
+   * This allows for spaces in CSV strings. The following two strings would return the same array
+   * option1, option2, option3
+   * option1,option2,option3
+   * 
+   * @return array
+   */
+  public static function trimmedExplode($split_on, $string) {
+    $values = array();
+    $arr = explode($split_on, $string);
+    foreach($arr as $val) {
+      $values[] = trim($val);
+    }
+    return $values;
+  }
+  
   public function sessionType() {
     $type = Cart66Setting::getValue('session_type');
     if(!$type) {
@@ -1439,5 +1524,49 @@ class Cart66Common {
     }
     return $type;
   }
+  
+  // Remove all non-numeric characters except for the decimal
+  public function cleanNumber($string) {
+    $number = preg_replace('/[^\d\.]/', '', $string);
+    return $number;
+  }
+  
+  public function verifyCartPages($outputType = 'full'){
+    $requiredPages = array(
+      "Store" => "store",
+      "Cart" => "store/cart",
+      "Checkout" => "store/checkout",
+      "Express" => "store/express",
+      "IPN" => "store/ipn",
+      "Receipt" => "store/receipt"
+    );
+    $output = '';
+    $success = array();
+    $error = array();
+    foreach($requiredPages as $page => $slug){
+       $wordpress_page = get_page_by_path($slug);
+       if($wordpress_page && !in_array($wordpress_page->post_status, array('trash','draft','private'))){
+         $success[] = "<li class='Cart66PageSuccess'><strong>$page page found</strong></li>";
+       }
+       else{
+         $error[] = "<li class='Cart66PageError'><strong>$page page not found!</strong> The page should be located at " . get_bloginfo('url') . "/$slug</li>";
+       }
+    }
+    
+    switch($outputType){
+      case "success":
+        $output = $success;
+      break;
+      case "error":
+        $output = $error;
+      break;
+      default:
+        $output = array_merge($error, $success);
+    }
+    
+    return implode(" ", $output);
+    
+  }
+  
   
 }

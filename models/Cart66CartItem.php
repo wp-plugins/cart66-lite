@@ -218,46 +218,58 @@ class Cart66CartItem {
   
   /**
    * Return the price for the product + the price difference applied by selected product options.
-   * If the product is a subscription this price inlcudes both the one time fee and the first 
+   * If the product is a subscription this price includes both the one time fee and the first 
    * subscription payment if the subscription start date is today.
    * 
    * @param boolean $includeFirstSubscription
    * @return float Price of product
    */
   public function getProductPrice() {
-    if($this->_productId > 0) {
-      $product = new Cart66Product($this->_productId);
-      if($this->isPayPalSubscription()) {
-        $price = $product->getCheckoutPrice();
+    if($this->_productId < 1) {
+      return false;
+    }
+    
+    $product = new Cart66Product($this->_productId);
+    if($this->isPayPalSubscription()) {
+      $price = $product->getCheckoutPrice();
+    }
+    elseif($this->isSpreedlySubscription()) {
+      $price = $product->getCheckoutPrice();
+    }
+    elseif($product->is_user_price == 1 || $product->gravity_form_pricing) {
+      $session_var_name = "userPrice_$this->_productId";
+      
+      if($product->gravity_form_pricing) {
+        $session_var_name .= '_' . $this->getFirstFormEntryId();
       }
-      elseif($this->isSpreedlySubscription()) {
-        $price = $product->getCheckoutPrice();
-      }
-      elseif($product->is_user_price == 1){
-        if(Cart66Session::get("userPrice_$this->_productId")){
-          // using a user-defined price
-          $userPrice = Cart66Session::get("userPrice_$this->_productId");
-          if($product->min_price > 0 && $userPrice < $product->min_price){
-            $userPrice = $product->min_price;
-          }
-          if($product->max_price > 0 && $userPrice > $product->max_price){
-            $userPrice = $product->max_price;
-          }
-          
-          $price = $userPrice;
-          
-        }
-        else{
-          $price = $product->price;
+      
+      //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Looking for product price in session variable: " . $session_var_name . "\n" . 
+      //  print_r(Cart66Session::dump(), true));
+        
+      if(Cart66Session::get($session_var_name)){
+        // using a user-defined price
+        $userPrice = Cart66Session::get($session_var_name);
+        
+        if($product->min_price > 0 && $userPrice < $product->min_price){
+          $userPrice = $product->min_price;
         }
         
+        if($product->max_price > 0 && $userPrice > $product->max_price){
+          $userPrice = $product->max_price;
+        }
+        
+        $price = $userPrice;
       }
-      else {
-        $price = $product->price + $this->_priceDifference;
+      else{
+        $price = $product->price;
       }
-      return $price;
+      
     }
-    return false;
+    else {
+      $price = $product->price + $this->_priceDifference;
+    }
+    
+    return $price;
   }
   
   public function getBaseProductPrice(){
@@ -268,6 +280,13 @@ class Cart66CartItem {
     else {
       $price = $product->price + $this->_priceDifference;
     }
+    
+    if(CART66_PRO && !empty($product->gravity_form_id) && $product->gravity_form_pricing == 1){
+      // gravity form price
+      $price = Cart66GravityReader::getPrice($this->getFirstFormEntryId());
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Gravity Form product price: $price");
+    }
+    
     return $price;
   }
   
@@ -282,9 +301,15 @@ class Cart66CartItem {
         $product = new Cart66Product($product->id);
         $priceDescription =  $product->getPriceDescription();
       }
-      elseif($product->is_user_price == 1){
-        if(Cart66Session::get("userPrice_$this->_productId")){
-          $userPrice = Cart66Session::get("userPrice_$this->_productId");
+      elseif($product->is_user_price == 1 || $product->gravity_form_pricing) {
+        $session_var_name = "userPrice_$this->_productId";
+
+        if($product->gravity_form_pricing) {
+          $session_var_name .= '_' . $this->getFirstFormEntryId();
+        }
+        
+        if(Cart66Session::get($session_var_name)) {
+          $userPrice = Cart66Session::get($session_var_name);
           if($product->min_price > 0 && $userPrice < $product->min_price){
             $userPrice = $product->min_price;
           }
@@ -324,6 +349,17 @@ class Cart66CartItem {
   
   public function getFormEntryIds() {
     return $this->_formEntryIds;
+  }
+
+  /**
+   * Return the first form entry id or false if there are not ids
+   */
+  public function getFirstFormEntryId() {
+    $id = false;
+    if(is_array($this->_formEntryIds)) {
+      $id = reset($this->_formEntryIds);
+    }
+    return $id;
   }
   
   public function getFullDisplayName() {
@@ -403,6 +439,19 @@ class Cart66CartItem {
       $subId = $product->spreedlySubscriptionId;
     }
     return $subId;
+  }
+  
+  /**
+   * Return the spreedly subscription product id if the product is a spreedly subscription product. 
+   * Otherwise return false.
+   */
+  public function getSpreedlyProductId() {
+    $productId = false;
+    $product = new Cart66Product($this->_productId);
+    if($product->isSpreedlySubscription()) {
+      $productId = $this->_productId;
+    }
+    return $productId;
   }
   
   /**

@@ -30,6 +30,20 @@ class Cart66 {
         Cart66Setting::setValue('order_number', '');
       }
     }
+    
+    $this->upgradeDatabase();
+  }
+  
+  public function scheduledEvents() {
+    $offset = get_option( 'gmt_offset' ) * 3600;
+    $timestamp = strtotime("3am + 1 day");
+    $fixedtime = $timestamp - $offset;
+    if(CART66_PRO && !wp_next_scheduled('daily_subscription_reminder_emails')) {
+      wp_schedule_event($fixedtime, 'daily', 'daily_subscription_reminder_emails');
+    }
+    if(CART66_PRO && !wp_next_scheduled('daily_followup_emails')) {
+      wp_schedule_event($fixedtime, 'daily', 'daily_followup_emails');
+    }
   }
   
   public function init() {
@@ -56,11 +70,21 @@ class Cart66 {
     add_filter('query_vars', array($this, 'addAjaxTrigger'));
     add_action('template_redirect', array($this, 'ajaxTriggerCheck'));
     
-		// add Cart66 to the admin bar
-		if(Cart66Common::cart66UserCan('orders')) {
-		  add_action('admin_bar_menu', array($this, 'cart66_admin_bar_menu'), 35);
-	  }
-		
+    // Scheduled events
+    if(CART66_PRO) {
+      add_action('daily_subscription_reminder_emails', array('Cart66MembershipReminders', 'dailySubscriptionEmailReminderCheck'));
+      add_action('daily_followup_emails', array('Cart66AdvancedNotifications', 'dailyFollowupEmailCheck'));
+    }
+    
+    // Notification shortcodes
+    $sc = new Cart66ShortcodeManager();
+    add_shortcode('email_shortcodes', array($sc, 'emailShortcodes'));
+        
+    // add Cart66 to the admin bar
+    if(Cart66Common::cart66UserCan('orders')) {
+      add_action('admin_bar_menu', array($this, 'cart66_admin_bar_menu'), 35);
+    }
+    
     if(IS_ADMIN) {
       //add_action( 'admin_notices', 'cart66_data_collection' );
 
@@ -74,16 +98,22 @@ class Cart66 {
       //add_action('admin_init', array($this, 'addEditorButtons'));
       add_action('admin_init', array($this, 'forceDownload'));
       add_action('wp_ajax_save_settings', array('Cart66Ajax', 'saveSettings'));
+      add_action('wp_ajax_force_plugin_update', array('Cart66Ajax', 'forcePluginUpdate'));
       add_action('wp_ajax_promotionProductSearch', array('Cart66Ajax', 'promotionProductSearch'));
       add_action('wp_ajax_loadPromotionProducts', array('Cart66Ajax', 'loadPromotionProducts'));
+      add_action('wp_ajax_send_test_email', array('Cart66Ajax', 'sendTestEmail'));
+      add_action('wp_ajax_resend_email_from_log', array('Cart66Ajax', 'resendEmailFromLog'));
       add_action('wp_ajax_promotions_table', array('Cart66DataTables', 'promotionsTable'));
       add_action('wp_ajax_products_table', array('Cart66DataTables', 'productsTable'));
       add_action('wp_ajax_orders_table', array('Cart66DataTables', 'ordersTable'));
       add_action('wp_ajax_print_view', array('Cart66Ajax', 'ajaxReceipt'));
+      add_action('wp_ajax_view_email', array('Cart66Ajax', 'viewLoggedEmail'));
       add_action('wp_ajax_dashboard_products_table', array('Cart66DataTables', 'dashboardProductsTable'));
       add_action('wp_ajax_shortcode_products_table', array('Cart66Ajax', 'shortcodeProductsTable'));
       add_action('wp_ajax_page_slurp', array('Cart66Ajax', 'pageSlurp'));
       add_action('wp_ajax_dismiss_mijireh_notice', array('Cart66Ajax', 'dismissMijirehNotice'));
+      add_action('wp_ajax_cart66_page_check', array('Cart66Ajax','checkPages'));
+            
 
       if(CART66_PRO) {
         add_action('wp_ajax_spreedly_table', array('Cart66DataTables', 'spreedlyTable'));
@@ -120,6 +150,9 @@ class Cart66 {
         add_filter('pre_set_site_transient_update_plugins', array('Cart66ProCommon', 'getUpdatePluginsOption'));    //used by WP 3.0
         add_action('install_plugins_pre_plugin-information', array('Cart66ProCommon', 'showChangelog'));
       }
+      
+      add_action('save_post', array($this,'check_cart66_pages_on_inline_edit'));
+      add_action('admin_notices',array($this,'cart66_page_check'));
     }
     else {
       $this->initShortcodes();
@@ -187,6 +220,50 @@ class Cart66 {
     
   }
   
+  public function cart66_page_check($return = false){
+    
+    if(Cart66Common::verifyCartPages('error')){
+      
+      $alert_output = "<div class='alert-message alert-danger' id='cart66_page_errors'>
+        <div class='left'>
+          <h2>" . __('A problem with Cart66 has been detected.', 'cart66') . "</h2>
+          <p>" . __( 'The following page(s) are missing from the proper page structure. This could be because the slug was renamed or the page was moved, set to draft, private, or deleted.' , 'cart66' ) . "</p>
+          <ul>" . Cart66Common::verifyCartPages('error') . "</ul>
+          <p>" . __( 'Please refer to' , 'cart66' ) . " <a href='http://cart66.com/2011/dont-rename-the-store-pages/' target='_blank'>" . __( 'this article</a> for the proper configuration of pages for Cart66.' , 'cart66' ) . " <em> " . __( 'Cart66 will not work properly until this issue is resolved.' , 'cart66' ) . "</em></p>
+        </div>
+      </div>";  
+      
+    }
+    else{
+      $alert_output = '<div id="cart66_page_errors"></div>';
+    }
+    
+    if($return){
+      return $alert_output;
+    }
+    else{
+      echo $alert_output;
+    }
+  }
+  
+  public function check_cart66_pages_on_inline_edit(){
+    if(!empty($_POST) && $_POST['action'] == 'inline-save' && $_POST['post_type'] == 'page'){
+      global $inline_save_flag;
+      if($inline_save_flag == 0){
+        ?><tr>
+          <script>
+            inline_save_callback();
+          </script>
+        </tr><?php 
+        $inline_save_flag = 1;
+      }
+      
+      $inline_safe_flag = 1;
+      
+    }
+    
+  }
+  
   public function cart66_admin_bar_menu() {
 	  global $wp_admin_bar;
     if (!is_admin_bar_showing() ){
@@ -236,13 +313,15 @@ class Cart66 {
 		);
 		
 		foreach($storePages as $pageName=>$cartPage){
-			$wp_admin_bar->add_menu( array(
-				'id' => 'cart66-storepage-' . strtolower($pageName),
-		    'parent' => 'cart66-pages',
-		    'title' => __($pageName),
-		    'href' => get_bloginfo('wpurl') . '/wp-admin/post.php?post=' . $cartPage->ID . '&action=edit',
-		    'meta' => false) 
-			);
+		  if($cartPage){
+		    $wp_admin_bar->add_menu( array(
+  				'id' => 'cart66-storepage-' . strtolower($pageName),
+  		    'parent' => 'cart66-pages',
+  		    'title' => __($pageName),
+  		    'href' => get_bloginfo('wpurl') . '/wp-admin/post.php?post=' . $cartPage->ID . '&action=edit',
+  		    'meta' => false) 
+  			);
+		  }			
 		}
 	}
   
@@ -352,6 +431,7 @@ class Cart66 {
     require_once(CART66_PATH . "/gateways/Cart66GatewayAbstract.php");
     require_once(CART66_PATH . "/gateways/Cart66PayPalExpressCheckout.php");
     require_once(CART66_PATH . "/models/Cart66Updater.php");
+    require_once(CART66_PATH . "/models/Cart66Notifications.php");
     
     if(CART66_PRO) {
       require_once(CART66_PATH . "/pro/models/Cart66AccessManager.php");
@@ -369,6 +449,10 @@ class Cart66 {
       require_once(CART66_PATH . "/pro/models/Cart66AuPost.php");
       require_once(CART66_PATH . "/pro/models/Cart66CaPost.php");
       require_once(CART66_PATH . "/pro/models/Cart66MailChimp.php");
+      require_once(CART66_PATH . "/pro/models/Cart66AdvancedNotifications.php");
+      require_once(CART66_PATH . "/pro/models/Cart66OrderFulfillment.php");
+      require_once(CART66_PATH . "/pro/models/Cart66EmailLog.php");
+      require_once(CART66_PATH . "/pro/models/Cart66MembershipReminders.php");
       
       // Load Constant Contact classes
       if(Cart66Setting::getValue('constantcontact_username')) {
@@ -423,8 +507,7 @@ class Cart66 {
       'shipping' => 'manage_options',
       'settings' => 'manage_options',
       'reports' => 'manage_options',
-      'accounts' => 'manage_options',
-      'notifications' => 'manage_options'
+      'accounts' => 'manage_options'
     );
     // Set default admin page roles if there isn't any
     $pageRoles = Cart66Setting::getValue('admin_page_roles');
@@ -479,6 +562,11 @@ class Cart66 {
       wp_enqueue_script('jquery-timepicker-addon', $path, null, CART66_VERSION_NUMBER, true);
       $path = CART66_URL . '/js/jquery.tokeninput.js';
       wp_enqueue_script('jquery-tokeninput', $path, null, CART66_VERSION_NUMBER, true);
+      $path = CART66_URL . '/js/cart66-codemirror.js';
+      wp_enqueue_script('cart66-codemirror', $path, null, CART66_VERSION_NUMBER, false);
+      $path = CART66_URL . '/js/notifications.js';
+      wp_enqueue_script('notifications-js', $path, null, CART66_VERSION_NUMBER, false);
+
  
       // Include the jquery table quicksearch library
       $path = CART66_URL . '/js/jquery.quicksearch.js';
@@ -499,6 +587,10 @@ class Cart66 {
 
       $uiCss = CART66_URL . '/admin/jquery-ui-1.7.1.custom.css';
       wp_enqueue_style('ui-css', $uiCss, null, CART66_VERSION_NUMBER, 'all');
+      
+      $codemirror = CART66_URL . '/admin/codemirror.css';
+      wp_enqueue_style('codemirror-css', $codemirror, null, CART66_VERSION_NUMBER, 'all');
+
     }
   }
   
@@ -778,6 +870,10 @@ class Cart66 {
     add_shortcode('terms_of_service',             array($sc, 'termsOfService'));
     add_shortcode('account_expiration',           array($sc, 'accountExpiration'));
     
+    if(CART66_PRO) {
+      add_shortcode('email_opt_out',              array($sc, 'emailOptOut'));
+    }
+    
     // System shortcodes
     add_shortcode('cart66_tests',                 array($sc, 'cart66Tests'));
     add_shortcode('express',                      array($sc, 'payPalExpress'));
@@ -823,6 +919,12 @@ class Cart66 {
       Cart66Ajax::ajaxCartElements();
       exit;
     }
+    
+    if ( intval( get_query_var( 'cart66AjaxCartRequests' ) ) == 4 ) {
+      //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] CONFIRM ORDER VERIFICATION");
+      Cart66Ajax::ajaxTaxUpdate();
+      exit;
+    }
   }
 
   /**
@@ -836,13 +938,13 @@ class Cart66 {
     global $post;
     if(Cart66Common::isSlurpPage()) {
       add_meta_box(  
-        'slurp_meta_box', // $id  
-        'Mijireh Page Slurp', // $title  
-        array($this, 'drawPageSlurpMetaBox'), // $callback  
-        'page', // $page  
-        'normal', // $context  
-        'high'); // $priority  
-    }
+          'slurp_meta_box', // $id  
+          'Mijireh Page Slurp', // $title  
+          array($this, 'drawPageSlurpMetaBox'), // $callback  
+          'page', // $page  
+          'normal', // $context  
+          'high'); // $priority  
+        }
   }
   
   public function drawPageSlurpMetaBox($post) {
@@ -860,8 +962,8 @@ class Cart66 {
   
   public function addFeatureLevelMetaBox() {
     if(CART66_PRO) {
-      add_meta_box('cart66_feature_level_meta', __('Feature Levels', 'cart66'), array($this, 'drawFeatureLevelMetaBox'), 'page', 'side', 'low');
-      add_meta_box('cart66_feature_level_meta', __('Feature Levels', 'cart66'), array($this, 'drawFeatureLevelMetaBox'), 'post', 'side', 'low');
+      add_meta_box('cart66_feature_level_meta', __('Feature Levels', 'cart66'), array($this, 'drawFeatureLevelMetaBox'), null, 'side', 'low');
+      //add_meta_box('cart66_feature_level_meta', __('Feature Levels', 'cart66'), array($this, 'drawFeatureLevelMetaBox'), 'page', 'side', 'low');
     }
   }  
   
@@ -968,43 +1070,77 @@ class Cart66 {
   
   public function protectSubscriptionPages() {
     global $wp_query;
-    $pid = isset( $wp_query->post->ID ) ? $wp_query->post->ID : NULL;
-
-    // Keep visitors who are not logged in from seeing private pages
-    Cart66AccessManager::verifyPageAccessRights($pid);
-
-    // block subscription pages from non-subscribers
-    $accountId = Cart66Common::isLoggedIn() ? Cart66Session::get('Cart66AccountId') : 0;
-    $account = new Cart66Account($accountId);
     
-    // Get a list of the required subscription ids
-    $requiredFeatureLevels = Cart66AccessManager::getRequiredFeatureLevelsForPage($pid);
-    if(count($requiredFeatureLevels)) {
-      // Check to see if the logged in user has one of the required subscriptions
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] protectSubscriptionPages: Page access looking for " . $account->getFeatureLevel() . " in: " . print_r($requiredFeatureLevels, true));
-      if(!in_array($account->getFeatureLevel(), $requiredFeatureLevels) || !$account->isActive()) {
-        if($wp_query->post->post_type == 'post') {
-          
-          // Set message for when visitor is not logged in
-          if(!$message = Cart66Setting::getValue('post_not_logged_in')) {
-            $message = "You must be logged in to view this post.";
-          }
-          
-          if(Cart66Common::isLoggedIn()) {
-            
-            // Set message for insuficient access rights
-            if(!$message = Cart66Setting::getValue('post_access_denied')) {
-              $message = "Your current subscription does not allow you to view this post.";
-            }
-            
-          }
-          $wp_query->post->post_content = $message;
-          $wp_query->post->comment_status = 'closed';
-        }
-        else {
+    // Keep visitors who are not logged in from seeing private pages
+    if(!isset($wp_query->tax_query)) {
+      $pid = isset( $wp_query->post->ID ) ? $wp_query->post->ID : NULL;
+      Cart66AccessManager::verifyPageAccessRights($pid);
+      
+      // block subscription pages from non-subscribers
+      $accountId = Cart66Common::isLoggedIn() ? Cart66Session::get('Cart66AccountId') : 0;
+      $account = new Cart66Account($accountId);
+
+      // Get a list of the required subscription ids
+      $requiredFeatureLevels = Cart66AccessManager::getRequiredFeatureLevelsForPage($pid);
+      if(count($requiredFeatureLevels)) {
+        // Check to see if the logged in user has one of the required subscriptions
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] protectSubscriptionPages: Page access looking for " . $account->getFeatureLevel() . " in: " . print_r($requiredFeatureLevels, true));
+        if(!in_array($account->getFeatureLevel(), $requiredFeatureLevels) || !$account->isActive()) {
+          Cart66Session::set('Cart66AccessDeniedRedirect', Cart66Common::getCurrentPageUrl());
           wp_redirect(Cart66AccessManager::getDeniedLink());
           exit;
         }
+      }
+    }
+    else {
+      $exclude = false;
+      $meta_query = array();
+      //echo nl2br(print_r($wp_query->posts, true));
+      foreach($wp_query->posts as $index => $p) {
+        $pid = isset( $p->ID ) ? $p->ID : NULL;
+        // block subscription pages from non-subscribers
+        $accountId = Cart66Common::isLoggedIn() ? Cart66Session::get('Cart66AccountId') : 0;
+        $account = new Cart66Account($accountId);
+
+        // Get a list of the required subscription ids
+        $requiredFeatureLevels = Cart66AccessManager::getRequiredFeatureLevelsForPage($pid);
+        if(count($requiredFeatureLevels)) {
+          // Check to see if the logged in user has one of the required subscriptions
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] protectSubscriptionPages: Page access looking for " . $account->getFeatureLevel() . " in: " . print_r($requiredFeatureLevels, true));
+          if(!in_array($account->getFeatureLevel(), $requiredFeatureLevels) || !$account->isActive()) {
+            $exclude = false;
+            if(!Cart66Setting::getValue('remove_posts_from_taxonomy')) {
+
+              // Set message for when visitor is not logged in
+              if(!$message = Cart66Setting::getValue('post_not_logged_in')) {
+                $message = __("You must be logged in to view this","cart66") . " " . $p->post_type . ".";
+              }
+
+              if(Cart66Common::isLoggedIn()) {
+
+                // Set message for insuficient access rights
+                if(!$message = Cart66Setting::getValue('post_access_denied')) {
+                  $message = __("Your current subscription does not allow you to view this","cart66") . " " . $p->post_type . ".";
+                }
+
+              }
+              $p->post_content = $message;
+              $p->comment_status = 'closed';
+            }
+            else {
+              $exclude = true;
+            }
+          }
+        }
+      }
+      if($exclude) {
+        global $wpdb;
+        $post_id = $wpdb->get_col("SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_cart66_subscription'");
+        $args = array(
+          'post__not_in' => $post_id
+        );
+        $args = array_merge($args, $wp_query->query);
+        query_posts($args);
       }
     }
 
@@ -1105,6 +1241,9 @@ class Cart66 {
         die();
       }
     }
+    elseif($_SERVER['REQUEST_METHOD'] == 'POST' && Cart66Common::postVal('cart66-action') == 'clear log file') {
+      Cart66Common::clearLog();
+    }
     
   }
   
@@ -1112,6 +1251,15 @@ class Cart66 {
     global $post;
     if(Cart66Common::isSlurpPage()) {
       // echo "<a href='#' id='page_slurp'>Slurp</a> ";
+    }
+  }
+  
+  public function upgradeDatabase() {
+    if(Cart66Setting::getValue('auth_force_ssl') == 'no') {
+      Cart66Setting::setValue('auth_force_ssl', null);
+    }
+    elseif(Cart66Setting::getValue('auth_force_ssl') == 'yes') {
+      Cart66Setting::setValue('auth_force_ssl', 1);
     }
   }
   

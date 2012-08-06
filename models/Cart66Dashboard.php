@@ -23,9 +23,10 @@ class Cart66Dashboard {
       if(version_compare($currentVersion, $newVersion['version'], '<') && version_compare($newVersion['version'], $dismissVersion, '>')){
         if(current_user_can('update_plugins')) {
           $plugins = get_plugin_updates();
-        	if (!empty($plugins)) {
-        		add_action('admin_footer', array('Cart66Dashboard', 'cart66_upgrade_message_jquery'));
-        	}
+          if(isset($plugins[basename(CART66_PATH) . 'cart66.php'])) {
+            add_action('admin_footer', array('Cart66Dashboard', 'cart66_upgrade_message_jquery'));
+            add_action('admin_notices', array('Cart66Dashboard', 'cart66_upgrade_message'));
+          }
         }
       }
   	}
@@ -157,21 +158,7 @@ class Cart66Dashboard {
          </tr>
       </tfoot>
     </table>
-	  <?php
-	  if(CART66_PRO) {
-	    $updater = new Cart66ProCommon();
-      $newVersion = $updater->getVersionInfo();
-      $dismissVersion = Cart66Setting::getValue('dismiss_version');
-      $currentVersion = Cart66Setting::getValue('version');
-      if(version_compare($currentVersion, $newVersion['version'], '<') && version_compare($newVersion['version'], $dismissVersion, '>')){
-        if(current_user_can('update_plugins')) {
-          $plugins = get_plugin_updates();
-        	if (!empty($plugins)) {
-        		self::cart66_upgrade_message($currentVersion, $newVersion);
-        	}
-        }
-      }
-	  }
+    <?php
   }
   
   // Create the settings for the Dashboard Widget
@@ -222,20 +209,14 @@ class Cart66Dashboard {
   public static function cart66_statistics_widget() {
       
     function totalFromRange($start,$end){
-      global $wpdb;
-      $tableName = Cart66Common::getTableName('orders');
-    	$sql = "SELECT sum(total) from $tableName where ordered_on > '$start' AND ordered_on < '$end'";
-    	$result = mysql_query($sql);
-    	if (!$result) {
-    	    die('TotalFromRange(): Could not query:' . mysql_error() . " " . $sql);
-    	}
-    	if(mysql_num_rows($result)>0){
-    		$output = mysql_result($result,0);
-    	}
-    	else{
-    		$output = "N/A";
-    	}
-    	return $output;
+      global $wpdb; 
+      $tableName = Cart66Common::getTableName('orders'); 
+      $sql = "SELECT sum(total) as total from $tableName where ordered_on > '$start' AND ordered_on < '$end'"; 
+      $result = $wpdb->get_row($sql, ARRAY_A);
+
+      $output = $result ? (double)$result['total'] : "N/A";
+
+      return $output;
     }
 
     // TODAY
@@ -254,7 +235,7 @@ class Cart66Dashboard {
     $total_days = date('t',strtotime('now'));
     $est_month = ($total_days * $daily_avg);
     ?>
-    <div class="tabbed">
+    <div class="cart66Tabbed">
     	<ul class="tabs">
     	  <li class="t1"><a class="t1 tab" href="javascript:void(0)"><?php _e('Summary', 'cart66') ?></a></li>
     	  <li class="t2"><a class="t2 tab" href="javascript:void(0)"><?php _e('Today/Yesterday', 'cart66') ?></a></li>
@@ -638,15 +619,15 @@ class Cart66Dashboard {
       	  $('div.pane').hide();
       	  $('div.t1').show();
       	  $('div.loading').hide();
-      	  $('div.tabbed ul.tabs li.t1 a').addClass('tab-current');
+      	  $('div.cart66Tabbed ul.tabs li.t1 a').addClass('tab-current');
           // SIDEBAR TABS
-          $('div.tabbed ul li a, div.t1 a, div.t1 tr.summaryDetails').click(function(){
+          $('div.cart66Tabbed ul li a, div.t1 a, div.t1 tr.summaryDetails').click(function(){
             if($(this).hasClass('tab')) {
               var thisClass = this.className.slice(0,2);
         	    $('div.pane').hide();
         	    $('div.' + thisClass).fadeIn(300);
-        	    $('div.tabbed ul.tabs li a').removeClass('tab-current');
-        	    $('div.tabbed ul.tabs li a.' + thisClass).addClass('tab-current');
+        	    $('div.cart66Tabbed ul.tabs li a').removeClass('tab-current');
+        	    $('div.cart66Tabbed ul.tabs li a.' + thisClass).addClass('tab-current');
             }
       	  });
         });
@@ -658,22 +639,25 @@ class Cart66Dashboard {
     
   }
   
-  public static function cart66_upgrade_message($currentVersion, $newVersion){
+  public static function cart66_upgrade_message(){
+    $updater = new Cart66ProCommon();
+    $newVersion = $updater->getVersionInfo();
+    $currentVersion = Cart66Setting::getValue('version');
     $cart66_plugin_url = "cart66/cart66.php";
     $cart66_upgrade_url = wp_nonce_url('update.php?action=upgrade-plugin&amp;plugin=' . urlencode($cart66_plugin_url), 'upgrade-plugin_' . $cart66_plugin_url);
     ?>
-      <div class='updated' id='cart66_upgrade_message'>
-        <p class="left">
-          <img src="<?php echo CART66_URL ?>/images/cart66_upgrade.png" height="30" />
+      <div class='alert-message mijireh-info' id='cart66_upgrade_message' style="display:none;">
+        <a href="javascript:void(0);" class="close" onclick="dismissMessage();">&times;</a>
+        <img src="<?php echo CART66_URL ?>/images/cart66_upgrade.png" height="30" />
+        <p>
           <strong><?php _e('There is a new version of Cart66 available', 'cart66'); ?>!</strong> 
           <?php _e('You are currently running Cart66', 'cart66'); ?> 
           <?php echo $currentVersion; ?><br />
           <strong><?php _e('The latest version of Cart66 is', 'cart66'); ?> <?php echo $newVersion['version']; ?>.</strong>
           &nbsp;<a href="plugin-install.php?tab=plugin-information&plugin=cart66&TB_iframe=true&width=640&height=810" class="thickbox" title="Cart66"><?php _e('View Details', 'cart66'); ?></a> 
           <?php _e('or', 'cart66'); ?> 
-          <a href="<?php echo $cart66_upgrade_url; ?>"><?php _e('Upgrade Automatically', 'cart66'); ?></a></p>
-        <p><a href="javascript:void(0);" class="dismiss" onclick="dismissMessage();"><?php _e("Dismiss", "cart66"); ?></a></p>
-        <br clear="all" />
+          <a href="<?php echo $cart66_upgrade_url; ?>"><?php _e('Upgrade Automatically', 'cart66'); ?></a>
+        </p>
       </div>
     <?php
   }

@@ -248,6 +248,10 @@ abstract class Cart66GatewayAbstract {
     $taxShipping = ($this->isTaxed('shipping') == 1) ? true : false;
     return $taxShipping;
   }
+  
+  public function getTaxRate() {
+    return $this->_taxRate->rate;
+  }
 
   public function getTaxAmount() {
     $tax = 0;

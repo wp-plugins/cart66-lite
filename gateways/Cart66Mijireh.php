@@ -4,6 +4,8 @@ require_once(CART66_PATH . "/models/PestJSON.php");
 
 class Cart66Mijireh extends Cart66GatewayAbstract {
   
+  var $response = array();
+  
   public function __construct() {
     parent::__construct();
     if(!Cart66Setting::getValue('mijireh_access_key')) {
@@ -109,6 +111,16 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
       //wp_redirect(MIJIREH_CHECKOUT .  '/checkout/' . $result['order_number']);
       exit;
     }
+    catch(Pest_Unauthorized $e) {
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] REST Request Failed because it was unauthorized: " . $e->getMessage());
+      $this->response['error_message'] = __("Your Mijireh Access key is invalid, please check your access settings and try again","cart66");
+      $this->response['error_code'] = 1;
+      if(strlen($this->_shipping['address']) < 3) {
+        $gatewayResponse = $this->getTransactionResponseDescription();
+        $exception = Cart66Exception::exceptionMessages(66500, __('Your order could not be processed for the following reasons:', 'cart66'), array('error_code' => 'Error: ' . $gatewayResponse['errorcode'], strtolower($gatewayResponse['errormessage'])));
+        echo Cart66Common::getView('views/error-messages.php', $exception);
+      }
+    }
     catch(Exception $e) {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] REST Request Failed: " . $e->getMessage());
     }
@@ -120,8 +132,10 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
   }
   
   public function getTransactionResponseDescription() {
-    return false;
-  }
+     $description['errormessage'] = $this->response['error_message'];
+     $description['errorcode'] = $this->response['error_code'];
+     return $description;
+   }
   
   public function setPayment($p) {
     $this->_payment['phone'] = isset($p['phone']) ? $p['phone'] : '';
@@ -150,6 +164,7 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
       $order = new Cart66Order();
       $cloud_order = $this->pullOrder($order_number);
       $order_data = $this->buildOrderDataArray($cloud_order);
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Order data: " . print_r($order_data, true));
       $order_id = $order->rawSave($order_data);
 
       // Save the order items
@@ -201,7 +216,15 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
       }
 
       // Send email receipts
-      Cart66Common::sendEmailReceipts($order_id);
+      if(CART66_PRO && Cart66Setting::getValue('enable_advanced_notifications') == 1) {
+        $notify = new Cart66AdvancedNotifications($order_id);
+        $notify->sendAdvancedEmailReceipts(false);
+      }
+      else {
+        $notify = new Cart66Notifications($order_id);
+        $notify->sendEmailReceipts();
+      }
+      //Cart66Common::sendEmailReceipts($order_id);
     }
     
     // Redirect to receipt page
@@ -245,6 +268,7 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
     
     $order_info = array(
       'trans_id' => $cloud_order['order_number'],
+      'authorization' => $cloud_order['authorization'],
       'shipping' => $cloud_order['shipping'],
       'shipping_method' => $cloud_order['meta_data']['shipping_method'],
       'subtotal' => $cloud_order['subtotal'],

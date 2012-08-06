@@ -220,7 +220,8 @@ Class Cart66DataTables {
   	    $featureLevel,
   	    $activeUntil,
   	    $type,
-  	    $a->notes
+  	    $a->notes,
+  	    $a->getOrderIdLink()
   	  );
   	}
 
@@ -299,41 +300,42 @@ Class Cart66DataTables {
   }
   
   public static function ordersTable() {
-    $columns = array( 'id', 'trans_id', 'bill_first_name', 'bill_last_name', 'total', 'ordered_on', 'shipping_method', 'status', 'email' );
+    $columns = array( 'id', 'trans_id', 'bill_first_name', 'bill_last_name', 'total', 'ordered_on', 'shipping_method', 'status', 'email', 'notes', 'authorization' );
     $indexColumn = "id";
     $tableName = Cart66Common::getTableName('orders');
 
     $where = self::dataTablesWhere($columns);
-  	$limit = self::dataTablesLimit() == '' ? null : self::dataTablesLimit();
-  	$orderBy = self::dataTablesOrder($columns);
+    $limit = self::dataTablesLimit() == '' ? null : self::dataTablesLimit();
+    $orderBy = self::dataTablesOrder($columns);
     
     $iTotal = self::totalRows($indexColumn, $tableName);
     $iFilteredTotal = self::filteredRows($indexColumn, $tableName, $where);
-  	
-  	$data = array();
-  	$order = new Cart66Order();
-  	$orders = $order->getOrderRows($where, $orderBy, $limit);
-  	foreach($orders as $o) {
-  	  $data[] = array(
-  	    $o->id,
-  	    $o->trans_id,
-  	    $o->bill_first_name,
-  	    $o->bill_last_name,
-  	    $o->total,
-  	    date('m/d/Y', strtotime($o->ordered_on)),
-  	    $o->shipping_method,
-  	    $o->status
-  	  );
-  	}
-  	
-  	$array = array(
-  	 'sEcho' => $_GET['sEcho'],
-  	 'iTotalRecords' => $iTotal[0],
-  	 'iTotalDisplayRecords' => $iFilteredTotal[0],
-  	 'aaData' => $data
-  	);
-  	echo json_encode($array);
-  	die();
+    
+    $data = array();
+    $order = new Cart66Order();
+    $orders = $order->getOrderRows($where, $orderBy, $limit);
+    foreach($orders as $o) {
+      $data[] = array(
+        $o->id,
+        $o->trans_id,
+        $o->bill_first_name,
+        $o->bill_last_name,
+        $o->total,
+        date('m/d/Y', strtotime($o->ordered_on)),
+        $o->shipping_method,
+        $o->status,
+        $o->notes
+      );
+    }
+    
+    $array = array(
+      'sEcho' => $_GET['sEcho'],
+      'iTotalRecords' => $iTotal[0],
+      'iTotalDisplayRecords' => $iFilteredTotal[0],
+      'aaData' => $data
+    );
+    echo json_encode($array);
+    die();
   }
   
   public static function productsTable() {

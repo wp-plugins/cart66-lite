@@ -124,6 +124,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cart66-action']) && $_P
 <?php if($settingsOk): ?>
 <form action="" method='post' id="paypalexpresscheckout">
   <input type='hidden' name='cart66-action' value='paypalexpresscheckout'>
-  <input type="image" id='PayPalExpressCheckoutButton' src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" value="PayPal Express Checkout" name="PayPal Express Checkout" />
+  <?php
+    $paypalImageUrl = 'https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif';
+    if(CART66_PRO && Cart66Setting::getValue('custom_paypal_express_image')) {
+      $paypalImageUrl = Cart66Setting::getValue('custom_paypal_express_image');
+    }
+    ?>
+    <input type="image" id='PayPalExpressCheckoutButton' src="<?php echo $paypalImageUrl; ?>" value="PayPal Express Checkout" name="PayPal Express Checkout" />
 </form>
 <?php endif; ?>

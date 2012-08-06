@@ -105,7 +105,7 @@
             }
         }
     } );
-    
+
     $('.ajaxSettingForm').submit(function() {
       var data = getFormData($(this).attr('id'));
       $.ajax({
@@ -115,11 +115,26 @@
           dataType: 'json',
           success: function(result) {
             $('#saveResult').html("<div id='saveMessage' class='" + result[0] + "'></div>");
-            $('#saveMessage').append("<p>" + result[1] + "</p>").hide().fadeIn(1500).delay(5000).fadeOut(1500);
+            $('#saveMessage').append("<p>" + result[1] + "</p>").hide().fadeIn(1500).delay(3000).fadeOut(1500);
           }
       });
       return false;
     });
+		
+		$('#forcePluginUpdate').submit(function() {
+      var data = getFormData($(this).attr('id'));
+      $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: data,
+          dataType: 'json',
+          success: function(result) {
+            window.location.href="plugins.php";
+          }
+      });
+      return false;
+    });
+
   })
 })(jQuery);
 

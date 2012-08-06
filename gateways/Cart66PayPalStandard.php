@@ -182,27 +182,13 @@ class Cart66PayPalStandard {
       }
       
       // Handle email receipts
-      $order = new Cart66Order($orderId);
-      $msg = Cart66Common::getEmailReceiptMessage($order);
-
-      // Send email receipts
-      $setting = new Cart66Setting();
-      $to = $pp['payer_email'];
-      $subject = Cart66Setting::getValue('receipt_subject');
-      $headers = 'From: '. Cart66Setting::getValue('receipt_from_name') .' <' . Cart66Setting::getValue('receipt_from_address') . '>';
-      Cart66Common::mail($to, $subject, $msg, $headers);
-
-      $others = Cart66Setting::getValue('receipt_copy');
-      if($others) {
-        $list = explode(',', $others);
-        $msg = "THIS IS A COPY OF THE RECEIPT\n\n$msg";
-        foreach($list as $e) {
-          $e = trim($e);
-          $isSent = Cart66Common::mail($e, $subject, $msg, $headers);
-          if(!$isSent) {
-            Cart66Common::log("Mail not sent to: $e");
-          }
-        }
+      if(CART66_PRO && Cart66Setting::getValue('enable_advanced_notifications') ==1) {
+        $notify = new Cart66AdvancedNotifications($orderId);
+        $notify->sendAdvancedEmailReceipts();
+      }
+      else {
+        $notify = new Cart66Notifications($orderId);
+        $notify->sendEmailReceipts();
       }
       
       $promotion = new Cart66Promotion();

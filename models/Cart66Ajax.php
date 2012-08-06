@@ -1,6 +1,57 @@
 <?php
 class Cart66Ajax {
   
+  public static function resendEmailFromLog() {
+    $log_id = $_POST['id'];
+    $resendEmail = Cart66EmailLog::resendEmailFromLog($log_id);
+    if($resendEmail) {
+      $result[0] = 'Cart66Modal alert-message success';
+      $result[1] = '<strong>Success</strong><br/>' . __('Email successfully resent', 'cart66') . ' <br />';
+    }
+    else {
+      $result[0] = 'Cart66Modal alert-message alert-error';
+      $result[1] = '<strong>Error</strong><br/>' . __('Email was not resent Successfully', 'cart66') . '<br>';
+    }
+    echo json_encode($result);
+    die();
+  }
+  
+  public function forcePluginUpdate(){
+    $output = false;
+    if(update_option('_site_transient_update_plugins', '') && update_option('_transient_update_plugins', '') ){
+      $output = true;
+    }
+    echo $output;
+    die();
+  }
+  
+  public static function sendTestEmail() {
+    $to = $_POST['email'];
+    $status = $_POST['status'];
+    if(!Cart66Common::isValidEmail($to)) {
+      $result[0] = 'Cart66Modal alert-message alert-error';
+      $result[1] = '<strong>Error</strong><br/>' . __('Please enter a valid email address', 'cart66') . '<br>';
+    }
+    else {
+      if(isset($_GET['type']) && $_GET['type'] == 'reminder') {
+        $sendEmail = Cart66MembershipReminders::sendTestReminderEmails($to, $_GET['id']);
+      }
+      else {
+        $sendEmail = Cart66AdvancedNotifications::sendTestEmail($to, $status);
+      }
+      if($sendEmail) {
+        $result[0] = 'Cart66Modal alert-message success';
+        $result[1] = '<strong>Success</strong><br/>' . __('Email successfully sent to', 'cart66') . ' <br /><strong>' . $to . '</strong><br>';
+      }
+      else {
+        $result[0] = 'Cart66Modal alert-message alert-error';
+        $result[1] = '<strong>Error</strong><br/>' . __('Email not sent. There is an unknown error.', 'cart66') . '<br>';
+      }
+    }
+    echo json_encode($result);
+    die();
+  }
+  
   public static function ajaxReceipt() {
     if(isset($_GET['order_id'])) {
       $orderReceipt = new Cart66Order($_GET['order_id']);
@@ -10,6 +61,20 @@ class Cart66Ajax {
       echo $printView;
       die();
     }
+  }
+  
+  public static function viewLoggedEmail() {
+    if(isset($_POST['log_id'])) {
+      $emailLog = new Cart66EmailLog($_POST['log_id']);
+      echo nl2br(htmlentities($emailLog->headers . "\r\n" . $emailLog->body));
+      die();
+    }
+  }
+  
+  public static function checkPages(){
+    $Cart66 = new Cart66();
+    echo $Cart66->cart66_page_check(true);
+    die();
   }
   
   public static function shortcodeProductsTable() {
@@ -47,7 +112,82 @@ class Cart66Ajax {
     }
     echo json_encode($data);
     die();
-  }  
+  }
+  
+  public static function ajaxTaxUpdate() {
+    if(isset($_POST['state']) && isset($_POST['state_text']) && isset($_POST['zip']) && isset($_POST['gateway'])) {
+      $gateway = Cart66Ajax::loadAjaxGateway($_POST['gateway']);
+      $gateway->setShipping(array('state_text' => $_POST['state_text'], 'state' => $_POST['state'], 'zip' => $_POST['zip']));
+      $s = $gateway->getShipping();
+      if($s['state'] && $s['zip']){
+        $id = 1;
+        $taxLocation = $gateway->getTaxLocation();
+        $tax = $gateway->getTaxAmount();
+        $rate = $gateway->getTaxRate();
+        $total = Cart66Session::get('Cart66Cart')->getGrandTotal() + $tax;
+        Cart66Session::set('Cart66Tax', $tax);
+        Cart66Session::set('Cart66TaxRate', round($rate, 2));
+      }
+      else {
+        $id = 0;
+        $tax = 0;
+        $rate = 0;
+        $total = Cart66Session::get('Cart66Cart')->getGrandTotal() + $tax;
+        Cart66Session::set('Cart66Tax', $tax);
+        Cart66Session::set('Cart66TaxRate', round($rate, 2));
+      }
+    }
+    $result = array(
+      'id' => $id,
+      'state' => $s['state'],
+      'zip' => $s['zip'],
+      'tax' => CART66_CURRENCY_SYMBOL . number_format($tax, 2),
+      'rate' => $rate = 0 ? '0.00' . '%' : round($rate, 2) . '%',
+      'total' => CART66_CURRENCY_SYMBOL . number_format($total, 2)
+    );
+    echo json_encode($result);
+    die();
+  }
+  
+  public function loadAjaxGateway($gateway) {
+    switch($gateway) {
+      case 'Cart66ManualGateway':
+        require_once(CART66_PATH . "/gateways/$gateway.php");
+        $gateway = new $gateway();
+        break;
+      case 'Cart66AuthorizeNet':
+        require_once(CART66_PATH . "/pro/gateways/$gateway.php");
+        $gateway = new $gateway();
+        break;
+      case 'Cart66Eway':
+        require_once(CART66_PATH . "/pro/gateways/$gateway.php");
+        $gateway = new $gateway();
+        break;
+      case 'Cart66Mijireh':
+        require_once(CART66_PATH . "/gateways/$gateway.php");
+        $gateway = new $gateway();
+        break;
+      case 'Cart66MWarrior':
+        require_once(CART66_PATH . "/pro/gateways/$gateway.php");
+        $gateway = new $gateway();
+        break;
+      case 'Cart66PayLeap':
+        require_once(CART66_PATH . "/pro/gateways/$gateway.php");
+        $gateway = new $gateway();
+        break;
+      case 'Cart66PayPalPro':
+        require_once(CART66_PATH . "/pro/gateways/$gateway.php");
+        $gateway = new $gateway();
+        break;
+      case 'Cart66Stripe':
+        require_once(CART66_PATH . "/pro/gateways/$gateway.php");
+        $gateway = new $gateway();
+        break;
+      default:
+        break;
+    }
+    return $gateway;
+  }
   
   public static function ajaxCartElements($args="") {
 
@@ -271,7 +411,13 @@ class Cart66Ajax {
     foreach($_REQUEST as $key => $value) {
       if($key[0] != '_' && $key != 'action' && $key != 'submit') {
         if(is_array($value) && $key != 'admin_page_roles') {
-          $value = implode('~', $value);
+          $value = array_filter($value, 'strlen');
+          if(empty($value)) {
+            $value = '';
+          }
+          else {
+            $value = implode('~', $value);
+          }
         }
 
         if($key == 'home_country') {
@@ -295,7 +441,7 @@ class Cart66Ajax {
             Cart66Log::createLogFile();
           }
           catch(Cart66Exception $e) {
-            $error = '<span style="color: red;">' . $e->getMessage() . '</span>';
+            $error = '<span>' . $e->getMessage() . '</span>';
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Caught Cart66 exception: " . $e->getMessage());
           }
         }
@@ -313,18 +459,18 @@ class Cart66Ajax {
           $versionInfo = Cart66ProCommon::getVersionInfo();
           if(!$versionInfo) {
             Cart66Setting::setValue('order_number', '');
-            $error = '<span style="color: red;">' . __( 'Invalid Order Number' , 'cart66' ) . '</span>';
+            $error = '<span>' . __( 'Invalid Order Number' , 'cart66' ) . '</span>';
           }
         }
       }
     }
 
     if($error) {
-      $result[0] = 'Cart66ErrorModal';
-      $result[1] = "<strong style='color: red;'>" . __("Warning","cart66") . "</strong><br/>$error";
+      $result[0] = 'Cart66Modal alert-message alert-error';
+      $result[1] = "<strong>" . __("Warning","cart66") . "</strong><br/>$error";
     }
     else {
-      $result[0] = 'Cart66SuccessModal';
+      $result[0] = 'Cart66Modal alert-message success';
       $result[1] = '<strong>Success</strong><br/>' . $_REQUEST['_success'] . '<br>'; 
     }
 

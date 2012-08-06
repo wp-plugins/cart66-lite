@@ -86,7 +86,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     if($s['state'] && $s['zip']){
       $taxLocation = $gateway->getTaxLocation();
       $tax = $gateway->getTaxAmount();
-      Cart66Session::set('Cart66Tax',$tax);
+      $rate = $gateway->getTaxRate();
+      Cart66Session::set('Cart66Tax', $tax);
+      Cart66Session::set('Cart66TaxRate', round($rate, 2));
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Tax PreCalculated: $".$tax);
     }
 
@@ -119,16 +121,19 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
         Cart66Session::set('Cart66CheckoutThrottle', Cart66CheckoutThrottle::getInstance(), true);
       }
 
-      if(!Cart66Session::get('Cart66CheckoutThrottle')->isReady($gateway->getCardNumberTail(), $oneTimeTotal)) {
-        try {
+      
+      try {
+        if(!Cart66Session::get('Cart66CheckoutThrottle')->isReady($gateway->getCardNumberTail(), $oneTimeTotal)) {
           Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Unable to process order: " . print_r($errors, true));
           throw new Cart66Exception(__('Your order could not be processed for the following reasons:', 'cart66'), 66500);
         }
-        catch(Cart66Exception $e) {
-          $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), "You must wait " . Cart66Session::get('Cart66CheckoutThrottle')->getTimeRemaining() . " more seconds before trying to checkout again.");
-          echo Cart66Common::getView('views/error-messages.php', $exception);
-        }
       }
+      catch(Cart66Exception $e) {
+        $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), array(__("You must wait ", "cart66") . Cart66Session::get('Cart66CheckoutThrottle')->getTimeRemaining() . __(" more seconds before trying to checkout again.", "cart66")));
+        echo Cart66Common::getView('views/error-messages.php', $exception);
+        $errors[] = ""; // Add an error so that the transaction will not be processed
+      }
+      
     }
     
     
@@ -151,9 +156,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
             $spreedlyCard = new SpreedlyCreditCard();
             $spreedlyCard->hydrateFromCheckout();
             $subscriptionId = Cart66Session::get('Cart66Cart')->getSpreedlySubscriptionId();
+            $productId = Cart66Session::get('Cart66Cart')->getSpreedlyProductId();
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] About to create a new spreedly account subscription: Account ID: $account->id | Subscription ID: $subscriptionId");
             $accountSubscription = new Cart66AccountSubscription();
-            $accountSubscription->createSpreedlySubscription($account->id, $subscriptionId, $spreedlyCard);
+            $accountSubscription->createSpreedlySubscription($account->id, $subscriptionId, $productId, $spreedlyCard);
           }
           catch(SpreedlyException $e) {
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Failed to checkout: " . $e->getCode() . ' ' . $e->getMessage());
@@ -237,11 +243,19 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           
           Cart66Session::drop('Cart66SubscriberToken');
           Cart66Session::set('order_id', $orderId);
+          Cart66Session::drop('Cart66ProRateAmount');
           $receiptLink = Cart66Common::getPageLink('store/receipt');
           $newOrder = new Cart66Order($orderId);
           
           // Send email receipts
-          Cart66Common::sendEmailReceipts($orderId);
+          if(CART66_PRO && Cart66Setting::getValue('enable_advanced_notifications') ==1) {
+            $notify = new Cart66AdvancedNotifications($orderId);
+            $notify->sendAdvancedEmailReceipts();
+          }
+          else {
+            $notify = new Cart66Notifications($orderId);
+            $notify->sendEmailReceipts();
+          }
           
           // Send buyer to receipt page
           $receiptVars = strpos($receiptLink, '?') ? '&' : '?';
@@ -257,7 +271,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           }
           catch(Cart66Exception $e) {
             $gatewayResponse = $gateway->getTransactionResponseDescription();
-            $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), array('Error: ' . $gatewayResponse['errorcode'], strtolower($gatewayResponse['errormessage'])));
+            $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), array('error_code' => 'Error: ' . $gatewayResponse['errorcode'], strtolower($gatewayResponse['errormessage'])));
             echo Cart66Common::getView('views/error-messages.php', $exception);
           }
           
@@ -296,9 +310,9 @@ $billingCountryCode =  (isset($b['country']) && !empty($b['country'])) ? $b['cou
 $shippingCountryCode = (isset($s['country']) && !empty($s['country'])) ? $s['country'] : Cart66Common::getHomeCountryCode();
 
 // Include the HTML markup for the checkout form
-$checkoutFormFile = CART66_PATH . 'views/checkout-form.php';
+$checkoutFormFile = CART66_PATH . '/views/checkout-form.php';
 if($gatewayName == 'Cart66Mijireh') {
-  $checkoutFormFile = CART66_PATH . 'views/mijireh/shipping_address.php';
+  $checkoutFormFile = CART66_PATH . '/views/mijireh/shipping_address.php';
 }
 else {
   $userViewFile = get_stylesheet_directory() . '/cart66-templates/views/checkout-form.php';
@@ -341,7 +355,7 @@ $checkout_data = array(
   'shipping_country' => $shipping_country,
   'billing_state' => $b['state'],
   'shipping_state' => $s['state'],
-  'cart_type' => $p['cardType'],
+  'card_type' => isset($p['cardType']) ? $p['cardType'] : '',
   'form_name' => '#' . $gatewayName . '_form',
   'error_field_names' => $error_field_names,
   'text_state' => __('State', 'cart66'),

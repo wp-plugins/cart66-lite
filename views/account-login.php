@@ -1,6 +1,14 @@
+<?php if(Cart66Session::get('zendesk_logout_error')): ?>
+    <div class="alert-message">
+      <?php _e('Zendesk logged you out with the following error','cart66'); ?>:<br>
+      <?php echo Cart66Session::get('zendesk_logout_error'); ?>
+    </div>
+<?php 
+      Cart66Session::drop('zendesk_logout_error');
+endif; ?>
 <?php if(Cart66Common::isLoggedIn()): ?>
-  <p>Hi <?php echo $data['account']->firstName; ?>. You are currently logged in.  
-  <a href="<?php echo Cart66Common::appendQueryString('cart66-task=logout'); ?>">Log out</a></p>
+  <p>Hi <?php echo $data['account']->firstName; ?>. <?php _e('You are currently logged in.', 'cart66'); ?>  
+  <a href="<?php echo Cart66Common::appendQueryString('cart66-task=logout'); ?>"><?php _e('Log out', 'cart66'); ?></a></p>
 <?php else: ?>
   <form id="Cart66AccountLogin" class="phorm2" action="" method="post">
     <input type="hidden" name="cart66-task" value="account-login" />

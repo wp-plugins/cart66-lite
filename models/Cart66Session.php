@@ -72,6 +72,7 @@ class Cart66Session {
     else {
       $value = Cart66SessionNative::dump();
     }
+	  return $value;
   }
   
 }

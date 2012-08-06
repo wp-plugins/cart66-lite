@@ -53,7 +53,7 @@ class Cart66Cart {
     }
     
     if(isset($_POST['item_user_price'])){
-      $sanitizedPrice = preg_replace("/[^0-9\.]/","",$_POST['item_user_price']);
+      $sanitizedPrice = Cart66Common::cleanNumber($_POST['item_user_price']);
       Cart66Session::set("userPrice_$itemId",$sanitizedPrice);
     }
     
@@ -75,7 +75,7 @@ class Cart66Cart {
   }
   
   public function updateCart() {
-    if(Cart66Common::postVal('updateCart') == 'Calculate Shipping') {
+    if(Cart66Common::postVal('calculateShipping')) {
       Cart66Session::set('cart66_shipping_zip', Cart66Common::postVal('shipping_zip'));
       Cart66Session::set('cart66_shipping_country_code', Cart66Common::postVal('shipping_country_code'));
     }
@@ -89,10 +89,18 @@ class Cart66Cart {
     do_action('cart66_after_update_cart', $this);
   }
   
+  /**
+   * Returns the item that was added (or updated) in the cart
+   * 
+   * @return Cart66CartItem
+   */
   public function addItem($id, $qty=1, $optionInfo='', $formEntryId=0, $productUrl='', $ajax=false) {
+    Cart66Session::set('Cart66Tax', 0);
+    Cart66Session::set('Cart66TaxRate', 0);
+    $the_final_item = false;
     $options_valid = true;
     $product = new Cart66Product($id);
-    
+    do_action('cart66_before_add_to_cart', $product, $qty);
     try {
       $optionInfo = $this->_processOptionInfo($product, $optionInfo);
     }
@@ -104,6 +112,7 @@ class Cart66Cart {
     if($product->id > 0 && $options_valid) {
       
       $newItem = new Cart66CartItem($product->id, $qty, $optionInfo->options, $optionInfo->priceDiff, $productUrl);
+      $the_final_item = $newItem;
       
       if( ($product->isSubscription() || $product->isMembershipProduct()) && ($this->hasSubscriptionProducts() || $this->hasMembershipProducts() )) {
         // Make sure only one subscription can be added to the cart. Spreedly only allows one subscription per subscriber.
@@ -150,10 +159,12 @@ class Cart66Cart {
             if($formEntryId > 0) {
               $item->addFormEntryId($formEntryId);
             }
+            $the_final_item = $item;
             break;
           }
         }
         if($isNew) {
+          $the_final_item = $newItem;
           $this->_items[] = $newItem;
         }
       }
@@ -161,6 +172,7 @@ class Cart66Cart {
       $this->_setPromoFromPost();
       Cart66Session::touch();
       do_action('cart66_after_add_to_cart', $product, $qty);
+      return $the_final_item;
     }
     
   }
@@ -170,11 +182,17 @@ class Cart66Cart {
       $product = $this->_items[$itemIndex]->getProduct();
       $this->_items[$itemIndex]->detachAllForms();
       if(count($this->_items) <= 1) {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] about to remove user price from session: userPrice_" . $product->id . '_' . $this->_items[$itemIndex]->getFirstFormEntryId());
+        Cart66Session::drop('userPrice_' . $product->id . '_' . $this->_items[$itemIndex]->getFirstFormEntryId(), true);
+        $this->_items[$itemIndex]->detachAllForms();
         $this->_items = array();
         Cart66Session::drop('Cart66Tax',true);
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Reset the cart items array");
       }
       else {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] about to remove user price from session: userPrice_" . $product->id . '_' . $this->_items[$itemIndex]->getFirstFormEntryId());
+        Cart66Session::drop('userPrice_' . $product->id . '_' . $this->_items[$itemIndex]->getFirstFormEntryId(), true);
+        $this->_items[$itemIndex]->detachAllForms();
         unset($this->_items[$itemIndex]);
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Did not reset the cart items array because the cart contains more than just a membership item");
       }
@@ -188,6 +206,14 @@ class Cart66Cart {
     foreach($this->_items as $index => $item) {
       if($item->getProductId() == $productId) {
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Removing item at index: $index");
+        $this->removeItem($index);
+      }
+    }
+  }
+  
+  public function removeAllItems() {
+    if(is_array($this->_items)) {
+      foreach($this->_items as $index => $item) {
         $this->removeItem($index);
       }
     }
@@ -570,10 +596,7 @@ class Cart66Cart {
       if($promotion && $promotion->apply_to == "products"){
         $total = ($subTotal - $promotion->getDiscountAmount()) + $this->getShippingCost();
       }
-      
-        
     }
-      
     
     $total = ($total < 0) ? 0 : $total;
     return $total; 
@@ -703,6 +726,20 @@ class Cart66Cart {
     foreach($this->getItems() as $item) {
       if($item->isSpreedlySubscription()) {
         return $item->getSpreedlySubscriptionId();
+      }
+    }
+    return false;
+  }
+  
+  /**
+   * Return the spreedly subscription product id for the subscription product in the cart 
+   * or false if there are no spreedly subscriptions in the cart. With Spreedly 
+   * subscriptions, there may be only one subscription product in the cart.
+   */
+  public function getSpreedlyProductId() {
+    foreach($this->getItems() as $item) {
+      if($item->isSpreedlySubscription()) {
+        return $item->getSpreedlyProductId();
       }
     }
     return false;
@@ -1138,7 +1175,11 @@ class Cart66Cart {
     else{
       if(Cart66Session::get('Cart66Promotion')){
         $currentPromotionCode = Cart66Session::get('Cart66PromotionCode');
-        $this->applyPromotion($currentPromotionCode);
+        $isAutoPromo = (Cart66Session::get('Cart66Promotion')->auto_apply == 1) ? true : false;
+        $this->applyPromotion($currentPromotionCode, $isAutoPromo);
+        if(!Cart66Session::get('Cart66Promotion')){
+          $this->_setAutoPromoFromPost();
+        }        
       }
       else {
         $this->clearPromotion();
@@ -1193,23 +1234,43 @@ class Cart66Cart {
           $check_option = explode('|', $check_option);
           $check_option = $check_option[0];
         }
-
+        
         if($this->_validate_option($valid_options, $check_option, $is_gravity_form)) {
-          if(preg_match('/\+\s*\$/', $opt)) {
-            $opt = preg_replace('/\+\s*\$/', '+$', $opt);
-            list($opt, $pd) = explode('+$', $opt);
-            $optionList[] = trim($opt);
-            $priceDiff += $pd;
-          }
-          elseif(preg_match('/-\s*\$/', $opt)) {
-            $opt = preg_replace('/-\s*\$/', '-$', $opt);
-            list($opt, $pd) = explode('-$', $opt);
-            $optionList[] = trim($opt);
-            $pd = trim($pd);
-            $priceDiff -= $pd;
+          if(strpos($opt, '$')) {
+            if(preg_match('/\+\s*\$/', $opt)) {
+              $opt = preg_replace('/\+\s*\$/', '+' . CART66_CURRENCY_SYMBOL_TEXT, $opt);
+              list($opt, $pd) = explode('+' . CART66_CURRENCY_SYMBOL_TEXT, $opt);
+              $optionList[] = trim($opt);
+              $priceDiff += $pd;
+            }
+            elseif(preg_match('/-\s*\$/', $opt)) {
+              $opt = preg_replace('/-\s*\$/', '-' . CART66_CURRENCY_SYMBOL_TEXT, $opt);
+              list($opt, $pd) = explode('-' . CART66_CURRENCY_SYMBOL_TEXT, $opt);
+              $optionList[] = trim($opt);
+              $pd = trim($pd);
+              $priceDiff -= $pd;
+            }
+            else {
+              $optionList[] = trim($opt);
+            }
           }
           else {
-            $optionList[] = trim($opt);
+            if(preg_match('/\+\s*\\' . CART66_CURRENCY_SYMBOL_TEXT . '/', $opt)) {
+              $opt = preg_replace('/\+\s*\\' . CART66_CURRENCY_SYMBOL_TEXT . '/', '+' . CART66_CURRENCY_SYMBOL_TEXT, $opt);
+              list($opt, $pd) = explode('+' . CART66_CURRENCY_SYMBOL_TEXT, $opt);
+              $optionList[] = trim($opt);
+              $priceDiff += $pd;
+            }
+            elseif(preg_match('/-\s*\\' . CART66_CURRENCY_SYMBOL_TEXT . '/', $opt)) {
+              $opt = preg_replace('/-\s*\\' . CART66_CURRENCY_SYMBOL_TEXT . '/', '-' . CART66_CURRENCY_SYMBOL_TEXT, $opt);
+              list($opt, $pd) = explode('-' . CART66_CURRENCY_SYMBOL_TEXT, $opt);
+              $optionList[] = trim($opt);
+              $pd = trim($pd);
+              $priceDiff -= $pd;
+            }
+            else {
+              $optionList[] = trim($opt);
+            }
           }
         }
         else {

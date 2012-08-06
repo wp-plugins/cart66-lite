@@ -57,6 +57,12 @@ class Cart66Product extends Cart66ModelAbstract {
     return $this->_db->get_var($sql);
   }
   
+  public function resetDownloadsForDuid($duid, $order_item_id) {
+    $downloadsTable = Cart66Common::getTableName('downloads');
+    $sql = "DELETE from $downloadsTable where duid='$duid' AND order_item_id='$order_item_id'";
+    $this->_db->query($sql);
+  }
+  
   /**
    * Return the quantity of inventory in stock for the product with the given id and variation description.
    * 
@@ -103,10 +109,16 @@ class Cart66Product extends Cart66ModelAbstract {
       $variations = explode('~', $variation);
       $options = array();
       foreach($variations as $opt) {
-        $options[] = trim(preg_replace('/\s*([+-])[^$]*\$.*$/', '', $opt));
+        if(strpos($opt, '$')) {
+          $options[] = trim(preg_replace('/\s*([+-])[^$]*\$.*$/', '', $opt));
+        }
+        else {
+          $options[] = trim(preg_replace('/\s*([+-])[^$]*\\'. CART66_CURRENCY_SYMBOL_TEXT . '.*$/', '', $opt));
+        }
       }
       $variation = strtolower(str_replace('~', ',', str_replace(' ', '', implode(',', $options))));
     }
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] variation: $variation");
     return $variation;
   }
   
@@ -146,6 +158,9 @@ class Cart66Product extends Cart66ModelAbstract {
       $name = $opt;
       if(strpos($opt, '$')) {
         $name = trim(preg_replace('/\s*([+-])[^$]*\$.*$/', '', $opt));
+      }
+      else {
+        $name = trim(preg_replace('/\s*([+-])[^$]*\\'. CART66_CURRENCY_SYMBOL_TEXT . '.*$/', '', $opt));
       }
       
       if(!empty($name)) {
@@ -225,10 +240,10 @@ class Cart66Product extends Cart66ModelAbstract {
     $this->_db->query($sql);
   }
   
-  public function updateInventoryFromPost($_REQUEST) {
+  public function updateInventoryFromPost($request) {
     global $wpdb;
     $inventory = Cart66Common::getTableName('inventory');
-    foreach($_REQUEST as $key => $value) {
+    foreach($request as $key => $value) {
       if (substr($key, 0, 4) == "qty_") {
         $ikey = substr($key, 4);
         $wpdb->query("UPDATE $inventory SET quantity='$value' WHERE ikey='$ikey'");
@@ -726,12 +741,18 @@ class Cart66Product extends Cart66ModelAbstract {
   
   public function gravityGetVariationPrices($gfEntry) {
     $options = array();
-    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Gravity Forms Entry:  " . print_r($gfEntry, true));
+    //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Gravity Forms Entry:  " . print_r($gfEntry, true));
     foreach($gfEntry as $id => $value) {
       if($id != 'source_url') {
-        $exp = '/[+-]\s*\$\d/';
+        $exp = '/[+-]\s*\\' . CART66_CURRENCY_SYMBOL_TEXT . '\d/';
         if(preg_match($exp, $value)) {
           $options[] = $value;
+        }
+        else {
+          $exp = '/[+-]\s*\$\d/';
+          if(preg_match($exp, $value)) {
+            $options[] = $value;
+          }
         }
       }
     }
@@ -782,6 +803,17 @@ class Cart66Product extends Cart66ModelAbstract {
         $subscription->load($this->spreedlySubscriptionId);
         $price += $subscription->price;
       }
+      
+      if(Cart66Common::isLoggedIn()) {
+        $proRateAmount = Cart66Session::get('Cart66ProRateAmount');
+        if(!$proRateAmount) {
+          $proRateData = $this->getProRateInfo();
+          $proRateAmount = $proRateData->amount;
+        }
+        $price = ($proRateAmount > $price) ? 0 : $price - $proRateAmount;
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Calculated ProRate price: " . $price);
+      }
+      
     }
     elseif($this->isPayPalSubscription()) {
       $price = $this->setupFee;
@@ -795,6 +827,7 @@ class Cart66Product extends Cart66ModelAbstract {
         }
       }
     }
+    
     return $price;
   }
   
@@ -872,6 +905,7 @@ class Cart66Product extends Cart66ModelAbstract {
    */
   public function getProRateInfo() {
     $data = false;
+    $proRateAmount = 0;
     if($this->isSpreedlySubscription()) {
       if(Cart66Common::isLoggedIn() && Cart66Session::get('Cart66Cart')) {
         if($subscriptionId = Cart66Session::get('Cart66Cart')->getSpreedlySubscriptionId()) {
@@ -890,8 +924,11 @@ class Cart66Product extends Cart66ModelAbstract {
             $data->description = $invoice->invoiceData->{'line-items'}->{'line-item'}[1]->description;
             $data->amount = $this->_creditAmount;
             $data->money = CART66_CURRENCY_SYMBOL . number_format($this->_creditAmount, 2);
+            
+            if($data->amount > 0) {
+              $proRateAmount = $data->amount;
+            }
 
-            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] PRICE DESCRIPTON CREDIT: $proRated");
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Spreedly Invoice: " . print_r($invoice->invoiceData, true));
           }
           catch(SpreedlyException $e) {
@@ -900,7 +937,7 @@ class Cart66Product extends Cart66ModelAbstract {
         }
       }
     }
-    
+    Cart66Session::set('Cart66ProRateAmount', $proRateAmount, true);
     return $data;
   }
   

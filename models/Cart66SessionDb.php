@@ -17,7 +17,7 @@ class Cart66SessionDb {
       self::$_maxLifetime = $minutes;
     }
     else {
-      self::$_maxLifetime = 30;
+      self::$_maxLifetime = (is_numeric(Cart66Setting::getValue('session_length')) && Cart66Setting::getValue('session_length') > 0) ? Cart66Setting::getValue('session_length') : 30;
     }
   }
   
@@ -60,7 +60,7 @@ class Cart66SessionDb {
     $out = "Cart66 Session Dump:\n\n";
     $out .= print_r(self::$_userData, true);
     $out .= print_r(self::$_data, true);
-    echo $out;
+    return $out;
   }
   
   protected static function _init() {
@@ -75,7 +75,7 @@ class Cart66SessionDb {
         'user_data' => ''
       );
       self::$_userData = array();
-      self::setMaxLifetime(30);
+      self::setMaxLifetime((Cart66Setting::getValue('session_length') > 0) ? Cart66Setting::getValue('session_length') : 30);
       self::_start();
     }
   }
@@ -197,9 +197,11 @@ class Cart66SessionDb {
   protected static function _isValid($data) {
     $isValid = true;
     
-    if($data['ip_address'] != self::_getIp()) {
-      $isValid = false;
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Session is not valid - IP Address changed");
+    if(Cart66Setting::getValue('session_ip_validation') != 1) {
+      if($data['ip_address'] != self::_getIp()) {
+        $isValid = false;
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Session is not valid - IP Address changed");
+      }
     }
     elseif($data['user_agent'] != $_SERVER['HTTP_USER_AGENT']) {
       $isValid = false;

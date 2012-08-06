@@ -219,7 +219,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
           $newOrder = new Cart66Order($orderId);
           
           // Send email receipts
-          Cart66Common::sendEmailReceipts($orderId);
+          if(CART66_PRO && Cart66Setting::getValue('enable_advanced_notifications') ==1) {
+            $notify = new Cart66AdvancedNotifications($orderId);
+            $notify->sendAdvancedEmailReceipts();
+          }
+          else {
+            $notify = new Cart66Notifications($orderId);
+            $notify->sendEmailReceipts();
+          }
           
           // Send buyer to receipt page
           $receiptVars = strpos($receiptLink, '?') ? '&' : '?';

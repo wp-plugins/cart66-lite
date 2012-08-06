@@ -44,8 +44,17 @@
         }
       ?>">
     
-      <input type="hidden" name="cart66-gateway-name" value="<?php echo $gatewayName ?>"/>
-    
+      <input type="hidden" name="cart66-gateway-name" value="<?php echo $gatewayName ?>" id="cart66-gateway-name" />
+      <?php
+        $url = Cart66Common::appendWurlQueryString('cart66AjaxCartRequests');
+        if(Cart66Common::isHttps()) {
+          $url = preg_replace('/http[s]*:/', 'https:', $url);
+        }
+        else {
+          $url = preg_replace('/http[s]*:/', 'http:', $url);
+        }
+      ?>
+      <input type="hidden" name="confirm_url" value="<?php echo $url; ?>" id="confirm-url" />
       <?php if($cart->requireShipping()): ?>
         <h2><?php _e( 'Shipping Address' , 'cart66' ); ?></h2>
       <?php else: ?>
@@ -82,8 +91,8 @@
 
         <li>
           <label for="shipping-state_text" class="short shipping-state_label"><?php _e( 'State' , 'cart66' ); ?>:</label>
-          <input type="text" name="shipping[state_text]" value="<?php Cart66Common::showValue($s['state']); ?>" id="shipping-state_text" class="state_text_field" />
-          <select id="shipping-state" class="shipping_countries required" title="State shipping address" name="shipping[state]">
+          <input type="text" name="shipping[state_text]" value="<?php Cart66Common::showValue($s['state']); ?>" id="shipping-state_text" class="ajax-tax state_text_field" />
+          <select id="shipping-state" class="ajax-tax shipping_countries required" title="State shipping address" name="shipping[state]">
             <option value="0">&nbsp;</option>              
             <?php
               $zone = Cart66Common::getZones($shippingCountryCode);
@@ -97,7 +106,7 @@
 
         <li>
           <label for="shipping-zip" class="shipping-zip_label"><?php _e( 'Zip code' , 'cart66' ); ?>:</label>
-          <input type="text" id="shipping-zip" name="shipping[zip]" value="<?php Cart66Common::showValue($s['zip']); ?>">
+          <input type="text" id="shipping-zip" name="shipping[zip]" value="<?php Cart66Common::showValue($s['zip']); ?>" class="ajax-tax">
         </li>
 
         <li>

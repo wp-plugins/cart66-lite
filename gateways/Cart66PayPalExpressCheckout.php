@@ -126,13 +126,15 @@ class Cart66PayPalExpressCheckout extends Cart66GatewayAbstract {
   public function SetExpressCheckout() {
     $this->_requestFields = array(
       'METHOD' => 'SetExpressCheckout',
-      'PAYMENTACTION' => 'Sale',
-      'LANDINGPAGE' => 'Billing'
+      'PAYMENTACTION' => 'Sale'
     );
+    if(CART66_PRO && !Cart66Setting::getValue('disable_landing_page')){
+      $this->_requestFields['LANDINGPAGE'] = 'Billing';
+    }
 
-  	if(CART66_PRO && Cart66Setting::getValue('express_force_paypal')){
-  		$this->_requestFields['SOLUTIONTYPE'] = 'Sole';
-  	}
+    if(CART66_PRO && Cart66Setting::getValue('express_force_paypal')){
+      $this->_requestFields['SOLUTIONTYPE'] = 'Sole';
+    }
 
     $nvp = $this->_buildNvpStr();
     Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Set Express Checkout Request NVP: " . str_replace('&', "\n", $nvp));

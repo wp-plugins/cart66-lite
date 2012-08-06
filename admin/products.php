@@ -79,87 +79,13 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
             <ul>
               <li>
                 <label class="long" for="product-name"><?php _e( 'Product name' , 'cart66' ); ?>:</label>
-                <input class="long" type="text" name='product[name]' id='product-name' value='<?php echo $product->name ?>' />
+                <input class="long" type="text" name='product[name]' id='product-name' value="<?php echo htmlspecialchars($product->name); ?>" />
               </li>
               <li>
                 <label class="long" for='product-item_number'><?php _e( 'Item number' , 'cart66' ); ?>:</label>
                 <input type='text' name='product[item_number]' id='product-item_number' value='<?php echo $product->itemNumber ?>' />
                 <span class="label_desc"><?php _e( 'Unique item number required.' , 'cart66' ); ?></span>
               </li>
-              
-              <?php if(CART66_PRO && Cart66Setting::getValue('spreedly_shortname')): ?>
-              <li>
-                <label for="product-spreedly_subscription_id" class="long"><?php _e( 'Attach Spreedly subscription' , 'cart66' ); ?>:</label>
-                <select name="product[spreedly_subscription_id]" id="product-spreedly_subscription_id">
-                  <?php foreach($data['subscriptions'] as $id => $name): ?>
-                    <?php
-                      $selected = ($id == $product->spreedlySubscriptionId) ? 'selected="selected"' : '';
-                    ?>
-                  <option value="<?php echo $id ?>" <?php echo $selected ?>><?php echo $name ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </li>
-              <?php endif; ?>
-              
-              <li>
-                <label class="long" for="product-price" id="price_label"><?php _e( 'Price' , 'cart66' ); ?>:</label>
-                <?php echo CART66_CURRENCY_SYMBOL ?><input type='text' style="width: 75px;" id="product-price" name='product[price]' value='<?php echo $product->price ?>'>
-                <span class="label_desc" id="price-description"></span>
-              </li>
-              <li>
-                <label class="long" for="product-price_description" id="price_description_label"><?php _e( 'Price description' , 'cart66' ); ?>:</label>
-                <input type='text' style="width: 275px;" id="product-price_description" name='product[price_description]' value='<?php echo $product->priceDescription ?>'>
-                <span class="label_desc" id="price_description"><?php _e( 'If you would like to customize the display of the price' , 'cart66' ); ?></span>
-              </li>
-              <li class="isUserPrice">
-                <label class="long" for="product-is_user_price" id="is_user_price"><?php _e( 'User defined price' , 'cart66' ); ?>:</label>
-                <select id="product-is_user_price" name='product[is_user_price]'>
-                  <option value='1' <?php echo ($product->is_user_price == 1)? 'selected="selected"' : '' ?>><?php _e( 'Yes' , 'cart66' ); ?></option>
-                  <option value='0' <?php echo ($product->is_user_price == 0)? 'selected="selected"' : '' ?>><?php _e( 'No' , 'cart66' ); ?></option>
-                </select><span class="desc"><?php _e( 'Allow the customer to specify a price.' , 'cart66' ); ?></span>
-                
-              </li>
-              
-              <li class="userPriceSettings" style="<?php echo ($product->is_user_price == 1)? 'display:block;' : 'display:none;' ?>">
-                <label class="long" for="product-min_price"><?php _e( 'Min price' , 'cart66' ); ?>:</label>
-                <?php echo CART66_CURRENCY_SYMBOL ?><input type="text" style="width: 75px;" id="product-min_price" name='product[min_price]' value='<?php echo $product->minPrice ?>' />
-                <label class="short" for="product-max_price"><?php _e( 'Max price' , 'cart66' ); ?>:</label>
-                <?php echo CART66_CURRENCY_SYMBOL ?><input type="text" style="width: 75px;" id="product-max_price" name='product[max_price]' value='<?php echo $product->maxPrice ?>' />
-                <span class="label_desc" id="is_user_price_description"><?php _e( 'Set to $0.00 for no limit ' , 'cart66' ); ?></span>
-              </li>
-              
-              <li>
-                <label class="long" for="product-taxable"><?php _e( 'Taxed' , 'cart66' ); ?>:</label>
-                <select id="product-taxable" name='product[taxable]'>
-                  <option value='1' <?php echo ($product->taxable == 1)? 'selected="selected"' : '' ?>><?php _e( 'Yes' , 'cart66' ); ?></option>
-                  <option value='0' <?php echo ($product->taxable == 0)? 'selected="selected"' : '' ?>><?php _e( 'No' , 'cart66' ); ?></option>
-                </select>
-                <span class="label_desc"><?php _e( 'Do you want to collect sales tax when this item is purchased?' , 'cart66' ); ?></span>
-                <p class="label_desc"><?php _e( 'For subscriptions, tax is only collected on the one time fee.' , 'cart66' ); ?></p>
-              </li>
-              <li>
-                <label class="long" for="product-shipped"><?php _e('Shipped', 'cart66'); ?>:</label>
-                <select id="product-shipped" name='product[shipped]'>
-                  <option value='1' <?php echo ($product->shipped === '1')? 'selected="selected"' : '' ?>><?php _e( 'Yes' , 'cart66' ); ?></option>
-                  <option value='0' <?php echo ($product->shipped === '0')? 'selected="selected"' : '' ?>><?php _e( 'No' , 'cart66' ); ?></option>
-                </select>
-                <span class="label_desc"><?php _e( 'Does this product require shipping' , 'cart66' ); ?>?</span>
-              </li>
-              <li>
-                <label class="long" for="product-weight"><?php _e( 'Weight' , 'cart66' ); ?>:</label>
-                <input type="text" name="product[weight]" value="<?php echo $product->weight ?>" size="6" id="product-weight" /> lbs 
-                <p class="label_desc"><?php _e( 'Shipping weight in pounds. Used for live rates calculations. Weightless items ship free.<br/>
-                  If using live rates and you want an item to have free shipping you can enter 0 for the weight.' , 'cart66' ); ?></p>
-              </li>
-              <li class="nonSubscription">
-                <label class="long" for="product-min_qty"><?php _e( 'Min quantity' , 'cart66' ); ?>:</label>
-                <input type="text" style="width: 50px;" id="product-min_qty" name='product[min_quantity]' value='<?php echo $product->minQuantity ?>' />
-                <label class="short" for="product-max_qty"><?php _e( 'Max quantity' , 'cart66' ); ?>:</label>
-                <input type="text" style="width: 50px;" id="product-max_qty" name='product[max_quantity]' value='<?php echo $product->maxQuantity ?>' />
-                <p class="label_desc"><?php _e( 'Limit the quantity that can be added to the cart. Set to 0 for unlimited.<br/>
-                  If you are selling digital products you may want to limit the quantity of the product to 1.' , 'cart66' ); ?></p>
-              </li>
-              
               
               <?php if(CART66_PRO && class_exists('RGForms')): ?>
                 <li class="">
@@ -184,15 +110,28 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
                   </select>
                   <span class="label_desc"><?php _e( 'A Gravity Form may only be linked to one product' , 'cart66' ); ?></span>
                 </li>
-                <li class="">
+                
+                <li class="gravity_field" <?php if($product->gravityFormId < 1) { echo 'style="display:none;"'; } ?>>
+                  <label class="long"><?php _e( 'Gravity Forms pricing' , 'cart66' ); ?>:</label>
+                  <select name="product[gravity_form_pricing]" id="product-gravity_form_pricing">
+                    <option value='0'><?php _e( 'No' , 'cart66' ); ?></option>
+                    <option value='1' <?php echo ($product->gravity_form_pricing == 1)? 'selected="selected"' : '' ?>><?php _e( 'Yes' , 'cart66' ); ?></option>
+                  </select>
+                  <?php echo isset($gravityError) ? $gravityError : ''; ?>
+                  <span class="label_desc"><?php _e( 'Use the Gravity Form pricing fields instead of the pricing fields here.' , 'cart66' ); ?></span>
+                </li>
+                
+                <li id="gravity_qty_field_element" class="gravity_field" <?php if($product->gravityFormId < 1) { echo 'style="display:none;"'; } ?>>
                   <label class="long"><?php _e( 'Quantity field' , 'cart66' ); ?>:</label>
-                  <select name="product[gravity_form_qty_id]" id="gravity_form_qty_id">
+                  <select name="product[gravity_form_qty_id]" id="product-gravity_form_qty_id">
                     <option value='0'><?php _e( 'None' , 'cart66' ); ?></option>
                     <?php
                       try {
                         $gr = new Cart66GravityReader($product->gravityFormId);
                         $fields = $gr->getStandardFields();
                         foreach($fields as $id => $label) {
+                          $id = str_replace("'", "", $id);
+                          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Gravity Form Fields :: $id => $label");
                           $selected = ($product->gravityFormQtyId == $id) ? 'selected="selected"' : '';
                           echo "<option value='$id' $selected>$label</option>\n";
                         }
@@ -206,6 +145,80 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
                   <?php echo isset($gravityError) ? $gravityError : ''; ?>
                   <span class="label_desc"><?php _e( 'Use one of the Gravity Form fields as the quantity for your product.' , 'cart66' ); ?></span>
                 </li>
+              <?php endif; ?>
+              
+              <li class="native_price" <?php if($product->gravity_form_pricing == 1) echo 'style="display:none;"'; ?>>
+                <label class="long" for="product-price" id="price_label"><?php _e( 'Price' , 'cart66' ); ?>:</label>
+                <?php echo CART66_CURRENCY_SYMBOL ?><input type='text' style="width: 75px;" id="product-price" name='product[price]' value='<?php echo $product->price ?>'>
+                <span class="label_desc" id="price-description"></span>
+              </li>
+              <li class="native_price" <?php if($product->gravity_form_pricing == 1) echo 'style="display:none;"'; ?>>
+                <label class="long" for="product-price_description" id="price_description_label"><?php _e( 'Price description' , 'cart66' ); ?>:</label>
+                <input type='text' style="width: 275px;" id="product-price_description" name='product[price_description]' value='<?php echo $product->priceDescription ?>'>
+                <span class="label_desc" id="price_description"><?php _e( 'If you would like to customize the display of the price' , 'cart66' ); ?></span>
+              </li>
+              <li class="isUserPrice native_price" <?php if($product->gravity_form_pricing == 1) echo 'style="display:none;"'; ?>>
+                <label class="long" for="product-is_user_price" id="is_user_price"><?php _e( 'User defined price' , 'cart66' ); ?>:</label>
+                <select id="product-is_user_price" name='product[is_user_price]'>
+                  <option value='1' <?php echo ($product->is_user_price == 1)? 'selected="selected"' : '' ?>><?php _e( 'Yes' , 'cart66' ); ?></option>
+                  <option value='0' <?php echo ($product->is_user_price == 0)? 'selected="selected"' : '' ?>><?php _e( 'No' , 'cart66' ); ?></option>
+                </select><span class="label_desc"><?php _e( 'Allow the customer to specify a price.' , 'cart66' ); ?></span>
+              </li>
+              
+              <li class="userPriceSettings" style="<?php echo ($product->is_user_price == 1)? 'display:block;' : 'display:none;' ?>">
+                <label class="long" for="product-min_price"><?php _e( 'Min price' , 'cart66' ); ?>:</label>
+                <?php echo CART66_CURRENCY_SYMBOL ?><input type="text" style="width: 75px;" id="product-min_price" name='product[min_price]' value='<?php echo $product->minPrice ?>' />
+                <label class="short" for="product-max_price"><?php _e( 'Max price' , 'cart66' ); ?>:</label>
+                <?php echo CART66_CURRENCY_SYMBOL ?><input type="text" style="width: 75px;" id="product-max_price" name='product[max_price]' value='<?php echo $product->maxPrice ?>' />
+                <span class="label_desc" id="is_user_price_description"><?php _e( 'Set to $0.00 for no limit ' , 'cart66' ); ?></span>
+              </li>
+              
+              <li>
+                <label class="long" for="product-taxable"><?php _e( 'Taxed' , 'cart66' ); ?>:</label>
+                <select id="product-taxable" name='product[taxable]'>
+                  <option value='1' <?php echo ($product->taxable == 1)? 'selected="selected"' : '' ?>><?php _e( 'Yes' , 'cart66' ); ?></option>
+                  <option value='0' <?php echo ($product->taxable == 0)? 'selected="selected"' : '' ?>><?php _e( 'No' , 'cart66' ); ?></option>
+                </select>
+                <p class="label_desc">
+                  <?php _e( 'Do you want to collect sales tax when this item is purchased?' , 'cart66' ); ?><br/>
+                  <?php _e( 'For subscriptions, tax is only collected on the one time fee.' , 'cart66' ); ?>
+                </p>
+              </li>
+              <li>
+                <label class="long" for="product-shipped"><?php _e('Shipped', 'cart66'); ?>:</label>
+                <select id="product-shipped" name='product[shipped]'>
+                  <option value='1' <?php echo ($product->shipped === '1')? 'selected="selected"' : '' ?>><?php _e( 'Yes' , 'cart66' ); ?></option>
+                  <option value='0' <?php echo ($product->shipped === '0')? 'selected="selected"' : '' ?>><?php _e( 'No' , 'cart66' ); ?></option>
+                </select>
+                <span class="label_desc"><?php _e( 'Does this product require shipping' , 'cart66' ); ?>?</span>
+              </li>
+              <li>
+                <label class="long" for="product-weight"><?php _e( 'Weight' , 'cart66' ); ?>:</label>
+                <input type="text" name="product[weight]" value="<?php echo $product->weight ?>" size="6" id="product-weight" /> lbs 
+                <p class="label_desc"><?php _e( 'Shipping weight in pounds. Used for live rates calculations. Weightless items ship free.<br/>
+                  If using live rates and you want an item to have free shipping you can enter 0 for the weight.' , 'cart66' ); ?></p>
+              </li>
+              <li class="nonSubscription">
+                <label class="long" for="product-min_qty"><?php _e( 'Min quantity' , 'cart66' ); ?>:</label>
+                <input type="text" style="width: 50px;" id="product-min_qty" name='product[min_quantity]' value='<?php echo $product->minQuantity ?>' />
+                <label class="short" for="product-max_qty"><?php _e( 'Max quantity' , 'cart66' ); ?>:</label>
+                <input type="text" style="width: 50px;" id="product-max_qty" name='product[max_quantity]' value='<?php echo $product->maxQuantity ?>' />
+                <p class="label_desc"><?php _e( 'Limit the quantity that can be added to the cart. Set to 0 for unlimited.<br/>
+                  If you are selling digital products you may want to limit the quantity of the product to 1.' , 'cart66' ); ?></p>
+              </li>
+              
+              <?php if(CART66_PRO && Cart66Setting::getValue('spreedly_shortname')): ?>
+              <li>
+                <label for="product-spreedly_subscription_id" class="long"><?php _e( 'Attach Spreedly subscription' , 'cart66' ); ?>:</label>
+                <select name="product[spreedly_subscription_id]" id="product-spreedly_subscription_id">
+                  <?php foreach($data['subscriptions'] as $id => $name): ?>
+                    <?php
+                      $selected = ($id == $product->spreedlySubscriptionId) ? 'selected="selected"' : '';
+                    ?>
+                  <option value="<?php echo $id ?>" <?php echo $selected ?>><?php echo $name ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </li>
               <?php endif; ?>
               
               <?php if(CART66_PRO): ?>
@@ -417,7 +430,7 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
     </table>
   <?php endif; ?>
   <?php if(isset($data['spreedly']) && is_array($data['spreedly']) && count($data['spreedly']) > 0): ?>
-    <h3 style="margin-top: 20px;"><?php _e( 'Your Spreedly Subscription Products' , 'cart66' ); ?></h3>
+    <h3 style="margin-top: 50px;"><?php _e( 'Your Spreedly Subscription Products' , 'cart66' ); ?></h3>
     <table class="widefat Cart66HighlightTable" id="spreedly_table">
       <tr>
         <thead>
@@ -448,7 +461,15 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
 </div>
 <script type="text/javascript">
   (function($){
-    $(document).ready(function(){
+    $(document).ready(function() {
+      
+      // Hide Gravity Forms quantity field when using Gravity Forms pricing
+      /*
+      if($('#product-gravity_form_pricing').val() == 1) {
+        $('#product-gravity_form_qty_id').val(0);
+        $('#gravity_qty_field_element').hide('slow');
+      }
+      */
       
       $('#products_table').dataTable({
         "bProcessing": true,
@@ -553,10 +574,10 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
 
       $("#product-spreedly_subscription_id").change(function(){
         if($(this).val() != 0){
-          $(".userPriceSettings, .isUserPrice").hide();
+          $(".userPriceSettings, .isUserPrice").hide('slow');
           $("#product-is_user_price").val("0");
           
-          $("#membershipProductFields").hide();
+          $("#membershipProductFields").hide('slow');
           $("#product-membership_product").val("0");
           $("#product-feature_level").val('');
           $("#product-billing_interval").val('');
@@ -564,11 +585,15 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
           toggleMembershipProductAttrs();
         }
         else{
-          $(".isUserPrice").show();
-          if($(".isUserPrice").val() == 1){
-            $(".userPriceSettings").show();
+          if($('#product-gravity_form_pricing').val() != 1) {
+            $(".isUserPrice").show('slow');
+
+            if($(".isUserPrice").val() == 1){
+              $(".userPriceSettings").show('slow');
+            }
           }
-          $("#membershipProductFields").show();
+          
+          $("#membershipProductFields").show('slow');
         }
       })
 
@@ -588,13 +613,37 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
       // Ajax to populate gravity_form_qty_id when gravity_form_id changes
       $('#product-gravity_form_id').change(function() {
         var gravityFormId = $('#product-gravity_form_id').val();
+        console.debug('changing gravity form selection to: ' + gravityFormId);
         $.get(ajaxurl, { 'action': 'update_gravity_product_quantity_field', 'formId': gravityFormId}, function(myOptions) {
-          $('#gravity_form_qty_id >option').remove();
-          $('#gravity_form_qty_id').append( new Option('None', 0) );
+          $('#product-gravity_form_qty_id >option').remove();
+          $('#product-gravity_form_qty_id').append( new Option('None', 0) );
           $.each(myOptions, function(val, text) {
-              $('#gravity_form_qty_id').append( new Option(text,val) );
+              $('#product-gravity_form_qty_id').append( new Option(text,val) );
           });
         });
+        
+        if(gravityFormId > 0) {
+          $('.gravity_field').show();
+        }
+        else {
+          $('.gravity_field').hide();
+          $('.native_price').show('slow');
+          $('#product-gravity_form_qty_id').val(0);
+          $('#product-gravity_form_pricing').val(0);
+        }
+      });
+      
+      // Toggle native pricing fields based on whether or not Gravity Forms pricing is activated
+      $('#product-gravity_form_pricing').change(function() {
+        if($(this).val() == 1) {
+          $('.native_price').hide('slow');
+          // $('#gravity_qty_field_element').hide('slow');
+        }
+        else {
+          // $('#gravity_qty_field_element').show('slow');
+          $('#product-gravity_form_qty_id').val(0);
+          $('.native_price').show('slow');
+        }
       });
 
       $('#spreedly_subscription_id').change(function() {

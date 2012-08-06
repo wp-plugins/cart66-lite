@@ -415,7 +415,13 @@ class Cart66ShortcodeManager {
   }
 
   public function payPalExpress($attrs) {
-    $view = Cart66Common::getView('views/paypal-express.php', $attrs);
+    try {
+      $view = Cart66Common::getView('views/paypal-express.php', $attrs);
+    }
+    catch(Cart66Exception $e) {
+      $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage());
+      $view = Cart66Common::getView('views/error-messages.php', $exception);
+    }
     return $view;
   }
 
@@ -454,6 +460,7 @@ class Cart66ShortcodeManager {
     Cart66Session::drop('Cart66Cart');
     Cart66Session::drop('Cart66Promotion');
     Cart66Session::drop('terms_acceptance');
+    Cart66Session::drop('Cart66ProRateAmount');
   }
   
   public function accountLogin($attrs) {
@@ -486,13 +493,19 @@ class Cart66ShortcodeManager {
           }
         }
         else {
-          // Locate logged in user home page
-          $pgs = get_posts('numberposts=1&post_type=any&meta_key=cart66_member&meta_value=home');
-          if(count($pgs)) {
-            $url = get_permalink($pgs[0]->ID);
+          if(Cart66Session::get('Cart66AccessDeniedRedirect')) {
+            $url = Cart66Session::get('Cart66AccessDeniedRedirect');
+          }
+          else {
+            // Locate logged in user home page
+            $pgs = get_posts('numberposts=1&post_type=any&meta_key=cart66_member&meta_value=home');
+            if(count($pgs)) {
+              $url = get_permalink($pgs[0]->ID);
+            }
           }
         }
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Redirecting after login to: $url");
+        Cart66Session::drop('Cart66AccessDeniedRedirect');
         wp_redirect($url);
         exit;
       }
@@ -510,6 +523,11 @@ class Cart66ShortcodeManager {
    * If no custom field is set then redirect to the current page after logging out
    */
   public function accountLogout($attrs) {
+    // Save zendesk error to session
+    if(isset($_GET['kind']) && $_GET['kind'] == 'error' && isset($_GET['message'])){
+      $zendeskError = $_GET['message'];
+      Cart66Session::set('zendesk_logout_error',$zendeskError,true);
+    }
     $url = Cart66Common::getCurrentPageUrl();
     if(isset($attrs['url']) && !empty($attrs['url'])) {
       $url = $attrs['url'];
@@ -693,12 +711,32 @@ class Cart66ShortcodeManager {
     die();
   }
   
+  /**
+   * Show content to qualifying feature levels.
+   * 
+   * The $attrs parameter should contain the key "level" which contains
+   * a CSV list of feature levels which are allowed to see the enclosed content.
+   * 
+   * A special feature level of "all_members" may be provided to show the content to
+   * any logged in member regardless of feature level. Note that expired accounts may log
+   * in but will not have a feature level. Therefore providing "all_members" as the required
+   * level will show the content to logged in members with expired accounts.
+   * 
+   * Because Cart66Common::trmmedExplode is used to parse the feature levels, the 
+   * feature level list may include spaces. The following two lists are the same:
+   *   one,two,three,four
+   *   one, two, three, four
+   */
   public function showTo($attrs, $content='null') {
     $isAllowed = false;
     if(Cart66Common::isLoggedIn()) {
+      $levels = Cart66Common::trimmedExplode(',', $attrs['level']);
       $account = new Cart66Account();
       if($account->load(Cart66Session::get('Cart66AccountId'))) {
-        if($account->isActive() && in_array($account->getFeatureLevel(), explode(',', $attrs['level']))) {
+        if(in_array('all_members', $levels)) {
+          $isAllowed = true;
+        }
+        elseif($account->isActive() && in_array($account->getFeatureLevel(), $levels)) {
           $isAllowed = true;
         }
       }
@@ -708,13 +746,19 @@ class Cart66ShortcodeManager {
     return do_shortcode($content);
   }
   
-  
+  /**
+   * This is the inverse of the showTo shortcode function above.
+   */
   public function hideFrom($attrs, $content='null') {
     $isAllowed = true;
     if(Cart66Common::isLoggedIn()) {
+      $levels = Cart66Common::trimmedExplode(',', $attrs['level']);
       $account = new Cart66Account();
-      if($account->load(Cart66Session::get('Cart66AccountId'))) {
-        if($account->isActive() && in_array($account->getFeatureLevel(), explode(',', $attrs['level']))) {
+      if(in_array('all_members', $levels)) {
+        $isAllowed = false;
+      }
+      elseif($account->load(Cart66Session::get('Cart66AccountId'))) {
+        if($account->isActive() && in_array($account->getFeatureLevel(), $levels)) {
           $isAllowed = false;
         }
       }
@@ -747,10 +791,25 @@ class Cart66ShortcodeManager {
           $qty = $product->gravityCheckForEntryQuantity($entry);
           $options = $product->gravityGetVariationPrices($entry);
           $productUrl = Cart66Common::getCurrentPageUrl();
-          Cart66Session::get('Cart66Cart')->addItem($productId, $qty, $options, $entry['id'], $productUrl);
+          $cart = Cart66Session::get('Cart66Cart');
+          $item = $cart->addItem($productId, $qty, $options, $entry['id'], $productUrl);
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Cart Item Value: " . print_r($item, true));
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Should we use the gravity forms price? " . $product->gravity_form_pricing . 
+            ' :: Session value: ' . Cart66Session::get('userPrice_' . $product->id));
+          
+          if($product->gravity_form_pricing == 1) {
+            $price = Cart66GravityReader::getPrice($entry['id']) / $qty;
+            $entry_id = $item->getFirstFormEntryId();
+            $user_price_name = 'userPrice_' . $productId . '_' . $entry_id;
+            Cart66Session::set($user_price_name, $price, true); // Setting the price of a Gravity Forms pricing product
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Using gravity forms pricing for product: Price: $price :: Name: " . $product->name . 
+              " :: Session variable name: $user_price_name");
+          }
+          
           $cartPage = get_page_by_path('store/cart');
           $cartPageLink = get_permalink($cartPage->ID);
           Cart66Session::set('Cart66LastPage', $_SERVER['HTTP_REFERER']);
+		  Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Cart66 Session Dump: " . Cart66Session::dump());
           wp_redirect($cartPageLink);
           exit;
         }
@@ -759,7 +818,7 @@ class Cart66ShortcodeManager {
   }
   
   public function zendeskRemoteLogin() {
-    if(Cart66Common::isLoggedIn() && isset($_GET['timestamp'])) {
+    if(Cart66Common::isLoggedIn()) {
       $account = new Cart66Account(Cart66Session::get('Cart66AccountId'));
       if($account) {
         ZendeskRemoteAuth::login($account);
@@ -793,7 +852,7 @@ class Cart66ShortcodeManager {
     }
   }
   
-  public function accountExpiration($attrs,$content = null){
+  public function accountExpiration($attrs, $content = null){
     $output = false;
     if(Cart66Common::isLoggedIn()) {
       $data = array();
@@ -865,7 +924,7 @@ class Cart66ShortcodeManager {
   
   protected function _buildCheckoutView($gateway) {
     $ssl = Cart66Setting::getValue('auth_force_ssl');
-    if($ssl == 'yes') {
+    if($ssl) {
       if(!Cart66Common::isHttps()) {
         $sslUrl = "https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
         wp_redirect($sslUrl);
@@ -881,5 +940,212 @@ class Cart66ShortcodeManager {
     $view = Cart66Common::getView('views/checkout.php', array('gateway' => $gateway));
     return $view;
   }
+  
+  public function emailShortcodes($attrs) {
+    $output = '';
+    if($attrs['source'] == 'receipt' || $attrs['source'] == 'fulfillment' || $attrs['source'] == 'status' || $attrs['source'] == 'followup') {
+      $order = new Cart66Order($attrs['id']);
+      $data = array(
+        'bill_first_name', 
+        'bill_last_name',
+        'bill_address',
+        'bill_address2',
+        'bill_city',
+        'bill_state',
+        'bill_country',
+        'bill_zip',
+        'ship_first_name',
+        'ship_last_name',
+        'ship_address',
+        'ship_address2',
+        'ship_city',
+        'ship_state',
+        'ship_country',
+        'ship_zip',
+        'phone',
+        'email',
+        'coupon',
+        'discount_amount',
+        'trans_id',
+        'shipping',
+        'subtotal',
+        'tax',
+        'total',
+        'non_subscription_total',
+        'ordered_on',
+        'status',
+        'ip',
+        'products',
+        'fulfillment_products',
+        'receipt',
+        'receipt_link',
+        'ouid',
+        'shipping_method',
+        'account_id',
+        'tracking_number'
+      );
+      if(in_array($attrs['att'], $data)) {
+        switch ($attrs['att']) {
+          case 'bill_first_name': // Intentional falling through
+          case 'bill_last_name':
+          case 'ship_first_name':
+          case 'ship_last_name':
+            $output = ucfirst(strtolower($order->$attrs['att']));
+            break;
+          case 'bill_address':
+            if($order->bill_address2 != ''){
+              $output = $order->$attrs['att'] . '<br />' . $order->bill_address2;
+            }
+            else {
+              $output = $order->$attrs['att'];
+            }
+            break;
+          case 'ship_address':
+            if($order->ship_address2 != ''){
+              $output = $order->$attrs['att'] . '<br />' . $order->ship_address2;
+            }
+            else {
+              $output = $order->$attrs['att'];
+            }
+            break;
+          case 'products':
+            $output = Cart66Common::getView('/pro/views/emails/email-products.php', array('order' => $order, 'type' => $attrs['type'], 'code' => 'products'));
+            break;
+          case 'fulfillment_products':
+            $output = Cart66Common::getView('/pro/views/emails/email-products.php', array('order' => $order, 'type' => $attrs['type'], 'code' => 'fulfillment_products', 'variable' => $attrs['variable']));
+            break;
+          case 'receipt':
+            $output = Cart66Common::getView('/pro/views/emails/email-receipt.php', array('order' => $order, 'type' => $attrs['type']));
+            break;
+          case 'phone':
+            $output = Cart66Common::formatPhone($attrs['att']);
+            break;
+          case 'total':
+            $output = CART66_CURRENCY_SYMBOL_TEXT . number_format($order->$attrs['att'], 2);
+            break;
+          case 'tax':
+            $output = CART66_CURRENCY_SYMBOL_TEXT . number_format($order->$attrs['att'], 2);
+            break;
+          case 'receipt_link':
+            $receiptPage = get_page_by_path('store/receipt');
+            $link = get_permalink($receiptPage->ID);
+            if(strstr($link,"?")){
+              $link .= '&ouid=';
+            }
+            else{
+              $link .= '?ouid=';
+            }
+            $output = $link . $order->ouid;
+            break;
+          default:
+            $output = $order->$attrs['att'];
+        }
+
+      }
+      elseif(substr($attrs['att'], 0, 8) == 'tracking') {
+        $output = Cart66AdvancedNotifications::updateTracking($order, $attrs);
+      }
+      elseif(substr($attrs['att'], 0, 5) == 'date:') {
+        $output = Cart66AdvancedNotifications::updateDate($attrs);
+      }
+      elseif(substr($attrs['att'], 0, 12) == 'date_ordered') {
+        $output = Cart66AdvancedNotifications::updateDateOrdered($order, $attrs);
+      }
+      $shipping_options = array(
+        'ship_first_name',
+        'ship_last_name',
+        'ship_address',
+        'ship_address2',
+        'ship_city',
+        'ship_state',
+        'ship_country',
+        'ship_zip',
+      );
+      if(in_array($attrs['att'], $shipping_options) && $order->shipping_method == 'None') {
+        $output = '';
+      }
+    }
+    elseif($attrs['source'] == 'reminder') {
+      $sub = new Cart66AccountSubscription($attrs['id']);
+      $account = new Cart66Account();
+      $account->load($sub->account_id);
+      $data = array(
+        'billing_first_name', 
+        'billing_last_name',
+        'feature_level',
+        'subscription_plan_name',
+        'active_until',
+        'billing_interval',
+        'username',
+        'opt_out_link'
+      );
+      if(in_array($attrs['att'], $data)) {
+        switch ($attrs['att']) {
+          case 'billing_first_name': // Intentional falling through
+          case 'billing_last_name':
+            $output = ucfirst(strtolower($sub->$attrs['att']));
+            break;
+          case 'active_until':
+            $output = date('F d, Y', strtotime($sub->$attrs['att']));
+            break;
+          case 'username':
+            $output = $account->$attrs['att'];
+            break;
+          case 'opt_out_link':
+            $output = Cart66ProCommon::generateUnsubscribeLink($account->id);
+            break;
+          default;
+            $output = $sub->$attrs['att'];
+        }
+        
+      }
+    }
     
+    return $output;
+  }
+  
+  public function emailOptOut() {
+    if(isset($_GET['cart66-task']) && $_GET['cart66-task'] == 'opt_out') {
+      if(isset($_GET['e']) && isset($_GET['t'])) {
+        $email = base64_decode(urldecode($_GET['e']));
+        $verify = Cart66ProCommon::verifyEmailToken($_GET['t'], $email);
+        if($verify == 1) {
+          $data = array(
+            'form' => 'form',
+            'email' => $email,
+            'token' => $_GET['t']
+          );
+          echo Cart66Common::getView('pro/views/unsubscribe.php', $data);
+        }
+        else {
+          if($verify == -1) {
+            $message = __('This email has already been unsubscribed', 'cart66');
+          }
+          if($verify == -2) {
+            $message = __('This email does not exist in our system', 'cart66');
+          }
+          $data = array(
+            'form' => 'error',
+            'message' => $message
+          );
+          echo Cart66Common::getView('pro/views/unsubscribe.php', $data);
+        }
+      }
+    }
+    elseif(isset($_GET['cart66-action']) && $_GET['cart66-action'] == 'opt_out') {
+      Cart66ProCommon::unsubscribeEmailToken($_POST['token'], $_POST['email']);
+      $data = array(
+        'form' => 'opt_out',
+        'email' => $_POST['email']
+      );
+      echo Cart66Common::getView('pro/views/unsubscribe.php', $data);
+    }
+    elseif(isset($_GET['cart66-action']) && $_GET['cart66-action'] == 'cancel_opt_out') {
+      $data = array(
+        'form' => 'cancel'
+      );
+      echo Cart66Common::getView('pro/views/unsubscribe.php', $data);
+    }
+  }
+  
 }

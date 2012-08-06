@@ -50,6 +50,76 @@
     }
     setState(frm,kind);
   }
+  test = '';
+  function updateAjaxTax() {
+    var ajaxurl = $('#confirm-url').val();
+    var state = $('#billing-state').val();
+    var zip = $('#billing-zip').val();
+    var state_text = $('#billing-state_text').val();
+    if(zip == '') {
+      return false;
+    }
+    if(state == 0 && state_text == '') {
+      return false;
+    }
+    $('.ajax-spin').show();
+    if($('.sameAsBilling').length !=0 && !$('.sameAsBilling').attr('checked')) {
+      if($('#shipping-zip').length != 0) {
+        var zip = $('#shipping-zip').val();
+      }
+      if($('#shipping-state_text').length != 0) {
+        var state_text = $('#shipping-state_text').val();
+      }
+      if($('#shipping-state').length != 0) {
+        var state = $('#shipping-state').val();
+      }
+    }
+    else if($('#billing-zip').length == 0) {
+      if($('#shipping-zip').length != 0) {
+        var zip = $('#shipping-zip').val();
+      }
+      if($('#shipping-state_text').length != 0) {
+        var state_text = $('#shipping-state_text').val();
+      }
+      if($('#shipping-state').length != 0) {
+        var state = $('#shipping-state').val();
+      }
+    }
+    var gateway = $('#cart66-gateway-name').val();
+    $.ajax({
+      type: "POST",
+      url: ajaxurl + '=4',
+      data: {
+        state: state,
+        state_text: state_text,
+        zip: zip,
+        gateway: gateway
+      },
+      dataType: 'json',
+      success: function(response) {
+        if(response.tax != '$0.00') {
+          $('.tax-row').removeClass('hide-tax-row').addClass('show-tax-row');
+          $('.tax-block').removeClass('hide-tax-block').addClass('show-tax-block');
+        }
+        $('.tax-amount').html(response.tax);
+        $('.grand-total-amount').html(response.total);
+        $('.tax-rate').html(response.rate);
+        $('.ajax-spin').hide();
+        if(test == '') {
+          test = 'running';
+          $('.tax-update').fadeIn(500).delay(2300).fadeOut(500);
+          $('.tax-update').queue(function () {
+            test = '';
+            $(this).dequeue();
+          });
+        }
+      },
+      error: function(xhr,err){
+        alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+      }
+    });
+    return false;
+  }
   
   $(document).ready(function(){
     // Dynamically configure billing state based on country
@@ -74,11 +144,26 @@
       var frm = $(this).closest('form').attr('id');
       if($('#' + frm + ' input[name="sameAsBilling"]').attr('checked')) {
         $('#' + frm + ' .shippingAddress').css('display', 'none');
+        $('#billing-state_text').addClass('ajax-tax');
+        $('#billing-state').addClass('ajax-tax');
+        $('#billing-zip').addClass('ajax-tax');
+        $('#billing_tax_update').addClass('tax-update');
+        $('#shipping_tax_update').removeClass('tax-update');
       }
       else {
         $('#' + frm + ' .shippingAddress').css('display', 'block');
+        $('#billing-state_text').removeClass('ajax-tax');
+        $('#billing-state').removeClass('ajax-tax');
+        $('#billing-zip').removeClass('ajax-tax');
+        $('#billing_tax_update').removeClass('tax-update');
+        $('#shipping_tax_update').addClass('tax-update');
       }
+      updateAjaxTax();
     });
+    $('#billing-state, #billing-zip, #billing-state_text').listenForChange();
+    $('.ajax-tax').change(function() {
+      updateAjaxTax();
+    })
     
     if(C66.billing_country != '') {      
       $('.billing_countries').each(function(index) {
@@ -101,10 +186,48 @@
       $(".Cart66CompleteOrderButton").attr("disabled", "disabled");
     });
     
-    C66.error_field_names.forEach(function(field) {
-      console.log(field);
+    $(C66.error_field_names).each(function(key, field) {
       $(field).addClass('errorField');
     });
     
   })
+})(jQuery);
+(function($) {
+  $.fn.listenForChange = function(options) {
+    settings = $.extend({
+      interval: 200 // in microseconds
+    }, options);
+    
+    var jquery_object = this;
+    var current_focus = null;
+    
+    jquery_object.focus(function() {
+      current_focus = this;
+    }).blur(function() {
+      current_focus = null;
+    });
+    
+    setInterval(function() {
+      // allow
+      jquery_object.each(function() {
+        // set data cache on element to input value if not yet set
+        if ($(this).data('change_listener') == undefined) {
+          $(this).data('change_listener', $(this).val());
+          return;
+        }
+        // return if the value matches the cache
+        if ($(this).data('change_listener') == $(this).val()) {
+          return;
+        }
+        // ignore if element is in focus (since change event will fire on blur)
+        if (this == current_focus) {
+          return;
+        }
+        // if we make it here, manually fire the change event and set the new value
+        $(this).trigger('change');
+        $(this).data('change_listener', $(this).val());
+      });
+    }, settings.interval);
+    return this;
+  };
 })(jQuery);
