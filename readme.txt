@@ -89,6 +89,46 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.5.0 =
+NEW: Added 164 countries to the countries list
+NEW: Automatic tax calculations on checkout page
+NEW: Ability to show order summary when tax is calculated
+NEW: Redesigned Settings Page
+NEW: Notifications Center
+NEW: Internal order notes
+NEW: View order notes on main orders page
+NEW: Download links included directly in email receipts
+NEW: Exclude products from promotions
+NEW: Maximum order amount for promotions
+NEW: Australian Capital Territory added as Australian State
+NEW: Malaysian states
+NEW: Custom PayPal Standard and PayPal Express buttons via URL
+NEW: Disable billing landing page for PayPal Express
+NEW: Ability to disable IP Validation for database sessions
+NEW: Set database session length in minutes
+NEW: Ajax Add to Cart queue to prevent skipping items being added simultaneously
+NEW: Added page checker to ensure cart66 required pages are in place
+NEW: Added cart66_add_popup_screens filter to allow the Cart66 Dialog box to show up on custom post types and other screens as needed by plugin and theme developers.
+NEW: Storing gateway transaction number in Cart66 when using Mijireh Checkout
+UPDATED: PayPal Standard button to prevent intermittent parsing problems
+UPDATED: Advanced sidebar widget to include shipping amount
+UPDATED: Mijireh error message when using incorrect access key
+UPDATED: Calculate shipping button to work with button overrides
+UPDATED: Product links to hide in “read” mode
+UPDATED: Default error messages
+UPDATED: PayPal Standard to use UTF-8 character set
+UPDATED: Added translations for previously overlooked text
+FIXED: IPN Page undefined index
+FIXED: Cart66 resources to use correct HTTP/HTTPS method
+FIXED: Undefined error when saving tax rate with one zip code
+FIXED: Apostrophe’s not working in product names
+FIXED: Error field highlighting for IE9
+FIXED: Statistics widget not working for some databases
+FIXED: An issue with user defined pricing
+FIXED: Several checkout form bugs
+FIXED: PHP 5.4 compatibility fixes
+FIXED: Using widgetContent for ajax add to cart instead of content to fix ie7/ie8 conflict
+
 = 1.4.8 =
 UPDATED: Improved error messages for payment gateways
 UPDATED: Improved responsiveness of page slurp panel when using Mijireh Checkout
