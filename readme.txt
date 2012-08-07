@@ -1,12 +1,14 @@
 === Cart66 Lite :: WordPress Ecommerce ===
-Contributors: reality66
-Donate link: http://cart66.com
+Contributors: reality66,
+Donate link: http://cart66.com/
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales, shopping cart
-Requires at least: 2.8
+Requires at least: 2.8.2
 Tested up to: 3.4.1
 Stable tag: 1.5.0
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Sell digital products and/or physical products with the Cart66 WordPress ecommerce shopping cart plugin.
+Sell digital products and/or physical products with Cart66. The easiest to use WordPress ecommerce shopping cart plugin.
 
 == Description ==
 
