@@ -3,7 +3,7 @@
 Plugin Name: Cart66 Lite
 Plugin URI: http://www.cart66.com
 Description: Wordpress Shopping Cart
-Version: 1.5.0
+Version: 1.5.0.1
 Author: Reality 66
 Author URI: http://www.Reality66.com
 Text Domain: cart66
@@ -51,7 +51,7 @@ if(!class_exists('Cart66')) {
   
   define("CART66_ORDER_NUMBER", false);
   define("CART66_PRO", false);
-  define('CART66_VERSION_NUMBER', '1.5.0');
+  define('CART66_VERSION_NUMBER', '1.5.0.1');
   define("WPCURL", Cart66Common::getWpContentUrl());
   define("WPURL", Cart66Common::getWpUrl());
   define("MIJIREH_CHECKOUT", 'https://secure.mijireh.com');
@@ -79,7 +79,10 @@ if(!class_exists('Cart66')) {
   
   // Register activation hook to install Cart66 database tables and system code
   register_activation_hook(CART66_PATH . '/cart66.php', array($cart66, 'install'));
-  register_activation_hook(CART66_PATH . '/cart66.php', array($cart66, 'scheduledEvents'));
+  
+  if(CART66_PRO) {
+    register_activation_hook(CART66_PATH . '/cart66.php', array($cart66, 'scheduledEvents'));
+  }
   
   // Check for WordPress 3.1 auto-upgrades
   if(function_exists('register_update_hook')) {
@@ -107,7 +110,9 @@ function cart66SettingsLink($links, $file) {
  */
 remove_action('wp_head', 'adjacent_posts_rel_link_wp_head');
 
-register_deactivation_hook(CART66_PATH . '/cart66.php', 'deactivation');
+if(CART66_PRO) {
+  register_deactivation_hook(CART66_PATH . '/cart66.php', 'deactivation');
+}
 function deactivation() {
   require_once(CART66_PATH. "/pro/models/Cart66MembershipReminders.php");
   wp_clear_scheduled_hook('daily_subscription_reminder_emails');
