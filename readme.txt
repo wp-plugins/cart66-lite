@@ -93,7 +93,7 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
-= 1.5.1 =
+= 1.5.0.1 =
 * FIXED: Fatal error on plugin deactivation
 
 = 1.5.0 =
