@@ -115,7 +115,7 @@
         }
       },
       error: function(xhr,err){
-        alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+        //alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
       }
     });
     return false;

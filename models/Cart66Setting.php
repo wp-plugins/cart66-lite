@@ -58,43 +58,53 @@ class Cart66Setting {
   public function section_tax_settings() {
     $rate = new Cart66TaxRate();
     $successMessage = '';
+    $errorMessage = '';
     if($_SERVER['REQUEST_METHOD'] == "POST") {
       if($_POST['cart66-action'] == 'save rate') {
         $data = $_POST['tax'];
-        if(isset($data['zip']) && !empty($data['zip'])) {
-          $zipCodes = explode('-', $data['zip']);
-          if(count($zipCodes) > 1) {
-            list($low, $high) = $zipCodes;
-          }
-          if(isset($low)) {
-            $low = trim($low);
-          }
-          else {
-            $low = $data['zip'];
-          }
-
-          if(isset($high)) {
-            $high = trim($high);
-          }
-          else {
-            $high = $low; 
-          }
-
-          if(is_numeric($low) && is_numeric($high)) {
-            if($low > $high) {
-              $x = $high;
-              $high = $low;
-              $low = $x;
-            }
-            $data['zip_low'] = $low;
-            $data['zip_high'] = $high;
-          }
-
+        if((isset($data['state']) && empty($data['state'])) && (isset($data['zip']) && empty($data['zip']))) {
+          $errorMessage = __('You must choose a state or enter a Zipcode', 'cart66');
         }
-        $rate->setData($data);
-        $rate->save();
-        $rate->clear();
-        $successMessage = __("Tax rate saved","cart66");
+        elseif(isset($data['rate']) && empty($data['rate'])) {
+          $errorMessage = __('Please provide a tax rate', 'cart66');
+        }
+        else {
+          if(isset($data['zip']) && !empty($data['zip'])) {
+            $zipCodes = explode('-', $data['zip']);
+            if(count($zipCodes) > 1) {
+              list($low, $high) = $zipCodes;
+            }
+            if(isset($low)) {
+              $low = trim($low);
+            }
+            else {
+              $low = $data['zip'];
+            }
+
+            if(isset($high)) {
+              $high = trim($high);
+            }
+            else {
+              $high = $low; 
+            }
+
+            if(is_numeric($low) && is_numeric($high)) {
+              if($low > $high) {
+                $x = $high;
+                $high = $low;
+                $low = $x;
+              }
+              $data['zip_low'] = $low;
+              $data['zip_high'] = $high;
+            }
+
+          }
+          $rate->setData($data);
+          $rate->save();
+          $rate->clear();
+          $successMessage = __("Tax rate saved","cart66");
+        }
+        
       }
     }
     elseif(isset($_GET['task']) && $_GET['task'] == 'deleteTax' && isset($_GET['id']) && $_GET['id'] > 0) {
@@ -105,7 +115,8 @@ class Cart66Setting {
     }
     $data = array(
       'rate' => $rate,
-      'success_message' => $successMessage
+      'success_message' => $successMessage,
+      'error_message' => $errorMessage
     );
     echo Cart66Common::getView('admin/settings/tax.php', $data, false);
   }

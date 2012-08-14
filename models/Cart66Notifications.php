@@ -61,7 +61,111 @@ class Cart66Notifications {
   }
   
   public function getEmailReceiptMessage($order, $html=null, $test=null) {
-    $msg = Cart66Common::getView('pro/views/emails/default-email-receipt.php', array($order, $html, $test));
+    $msg = $this->defaultPlainEmailMessage($order);
+    if(CART66_PRO) {
+      $msg = Cart66Common::getView('pro/views/emails/default-email-receipt.php', array($order, $html, $test));
+    }
+    return $msg;
+  }
+  
+  public function defaultPlainEmailMessage($order) {
+    $msg = __("ORDER NUMBER","cart66") . ": " . $order->trans_id . "\n\n";
+
+    $hasDigital = false;
+    $product = new Cart66Product();
+    foreach($order->getItems() as $item) {
+      $product->load($item->product_id);
+      if($hasDigital == false) {
+        $hasDigital = $product->isDigital();
+      }
+      $price = $item->product_price * $item->quantity;
+      // $msg .= "Item: " . $item->item_number . ' ' . $item->description . "\n";
+      $msg .= __("Item","cart66") . ": " . $item->description . "\n";
+      if($hasDigital) {
+        $receiptPage = get_page_by_path('store/receipt');
+        $receiptPageLink = get_permalink($receiptPage);
+        $receiptPageLink .= (strstr($receiptPageLink, '?')) ? '&duid=' . $item->duid : '?duid=' . $item->duid;
+        $msg .= "\n" . $receiptPageLink . "\n";
+      }
+      if($item->quantity > 1) {
+        $msg .= __("Quantity","cart66") . ": " . $item->quantity . "\n";
+      }
+      $msg .= __("Item Price","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price, 2) . "\n";
+      $msg .= __("Item Total","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price * $item->quantity, 2) . "\n\n";
+
+      if($product->isGravityProduct()) {
+        $msg .= Cart66GravityReader::displayGravityForm($item->form_entry_ids, true);
+      }
+    }
+
+    if($order->shipping_method != 'None' && $order->shipping_method != 'Download') {
+      $msg .= __("Shipping","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . $order->shipping . "\n";
+    }
+
+    if(!empty($order->coupon) && $order->coupon != 'none') {
+      $msg .= __("Coupon","cart66") . ": " . $order->coupon . "\n";
+    }
+
+    if($order->tax > 0) {
+      $msg .= __("Tax","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->tax, 2) . "\n";
+    }
+
+    $msg .= "\n" . __("TOTAL","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->total, 2) . "\n";
+
+    if($order->shipping_method != 'None' && $order->shipping_method != 'Download') {
+      $msg .= "\n\n" . __("SHIPPING INFORMATION","cart66") . "\n\n";
+
+      $msg .= $order->ship_first_name . ' ' . $order->ship_last_name . "\n";
+      $msg .= $order->ship_address . "\n";
+      if(!empty($order->ship_address2)) {
+        $msg .= $order->ship_address2 . "\n";
+      }
+      $msg .= $order->ship_city . ' ' . $order->ship_state . ' ' . $order->ship_zip . "\n" . $order->ship_country . "\n";
+
+      $msg .= "\n" . __("Delivery via","cart66") . ": " . $order->shipping_method . "\n";
+    }
+
+
+    $msg .= "\n\n" . __("BILLING INFORMATION","cart66") . "\n\n";
+
+    $msg .= $order->bill_first_name . ' ' . $order->bill_last_name . "\n";
+    $msg .= $order->bill_address . "\n";
+    if(!empty($order->bill_address2)) {
+      $msg .= $order->bill_address2 . "\n";
+    }
+    $msg .= $order->bill_city . ' ' . $order->bill_state;
+    $msg .= $order->bill_zip != null ? ', ' : ' ';
+    $msg .= $order->bill_zip . "\n" . $order->bill_country . "\n";
+
+    if(!empty($order->phone)) {
+      $phone = Cart66Common::formatPhone($order->phone);
+      $msg .= "\n" . __("Phone","cart66") . ": $phone\n";
+    }
+
+    if(!empty($order->email)) {
+      $msg .= __("Email","cart66") . ': ' . $order->email . "\n";
+    }
+
+    $receiptPage = get_page_by_path('store/receipt');
+    $link = get_permalink($receiptPage->ID);
+    if(strstr($link,"?")){
+      $link .= '&ouid=' . $order->ouid;
+    }
+    else{
+      $link .= '?ouid=' . $order->ouid;
+    }
+
+    if($hasDigital) {
+      $msg .= "\n" . __('DOWNLOAD LINK','cart66') . "\n" . __('Click the link below to download your order.','cart66') . "\n$link";
+    }
+    else {
+      $msg .= "\n" . __('VIEW RECEIPT ONLINE','cart66') . "\n" . __('Click the link below to view your receipt online.','cart66') . "\n$link";
+    }
+
+    $msgIntro = Cart66Setting::getValue('receipt_intro') && !Cart66Setting::getValue('enable_advanced_notifications') ? Cart66Setting::getValue('receipt_intro') : '';
+    $msgIntro .= Cart66Setting::getValue('receipt_message_intro') && Cart66Setting::getValue('enable_advanced_notifications') ? Cart66Setting::getValue('receipt_plain_email') : '';
+
+    $msg = $msgIntro . " \n----------------------------------\n\n" . $msg;
     return $msg;
   }
   

@@ -255,7 +255,8 @@ if(count($errors)) {
 
         </div><!-- #paymentInfo -->
       </div><!-- #ccInfo -->
-         <?php if($lists = Cart66Setting::getValue('constantcontact_list_ids') && Cart66Setting::getValue('constantcontact_username')): ?>
+         <?php if(Cart66Setting::getValue('constantcontact_list_ids') && Cart66Setting::getValue('constantcontact_username')): ?>
+           <?php $lists = Cart66Setting::getValue('constantcontact_list_ids'); ?>
            <ul id="constantContact">
             <li>
               <?php
@@ -274,7 +275,8 @@ if(count($errors)) {
             </li>
           <?php endif; ?>
           
-          <?php if($lists = Cart66Setting::getValue('mailchimp_list_ids') && Cart66Setting::getValue('mailchimp_apikey')): ?>
+          <?php if(Cart66Setting::getValue('mailchimp_list_ids') && Cart66Setting::getValue('mailchimp_apikey')): ?>
+            <?php $lists = Cart66Setting::getValue('mailchimp_list_ids'); ?>
             <ul id="mailChimp">
             <li>
               <?php

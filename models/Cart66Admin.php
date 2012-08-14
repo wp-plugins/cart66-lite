@@ -108,7 +108,7 @@ class Cart66Admin {
           $notify->sendStatusUpdateEmail($status);
         }
       }
-      else {
+      elseif(CART66_PRO) {
         Cart66AdvancedNotifications::addTrackingNumbers($order);
       }
       $view = Cart66Common::getView('admin/orders.php');

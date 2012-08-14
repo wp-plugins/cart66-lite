@@ -136,6 +136,10 @@ class Cart66Ajax {
         Cart66Session::set('Cart66Tax', $tax);
         Cart66Session::set('Cart66TaxRate', round($rate, 2));
       }
+      if(Cart66Session::get('Cart66Cart')->getTax('All Sales')) {
+        $rate = $gateway->getTaxRate();
+        Cart66Session::set('Cart66TaxRate', round($rate, 2));
+      }
     }
     $result = array(
       'id' => $id,

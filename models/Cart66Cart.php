@@ -381,6 +381,9 @@ class Cart66Cart {
     $isTaxed = $taxRate->loadByZip($zip);
     if($isTaxed == false) {
       $isTaxed = $taxRate->loadByState($state);
+      if($state = 'All Sales') {
+        Cart66Session::set('Cart66TaxRate', round($taxRate->rate, 2));
+      }
     }
     
     if($isTaxed) {

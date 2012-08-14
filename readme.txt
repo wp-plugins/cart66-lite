@@ -93,6 +93,12 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.5.0.2 =
+* FIXED: Tax rates not displaying correctly for "all sales"
+* FIXED: Tax settings to not allow saving of empty tax rates
+* FIXED: Issue with updating order statuses
+* FIXED: PHP errors in email receipts
+
 = 1.5.0.1 =
 * FIXED: Fatal error on plugin deactivation
 

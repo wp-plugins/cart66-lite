@@ -14,6 +14,22 @@
 </div>
 
 <?php endif; ?>
+<?php if(!empty($data['error_message'])): ?>
+
+<script type="text/javascript">
+  (function($){
+    $(document).ready(function(){
+      $("#Cart66ErrorBox").fadeIn(1500).delay(4000).fadeOut(1500);
+    })
+  })(jQuery);
+</script> 
+  
+<div class="Cart66Modal alert-message alert-danger" id="Cart66ErrorBox" style="">
+  <p><strong><?php _e( 'Error' , 'cart66' ); ?></strong><br/>
+  <?php echo $data['error_message'] ?></p>
+</div>
+
+<?php endif; ?>
 <form id="taxRatesForm" action="" method="post">
   <input type="hidden" name="cart66-action" value="save rate" />
   <h3><?php _e('Tax Rates', 'cart66'); ?></h3>

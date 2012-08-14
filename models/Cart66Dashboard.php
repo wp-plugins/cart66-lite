@@ -23,7 +23,7 @@ class Cart66Dashboard {
       if(version_compare($currentVersion, $newVersion['version'], '<') && version_compare($newVersion['version'], $dismissVersion, '>')){
         if(current_user_can('update_plugins')) {
           $plugins = get_plugin_updates();
-          if(isset($plugins[basename(CART66_PATH) . 'cart66.php'])) {
+          if(isset($plugins[basename(CART66_PATH) . '/cart66.php'])) {
             add_action('admin_footer', array('Cart66Dashboard', 'cart66_upgrade_message_jquery'));
             add_action('admin_notices', array('Cart66Dashboard', 'cart66_upgrade_message'));
           }
