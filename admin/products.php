@@ -149,7 +149,7 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
               
               <li class="native_price" <?php if($product->gravity_form_pricing == 1) echo 'style="display:none;"'; ?>>
                 <label class="long" for="product-price" id="price_label"><?php _e( 'Price' , 'cart66' ); ?>:</label>
-                <?php echo CART66_CURRENCY_SYMBOL ?><input type='text' style="width: 75px;" id="product-price" name='product[price]' value='<?php echo $product->price ?>'>
+                <?php echo Cart66Common::currencySymbol('before'); ?> <input type='text' style="width: 75px;" id="product-price" name='product[price]' value='<?php echo $product->id > 0 ? Cart66Common::currency($product->price, true, false, false) : ''; ?>'> <?php echo Cart66Common::currencySymbol('after'); ?>
                 <span class="label_desc" id="price-description"></span>
               </li>
               <li class="native_price" <?php if($product->gravity_form_pricing == 1) echo 'style="display:none;"'; ?>>
@@ -167,9 +167,9 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
               
               <li class="userPriceSettings" style="<?php echo ($product->is_user_price == 1)? 'display:block;' : 'display:none;' ?>">
                 <label class="long" for="product-min_price"><?php _e( 'Min price' , 'cart66' ); ?>:</label>
-                <?php echo CART66_CURRENCY_SYMBOL ?><input type="text" style="width: 75px;" id="product-min_price" name='product[min_price]' value='<?php echo $product->minPrice ?>' />
+                <?php echo Cart66Common::currencySymbol('before'); ?> <input type="text" style="width: 75px;" id="product-min_price" name='product[min_price]' value='<?php echo $product->id > 0 ? Cart66Common::currency($product->minPrice, true, false, false) : ''; ?>' /> <?php echo Cart66Common::currencySymbol('after'); ?>
                 <label class="short" for="product-max_price"><?php _e( 'Max price' , 'cart66' ); ?>:</label>
-                <?php echo CART66_CURRENCY_SYMBOL ?><input type="text" style="width: 75px;" id="product-max_price" name='product[max_price]' value='<?php echo $product->maxPrice ?>' />
+                <?php echo Cart66Common::currencySymbol('before'); ?> <input type="text" style="width: 75px;" id="product-max_price" name='product[max_price]' value='<?php echo $product->id > 0 ? Cart66Common::currency($product->maxPrice, true, false, false) : ''; ?>' /> <?php echo Cart66Common::currencySymbol('after'); ?>
                 <span class="label_desc" id="is_user_price_description"><?php _e( 'Set to $0.00 for no limit ' , 'cart66' ); ?></span>
               </li>
               
@@ -376,6 +376,9 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
                   <option value="single" <?php echo ($product->custom == 'single')? 'selected' : '' ?>><?php _e( 'Single line text field' , 'cart66' ); ?></option>
                   <option value="multi" <?php echo ($product->custom == 'multi')? 'selected' : '' ?>><?php _e( 'Multi line text field' , 'cart66' ); ?></option>
                 </select>
+                <input type="hidden" name="product[custom_required]" value="" />
+                <input type="checkbox" name="product[custom_required]" value="1" id="product-custom_required" <?php echo $product->custom_required == 1 ? ' checked="checked"' : ''; ?>>
+                <label for="product-custom_required"><?php _e('Required', 'cart66'); ?></label>
                 <p class="label_desc"><?php _e( 'Include a free form text area so your buyer can provide custom information such as a name to engrave on the product.' , 'cart66' ); ?></p>
               </li>
               <li>

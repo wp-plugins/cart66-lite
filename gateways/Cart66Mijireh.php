@@ -186,6 +186,17 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
         if(isset($cloud_order['meta_data']['gforms_' . $item['sku']])){
           $data['form_entry_ids'] = $cloud_order['meta_data']['gforms_' . $item['sku']];
         }
+        $fIds = explode(',', $data['form_entry_ids']);
+        if(is_array($fIds) && count($fIds)) {
+          foreach($fIds as $entryId) {
+            if(class_exists('RGFormsModel')) {
+              if($lead = RGFormsModel::get_lead($entryId)) {
+                $lead['status'] = 'active';
+                RGFormsModel::update_lead($lead);
+              }
+            }
+          }
+        }
         
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Trying to save this order item:" . print_r($data, true));
         $wpdb->insert($order_items_table, $data);
@@ -214,11 +225,16 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
         }
         
       }
-
+      
+      //update the number of redemptions for the promotion code.
+      if(Cart66Session::get('Cart66Promotion')) {
+        Cart66Session::get('Cart66Promotion')->updateRedemptions();
+      }
+      
       // Send email receipts
       if(CART66_PRO && Cart66Setting::getValue('enable_advanced_notifications') == 1) {
         $notify = new Cart66AdvancedNotifications($order_id);
-        $notify->sendAdvancedEmailReceipts(false);
+        $notify->sendAdvancedEmailReceipts();
       }
       else {
         $notify = new Cart66Notifications($order_id);

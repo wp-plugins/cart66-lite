@@ -90,18 +90,99 @@ class Cart66Product extends Cart66ModelAbstract {
     Cart66Common::log("Decrementing Inventory: line " . __LINE__);
     // Build varation ikey string component
     if(!empty($variation)) {
-      $variation = self::scrubVaritationsForIkey($variation);
+      $variation = self::scrubVaritationsForIkey(str_replace(', ', '~', $variation));
     }
     
     $p = new Cart66Product($id);
-    $ikey = $p->getInventoryKey($variation);
+    $is_gravity_form = false;
+    $valid_options = array();
+    if($p->isGravityProduct()) {
+      $valid_options = Cart66GravityReader::getFormValuesArray($p->gravity_form_id);
+      $is_gravity_form = true;
+    }
+    else {
+      if(strlen($p->options_1) > 1) {
+        $valid_options[] = explode(',', str_replace(' ', '', $p->options_1));
+      }
+      if(strlen($p->options_2) > 1) {
+        $valid_options[] = explode(',', str_replace(' ', '', $p->options_2));
+      }
+    }
+    $newVariation = '';
+    $options = explode(',', $variation);
+    foreach($options as $option) {
+      if($p->validate_option($valid_options, $option, $is_gravity_form)) {
+        $newVariation .= $option;
+      }
+    }
+    $ikey = $p->getInventoryKey($newVariation);
     $count = $p->getInventoryCount($ikey);
     $newCount = $count - $qty;
     if($newCount < 0) {
       $newCount = 0;
     }
-    
     $p->setInventoryLevel($ikey, $newCount);
+  }
+  
+  public static function increaseInventory($id, $variation='', $qty=1) {
+    Cart66Common::log("Increasing Inventory: line " . __LINE__);
+    // Build varation ikey string component
+    if(!empty($variation)) {
+      $variation = self::scrubVaritationsForIkey(str_replace(', ', '~', $variation));
+    }
+    
+    $p = new Cart66Product($id);
+    $is_gravity_form = false;
+    $valid_options = array();
+    if($p->isGravityProduct()) {
+      $valid_options = Cart66GravityReader::getFormValuesArray($p->gravity_form_id);
+      $is_gravity_form = true;
+    }
+    else {
+      if(strlen($p->options_1) > 1) {
+        $valid_options[] = explode(',', str_replace(' ', '', $p->options_1));
+      }
+      if(strlen($p->options_2) > 1) {
+        $valid_options[] = explode(',', str_replace(' ', '', $p->options_2));
+      }
+    }
+    $newVariation = '';
+    $options = explode(',', $variation);
+    foreach($options as $option) {
+      if($p->validate_option($valid_options, $option, $is_gravity_form)) {
+        $newVariation .= $option;
+      }
+    }
+    $ikey = $p->getInventoryKey($newVariation);
+    $count = $p->getInventoryCount($ikey);
+    $newCount = $count + $qty;
+    $p->setInventoryLevel($ikey, $newCount);
+  }
+  
+  protected function validate_option(&$valid_options, $choice, $is_gravity_form=false) {
+    $found = false;
+    
+    foreach($valid_options as $key => $option_group) {
+      foreach($option_group as $option) {
+        $choice = preg_replace('[\W]', '', $choice);
+        $option = preg_replace('[\W]', '', self::scrubVaritationsForIkey($option));
+        
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Validating option :: $choice == $option");
+        if($choice == $option) {
+          $found = true;
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Removing option group: $key");
+
+          // Gravity forms have checkbox options which allow multiple options from the same group
+          if(!$is_gravity_form) {
+            unset($valid_options[$key]);
+          }
+          
+          return $found;
+        }
+      }
+    }
+    
+    return $found;
   }
   
   public static function scrubVaritationsForIkey($variation='') {
@@ -153,7 +234,7 @@ class Cart66Product extends Cart66ModelAbstract {
   public function getOptionNames($optNumber=1) {
     $names = array();
     $optionName = "options_$optNumber";
-    $opts = split(',', $this->$optionName);
+    $opts = explode(',', $this->$optionName);
     foreach($opts as $opt) {
       $name = $opt;
       if(strpos($opt, '$')) {
@@ -307,7 +388,7 @@ class Cart66Product extends Cart66ModelAbstract {
       }
     }
     else {
-      $ikeyList[$p->name] = $p->getInventoryKey();
+      $ikeyList[$this->name] = $this->getInventoryKey();
     }
     
     return $ikeyList;
@@ -370,7 +451,7 @@ class Cart66Product extends Cart66ModelAbstract {
     $optionName = "options_$optNumber";
     if(strlen($this->$optionName) > 1) {
       $select = "\n<select name=\"options_$optNumber\" id=\"options_$optNumber\" class=\"cart66Options options_$optNumber\">";
-      $opts = split(',', $this->$optionName);
+      $opts = explode(',', $this->$optionName);
       foreach($opts as $opt) {
         $opt = str_replace('+$', '+ $', $opt);
         $opt = trim($opt);
@@ -626,7 +707,8 @@ class Cart66Product extends Cart66ModelAbstract {
         oi.product_id = %s and
         oi.order_id = o.id and
         o.ordered_on >= '$start' and 
-        o.ordered_on < '$end'
+        o.ordered_on < '$end' and
+        o.status != 'checkout_pending'
       ";
     $query = $this->_db->prepare($sql, $this->id);
     $num = $this->_db->get_var($query);
@@ -642,7 +724,8 @@ class Cart66Product extends Cart66ModelAbstract {
         $orderItems as oi 
       where
         oi.product_id = %s and
-        oi.order_id = o.id
+        oi.order_id = o.id and
+        o.status != 'checkout_pending'
       ";
     $query = $this->_db->prepare($sql, $this->id);
     $num = $this->_db->get_var($query);
@@ -658,7 +741,8 @@ class Cart66Product extends Cart66ModelAbstract {
         $orderItems as oi 
       where
         oi.product_id = %s and
-        oi.order_id = o.id
+        oi.order_id = o.id and
+        o.status != 'checkout_pending'
       ";
     $query = $this->_db->prepare($sql, $this->id);
     $num = $this->_db->get_var($query);
@@ -679,7 +763,8 @@ class Cart66Product extends Cart66ModelAbstract {
         oi.product_id = %s and
         oi.order_id = o.id and
         o.ordered_on >= '$start' and 
-        o.ordered_on < '$end'
+        o.ordered_on < '$end' and
+        o.status != 'checkout_pending'
       ";
        
     $query = $this->_db->prepare($sql, $this->id);
@@ -852,11 +937,16 @@ class Cart66Product extends Cart66ModelAbstract {
         $price = $this->price + $priceDifference;
         $priceDescription = "";
         if($price > 0) {
-          $priceDescription = CART66_CURRENCY_SYMBOL . number_format($price, 2);
+          $priceDescription = Cart66Common::currency($price);
         }
 
         if($this->hasFreeTrial()) {
-          $priceDescription = "Free Trial";
+          if(empty($this->priceDescription)){
+            $priceDescription = "Free Trial";
+          }
+          else{
+          	$priceDescription = $this->priceDescription;	
+          }
         }
         else {
           if($price > 0) { $priceDescription .= ' (one time) +<br/> '; }
@@ -886,7 +976,7 @@ class Cart66Product extends Cart66ModelAbstract {
           $priceDescription = $this->priceDescription;
         }
         else {
-          $priceDescription = CART66_CURRENCY_SYMBOL . number_format($this->price + $priceDifference, 2);
+          $priceDescription = Cart66Common::currency($this->price + $priceDifference);
         }
       }
     }
@@ -923,7 +1013,7 @@ class Cart66Product extends Cart66ModelAbstract {
             $data = new stdClass();
             $data->description = $invoice->invoiceData->{'line-items'}->{'line-item'}[1]->description;
             $data->amount = $this->_creditAmount;
-            $data->money = CART66_CURRENCY_SYMBOL . number_format($this->_creditAmount, 2);
+            $data->money = Cart66Common::currency($this->_creditAmount);
             
             if($data->amount > 0) {
               $proRateAmount = $data->amount;
@@ -982,7 +1072,7 @@ class Cart66Product extends Cart66ModelAbstract {
   
   public static function loadProductsOutsideOfClass($select='*', $where='id > 0', $orderBy='name') {
     $tableName = Cart66Common::getTableName('products');
-  	$sql = "SELECT $select
+    $sql = "SELECT $select
       from 
         $tableName 
       where
@@ -991,8 +1081,7 @@ class Cart66Product extends Cart66ModelAbstract {
         $orderBy
     ";
     global $wpdb;
-    $query = $wpdb->prepare($sql);
-    $products = $wpdb->get_results($query);
+    $products = $wpdb->get_results($sql);
     return $products;
   }
   

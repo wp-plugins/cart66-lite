@@ -144,7 +144,7 @@ a .Cart66Price {display:inline;}
 .Cart66UserQuantity {
   display:inline-block;
 }
-.Cart66PriceBlock {
+.Cart66PriceBlock, .Cart66PriceDescription {
   display:block;
 }
 .Cart66CustomFieldDesc {
@@ -274,6 +274,11 @@ a .Cart66Price {display:inline;}
   border-radius: 5px;
   cursor: pointer;
   background-color: #445e67;
+  background-image: -webkit-linear-gradient(#445e67, #2d434b);
+  background-image: -moz-linear-gradient(#445e67, #2d434b);
+  background-image: -o-linear-gradient(#445e67, #2d434b);
+  background-image: -ms-linear-gradient(#445e67, #2d434b);
+  background-image: linear-gradient(#445e67, #2d434b);
   color: #fff;
 }
 .ajaxPurAddToCart {
@@ -397,7 +402,7 @@ a.Cart66ButtonSecondary {
   width: 75px;
 }
 
-.phorm2 .Cart66ErrorField {
+.phorm2 .Cart66ErrorField, input.Cart66ErrorField {
   background-color: #FEE;
   border: 1px solid #F75;
   padding: 3px;
@@ -607,7 +612,7 @@ span.subscriptionOrMembership {
   padding:.3em;
 }
 
-  .alert-message.alert-danger, .alert-message.alert-danger:hover, .alert-message.alert-error, .alert-message.alert-error:hover, .alert-message.success, .alert-message.success:hover, .alert-message.info, .alert-message.info:hover {
+  .alert-message.alert-danger, .alert-message.alert-danger:hover, .alert-message.alert-error, .alert-message.alert-error:hover, .alert-message.success, .alert-message.success:hover, .alert-message.info, .alert-message.info:hover, .alert-message .header {
     color: white;
   }
   .alert-message .close {
@@ -635,6 +640,7 @@ span.subscriptionOrMembership {
   }
 
   .alert-message.alert-danger, .alert-message.alert-error {
+    background-color: #c43c35;
     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ee5f5b), color-stop(100%, #c43c35));
     background-image: -webkit-linear-gradient(#ee5f5b, #c43c35);
     background-image: -moz-linear-gradient(#ee5f5b, #c43c35);
@@ -711,7 +717,7 @@ span.subscriptionOrMembership {
     font-weight: bold;
     color: #404040;
   }
-  .alert-message.alert-danger p a, .alert-message.alert-error p a, .alert-message.success p a, .alert-message.info p a, .alert-message.info h1 a, .alert-message.info h2 a {
+  .alert-message.alert-danger p a, .alert-message.alert-error p a, .alert-message.success p a, .alert-message.info p a, .alert-message.info h1 a, .alert-message.info h2 a, .alert-message h1, .alert-message h2, .alert-message h3, .alert-message .header {
     color: white;
   }
   .alert-message h5 {
@@ -796,4 +802,11 @@ span.subscriptionOrMembership {
   }
   .tax-update-message {
     display:inline-block;
+  }
+  textarea#checkout-custom-field-multi {
+    width:100%;
+    height:100px;
+  }
+  input#checkout-custom-field-single {
+    width:250px;
   }

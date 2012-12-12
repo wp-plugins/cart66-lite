@@ -31,7 +31,22 @@ if(count($errors)) {
 ?>
 
 <form action="" method='post' id="<?php echo $gatewayName ?>_form" class="phorm2<?php if(Cart66Session::get('Cart66Cart')->requireShipping() && $gatewayName != 'Cart66ManualGateway'): echo ' shipping'; endif; ?><?php if($lists = Cart66Setting::getValue('constantcontact_list_ids') && Cart66Setting::getValue('constantcontact_username')): echo ' constantcontact'; endif; ?><?php if($lists = Cart66Setting::getValue('mailchimp_list_ids') && Cart66Setting::getValue('mailchimp_apikey')): echo ' mailchimp'; endif; ?><?php if(Cart66Session::get('Cart66Cart')->hasSubscriptionProducts() || Cart66Session::get('Cart66Cart')->hasMembershipProducts()): echo ' subscription'; endif; ?>">
+  <input type="hidden" class="ajax-tax-cart" name="ajax-tax-cart" value="<?php echo Cart66Session::get('Cart66Cart')->hasTaxableProducts() ? 'true' : 'false'; ?>" />
   <input type="hidden" name="cart66-gateway-name" value="<?php echo $gatewayName ?>" id="cart66-gateway-name" />
+  <?php if(CART66_PRO && Cart66Setting::getValue('checkout_custom_field_display') && Cart66Setting::getValue('checkout_custom_field_display') != 'disabled'): ?>
+    <div class="checkout-custom-field">
+      <?php if(Cart66Setting::getValue('checkout_custom_field_label')): ?>
+        <p><?php echo Cart66Setting::getValue('checkout_custom_field_label'); ?></p>
+      <?php else: ?>
+        <p><?php _e('Enter any special instructions you have for this order:', 'cart66'); ?></p>
+      <?php endif; ?>
+      <?php if(Cart66Setting::getValue('checkout_custom_field') == 'multi' || !Cart66Setting::getValue('checkout_custom_field')): ?>
+        <textarea id="checkout-custom-field-multi" name="payment[custom-field]"><?php Cart66Common::showValue($p['custom-field']); ?></textarea>
+      <?php elseif(Cart66Setting::getValue('checkout_custom_field') == 'single'): ?>
+        <input type="text" id="checkout-custom-field-single" name="payment[custom-field]" value="<?php Cart66Common::showValue($p['custom-field']); ?>" />
+      <?php endif; ?>
+    </div>
+  <?php endif; ?>
 <div id="ccInfo">
   <div id="billingInfo">
         <ul id="billingAddress" class="shortLabels" >
@@ -83,7 +98,7 @@ if(count($errors)) {
           <li id="billing_tax_update" class="tax-block <?php echo Cart66Session::get('Cart66Tax') > 0 ? 'show-tax-block' : 'hide-tax-block'; ?>">
             <span class="tax-update">
               <label class="short">&nbsp;</label>
-              <p class="summary-message cart66-align-center tax-update-message"><span class="tax-rate"><?php echo Cart66Session::get('Cart66TaxRate'); ?>%</span> <?php _e('tax', 'cart66'); ?>,  <span class="tax-amount"><?php echo CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Tax'), 2); ?></span></p>
+              <p class="summary-message cart66-align-center tax-update-message"><span class="tax-rate"><?php echo Cart66Session::get('Cart66TaxRate'); ?></span> <?php _e('tax', 'cart66'); ?>,  <span class="tax-amount"><?php echo Cart66Common::currency(Cart66Session::get('Cart66Tax')); ?></span></p>
             </span>
           </li>
           <li>
@@ -98,6 +113,9 @@ if(count($errors)) {
                 <option value="<?php echo $code ?>" <?php if($code == $billingCountryCode) { echo 'selected="selected"'; } ?>><?php echo $name ?></option>
               <?php endforeach; ?>
             </select>
+            <?php if(Cart66Session::get('Cart66ShippingCountryCode') && Cart66Setting::getValue('international_sales')): ?>
+              <p class="limited-countries-label-billing summary-message cart66-align-center"><?php _e('Available countries may be limited based on your selected shipping method', 'cart66'); ?></p>
+            <?php endif; ?>
           </li>
         </ul>
 	</div><!-- #billingInfo -->
@@ -157,7 +175,7 @@ if(count($errors)) {
           <li id="shipping_tax_update" class="tax-block <?php echo Cart66Session::get('Cart66Tax') > 0 ? 'show-tax-block' : 'hide-tax-block'; ?>">
             <span class="tax-update">
               <label class="short">&nbsp;</label>
-              <p class="alert-message cart66-align-center tax-update-message"><span class="tax-rate"><?php echo Cart66Session::get('Cart66TaxRate'); ?>%</span> <?php _e('tax', 'cart66'); ?>,  <span class="tax-amount"><?php echo CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Tax'), 2); ?></span></p>
+              <p class="summary-message cart66-align-center tax-update-message"><span class="tax-rate"><?php echo Cart66Session::get('Cart66TaxRate'); ?></span> <?php _e('tax', 'cart66'); ?>,  <span class="tax-amount"><?php echo Cart66Common::currency(Cart66Session::get('Cart66Tax')); ?></span></p>
             </span>
           </li>
           <li>
@@ -168,10 +186,23 @@ if(count($errors)) {
           <li>
             <label for="shipping-country" class="short"><?php _e( 'Country' , 'cart66' ); ?>:</label>
             <select title="country" id="shipping-country" name="shipping[country]">
-              <?php foreach(Cart66Common::getCountries() as $code => $name): ?>
-                <option value="<?php echo $code ?>" <?php if($code == $shippingCountryCode) { echo 'selected="selected"'; } ?>><?php echo $name ?></option>
+              <?php foreach(Cart66Common::getShippingCountries() as $code => $country_name): ?>
+                <?php
+                $disabled = false;
+                if(is_array($country_name)) {
+                  $country_name = $country_name['country'];
+                  $disabled = isset($country_name['disabled']) ? $country_name['disabled'] : 'true';
+                }
+                if($disabled == 'true') {
+                  $disabled = 'disabled';
+                }
+                ?>
+                <option value="<?php echo $code ?>" <?php if($code == $shippingCountryCode  && !$disabled) { echo 'selected="selected"'; } ?> <?php echo $disabled; ?>><?php echo $country_name ?></option>
               <?php endforeach; ?>
             </select>
+            <?php if(Cart66Session::get('Cart66ShippingCountryCode') && Cart66Setting::getValue('international_sales')): ?>
+              <p class="limited-countries-label-shipping summary-message cart66-align-center"><?php _e('Available countries may be limited based on your selected shipping method', 'cart66'); ?></p>
+            <?php endif; ?>
           </li>
         </ul>
      </div> <!--shippingInfo-->
@@ -351,27 +382,27 @@ if(count($errors)) {
               <tbody>
                 <tr>
                   <td class="subtotal-column cart66-align-right"><strong><?php _e('Subtotal', 'cart66'); ?></strong>:</td>
-                  <td class="cart66-align-right"><?php echo CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Cart')->getSubTotal(), 2); ?></td>
+                  <td class="cart66-align-right"><?php echo Cart66Common::currency(Cart66Session::get('Cart66Cart')->getSubTotal()); ?></td>
                 </tr>
                 <?php if(Cart66Session::get('Cart66Cart')->requireShipping()): ?>
                   <tr>
                     <td class="cart66-align-right"><strong><?php _e('Shipping', 'cart66'); ?></strong>:</td>
-                    <td class="cart66-align-right"><?php echo CART66_CURRENCY_SYMBOL . Cart66Session::get('Cart66Cart')->getShippingCost(); ?></td>
+                    <td class="cart66-align-right"><?php echo Cart66Common::currency(Cart66Session::get('Cart66Cart')->getShippingCost()); ?></td>
                   </tr>
                 <?php endif; ?>
                 <?php if(Cart66Session::get('Cart66Promotion')): ?>
                   <tr>
                     <td class="cart66-align-right"><strong><?php _e('Discount', 'cart66'); ?></strong>:</td>
-                    <td class="cart66-align-right">-&nbsp;<?php echo CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Cart')->getDiscountAmount(), 2); ?></td>
+                    <td class="cart66-align-right">-&nbsp;<?php echo Cart66Common::currency(Cart66Session::get('Cart66Cart')->getDiscountAmount()); ?></td>
                   </tr>
                 <?php endif; ?>
                 <tr>
-                  <td class="cart66-align-right"><strong><span class="ajax-spin"><img src="<?php echo CART66_URL; ?>/images/ajax-spin.gif" /></span> <?php _e('Tax', 'cart66'); ?>  (<span class="tax-rate"><?php echo Cart66Session::get('Cart66TaxRate'); ?>%</span>)</strong>:</td>
-                  <td class="cart66-align-right"><span class="tax-amount"><?php echo CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Tax'), 2); ?></span></td>
+                  <td class="cart66-align-right"><strong><span class="ajax-spin"><img src="<?php echo CART66_URL; ?>/images/ajax-spin.gif" /></span> <?php _e('Tax', 'cart66'); ?>  (<span class="tax-rate"><?php echo Cart66Session::get('Cart66TaxRate'); ?></span>)</strong>:</td>
+                  <td class="cart66-align-right"><span class="tax-amount"><?php echo Cart66Common::currency(Cart66Session::get('Cart66Tax')); ?></span></td>
                 </tr>
                 <tr>
                   <td class="cart66-align-right"><strong><span class="ajax-spin"><img src="<?php echo CART66_URL; ?>/images/ajax-spin.gif" /></span> <?php _e('Total', 'cart66'); ?></strong>:</td>
-                  <td class="cart66-align-right"><span class="grand-total-amount"><?php echo CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Cart')->getGrandTotal() + Cart66Session::get('Cart66Tax'), 2); ?></span></td>
+                  <td class="cart66-align-right"><span class="grand-total-amount"><?php echo Cart66Common::currency(Cart66Session::get('Cart66Cart')->getGrandTotal() + Cart66Session::get('Cart66Tax')); ?></span></td>
                 </tr>
               </tbody>
             </table>

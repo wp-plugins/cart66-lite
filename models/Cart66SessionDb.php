@@ -83,16 +83,23 @@ class Cart66SessionDb {
   protected function _start() {
     self::$_validRequest = true;
     
-    // Do not start sessions for requests to these file extensions
-    $url = array_shift(explode('?', $_SERVER['REQUEST_URI']));
-    if(strpos(basename($url), '.')) {
-      $ext = strtolower(end(explode('.', basename($url))));
-      $ignoreList = array('png', 'jpg', 'jpeg', 'css', 'gif', 'js', 'txt', 'mp3', 'wma', 'swf', 'fla', 'zip');
-      if(in_array($ext, $ignoreList)) {
-        self::$_validRequest = false;
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not starting session for this request: $url");
-      }
+    // Do not start sessions for admin requests or requests to these file extensions
+    if(IS_ADMIN && !DOING_AJAX) {
+      self::$_validRequest = false;
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not starting Cart66 session for admin request");
     }
+    else {
+      $url = array_shift(explode('?', $_SERVER['REQUEST_URI']));
+      if(strpos(basename($url), '.')) {
+        $ext = strtolower(end(explode('.', basename($url))));
+        $ignoreList = array('png', 'jpg', 'jpeg', 'css', 'gif', 'js', 'txt', 'mp3', 'wma', 'swf', 'fla', 'zip');
+        if(in_array($ext, $ignoreList)) {
+          self::$_validRequest = false;
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not starting session for this request: $url");
+        }
+      }      
+    }
+    
     
     if(self::$_validRequest) {
       $sid = isset($_COOKIE['Cart66DBSID']) ? $_COOKIE['Cart66DBSID'] : false;
@@ -274,6 +281,7 @@ class Cart66SessionDb {
       self::$_data['id'] > 0 ? self::_update() : self::_insert();
 	  }
 	  else {
+	    $sid = isset($_COOKIE['Cart66DBSID']) ? $_COOKIE['Cart66DBSID'] : false;
 	    $reqInfo = "\nCart66DBSID: $sid\nREQUEST: " . $_SERVER['REQUEST_URI'] . "\nQUERY STRING: " . $_SERVER['QUERY_STRING'];
 	    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not saving session because the request is being ignored $reqInfo");
 	  }

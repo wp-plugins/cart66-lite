@@ -8,6 +8,7 @@ $tab = 'gateway-gateway_settings';
     <li><a href="#gateway-mijireh_settings" class="gateway-mijireh_settings"><?php _e('Mijireh Checkout', 'cart66'); ?></a> | </li>
     <li><a href="#gateway-paypal_standard_settings" class="gateway-paypal_standard_settings"><?php _e('PayPal Standard', 'cart66'); ?></a> | </li>
     <li><a href="#gateway-paypal_express_pro_settings" class="gateway-paypal_express_pro_settings"><?php _e('PayPal Express', 'cart66'); ?><?php echo (CART66_PRO) ? __(' and PayPal Pro','cart66') : '' ?></a> | </li>
+    <li><a href="#gateway-2checkout_settings" class="gateway-2checkout_settings"><?php _e('2Checkout', 'cart66'); ?></a> | </li>
     <li><a href="#gateway-other_gateways" class="gateway-other_gateways"><?php _e('Other Gateways', 'cart66'); ?></a></li>
   </ul>
   <br clear="all">
@@ -233,6 +234,35 @@ $tab = 'gateway-gateway_settings';
               <input type="radio" name="disable_landing_page" id="disable_landing_page_no" value="0" <?php echo Cart66Setting::getValue('disable_landing_page') != 1 ? 'checked="checked" ' : '' ?>/>
               <label for="disable_landing_page_no"><?php _e( 'No' , 'cart66' ); ?></label>
               <p class="description"><?php _e( 'This allows you to send your customers directly to the login page instead of the signup page for PayPal Express' , 'cart66' ); ?></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="gateway-2checkout_settings" class="pane">
+      <a href="#" target="_blank" style="float:right;"><img src="https://cart66.com/images/integrations/2checkout-logo.png" align="left" alt="2Checkout"></a>
+      <h3><?php _e('2Checkout Settings', 'cart66'); ?></h3>
+      <table class="form-table">
+        <tbody>
+          <tr valign="top">
+            <th scope="row"><?php _e('Account Number', 'cart66'); ?></th>
+            <td>
+              <input type="text" name="tco_account_number" id="tco_account_number" value="<?php echo Cart66Setting::getValue('tco_account_number'); ?>" />
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e('Secret Word', 'cart66'); ?></th>
+            <td>
+              <input type="text" name="tco_secret_word" id="tco_secret_word" value="<?php echo Cart66Setting::getValue('tco_secret_word'); ?>" />
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e('Demo Mode', 'cart66'); ?></th>
+            <td>
+              <input type="radio" name="tco_test_mode" value="1" id="tco_test_mode_yes"<?php echo Cart66Setting::getValue('tco_test_mode') == 1 ? ' checked="checked"' : ''; ?> />
+              <label for="tco_test_mode_yes"><?php _e('Yes', 'cart66'); ?></label>
+              <input type="radio" name="tco_test_mode" value="" id="tco_test_mode_no"<?php echo Cart66Setting::getValue('tco_test_mode') != 1 ? ' checked="checked"' : ''; ?> />
+              <label for="tco_test_mode_No"><?php _e('No', 'cart66'); ?></label>
             </td>
           </tr>
         </tbody>

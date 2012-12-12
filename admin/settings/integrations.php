@@ -8,6 +8,7 @@ $tab = 'integrations-amazon_s3';
     <li><a href="#integrations-amazon_s3" class="integrations-amazon_s3"><?php _e('Amazon S3', 'cart66'); ?></a> | </li>
     <li><a href="#integrations-constant_contact" class="integrations-constant_contact"><?php _e('Constant Contact', 'cart66'); ?></a> | </li>
     <li><a href="#integrations-google_analytics_ecommerce" class="integrations-google_analytics_ecommerce"><?php _e('Google Analytics Ecommerce Tracking', 'cart66'); ?></a> | </li>
+    <li><a href="#integrations-gravity_forms" class="integrations-gravity_forms"><?php _e('Gravity Forms', 'cart66'); ?></a> | </li>
     <li><a href="#integrations-idevaffiliate" class="integrations-idevaffiliate"><?php _e('iDevAffiliate', 'cart66'); ?></a> | </li>
     <li><a href="#integrations-mailchimp" class="integrations-mailchimp"><?php _e('MailChimp', 'cart66'); ?></a> | </li>
     <li><a href="#integrations-spreedly" class="integrations-spreedly"><?php _e('Spreedly', 'cart66'); ?></a> | </li>
@@ -71,6 +72,37 @@ $tab = 'integrations-amazon_s3';
             <li><?php _e('Time to Purchase: The number of days from the initial visit, and the total number of visits it takes for visitors to complete transactions', 'cart66'); ?>.</li>
           </ul>
         </p>
+        <p class="description"><?php _e( 'This feature is only available in', 'cart66'); ?> <a href="http://cart66.com"><?php _e('Cart66 Professional', 'cart66'); ?></a>.</p>
+      <?php endif; ?>
+    </div>
+    <div id="integrations-gravity_forms" class="pane">
+      <a href="#" target="_blank" style="float:right;"><img src="https://cart66.com/images/integrations/gravity-logo.png" align="left" alt="Gravity Forms"></a>
+      <h3><?php _e('Gravity Forms', 'cart66'); ?></h3>
+      <?php if(CART66_PRO): ?>
+        <table class="form-table">
+          <tbody>
+            <tr valign="top">
+              <th scope="row"><?php _e('Display Form Entries Before Sale', 'cart66'); ?></th>
+              <td>
+                <input type="radio" name="display_form_entries_before_sale" id="display_form_entries_before_sale_yes" value="1" <?php echo (Cart66Setting::getValue('display_form_entries_before_sale') == 1) ? 'checked="checked" ' : ''; ?>/>
+                <label for="display_form_entries_before_sale_yes"><?php _e('Yes', 'cart66'); ?></label>
+                <input type="radio" name="display_form_entries_before_sale" id="display_form_entries_before_sale_no" value="" <?php echo (Cart66Setting::getValue('display_form_entries_before_sale') != 1) ? 'checked="checked" ' : ''; ?>/>
+                <label for="display_form_entries_before_sale_no"><?php _e('No', 'cart66'); ?></label>
+                <p class="description"><?php _e('Set this to yes to view Cart66 product form entries in the Gravity Form entries section before a sale has been processed.', 'cart66'); ?></p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <th scope="row"><?php _e('Keep Orphaned Gravity Form Entries', 'cart66'); ?></th>
+              <td>
+                <input type="radio" name="keep_orphaned_gravity_entries" id="keep_orphaned_gravity_entries_yes" value="1" <?php echo (Cart66Setting::getValue('keep_orphaned_gravity_entries') == 1) ? 'checked="checked" ' : ''; ?>/>
+                <label for="keep_orphaned_gravity_entries_yes"><?php _e('Yes', 'cart66'); ?></label>
+                <input type="radio" name="keep_orphaned_gravity_entries" id="keep_orphaned_gravity_entries_no" value="" <?php echo (Cart66Setting::getValue('keep_orphaned_gravity_entries') != 1) ? 'checked="checked" ' : ''; ?>/>
+                <label for="keep_orphaned_gravity_entries_no"><?php _e('No', 'cart66'); ?></label>
+                <p class="description"><?php _e('Set this to yes to prevent orphaned Cart66 product Gravity Form entries from being removed automatically.', 'cart66'); ?></p>
+              </td>
+            </tr>
+        </table>
+      <?php else: ?>
         <p class="description"><?php _e( 'This feature is only available in', 'cart66'); ?> <a href="http://cart66.com"><?php _e('Cart66 Professional', 'cart66'); ?></a>.</p>
       <?php endif; ?>
     </div>
@@ -294,6 +326,16 @@ $tab = 'integrations-amazon_s3';
                     <br/><br/><em><?php _e( 'Note: To disable iDevAffiliate integration, simply delete this URL and click Save.' , 'cart66' ); ?></em>
                   <?php endif; ?>
                 </p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <th scope="row"><?php _e('Coupon Code Tracking', 'cart66'); ?></th>
+              <td>
+                <input type="radio" name="idev_coupon_codes" id="idev_coupon_codes_yes" value="1" <?php echo (Cart66Setting::getValue('idev_coupon_codes') == 1) ? 'checked="checked" ' : ''; ?>/>
+                <label for="idev_coupon_codes_yes"><?php _e('Yes', 'cart66'); ?></label>
+                <input type="radio" name="idev_coupon_codes" id="idev_coupon_codes_no" value="" <?php echo (Cart66Setting::getValue('idev_coupon_codes') != 1) ? 'checked="checked" ' : ''; ?>/>
+                <label for="idev_coupon_codes_no"><?php _e('No', 'cart66'); ?></label>
+                <p class="description"><?php _e('Set this to yes to enable sending coupon codes to iDevAffiliate for commission tracking.', 'cart66'); ?></p>
               </td>
             </tr>
           </tbody>

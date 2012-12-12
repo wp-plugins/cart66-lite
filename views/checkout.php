@@ -10,7 +10,8 @@ $supportedGateways = array (
   'Cart66MerchantWarrior',
   'Cart66PayLeap',
   'Cart66Mijireh',
-  'Cart66Stripe'
+  'Cart66Stripe',
+  'Cart662Checkout'
 );
 
 $errors = array();
@@ -88,7 +89,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
       $tax = $gateway->getTaxAmount();
       $rate = $gateway->getTaxRate();
       Cart66Session::set('Cart66Tax', $tax);
-      Cart66Session::set('Cart66TaxRate', round($rate, 2));
+      Cart66Session::set('Cart66TaxRate', Cart66Common::tax($rate));
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Tax PreCalculated: $".$tax);
     }
 
@@ -172,6 +173,16 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
             else {
               // Set the subscriber token in the session for repeat attempts to create the subscription
               Cart66Session::set('Cart66SubscriberToken', $account->subscriberToken);
+            }
+            if(count($errors)) {
+              try {
+                Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Unable to process order: " . print_r($errors, true));
+                throw new Cart66Exception(__('Your order could not be processed for the following reasons:', 'cart66'), 66500);
+              }
+              catch(Cart66Exception $e) {
+                $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage(), $errors);
+                echo Cart66Common::getView('views/error-messages.php', $exception);
+              }
             }
           }
           
@@ -310,9 +321,12 @@ $billingCountryCode =  (isset($b['country']) && !empty($b['country'])) ? $b['cou
 $shippingCountryCode = (isset($s['country']) && !empty($s['country'])) ? $s['country'] : Cart66Common::getHomeCountryCode();
 
 // Include the HTML markup for the checkout form
-$checkoutFormFile = CART66_PATH . '/views/checkout-form.php';
+$checkoutFormFile = '/views/checkout-form.php';
 if($gatewayName == 'Cart66Mijireh') {
-  $checkoutFormFile = CART66_PATH . '/views/mijireh/shipping_address.php';
+  $checkoutFormFile =  '/views/mijireh/shipping_address.php';
+}
+elseif($gatewayName == 'Cart662Checkout') {
+  $checkoutFormFile =  '/views/2Checkout.php';
 }
 else {
   $userViewFile = get_stylesheet_directory() . '/cart66-templates/views/checkout-form.php';
@@ -322,7 +336,11 @@ else {
 }
 Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Using Checkout Form File :: $checkoutFormFile");
 
-include($checkoutFormFile);
+ob_start();
+include(CART66_PATH . $checkoutFormFile);
+$checkoutFormFileContents = ob_get_contents();
+ob_end_clean();
+echo Cart66Common::minifyMarkup($checkoutFormFileContents);
 
 // Include the client side javascript validation
 $same_as_billing = false;
@@ -332,7 +350,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && Cart66Setting::getValue('sameAsBilling
 elseif(isset($_POST['sameAsBilling']) && $_POST['sameAsBilling'] == '1') {
   $same_as_billing = true;
 }
-$shipping_address_display = (!$same_as_billing || $gatewayName == 'Cart66Mijireh') ? 'block' : 'none';
+$shipping_address_display = (!$same_as_billing || $gatewayName == 'Cart66Mijireh' || $gatewayName == 'Cart662Checkout') ? 'block' : 'none';
 
 $billing_country = '';
 if(isset($b['country']) && !empty($b['country'])) {
@@ -353,7 +371,7 @@ $checkout_data = array(
   'shipping_address_display' => $shipping_address_display,
   'billing_country' => $billing_country,
   'shipping_country' => $shipping_country,
-  'billing_state' => $b['state'],
+  'billing_state' => isset($b['state']) ? $b['state'] : '',
   'shipping_state' => $s['state'],
   'card_type' => isset($p['cardType']) ? $p['cardType'] : '',
   'form_name' => '#' . $gatewayName . '_form',

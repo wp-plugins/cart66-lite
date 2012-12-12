@@ -52,7 +52,7 @@ class Pest {
   }
   
   public function post($url, $data, $headers=array()) {
-    $data = (is_array($data)) ? http_build_query($data) : $data;
+    $data = (is_array($data)) ? http_build_query($data, '', '&') : $data;
     
     $curl_opts = $this->curl_opts;
     $curl_opts[CURLOPT_CUSTOMREQUEST] = 'POST';
@@ -69,7 +69,7 @@ class Pest {
   }
   
   public function put($url, $data, $headers=array()) {
-    $data = (is_array($data)) ? http_build_query($data) : $data; 
+    $data = (is_array($data)) ? http_build_query($data, '', '&') : $data; 
     
     $curl_opts = $this->curl_opts;
     $curl_opts[CURLOPT_CUSTOMREQUEST] = 'PUT';

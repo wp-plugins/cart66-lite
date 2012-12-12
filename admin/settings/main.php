@@ -1,6 +1,6 @@
 <?php
 $tab = 'main-main_settings';
-if(!Cart66Setting::getValue('order_number')) {
+if(CART66_PRO && !Cart66Setting::getValue('order_number')) {
   $tab = 'main-order_number';
 }
 elseif($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -80,7 +80,7 @@ elseif($_SERVER['REQUEST_METHOD'] == "POST") {
           <tr valign="top">
             <th scope="row"><?php _e('Currency Symbol', 'cart66'); ?></th>
             <td>
-              <input type="text" name="CART66_CURRENCY_SYMBOL" value="<?php echo htmlentities(Cart66Setting::getValue('CART66_CURRENCY_SYMBOL'));  ?>" id="CART66_CURRENCY_SYMBOL">
+              <input class="small-text" type="text" name="CART66_CURRENCY_SYMBOL" value="<?php echo Cart66Setting::getValue('CART66_CURRENCY_SYMBOL', true);  ?>" id="CART66_CURRENCY_SYMBOL">
               <label for="CART66_CURRENCY_SYMBOL">
                 <span class="description"><?php _e( 'Use the HTML entity such as &amp;pound; for &pound; British Pound Sterling or &amp;euro; for &euro; Euro' , 'cart66' ); ?></span>
               </label>
@@ -89,9 +89,47 @@ elseif($_SERVER['REQUEST_METHOD'] == "POST") {
           <tr valign="top">
             <th scope="row"><?php _e('Currency Character', 'cart66'); ?></th>
             <td>
-              <input type="text" name="CART66_CURRENCY_SYMBOL_text" value="<?php echo htmlentities(Cart66Setting::getValue('CART66_CURRENCY_SYMBOL_text'));  ?>" id="CART66_CURRENCY_SYMBOL_text">
+              <input class="small-text" type="text" name="CART66_CURRENCY_SYMBOL_text" value="<?php echo Cart66Setting::getValue('CART66_CURRENCY_SYMBOL_text');  ?>" id="CART66_CURRENCY_SYMBOL_text">
               <label for="CART66_CURRENCY_SYMBOL_text">
-                <span class="description"><?php _e( 'Do NOT use the HTML entity. This is the currency character used for the email receipts.' , 'cart66' ); ?></span>
+                <span class="description"><?php _e( 'Do NOT use the HTML entity. This is the currency character used for the plain text email receipts' , 'cart66' ); ?></span>
+              </label>
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e('Currency Position', 'cart66'); ?></th>
+            <td>
+              <select name="currency_position">
+                <option value="before"<?php echo Cart66Setting::getValue('currency_position') != 'after' ? ' selected="selected"' : ''; ?>><?php _e('Before', 'cart66'); ?></option>
+                <option value="after"<?php echo Cart66Setting::getValue('currency_position') == 'after' ? ' selected="selected"' : ''; ?>><?php _e('After', 'cart66'); ?></option>
+              </select>
+              <span class="description"><?php _e( 'Choose the position of the currency symbol. The default position is before: $10.00' , 'cart66' ); ?></span>
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e('Thousands Separator', 'cart66'); ?></th>
+            <td>
+              <input class="small-text" type="text" name="currency_thousands_sep" value="<?php echo Cart66Setting::getValue('currency_thousands_sep') ? htmlentities(Cart66Setting::getValue('currency_thousands_sep')) : ',';  ?>" id="currency_thousands_sep">
+              <label for="currency_thousands_sep">
+                <span class="description"><?php _e( 'This sets the thousands separator.  This is usually a' , 'cart66' ); ?> ,</span>
+              </label>
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e('Decimal Point', 'cart66'); ?></th>
+            <td>
+              <input class="small-text" type="text" name="currency_dec_point" value="<?php echo Cart66Setting::getValue('currency_dec_point') ? htmlentities(Cart66Setting::getValue('currency_dec_point')) : '.';  ?>" id="currency_dec_point">
+              <label for="currency_dec_point">
+                <span class="description"><?php _e( 'This sets the decimal point separator.  This is usually a', 'cart66' ); ?> .</span>
+              </label>
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e('Decimals', 'cart66'); ?></th>
+            <td>
+              <input class="small-text" type="text" name="currency_decimals" value="<?php echo Cart66Setting::getValue('currency_decimals') == 'no_decimal' ? 0 : (Cart66Setting::getValue('currency_decimals') ? htmlentities(Cart66Setting::getValue('currency_decimals')) : 2);  ?>" id="currency_decimals">
+              <label for="currency_decimals">
+                <span class="description"><?php _e( 'This sets the number of decimal points.  Use 0 to set to none.  Default is 2.' , 'cart66' ); ?></span>
+              </label>
             </td>
           </tr>
           <tr valign="top">
@@ -154,6 +192,15 @@ elseif($_SERVER['REQUEST_METHOD'] == "POST") {
               <input type="radio" name="enable_edit_product_links" id"enable_edit_product_links_no" value="" <?php echo Cart66Setting::getValue('enable_edit_product_links') != 1 ? 'checked="checked" ' : '' ?>>
               <label for="enable_edit_product_links_no"><?php _e( 'No' , 'cart66' ); ?></label>
               <p class="description"><?php _e( 'Use this option to enable the edit product links on your product pages' , 'cart66' ); ?>.</span>
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e('Out of Stock Label', 'cart66'); ?></th>
+            <td>
+              <input type="text" name="label_out_of_stock" id="label_out_of_stock" class="regular-text" value="<?php echo Cart66Setting::getValue('label_out_of_stock'); ?>" />
+              <p class="description">
+                <label for="label_out_of_stock"><?php _e('Set the label for the out of stock label for products.  Default: Out of stock', 'cart66'); ?></label>
+              </p>
             </td>
           </tr>
           <tr valign="top">

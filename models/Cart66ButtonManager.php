@@ -25,7 +25,7 @@ class Cart66ButtonManager {
       $subscription = 0;
       
       if($showPrice == 'yes' || $showPrice == 'only') {
-        $price = CART66_CURRENCY_SYMBOL . number_format($product->price, 2);
+        $price = Cart66Common::currency($product->price);
         
         // Check for subscription pricing
         if($product->isSubscription()) {
@@ -79,7 +79,7 @@ class Cart66ButtonManager {
         'productOptions' => $product->getOptions(),
         'gravity_form_id' => $gravity_form_id
       );
-      $view = Cart66Common::getView('views/cart-button.php', $data);
+      $view = Cart66Common::getView('views/cart-button.php', $data, true, true);
     }
     return $view;
   }

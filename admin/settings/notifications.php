@@ -41,6 +41,7 @@ $mustache_elements = array(
   'tax',
   'total',
   'non_subscription_total',
+  'custom_field',
   'date:F d, Y',
   'date_ordered:F d, Y',
   'ordered_on',

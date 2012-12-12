@@ -52,76 +52,82 @@
   }
   test = '';
   function updateAjaxTax() {
-    var ajaxurl = $('#confirm-url').val();
-    var state = $('#billing-state').val();
-    var zip = $('#billing-zip').val();
-    var state_text = $('#billing-state_text').val();
-    if(zip == '') {
-      return false;
-    }
-    if(state == 0 && state_text == '') {
-      return false;
-    }
-    $('.ajax-spin').show();
-    if($('.sameAsBilling').length !=0 && !$('.sameAsBilling').attr('checked')) {
-      if($('#shipping-zip').length != 0) {
-        var zip = $('#shipping-zip').val();
-      }
-      if($('#shipping-state_text').length != 0) {
-        var state_text = $('#shipping-state_text').val();
-      }
-      if($('#shipping-state').length != 0) {
-        var state = $('#shipping-state').val();
-      }
-    }
-    else if($('#billing-zip').length == 0) {
-      if($('#shipping-zip').length != 0) {
-        var zip = $('#shipping-zip').val();
-      }
-      if($('#shipping-state_text').length != 0) {
-        var state_text = $('#shipping-state_text').val();
-      }
-      if($('#shipping-state').length != 0) {
-        var state = $('#shipping-state').val();
-      }
-    }
-    var gateway = $('#cart66-gateway-name').val();
-    $.ajax({
-      type: "POST",
-      url: ajaxurl + '=4',
-      data: {
-        state: state,
-        state_text: state_text,
-        zip: zip,
-        gateway: gateway
-      },
-      dataType: 'json',
-      success: function(response) {
-        if(response.tax != '$0.00') {
-          $('.tax-row').removeClass('hide-tax-row').addClass('show-tax-row');
-          $('.tax-block').removeClass('hide-tax-block').addClass('show-tax-block');
+    var taxed = $('.ajax-tax-cart').val();
+    if(taxed === 'true') {
+      var ajaxurl = $('#confirm-url').val();
+      var state = $('#billing-state').val();
+      var zip = $('#billing-zip').val();
+      var state_text = $('#billing-state_text').val();
+      if($('.sameAsBilling').length !=0 && !$('.sameAsBilling').attr('checked')) {
+        if($('#shipping-zip').length != 0) {
+          var zip = $('#shipping-zip').val();
         }
-        $('.tax-amount').html(response.tax);
-        $('.grand-total-amount').html(response.total);
-        $('.tax-rate').html(response.rate);
-        $('.ajax-spin').hide();
-        if(test == '') {
-          test = 'running';
-          $('.tax-update').fadeIn(500).delay(2300).fadeOut(500);
-          $('.tax-update').queue(function () {
-            test = '';
-            $(this).dequeue();
-          });
+        if($('#shipping-state_text').length != 0) {
+          var state_text = $('#shipping-state_text').val();
         }
-      },
-      error: function(xhr,err){
-        //alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+        if($('#shipping-state').length != 0) {
+          var state = $('#shipping-state').val();
+        }
       }
-    });
+      else if($('#billing-zip').length == 0) {
+        if($('#shipping-zip').length != 0) {
+          var zip = $('#shipping-zip').val();
+        }
+        if($('#shipping-state_text').length != 0) {
+          var state_text = $('#shipping-state_text').val();
+        }
+        if($('#shipping-state').length != 0) {
+          var state = $('#shipping-state').val();
+        }
+      }
+      if(zip == '') {
+        return false;
+      }
+      if(state == 0 && state_text == '') {
+        return false;
+      }
+      $('.ajax-spin').show();
+      var gateway = $('#cart66-gateway-name').val();
+      $.ajax({
+        type: "POST",
+        url: ajaxurl + '=4',
+        data: {
+          state: state,
+          state_text: state_text,
+          zip: zip,
+          gateway: gateway
+        },
+        dataType: 'json',
+        success: function(response) {
+          if(response.tax != '$0.00') {
+            $('.tax-row').removeClass('hide-tax-row').addClass('show-tax-row');
+            $('.tax-block').removeClass('hide-tax-block').addClass('show-tax-block');
+          }
+          $('.tax-amount').html(response.tax);
+          $('.grand-total-amount').html(response.total);
+          $('.tax-rate').html(response.rate);
+          $('.ajax-spin').hide();
+          if(test == '') {
+            test = 'running';
+            $('.tax-update').fadeIn(500).delay(2300).fadeOut(500);
+            $('.tax-update').queue(function () {
+              test = '';
+              $(this).dequeue();
+            });
+          }
+        },
+        error: function(xhr,err){
+          //alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+        }
+      });
+    }
     return false;
   }
   
   $(document).ready(function(){
+    var shipping_countries = $('#shipping-country').html();
+    var billing_countries = $('#billing-country').html();
+    
     // Dynamically configure billing state based on country
     $('.billing_countries').change(function() { 
       setState($(this).closest('form').attr('id'), 'billing');
@@ -140,28 +146,63 @@
     }
     $('.shippingAddress').css('display', C66.shipping_address_display);
     
+    $('.sameAsBilling').each(function() {
+      var frm = $(this).closest('form').attr('id');
+      if($('#' + frm + ' input[name="sameAsBilling"]').attr('checked')) {
+        $('#' + frm + ' .billing_countries').html(shipping_countries);
+        setState(frm, 'billing');
+        $('.limited-countries-label-billing').show();
+        $('#billing-state_text, #billing-state, #billing-zip').addClass('ajax-tax');
+        $('#shipping-state_text, #shipping-state, #shipping-zip').removeClass('ajax-tax');
+        $('#billing_tax_update').addClass('tax-update').show();
+        $('#shipping_tax_update').removeClass('tax-update').hide();
+      }
+      else {
+        $('#' + frm + ' .billing_countries').html(billing_countries);
+        setState(frm, 'billing');
+        $('.limited-countries-label-billing').hide();
+        $('#billing-state_text, #billing-state, #billing-zip').removeClass('ajax-tax');
+        $('#shipping-state_text, #shipping-state, #shipping-zip').addClass('ajax-tax');
+        $('#billing_tax_update').removeClass('tax-update').hide();
+        $('#shipping_tax_update').addClass('tax-update').show();
+      }
+    })
+    
     $('.sameAsBilling').click(function() {
       var frm = $(this).closest('form').attr('id');
       if($('#' + frm + ' input[name="sameAsBilling"]').attr('checked')) {
+        var billing_country = $('#' + frm + ' .billing_countries').val();
+        $('#' + frm + ' .billing_countries').html(shipping_countries);
+        $('#' + frm + ' .billing_countries').val(billing_country);
+        $('#' + frm + ' .billing_countries option').each(function() {
+          if($(this).val() == $('#' + frm + ' .billing_countries').val() && $(this).is(':disabled')) {
+            $('#' + frm + ' .billing_countries').val('');
+          }
+        })
+        //setState(frm, 'billing');
+        $('.limited-countries-label-billing').show();
         $('#' + frm + ' .shippingAddress').css('display', 'none');
-        $('#billing-state_text').addClass('ajax-tax');
-        $('#billing-state').addClass('ajax-tax');
-        $('#billing-zip').addClass('ajax-tax');
-        $('#billing_tax_update').addClass('tax-update');
-        $('#shipping_tax_update').removeClass('tax-update');
+        $('#billing-state_text, #billing-state, #billing-zip').addClass('ajax-tax');
+        $('#shipping-state_text, #shipping-state, #shipping-zip').removeClass('ajax-tax');
+        $('#billing_tax_update').addClass('tax-update').show();
+        $('#shipping_tax_update').removeClass('tax-update').hide();
       }
       else {
         $('#' + frm + ' .shippingAddress').css('display', 'block');
-        $('#billing-state_text').removeClass('ajax-tax');
-        $('#billing-state').removeClass('ajax-tax');
-        $('#billing-zip').removeClass('ajax-tax');
-        $('#billing_tax_update').removeClass('tax-update');
-        $('#shipping_tax_update').addClass('tax-update');
+        var billing_country = $('#' + frm + ' .billing_countries').val();
+        $('#' + frm + ' .billing_countries').html(billing_countries);
+        $('#' + frm + ' .billing_countries').val(billing_country);
+        //setState(frm, 'billing');
+        $('.limited-countries-label-billing').hide();
+        $('#billing-state_text, #billing-state, #billing-zip').removeClass('ajax-tax');
+        $('#shipping-state_text, #shipping-state, #shipping-zip').addClass('ajax-tax');
+        $('#billing_tax_update').removeClass('tax-update').hide();
+        $('#shipping_tax_update').addClass('tax-update').show();
       }
       updateAjaxTax();
     });
-    $('#billing-state, #billing-zip, #billing-state_text').listenForChange();
-    $('.ajax-tax').change(function() {
+    $('#billing-state, #billing-zip, #billing-state_text, #shipping-state, #shipping-zip, #shipping-state_text').listenForChange();
+    $('.ajax-tax').live("change", function() {
       updateAjaxTax();
     })
     

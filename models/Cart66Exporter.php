@@ -43,10 +43,10 @@ class Cart66Exporter {
     
     $orderColHeaders = implode(',', $orderHeaders);
     $orderColSql = implode(',', array_keys($orderHeaders));
-    $out  = $orderColHeaders . ",Form Data,Item Number,Description,Quantity,Product Price\n";
+    $out  = $orderColHeaders . ",Form Data,Item Number,Description,Quantity,Product Price,Form ID\n";
     
-    $sql = "SELECT $orderColSql from $orders where ordered_on >= %s AND ordered_on < %s order by ordered_on";
-    $sql = $wpdb->prepare($sql, $start, $end);
+    $sql = "SELECT $orderColSql from $orders where ordered_on >= %s AND ordered_on < %s AND status != %s order by ordered_on";
+    $sql = $wpdb->prepare($sql, $start, $end, 'checkout_pending');
     Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] SQL: $sql");
     $selectedOrders = $wpdb->get_results($sql, ARRAY_A);
     
@@ -65,6 +65,7 @@ class Cart66Exporter {
           }
 
           if($i['form_entry_ids'] && CART66_PRO){
+            $i['form_id'] = $i['form_entry_ids'];
             $GReader = new Cart66GravityReader();
             $i['form_entry_ids'] = $GReader->displayGravityForm($i['form_entry_ids'],true);
             $i['form_entry_ids'] = str_replace("\"","''",$i['form_entry_ids']);

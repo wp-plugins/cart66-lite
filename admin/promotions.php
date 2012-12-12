@@ -76,15 +76,17 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
                     <select name="promo[apply_to]" class="promo-apply_to" id="promo-apply_to">
                       <option value="products" <?php if($promo->apply_to == 'products') { echo 'selected'; } ?>><?php _e( 'Products' , 'cart66' ); ?></option>
                       <option value="shipping" <?php if($promo->apply_to == 'shipping') { echo 'selected'; } ?>><?php _e( 'Shipping' , 'cart66' ); ?></option>
-                      <option value="total" <?php if($promo->apply_to == 'total') { echo 'selected'; } ?>><?php _e( 'Cart Total' , 'cart66' ); ?></option>
+                      <option value="subtotal" <?php if($promo->apply_to == 'subtotal') { echo 'selected'; } ?>><?php _e( 'Subtotal' , 'cart66' ); ?></option>
+                      <option value="total" <?php if($promo->apply_to == 'total') { echo 'selected'; } ?>><?php _e( 'Grand Total' , 'cart66' ); ?></option>
                     </select>
-                    <span class="label_desc"><?php _e('Select if this promotion will apply to specific products, shipping or the entire cart total', 'cart66'); ?>.</span>
+                    <span class="label_desc"><?php _e('Select if this promotion will apply to specific products, shipping, products subtotal or the entire cart total', 'cart66'); ?>.</span>
                   </li>
                 <li>
                   <label class="long" for="promo-amount"><?php _e( 'Amount' , 'cart66' ); ?>:</label>
-                  <span id="dollarSign"><?php echo CART66_CURRENCY_SYMBOL ?></span>
-                  <input type="text" name="promo[amount]" id="promo-amount" value="<?php echo $promo->amount ?>"> 
-                  <span id="percentSign">%</span>
+                  <span class="dollarSign"><?php echo Cart66Common::currencySymbol('before'); ?></span>
+                  <input type="text" name="promo[amount]" id="promo-amount" value="<?php echo $promo->amount ?>">
+                  <span class="dollarSign"><?php echo Cart66Common::currencySymbol('after'); ?></span>
+                  <span class="percentSign">%</span>
                   <span class="label_desc"><?php _e('Set the promotion amount', 'cart66'); ?>.</span>
                 </li>
                 <li>
@@ -92,11 +94,11 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
                   <div class="dateRange">
                   <div class="group">
                     <label for="promo-min_order"><?php _e( 'Minimum order amount' , 'cart66' ); ?>:</label>
-                    <?php echo CART66_CURRENCY_SYMBOL ?> <input type="text" id="promo-min_order" name="promo[min_order]" value="<?php echo $promo->minOrder ?>">
+                    <?php echo Cart66Common::currencySymbol('before'); ?> <input type="text" id="promo-min_order" name="promo[min_order]" value="<?php echo $promo->minOrder ?>"> <?php echo Cart66Common::currencySymbol('after'); ?>
                   </div>
                   <div class="group">
                     <label for="promo-max_order"><?php _e( 'Maximum order amount' , 'cart66' ); ?>:</label>
-                    <?php echo CART66_CURRENCY_SYMBOL ?> <input type="text" id="promo-max_order" name="promo[max_order]" value="<?php echo $promo->maxOrder ?>">
+                    <?php echo Cart66Common::currencySymbol('before'); ?> <input type="text" id="promo-max_order" name="promo[max_order]" value="<?php echo $promo->maxOrder ?>"> <?php echo Cart66Common::currencySymbol('after'); ?>
                   </div>
                   <span class="label_desc"><?php _e('Set the minimum and/or maximum amount required for this promotion to apply', 'cart66'); ?>.</span>
                   </div>
@@ -296,12 +298,12 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
       function setPromoSign() {
         var v = $('#promo-type').val();
         if(v == 'percentage') {
-          $('#dollarSign').hide();
-          $('#percentSign').show();
+          $('.dollarSign').hide();
+          $('.percentSign').show();
         }
         else {
-          $('#dollarSign').show();
-          $('#percentSign').hide();
+          $('.dollarSign').show();
+          $('.percentSign').hide();
         }
       }
       $('.sidebar-name').click(function() {

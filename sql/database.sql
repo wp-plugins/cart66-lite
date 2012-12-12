@@ -368,3 +368,11 @@ alter table `[prefix]accounts` add column `opt_out` tinyint(1) not null default 
 alter table `[prefix]account_subscriptions` add column `product_id` int(10) unsigned not null;
 alter table `[prefix]membership_reminders` modify `interval` varchar(255);
 alter table `[prefix]email_log` modify `headers` text not null;
+
+-- Upgrading to Cart66 1.5.0.4
+alter table `[prefix]products` add column `custom_required` tinyint(1) unsigned not null default 0;
+
+-- Upgrading to Cart66 1.5.0.5
+alter table `[prefix]promotions` modify `apply_to` enum('products','shipping','subtotal','total') not null default 'total';
+alter table `[prefix]shipping_methods` add column `countries` longtext default '' not null;
+alter table `[prefix]orders` add column `custom_field` text default '' not null;

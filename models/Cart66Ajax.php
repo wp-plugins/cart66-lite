@@ -63,6 +63,20 @@ class Cart66Ajax {
     }
   }
   
+  public static function ajaxOrderLookUp() {
+    $redirect = true;
+    $order = new Cart66Order();
+    $order->loadByOuid($_POST['ouid']);
+    if(!Cart66Session::get('Cart66PendingOUID')) {
+      Cart66Session::set('Cart66PendingOUID', $_POST['ouid']);
+    }
+    if(empty($order->id) || $order->status == 'checkout_pending') {
+      $redirect = false;
+    }
+    echo json_encode($redirect);
+    die();
+  }
+  
   public static function viewLoggedEmail() {
     if(isset($_POST['log_id'])) {
       $emailLog = new Cart66EmailLog($_POST['log_id']);
@@ -126,7 +140,7 @@ class Cart66Ajax {
         $rate = $gateway->getTaxRate();
         $total = Cart66Session::get('Cart66Cart')->getGrandTotal() + $tax;
         Cart66Session::set('Cart66Tax', $tax);
-        Cart66Session::set('Cart66TaxRate', round($rate, 2));
+        Cart66Session::set('Cart66TaxRate', Cart66Common::tax($rate));
       }
       else {
         $id = 0;
@@ -134,20 +148,20 @@ class Cart66Ajax {
         $rate = 0;
         $total = Cart66Session::get('Cart66Cart')->getGrandTotal() + $tax;
         Cart66Session::set('Cart66Tax', $tax);
-        Cart66Session::set('Cart66TaxRate', round($rate, 2));
+        Cart66Session::set('Cart66TaxRate', Cart66Common::tax($rate));
       }
       if(Cart66Session::get('Cart66Cart')->getTax('All Sales')) {
         $rate = $gateway->getTaxRate();
-        Cart66Session::set('Cart66TaxRate', round($rate, 2));
+        Cart66Session::set('Cart66TaxRate', Cart66Common::tax($rate));
       }
     }
     $result = array(
       'id' => $id,
       'state' => $s['state'],
       'zip' => $s['zip'],
-      'tax' => CART66_CURRENCY_SYMBOL . number_format($tax, 2),
-      'rate' => $rate = 0 ? '0.00' . '%' : round($rate, 2) . '%',
-      'total' => CART66_CURRENCY_SYMBOL . number_format($total, 2)
+      'tax' => Cart66Common::currency($tax),
+      'rate' => $rate = 0 ? '0.00' . '%' : Cart66Common::tax($rate),
+      'total' => Cart66Common::currency($total)
     );
     echo json_encode($result);
     die();
@@ -156,6 +170,10 @@ class Cart66Ajax {
   public function loadAjaxGateway($gateway) {
     switch($gateway) {
       case 'Cart66ManualGateway':
+        require_once(CART66_PATH . "/gateways/$gateway.php");
+        $gateway = new $gateway();
+        break;
+      case 'Cart662Checkout':
         require_once(CART66_PATH . "/gateways/$gateway.php");
         $gateway = new $gateway();
         break;
@@ -197,31 +215,29 @@ class Cart66Ajax {
 
     $items = Cart66Session::get('Cart66Cart')->getItems();
     $product = new Cart66Product();
-    $currencySymbol = CART66_CURRENCY_SYMBOL;
     $products = array();
     foreach($items as $itemIndex => $item) {
       $product->load($item->getProductId());
       $products[] = array(
         'productName' => $item->getFullDisplayName(),
         'productQuantity' => $item->getQuantity(),
-        'productPrice' => number_format($item->getProductPrice(), 2),
-        'productSubtotal' => number_format($item->getProductPrice() * $item->getQuantity(), 2),
-        'currencySymbol' => $currencySymbol
+        'productPrice' => Cart66Common::currency($item->getProductPrice()),
+        'productSubtotal' => Cart66Common::currency($item->getProductPrice() * $item->getQuantity())
       );
     }
     
     $summary = array(
       'items' => ' ' . _n('item', 'items', Cart66CartWidget::countItems(), 'cart66'), 
-      'amount' => number_format(Cart66CartWidget::getSubTotal(), 2), 
-      'count' => Cart66CartWidget::countItems(), 
-      'currencySymbol' => $currencySymbol
+      'amount' => Cart66Common::currency(Cart66CartWidget::getSubTotal()), 
+      'count' => Cart66CartWidget::countItems()
     );
     
     $array = array(
       'summary' => $summary,
       'products' => $products,
-      'subtotal' => number_format(Cart66Session::get('Cart66Cart')->getSubTotal(), 2),
+      'subtotal' => Cart66Common::currency(Cart66Session::get('Cart66Cart')->getSubTotal()),
       'shipping' => Cart66Session::get('Cart66Cart')->requireShipping() ? 1 : 0,
+      'shippingAmount' => Cart66Common::currency(Cart66Session::get('Cart66Cart')->getShippingCost())
     );
     echo json_encode($array);
     die();
@@ -230,7 +246,7 @@ class Cart66Ajax {
   public static function ajaxAddToCart() {
     $message = self::addToCartFunctions();
     echo json_encode($message);
-  	die();
+    die();
   }
   
   public function addToCartFunctions() {
@@ -262,7 +278,7 @@ class Cart66Ajax {
     }
     
     if(isset($_POST['item_user_price'])){
-      $sanitizedPrice = preg_replace("/[^0-9\.]/","",$_POST['item_user_price']);
+      $sanitizedPrice = Cart66Common::cleanNumber($_POST['item_user_price']);
       Cart66Session::set("userPrice_$itemId",$sanitizedPrice);
     }
     
@@ -289,13 +305,34 @@ class Cart66Ajax {
         $productOptions = $item->getOptionInfo();
         $actualQuantity = $itemQuantity + $item->getQuantity();
         if($productId == $itemId && $productOptions == $options) {
-          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] starting 3");
-          if(Cart66Product::confirmInventory($productId, $productOptions, $actualQuantity)) {
-            Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
-            $message = __('We have successfully added', 'cart66') . " <strong>$itemQuantity</strong> $itemName $optionResult" . __('to the cart', 'cart66') . ".";
-            $msgQuantityInCart = $actualQuantity;
-            $msgId = 0;
-            break;
+          if(Cart66Product::confirmInventory($itemId, $options, $itemQuantity)) {
+            $product = new Cart66Product($itemId);
+            if($itemQuantity < $product->min_quantity || ($itemQuantity > $product->max_quantity && $product->max_quantity != 0)) {
+              Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
+              if($itemQuantity < $product->min_quantity) {
+                $message = __('We have added', 'cart66') . " <strong>" . $product->min_quantity . "</strong> $itemName $optionResult" . __('to the cart because that is the minimum required quantity for this product', 'cart66') . ".";
+                $msgQuantityInCart = $product->min_quantity;
+              }
+              elseif($itemQuantity > $product->max_quantity) {
+                $message = __('We have only added', 'cart66') . " <strong>$product->max_quantity</strong> $itemName $optionResult" . __('to the cart because that is the maximum allowed quantity for this product', 'cart66') . ".";
+                $msgQuantityInCart = $product->max_quantity;
+              }
+              $msgId = -1;
+            }
+            else {
+              Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
+              if(Cart66Session::get('Cart66InvalidOptions')) {
+                $message = Cart66Session::get('Cart66InvalidOptions');
+                Cart66Session::drop('Cart66InvalidOptions');
+                $msgQuantityInCart = 0;
+                $msgId = -2;
+              }
+              else {
+                $message = __('We have successfully added', 'cart66') . " <strong>$itemQuantity</strong> $itemName $optionResult" . __('to the cart', 'cart66') . ".";
+                $msgQuantityInCart = $itemQuantity;
+                $msgId = 0;
+              }
+            }
           }
           else {
             $qtyAvailable = Cart66Product::checkInventoryLevelForProduct($productId, $productOptions);
@@ -309,7 +346,8 @@ class Cart66Ajax {
             }
             else {
               Cart66Common::log("Item not added due to inventory failure");
-              $message = __('We could not add', 'cart66') . " <strong>$actualQty $itemName $optionResult</strong>" . __('to the cart because we are out of stock', 'cart66') . ".";
+              $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
+              $message = __('We could not add', 'cart66') . " <strong>$actualQty $itemName $optionResult</strong>" . __('to the cart because we are ', 'cart66') . $soldOutLabel . ".";
               $msgQuantityInCart = 0;
               $msgId = -2;
               break;
@@ -318,11 +356,33 @@ class Cart66Ajax {
         }
         else {
           if(Cart66Product::confirmInventory($itemId, $options, $itemQuantity)) {
-            Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
-            $message = __('We have successfully added', 'cart66') . " <strong>$itemQuantity</strong> $itemName $optionResult" . __('to the cart', 'cart66') . ".";
-            $msgQuantityInCart = $itemQuantity;
-            $msgId = 0;
-            break;
+            $product = new Cart66Product($itemId);
+            if($itemQuantity < $product->min_quantity || ($itemQuantity > $product->max_quantity && $product->max_quantity != 0)) {
+              Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
+              if($itemQuantity < $product->min_quantity) {
+                $message = __('We have added', 'cart66') . " <strong>" . $product->min_quantity . "</strong> $itemName $optionResult" . __('to the cart because that is the minimum required quantity for this product', 'cart66') . ".";
+                $msgQuantityInCart = $product->min_quantity;
+              }
+              elseif($itemQuantity > $product->max_quantity) {
+                $message = __('We have only added', 'cart66') . " <strong>$product->max_quantity</strong> $itemName $optionResult" . __('to the cart because that is the maximum allowed quantity for this product', 'cart66') . ".";
+                $msgQuantityInCart = $product->max_quantity;
+              }
+              $msgId = -1;
+            }
+            else {
+              Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
+              if(Cart66Session::get('Cart66InvalidOptions')) {
+                $message = Cart66Session::get('Cart66InvalidOptions');
+                Cart66Session::drop('Cart66InvalidOptions');
+                $msgQuantityInCart = 0;
+                $msgId = -2;
+              }
+              else {
+                $message = __('We have successfully added', 'cart66') . " <strong>$itemQuantity</strong> $itemName $optionResult" . __('to the cart', 'cart66') . ".";
+                $msgQuantityInCart = $itemQuantity;
+                $msgId = 0;
+              }
+            }
           }
           else {
             $actualQty = Cart66Product::checkInventoryLevelForProduct($itemId, $options);
@@ -335,7 +395,8 @@ class Cart66Ajax {
             }
             else {
               Cart66Common::log("Item not added due to inventory failure");
-              $message = __('We could not add', 'cart66') . " <strong>$actualQty $itemName $optionResult</strong>" . __('to the cart because we are out of stock', 'cart66') . ".";
+              $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
+              $message = __('We could not add', 'cart66') . " <strong>$actualQty $itemName $optionResult</strong>" . __('to the cart because we are ', 'cart66') . $soldOutLabel . ".";
               $msgQuantityInCart = 0;
               $msgId = -2;
               break;
@@ -346,10 +407,33 @@ class Cart66Ajax {
     }
     else {
       if(Cart66Product::confirmInventory($itemId, $options, $itemQuantity)) {
-        Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
-        $message = __('We have successfully added', 'cart66') . " <strong>$itemQuantity</strong> $itemName $optionResult" . __('to the cart', 'cart66') . ".";
-        $msgQuantityInCart = $itemQuantity;
-        $msgId = 0;
+        $product = new Cart66Product($itemId);
+        if($itemQuantity < $product->min_quantity || ($itemQuantity > $product->max_quantity && $product->max_quantity != 0)) {
+          Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
+          if($itemQuantity < $product->min_quantity) {
+            $message = __('We have added', 'cart66') . " <strong>" . $product->min_quantity . "</strong> $itemName $optionResult" . __('to the cart because that is the minimum required quantity for this product', 'cart66') . ".";
+            $msgQuantityInCart = $product->min_quantity;
+          }
+          elseif($itemQuantity > $product->max_quantity) {
+            $message = __('We have only added', 'cart66') . " <strong>$product->max_quantity</strong> $itemName $optionResult" . __('to the cart because that is the maximum allowed quantity for this product', 'cart66') . ".";
+            $msgQuantityInCart = $product->max_quantity;
+          }
+          $msgId = -1;
+        }
+        else {
+          Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
+          if(Cart66Session::get('Cart66InvalidOptions')) {
+            $message = Cart66Session::get('Cart66InvalidOptions');
+            Cart66Session::drop('Cart66InvalidOptions');
+            $msgQuantityInCart = 0;
+            $msgId = -2;
+          }
+          else {
+            $message = __('We have successfully added', 'cart66') . " <strong>$itemQuantity</strong> $itemName $optionResult" . __('to the cart', 'cart66') . ".";
+            $msgQuantityInCart = $itemQuantity;
+            $msgId = 0;
+          }
+        }
       }
       else {
         $actualQty = Cart66Product::checkInventoryLevelForProduct($itemId, $options);
@@ -361,7 +445,8 @@ class Cart66Ajax {
         }
         else {
           Cart66Common::log("Item not added due to inventory failure");
-          $message = __('We could not add', 'cart66') . " <strong>$actualQty $itemName $optionResult</strong>" . __('to the cart because we are out of stock', 'cart66') . ".";
+          $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
+          $message = __('We could not add', 'cart66') . " <strong>$actualQty $itemName $optionResult</strong>" . __('to the cart because we are ', 'cart66') . $soldOutLabel . ".";
           $msgQuantityInCart = 0;
           $msgId = -2;
         }
@@ -413,7 +498,7 @@ class Cart66Ajax {
   public static function saveSettings() {
     $error = '';
     foreach($_REQUEST as $key => $value) {
-      if($key[0] != '_' && $key != 'action' && $key != 'submit') {
+      if($key[0] != '_' && $key != 'action' && $key != 'submit' && $key) {
         if(is_array($value) && $key != 'admin_page_roles') {
           $value = array_filter($value, 'strlen');
           if(empty($value)) {
@@ -455,6 +540,9 @@ class Cart66Ajax {
         elseif($key == 'admin_page_roles') {
           $value = serialize($value);
           Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Saving Admin Page Roles: " . print_r($value,true));
+        }
+        elseif($key == 'currency_decimals' && $value == 0) {
+          $value = 'no_decimal';
         }
 
         Cart66Setting::setValue($key, trim(stripslashes($value)));
@@ -528,8 +616,8 @@ class Cart66Ajax {
         }
         $out .= '</table>';
       }
-
-      $result[1] = $p->name . " " . $optionsMsg . " is&nbsp;out&nbsp;of&nbsp;stock $out";
+      $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
+      $result[1] = $p->name . " " . $optionsMsg . " is $soldOutLabel $out";
     }
 
     $result = json_encode($result);

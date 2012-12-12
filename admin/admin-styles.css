@@ -814,7 +814,7 @@ overflow: hidden;
  ************************************************************/
 
 
-.alert-message.alert-danger, .alert-message.alert-danger:hover, .alert-message.alert-error, .alert-message.alert-error:hover, .alert-message.success, .alert-message.success:hover, .alert-message.info, .alert-message.info:hover {
+.alert-message.alert-danger, .alert-message.alert-danger:hover, .alert-message.alert-error, .alert-message.alert-error:hover, .alert-message.success, .alert-message.success:hover, .alert-message.info, .alert-message.info:hover, .alert-message .header {
   color: white;
 }
 .alert-message .close {
@@ -918,7 +918,7 @@ overflow: hidden;
   font-weight: bold;
   color: #404040;
 }
-.alert-message.alert-danger p a, .alert-message.alert-error p a, .alert-message.success p a, .alert-message.info p a, .alert-message.info h1 a, .alert-message.info h2 a {
+.alert-message.alert-danger p a, .alert-message.alert-error p a, .alert-message.success p a, .alert-message.info p a, .alert-message.info h1 a, .alert-message.info h2 a, .alert-message .header {
   color: white;
 }
 .alert-message h5 {

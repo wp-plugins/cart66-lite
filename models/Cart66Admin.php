@@ -253,14 +253,20 @@ class Cart66Admin {
           $account = new Cart66Account($acctData['id']);
           $account->setData($acctData);
           $account_errors = $account->validate();
-
-          $sub = new Cart66AccountSubscription($planData['id']);
-          $sub->setData($planData);
-          $subscription_product = new Cart66Product($sub->product_id);
-          $sub->subscription_plan_name = $subscription_product->name;
-          $sub->feature_level = $subscription_product->feature_level;
-          $subscription_errors = $sub->validate();
           
+          $sub = new Cart66AccountSubscription($planData['id']);
+          if($planData['product_id'] != 'spreedly_subscription') {
+            $sub->setData($planData);
+            $subscription_product = new Cart66Product($sub->product_id);
+            $sub->subscription_plan_name = $subscription_product->name;
+            $sub->feature_level = $subscription_product->feature_level;
+            $sub->subscriber_token = '';
+          }
+          else {
+            unset($planData['product_id']);
+            $sub->setData($planData);
+          }
+          $subscription_errors = $sub->validate();
           $errors = array_merge($account_errors, $subscription_errors);
 
           if(count($errors) == 0) {

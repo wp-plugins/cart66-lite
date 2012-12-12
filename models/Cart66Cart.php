@@ -53,7 +53,8 @@ class Cart66Cart {
     }
     
     if(isset($_POST['item_user_price'])){
-      $sanitizedPrice = Cart66Common::cleanNumber($_POST['item_user_price']);
+      $userPrice = $_POST['item_user_price'] === 0 ? '0' . Cart66Setting::getValue('currency_dec_point') . '00' : $_POST['item_user_price'];
+      $sanitizedPrice = Cart66Common::cleanNumber($userPrice);
       Cart66Session::set("userPrice_$itemId",$sanitizedPrice);
     }
     
@@ -94,7 +95,7 @@ class Cart66Cart {
    * 
    * @return Cart66CartItem
    */
-  public function addItem($id, $qty=1, $optionInfo='', $formEntryId=0, $productUrl='', $ajax=false) {
+  public function addItem($id, $qty=1, $optionInfo='', $formEntryId=0, $productUrl='', $ajax=false, $suppressHook=false) {
     Cart66Session::set('Cart66Tax', 0);
     Cart66Session::set('Cart66TaxRate', 0);
     $the_final_item = false;
@@ -107,6 +108,8 @@ class Cart66Cart {
     catch(Exception $e) {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Exception due to invalid product option: " . $e->getMessage());
       $options_valid = false;
+      $alert = __('We could not add the product', 'cart66') . ' <strong>' . $product->name . '</strong> ' . __('to the cart because the product options are invalid.', 'cart66');
+      Cart66Session::set('Cart66InvalidOptions', $alert);
     }
     
     if($product->id > 0 && $options_valid) {
@@ -143,10 +146,11 @@ class Cart66Cart {
                 $alert = '<p>We are not able to fulfill your order for <strong>' .  $qty . '</strong> ' . $item->getFullDisplayName() . "  because we only have <strong>$actualQty in stock</strong>.</p>";
               }
               else {
-                $alert = '<p>We are not able to fulfill your order for <strong>' .  $qty . '</strong> ' . $item->getFullDisplayName() . "  because it is <strong>out of stock</strong>.</p>";
+                $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
+                $alert = '<p>We are not able to fulfill your order for <strong>' .  $qty . '</strong> ' . $item->getFullDisplayName() . "  because it is <strong>" . $soldOutLabel . "</strong>.</p>";
               }
               if(!empty($alert)) {
-                $alert = "<div class='Cart66Unavailable Cart66Error'><h1>Inventory Restriction</h1> $alert <p>Your cart has been updated based on our available inventory.</p>";
+                $alert = "<div class='alert-message alert-error Cart66Unavailable'><h1>Inventory Restriction</h1> $alert <p>Your cart has been updated based on our available inventory.</p>";
                 $alert .= '<input type="button" name="close" value="Ok" class="Cart66ButtonSecondary modalClose" /></div>';
                 Cart66Session::set('Cart66InventoryWarning', $alert);
               }
@@ -164,6 +168,32 @@ class Cart66Cart {
           }
         }
         if($isNew) {
+          $newQuantity = $qty;
+          $actualQty = Cart66Product::checkInventoryLevelForProduct($id, $optionInfo->options);
+          $confirmInventory = Cart66Product::confirmInventory($id, $optionInfo->options, $newQuantity);
+          if($actualQty !== NULL && $actualQty < $newQuantity && !$confirmInventory){
+            if($actualQty > 0) {
+              $alert = '<p>We are not able to fulfill your order for <strong>' .  $qty . '</strong> ' . $newItem->getFullDisplayName() . "  because we only have <strong>$actualQty in stock</strong>.</p>";
+            }
+            else {
+              $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
+              $alert = '<p>We are not able to fulfill your order for <strong>' .  $qty . '</strong> ' . $newItem->getFullDisplayName() . "  because it is <strong>" . $soldOutLabel . "</strong>.</p>";
+            }
+            if(!empty($alert)) {
+              $alert = "<div class='alert-message alert-error Cart66Unavailable'><h1>Inventory Restriction</h1> $alert <p>Your cart has been updated based on our available inventory.</p>";
+              $alert .= '<input type="button" name="close" value="Ok" class="Cart66ButtonSecondary modalClose" /></div>';
+              Cart66Session::set('Cart66InventoryWarning', $alert);
+            }
+            if($ajax==true) {
+              Cart66Session::drop('Cart66InventoryWarning');
+            }
+            $newQuantity = $actualQty;
+          }
+          $newItem->setQuantity($newQuantity);
+          if($formEntryId > 0) {
+            $newItem->addFormEntryId($formEntryId);
+          }
+          
           $the_final_item = $newItem;
           $this->_items[] = $newItem;
         }
@@ -171,7 +201,9 @@ class Cart66Cart {
 
       $this->_setPromoFromPost();
       Cart66Session::touch();
-      do_action('cart66_after_add_to_cart', $product, $qty);
+      if(!$suppressHook) {
+        do_action('cart66_after_add_to_cart', $product, $qty);
+      }
       return $the_final_item;
     }
     
@@ -348,7 +380,7 @@ class Cart66Cart {
     return $isTaxed;
   }
   
-  public function getTaxableAmount() {
+  public function getTaxableAmount($tax_shipping=false) {
     $total = 0;
     $p = new Cart66Product();
     foreach($this->_items as $item) {
@@ -361,9 +393,14 @@ class Cart66Cart {
     $discount = 0;
     $promotion = $this->getPromotion();
     
-    if($promotion && $promotion->apply_to != "shipping"){
+    if($promotion){
       $discount = $this->getDiscountAmount();
-    }    
+    }
+    
+    if($tax_shipping) {
+      $shipping = $this->getShippingCost();
+      $total = $total += $shipping;
+    }
     
     if($discount > $total) {
       $total = 0;
@@ -381,16 +418,14 @@ class Cart66Cart {
     $isTaxed = $taxRate->loadByZip($zip);
     if($isTaxed == false) {
       $isTaxed = $taxRate->loadByState($state);
-      if($state = 'All Sales') {
-        Cart66Session::set('Cart66TaxRate', round($taxRate->rate, 2));
+      if($state == 'All Sales' && $isTaxed) {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] so i guess it's all sales? rate: " . $taxRate->rate);
+        Cart66Session::set('Cart66TaxRate', Cart66Common::tax($taxRate->rate));
       }
     }
     
     if($isTaxed) {
-      $taxable = $this->getTaxableAmount();
-      if($taxRate->tax_shipping == 1) {
-        $taxable += $this->getShippingCost();
-      }
+      $taxable = $this->getTaxableAmount($taxRate->tax_shipping);
       $tax = number_format($taxable * ($taxRate->rate/100), 2, '.', '');
     }
     
@@ -406,6 +441,10 @@ class Cart66Cart {
     $method = new Cart66ShippingMethod();
     $methods = $method->getModels("where code IS NULL or code = ''", 'order by default_rate asc');
     $ship = array();
+    if(Cart66Setting::getValue('require_shipping_validation')) {
+      $select = Cart66Setting::getValue('require_shipping_validation_label') ? Cart66Setting::getValue('require_shipping_validation_label') : __('Select a Shipping Method', 'cart66');
+      $ship[$select] = 'select';
+    }
     foreach($methods as $m) {
       $ship[$m->name] = $m->id;
     }
@@ -596,7 +635,7 @@ class Cart66Cart {
         // nothing special to do here right now
         $total = $total - $promotion->getDiscountAmount();
       }
-      if($promotion && $promotion->apply_to == "products"){
+      if($promotion && ($promotion->apply_to == "products" || $promotion->apply_to == "subtotal")){
         $total = ($subTotal - $promotion->getDiscountAmount()) + $this->getShippingCost();
       }
     }
@@ -625,8 +664,10 @@ class Cart66Cart {
    }
   
   public function storeOrder($orderInfo) {
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] orderinfo: " . print_r($orderInfo, true));
     $order = new Cart66Order();
-    $orderInfo['trans_id'] = (empty($orderInfo['trans_id'])) ? 'MT-' . Cart66Common::getRandString() : $orderInfo['trans_id'];
+    $pre_string = isset($orderInfo['status']) && $orderInfo['status'] == 'checkout_pending' ? 'CP-' : 'MT-';
+    $orderInfo['trans_id'] = (empty($orderInfo['trans_id'])) ? $pre_string . Cart66Common::getRandString() : $orderInfo['trans_id'];
     $orderInfo['ip'] = $_SERVER['REMOTE_ADDR'];
     if(Cart66Session::get('Cart66Promotion')){
        $orderInfo['discount_amount'] = Cart66Session::get('Cart66Promotion')->getDiscountAmount(Cart66Session::get('Cart66Cart'));
@@ -854,6 +895,9 @@ class Cart66Cart {
       $this->_shippingMethodId = $id;
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Set shipping method id to: $id");
     }
+    elseif(Cart66Setting::getValue('require_shipping_validation')) {
+      $this->_shippingMethodId = 'select';
+    }
   }
 
   public function getShippingMethodId() {
@@ -912,8 +956,9 @@ class Cart66Cart {
             we only have <strong>$qtyAvailable in stock</strong>.</p>";
         }
         else {
+          $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
           $alert .= '<p>We are not able to fulfill your order for <strong>' .  $item->getQuantity() . '</strong> ' . $item->getFullDisplayName() . "  because 
-            it is <strong>out of stock</strong>.</p>";
+            it is <strong>" . $soldOutLabel . "</strong>.</p>";
         }
         
         if($qtyAvailable > 0) {
@@ -927,7 +972,7 @@ class Cart66Cart {
     }
     
     if(!empty($alert)) {
-      $alert = "<div class='Cart66Unavailable Cart66Error'><h1>Inventory Restriction</h1> $alert <p>Your cart has been updated based on our available inventory.</p>";
+      $alert = "<div class='alert-message alert-error Cart66Unavailable'><h1>Inventory Restriction</h1> $alert <p>Your cart has been updated based on our available inventory.</p>";
       $alert .= '<input type="button" name="close" value="Ok" class="Cart66ButtonSecondary modalClose" /></div>';
     }
     
@@ -1015,7 +1060,7 @@ class Cart66Cart {
       }
       
       // Get Canada Post Live Shipping Rates
-      if(Cart66Setting::getValue('capost_merchant_id')) {
+      if(Cart66Setting::getValue('capost_merchant_id') || Cart66Setting::getValue('capost_username')) {
         $this->_liveRates->setToCountryCode($countryCode);
         $rates = $this->getCaPostRates();
         foreach($rates as $name => $price) {
@@ -1111,6 +1156,9 @@ class Cart66Cart {
     $methods = $method->getModels("where code IS NULL or code = ''", 'order by default_rate asc');
     if(is_array($methods) && count($methods) && get_class($methods[0]) == 'Cart66ShippingMethod') {
       $this->_shippingMethodId = $methods[0]->id;
+      if(Cart66Setting::getValue('require_shipping_validation')) {
+        $this->_shippingMethodId = 'select';
+      }
     }
   }
   
@@ -1120,6 +1168,12 @@ class Cart66Cart {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not using live shipping rates");
       $shippingMethodId = $_POST['shipping_method_id'];
       $this->setShippingMethod($shippingMethodId);
+      if(isset($_POST['shipping_country_code'])) {
+        Cart66Session::set('Cart66ShippingCountryCode', $_POST['shipping_country_code']);
+      }
+      else {
+        Cart66Session::drop('Cart66ShippingCountryCode');
+      }
     }
     // Using live rates
     elseif(isset($_POST['live_rates'])) {
@@ -1151,7 +1205,7 @@ class Cart66Cart {
             $this->setItemQuantity($itemIndex, $qtyAvailable);
             if(!Cart66Session::get('Cart66InventoryWarning')) { Cart66Session::set('Cart66InventoryWarning', ''); }
             $inventoryWarning = Cart66Session::get('Cart66InventoryWarning');
-            $inventoryWarning .= '<div class="Cart66Error">' . __("The quantity for","cart66") . ' ' . $item->getFullDisplayName() . " " . __("could not be changed to","cart66") . " $qty " . __("because we only have", "cart66") . " $qtyAvailable " . __("in stock","cart66") . ".</div>";
+            $inventoryWarning .= '<div class="alert-message alert-error  Cart66Unavailable">' . __("The quantity for","cart66") . ' ' . $item->getFullDisplayName() . " " . __("could not be changed to","cart66") . " $qty " . __("because we only have", "cart66") . " $qtyAvailable " . __("in stock","cart66") . ".</div>";
             Cart66Session::set('Cart66InventoryWarning', $inventoryWarning);
             Cart66Common::log("Quantity available ($qtyAvailable) cannot meet desired quantity ($qty) for product id: " . $item->getProductId());
           }
@@ -1168,6 +1222,10 @@ class Cart66Cart {
         $this->setCustomFieldInfo($itemIndex, $info);
       }
     }
+  }
+  
+  public function applyAutoPromotions() {
+    $this->_setPromoFromPost();
   }
   
   protected function _setPromoFromPost() {
@@ -1278,6 +1336,12 @@ class Cart66Cart {
         }
         else {
           throw new Exception("Invalid product option: $opt");
+        }
+      }
+      else {
+        if(count($valid_options) > 0 && !$product->isGravityProduct()) {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] no option");
+          throw new Exception("Product option is required");
         }
       }
     }

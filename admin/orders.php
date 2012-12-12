@@ -10,7 +10,7 @@
 
 <div class='wrap' style='margin-bottom:60px;'>
   
-  <?php 
+ <?php 
     $setting = new Cart66Setting();
     $stats = trim(Cart66Setting::getValue('status_options'));
     if(strlen($stats) >= 1 ) {
@@ -19,20 +19,20 @@
       <p style="float: left; clear: both; margin-top:0; padding-top: 0;"><?php _e( 'Filter Orders by Status' , 'cart66' ); ?>:
         <?php
           foreach($stats as $s) {
-            $s = trim($s);
+            $s = trim(strtolower($s));
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Order status query: WHERE status='$s'");
-            $tmpRows = $order->getOrderRows("WHERE status='$s'");
+            $tmpRows = $order->getOrderRows("WHERE status='$s'");            
             $n = count($tmpRows);
             if($n > 0) {
               $url = Cart66Common::replaceQueryString("page=cart66_admin&status=$s");
-              echo "<a href=\"$url\">$s (" . count($tmpRows) . ")</a> &nbsp;|&nbsp; ";
+              echo "<a href=\"$url\">" . ucwords($s) . " (" . count($tmpRows) . ")</a> &nbsp;|&nbsp; ";
             }
             else {
-              echo "$s (0) &nbsp;|&nbsp;";
+              echo ucwords($s) ." (0) &nbsp;|&nbsp;";
             }
           }
         ?>
-        <a href="?page=cart66_admin">All (<?php echo count($order->getOrderRows()) ?>)</a>
+        <a href="?page=cart66_admin">All (<?php echo count($order->getOrderRows("WHERE `status` != 'checkout_pending'")) ?>)</a>
       </p>
   <?php
     }
@@ -94,7 +94,7 @@
           { "bSortable": true, "fnRender": function(oObj) { return '<a href="?page=cart66_admin&task=view&id=' + oObj.aData[0] + '">' + oObj.aData[1] + '</a>' }},
           { "fnRender": function(oObj) { return oObj.aData[2] + ' ' + oObj.aData[3] }},
           { "bVisible": false },
-          { "fnRender": function(oObj) { return '<?php echo CART66_CURRENCY_SYMBOL ?>' + oObj.aData[4] }},
+          null,
           { "bSearchable": false },
           { "bSearchable": false },
           null,
@@ -118,6 +118,7 @@
         }
       }).css('width','');
       $('.Cart66ViewOrderNote').live('click', function () {
+        $(".Cart66OrderNote").hide();
         var id = $(this).attr('rel');
         $('#' + id).show();
         return false;

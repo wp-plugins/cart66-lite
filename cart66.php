@@ -3,7 +3,7 @@
 Plugin Name: Cart66 Lite
 Plugin URI: http://www.cart66.com
 Description: Wordpress Shopping Cart
-Version: 1.5.0.2
+Version: 1.5.1
 Author: Reality 66
 Author URI: http://www.Reality66.com
 Text Domain: cart66
@@ -48,10 +48,9 @@ if(!class_exists('Cart66')) {
   require_once(CART66_PATH. "/models/Cart66CartWidget.php");
   require_once(CART66_PATH. "/models/Cart66.php");
   require_once(CART66_PATH. "/models/Cart66Common.php");
-  
   define("CART66_ORDER_NUMBER", false);
   define("CART66_PRO", false);
-  define('CART66_VERSION_NUMBER', '1.5.0.2');
+  define('CART66_VERSION_NUMBER', cart66_plugin_version());
   define("WPCURL", Cart66Common::getWpContentUrl());
   define("WPURL", Cart66Common::getWpUrl());
   define("MIJIREH_CHECKOUT", 'https://secure.mijireh.com');
@@ -93,7 +92,33 @@ if(!class_exists('Cart66')) {
   add_action('widgets_init', array($cart66, 'registerCartWidget'));
   // Add settings link to plugin page
   add_filter('plugin_action_links', 'cart66SettingsLink',10,2);
-  include('wp_mail.php');
+  cart66_check_mail_plugins();
+}
+
+function cart66_check_mail_plugins() {
+  $wp_mail = true;
+  $start = WP_PLUGIN_DIR;
+  $plugin_files = array(
+    'wpmandrill.php'
+  );
+  $dir_start = scandir($start);
+
+  foreach($dir_start as $key => $dir) {
+    if(!is_dir($start . '/' . $dir) || $dir == '.' || $dir == '..') {
+      continue;
+    }
+    $new_dir = scandir($start . '/' . $dir);
+    foreach($new_dir as $key => $dir2) {
+      include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+      if(in_array($dir2, $plugin_files) && is_plugin_active($dir . '/' . $dir2)) {
+        $wp_mail = false;
+      }
+    }
+  }
+  define('CART66_WPMAIL', $wp_mail);
+  if(CART66_WPMAIL) {
+    include('wp_mail.php');
+  }
 }
 
 function cart66SettingsLink($links, $file) {
@@ -115,6 +140,17 @@ if(CART66_PRO) {
 }
 function deactivation() {
   require_once(CART66_PATH. "/pro/models/Cart66MembershipReminders.php");
+  require_once(CART66_PATH. "/pro/models/Cart66GravityReader.php");
   wp_clear_scheduled_hook('daily_subscription_reminder_emails');
   wp_clear_scheduled_hook('daily_followup_emails');
+  wp_clear_scheduled_hook('daily_gravity_forms_entry_removal');
+  wp_clear_scheduled_hook('daily_prune_pending_paypal_orders');
+}
+
+function cart66_plugin_version() {
+  if(!function_exists('get_plugin_data')) {
+    require_once(ABSPATH . 'wp-admin/includes/plugin.php');
+  }
+  $plugin_data = get_plugin_data(CART66_PATH . '/cart66.php');
+  return $plugin_data['Version'];
 }

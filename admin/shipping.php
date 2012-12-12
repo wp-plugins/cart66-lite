@@ -11,7 +11,18 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     $rule->save();
     $rule->clear();
   }
+  elseif($_POST['cart66-action'] == 'save shipping validation') {
+    Cart66Setting::setValue('require_shipping_validation', $_POST['require_shipping_validation']);
+    Cart66Setting::setValue('require_shipping_validation_label', $_POST['require_shipping_validation_label']);
+  }
   elseif($_POST['cart66-action'] == 'save shipping method') {
+    if(isset($_POST['shipping_method']['countries'])) {
+      foreach($_POST['shipping_method']['countries'] as $post_country) {
+        $post_country = explode('~', $post_country);
+        $post_countries[$post_country[0]] = $post_country[1];
+      }
+      $_POST['shipping_method']['countries'] = serialize($post_countries);
+    }
     $method->setData($_POST['shipping_method']);
     $method->save();
     $method->clear();
@@ -281,46 +292,115 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
   if(CART66_PRO && Cart66Setting::getValue('use_live_rates')):
     require_once(CART66_PATH . "/pro/admin/shipping.php");  
   else: ?>
+    
+    <h3 style="clear: both;"><?php _e( 'Shipping Validation' , 'cart66' ); ?></h3>
+    <p style="width: 400px;"><?php _e( 'Set the options here whether or not to require shipping validation on the cart page.' , 'cart66' ); ?></p> 
 
+    <form action="" method='post'>
+      <input type='hidden' name='cart66-action' value='save shipping validation' />
+      
+      <table class="form-table">
+        <tbody>
+          <tr valign="top">
+            <th scope="row"><?php _e('Shipping Validation', 'cart66'); ?></th>
+            <td>
+              <input type="radio" value="1" name="require_shipping_validation" id="require_shipping_validation_yes"<?php echo Cart66Setting::getValue('require_shipping_validation') == 1 ? ' checked="checked"' : ''; ?> />
+              <label for="require_shipping_validation_yes"><?php _e('Yes', 'cart66'); ?></label>
+              <input type="radio" value="0" name="require_shipping_validation" id="require_shipping_validation_no"<?php echo Cart66Setting::getValue('require_shipping_validation') != 1 ? ' checked="checked"' : ''; ?> />
+              <label for="require_shipping_validation_no"><?php _e('No', 'cart66'); ?></label>
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e('Validation Label', 'cart66'); ?></th>
+            <td>
+              <input type="test" name="require_shipping_validation_label" value="<?php echo Cart66Setting::getValue('require_shipping_validation_label'); ?>" />
+              <p class="description"><?php _e('Enter the label for the option that asks the customer to select a shipping method and rate.  Default: Select a Shipping Method', 'cart66'); ?></p>
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"></th>
+            <td>
+              <?php submit_button(__('Save', 'cart66')); ?>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    
+    </form>
+    
     <h3 style="clear: both;"><?php _e( 'Shipping Methods' , 'cart66' ); ?></h3>
-    <p style="width: 400px;"><?php _e( 'Create the shipping methods you will offer your customers. If no shipping
-    price is defined for a product, the default rates entered here will be used
-    to calculate shipping costs.' , 'cart66' ); ?></p> 
+    <p style="width: 400px;"><?php _e( 'Create the shipping methods you will offer your customers. If no shipping price is defined for a product, the default rates entered here will be used to calculate shipping costs.' , 'cart66' ); ?></p> 
 
     <form action="" method='post'>
       <input type='hidden' name='cart66-action' value='save shipping method' />
       <input type='hidden' name='shipping_method[id]' value='<?php echo $method->id ?>' />
-    
-      <ul>
-        <li>
-          <label class="med"><?php _e( 'Shipping method' , 'cart66' ); ?>:</label>
-          <input type="text" name="shipping_method[name]" value="<?php echo $method->name ?>" />
-          <span class="label_desc"><?php _e( 'ex. FedEx Ground' , 'cart66' ); ?></span>
-        </li>
       
-        <li>
-          <label class="med"><?php _e( 'Default rate' , 'cart66' ); ?>:</label>
-          <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
-          <input type="text" name="shipping_method[default_rate]" value="<?php echo $method->default_rate ?>" style='width: 80px;'/>
-          <span class="label_desc"><?php _e( 'Rate if only one item is ordered' , 'cart66' ); ?></span>
-        </li>
-
-        <li>
-          <label class="med">Default bunde rate:</label>
-          <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
-          <input type="text" name="shipping_method[default_bundle_rate]" value="<?php echo $method->default_bundle_rate ?>" style='width: 80px;'/>
-          <span class="label_desc"><?php _e( 'Rate for each additional item' , 'cart66' ); ?></span>
-        </li>
-
-        <li>
-          <label class="med">&nbsp;</label>
-          <?php if($method->id > 0): ?>
-          <a href='?page=cart66-shipping' class='button-secondary linkButton' style=""><?php _e( 'Cancel' , 'cart66' ); ?></a>
-          <?php endif; ?>
-          <input type='submit' name='submit' class="button-primary" style='width: 60px;' value='<?php _e( 'Save' , 'cart66' ); ?>' />
-        </li>
-      </ul>
-    
+      <table class="form-table">
+        <tbody>
+          <tr valign="top">
+            <th scope="row"><?php _e( 'Shipping method' , 'cart66' ); ?></th>
+            <td>
+              <input type="text" name="shipping_method[name]" value="<?php echo $method->name ?>" />
+              <span class="label_desc"><?php _e( 'ex. FedEx Ground' , 'cart66' ); ?></span>
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e( 'Default rate' , 'cart66' ); ?></th>
+            <td>
+              <span><?php echo Cart66Common::currencySymbol('before'); ?></span>
+              <input type="text" name="shipping_method[default_rate]" value="<?php echo $method->default_rate ?>" style='width: 80px;'/>
+              <span><?php echo Cart66Common::currencySymbol('after'); ?></span>
+              <span class="label_desc"><?php _e( 'Rate if only one item is ordered' , 'cart66' ); ?></span>
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e('Default bundle rate', 'cart66'); ?></th>
+            <td>
+              <span><?php echo Cart66Common::currencySymbol('before'); ?></span>
+              <input type="text" name="shipping_method[default_bundle_rate]" value="<?php echo $method->default_bundle_rate ?>" style='width: 80px;'/>
+              <span><?php echo Cart66Common::currencySymbol('after'); ?></span>
+              <span class="label_desc"><?php _e( 'Rate for each additional item' , 'cart66' ); ?></span>
+            </td>
+          </tr>
+          <tr valign="top" class="eligible_countries_block">
+            <th scope="row"><?php _e('Eligible Countries', 'cart66'); ?></th>
+            <td>
+              <select id="countries" name="shipping_method[countries][]" class="multiselect" multiple="multiple">
+                <?php
+                  $countryList = unserialize($method->countries);
+                  $countryList = $countryList ? $countryList : array();
+                ?>
+                <?php
+                $countries = explode(',', Cart66Setting::getValue('countries'));
+                
+                foreach($countries as $c) {
+                  $ship_country = explode('~', $c);
+                  $ship_to_countries[$ship_country[0]] = $ship_country[1];
+                }
+                foreach($ship_to_countries as $code => $country): ?>
+                  <?php 
+                    $selected = (in_array($country, $countryList)) ? 'selected="selected"' : '';
+                    if(!empty($code)):
+                  ?>
+                    <option value="<?php echo $code . '~' . $country; ?>" <?php echo $selected ?>><?php echo $country ?></option>
+                  <?php endif; ?>
+                <?php endforeach; ?>
+              </select>
+              <span class="description"><?php _e('Select which countries you want this shipping method to apply to. Leave blank to apply to all countries. Only the countries selected in the main settings will appear in this list.', 'cart66'); ?></span>
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"></th>
+            <td>
+              <?php if($method->id > 0): ?>
+              <a href='?page=cart66-shipping' class='button-secondary linkButton' style=""><?php _e( 'Cancel' , 'cart66' ); ?></a>
+              <?php endif; ?>
+              <input type='submit' name='submit' class="button-primary" style='width: 60px;' value='<?php _e( 'Save' , 'cart66' ); ?>' />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
     </form>
     
     <?php
@@ -340,8 +420,8 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
       <?php foreach($methods as $m): ?>
         <tr>
           <td><?php echo $m->name ?></td>
-          <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($m->default_rate, 2); ?></td>
-          <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($m->default_bundle_rate, 2); ?></td>
+          <td><?php echo Cart66Common::currency($m->default_rate); ?></td>
+          <td><?php echo Cart66Common::currency($m->default_bundle_rate); ?></td>
           <td>
            <a href='?page=cart66-shipping&task=edit_method&id=<?php echo $m->id ?>'><?php _e( 'Edit' , 'cart66' ); ?></a> | 
            <a class='delete' href='?page=cart66-shipping&task=delete_method&id=<?php echo $m->id ?>'><?php _e( 'Delete' , 'cart66' ); ?></a>
@@ -381,13 +461,15 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
           </li>
           <li>
             <label class="med"><?php _e( 'Shipping rate' , 'cart66' ); ?>:</label>
-            <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
+            <span><?php echo Cart66Common::currencySymbol('before'); ?></span>
             <input type="text" style="width: 80px;" name="rate[shipping_rate]" value="<?php echo $rate->shipping_rate ?>" />
+            <span><?php echo Cart66Common::currencySymbol('after'); ?></span>
           </li>
           <li>
             <label class="med">Shipping bundle rate:</label>
-            <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
+            <span><?php echo Cart66Common::currencySymbol('before'); ?></span>
             <input type="text" style="width: 80px;" name="rate[shipping_bundle_rate]" value="<?php echo $rate->shipping_bundle_rate ?>" />
+            <span><?php echo Cart66Common::currencySymbol('after'); ?></span>
           </li>
           <li>
             <label class="med">&nbsp;</label>
@@ -425,8 +507,8 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
         <tr>
           <td><?php echo $product->item_number ?> <?php echo $product->name ?></td>
           <td><?php echo $method->name ?></td>
-          <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($r->shipping_rate, 2); ?></td>
-          <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($r->shipping_bundle_rate, 2); ?></td>
+          <td><?php echo Cart66Common::currency($r->shipping_rate); ?></td>
+          <td><?php echo Cart66Common::currency($r->shipping_bundle_rate); ?></td>
           <td>
            <a href='?page=cart66-shipping&task=edit_rate&id=<?php echo $r->id ?>'><?php _e( 'Edit' , 'cart66' ); ?></a> | 
            <a class='delete' href='?page=cart66-shipping&task=delete_rate&id=<?php echo $r->id ?>'><?php _e( 'Delete' , 'cart66' ); ?></a>
@@ -438,12 +520,10 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
     <?php endif; ?>
     <h3 style="clear: both;"><?php _e( 'Cart Price Shipping Rates' , 'cart66' ); ?></h3>
 
-    <p style='width: 400px;'><?php _e( 'You can set the shipping cost based on the total cart value. For example, you 
-      may want to offer free shipping on orders over $50. To do that set minimum cart amount to $50 and the
-      shipping cost to $0.' , 'cart66' ); ?></p> 
-    <p style='width: 400px;'><?php _e( 'You can also set up tiered shipping costs based on the cart amount. For example,
-      if you want to charge $10 shipping on orders between $0 - $24.99 and $5 shipping on orders between $25 - $49.99
-      and free shipping on orders $50 or more you would set that up with three shipping rules as follows.' , 'cart66' ); ?></p>
+    <p style='width: 400px;'><?php echo __( 'You can set the shipping cost based on the total cart value. For example, you 
+      may want to offer free shipping on orders over ', 'cart66') . Cart66Common::currency(50) . '. ' . __('To do that set minimum cart amount to', 'cart66') . ' ' . Cart66Common::currency(50) . __(' and the shipping cost to ', 'cart66') . Cart66Common::currency(0) . '.'?></p> 
+    <p style='width: 400px;'><?php echo __( 'You can also set up tiered shipping costs based on the cart amount. For example,
+      if you want to charge $10 shipping on orders between ', 'cart66') . Cart66Common::currency(0) . ' - ' . Cart66Common::currency(24.99) . __(' and ', 'cart66') . Cart66Common::currency(5) . __(' shipping on orders between ', 'cart66') . Cart66Common::currency(25) . ' - ' . Cart66Common::currency(49.99) . __(' and free shipping on orders ', 'cart66') . Cart66Common::currency(50) . __(' or more you would set that up with three shipping rules as follows.' , 'cart66' ); ?></p>
     
     <table style='width: 400px; margin-bottom: 20px;'>
       <tr>
@@ -451,16 +531,16 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
         <th style='text-align: left;'><?php _e( 'Shipping cost' , 'cart66' ); ?></th>
       </tr>
       <tr>
-        <td>$0</td>
-        <td>$10</td>
+        <td><?php echo Cart66Common::currency(0); ?></td>
+        <td><?php echo Cart66Common::currency(10); ?></td>
       </tr>
       <tr>
-        <td>$25</td>
-        <td>$5</td>
+        <td><?php echo Cart66Common::currency(25); ?></td>
+        <td><?php echo Cart66Common::currency(5); ?></td>
       </tr>
       <tr>
-        <td>$50</td>
-        <td>$0</td>
+        <td><?php echo Cart66Common::currency(50); ?></td>
+        <td><?php echo Cart66Common::currency(0); ?></td>
       </tr>
     </table>
 
@@ -471,8 +551,9 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
       <ul>
         <li>
           <label for="rule-min_amount"><?php _e( 'Minimum cart amount' , 'cart66' ); ?>:</label>
-          <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
+          <span><?php echo Cart66Common::currencySymbol('before'); ?></span>
           <input type='text' name='rule[min_amount]' id='rule-min_amount' style='width: 80px;' value='<?php echo $rule->minAmount ?>' />
+          <span><?php echo Cart66Common::currencySymbol('after'); ?></span>
         </li>
         <li>
           <label class="med"><?php _e( 'Shipping method' , 'cart66' ); ?>:</label>
@@ -484,8 +565,9 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
         </li>
         <li>
           <label class="med" for="rule-shipping_cost"><?php _e( 'Shipping cost' , 'cart66' ); ?>:</label>
-          <span><?php echo CART66_CURRENCY_SYMBOL ?></span>
-          <input type="text" id="rule-shipping_cost" name="rule[shipping_cost]" style='width: 80px;' value='<?php echo $rule->shippingCost ?>'>
+          <span><?php echo Cart66Common::currencySymbol('before'); ?></span>
+          <input type="text" id="rule-shipping_cost" name="rule[shipping_cost]" style="width: 80px;" value="<?php echo $rule->shippingCost ?>" />
+          <span><?php echo Cart66Common::currencySymbol('after'); ?></span>
         </li>
         <li>
           <label class="med">&nbsp;</label>
@@ -520,9 +602,9 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
               $method->load($rule->shipping_method_id);
             ?>
            <tr>
-             <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $rule->min_amount ?></td>
+             <td><?php echo Cart66Common::currency($rule->min_amount); ?></td>
              <td><?php echo ($method->name) ? $method->name : "<span style='color:red;'>Please select a method</span>"; ?></td>
-             <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $rule->shipping_cost ?></td>
+             <td><?php echo Cart66Common::currency($rule->shipping_cost); ?></td>
              <td>
                <a href='?page=cart66-shipping&task=edit&id=<?php echo $rule->id ?>'><?php _e( 'Edit' , 'cart66' ); ?></a> | 
                <a class='delete' href='?page=cart66-shipping&task=delete&id=<?php echo $rule->id ?>'><?php _e( 'Delete' , 'cart66' ); ?></a>
@@ -541,6 +623,8 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
 <script type="text/javascript">
   (function($){
     $(document).ready(function(){
+      
+      $(".multiselect").multiselect({sortable: true});
       
       $('div.sh<?php echo $tab; ?>').show();
   	  

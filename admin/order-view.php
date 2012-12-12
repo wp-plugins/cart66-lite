@@ -48,8 +48,8 @@ if(isset($data['resend']) && $data['resend'] == true) {
         </td>
         <td style="text-align: center;"><?php echo $item->quantity ?></td>
 
-        <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($item->product_price, 2); ?></td>
-        <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($item->product_price * $item->quantity, 2) ?></td>
+        <td style="text-align: right;"><?php echo Cart66Common::currency($item->product_price); ?></td>
+        <td style="text-align: right;"><?php echo Cart66Common::currency($item->product_price * $item->quantity); ?></td>
       </tr>
       <?php
         if(!empty($item->form_entry_ids)) {
@@ -78,49 +78,66 @@ if(isset($data['resend']) && $data['resend'] == true) {
       
       <tr>
         <td colspan="4" style="text-align: right;"><strong><?php _e( 'Subtotal' , 'cart66' ); ?>:</strong></td>
-        <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->subtotal, 2); ?></td>
+        <td style="text-align: right;"><?php echo Cart66Common::currency($order->subtotal); ?></td>
       </tr>
       
       <?php if($order->discount_amount > 0): ?>
         <tr>
           <td colspan="4" style="text-align: right;"><strong><?php _e( 'Discount' , 'cart66' ); ?>:</strong></td>
-          <td style="text-align: right;">-<?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->discountAmount, 2); ?></td>
+          <td style="text-align: right;">-<?php echo Cart66Common::currency($order->discountAmount); ?></td>
         </tr>
       <?php endif; ?>
 
       <?php if($order->shipping_method != 'None'): ?>
       <tr>
         <td colspan="4" style="text-align: right;"><strong><?php _e( 'Shipping' , 'cart66' ); ?>:</strong></td>
-        <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->shipping, 2); ?></td>
+        <td style="text-align: right;"><?php echo Cart66Common::currency($order->shipping); ?></td>
       </tr>
       <?php endif; ?>
       
       <?php if($order->tax > 0): ?>
         <tr>
           <td colspan="4" style="text-align: right;"><strong><?php _e( 'Tax' , 'cart66' ); ?>:</strong></td>
-          <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->tax, 2); ?></td>
+          <td style="text-align: right;"><?php echo Cart66Common::currency($order->tax); ?></td>
         </tr>
       <?php endif; ?>
       
       <?php if(!empty($order->coupon) && $order->coupon != 'none'): ?>
         <tr>
-          <td colspan='4'>&nbsp;</td>
+          <td colspan='5'>&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="2" style="text-align: right; background-color: #EEE;"><strong><?php _e( 'Coupon' , 'cart66' ); ?>:</strong></td>
-          <td colspan="2" style="text-align: right; background-color: #EEE;"><?php echo $order->coupon ?></td>
+          <?php $coupon = explode(' (', $order->coupon); ?>
+          <td colspan="4" style="text-align: right; background-color: #EEE;"><strong><?php _e( 'Coupon' , 'cart66' ); ?> (<?php echo $coupon[0]; ?>):</strong></td>
+          <td style="text-align: right; background-color: #EEE;"><?php echo Cart66Common::currency($order->discount_amount); ?></td>
         </tr>
         <tr>
-          <td colspan='4'>&nbsp;</td>
+          <td colspan='5'>&nbsp;</td>
         </tr>
       <?php endif; ?>
       
       <tr>
         <td colspan="4" style="text-align: right;"><strong><?php _e( 'Total' , 'cart66' ); ?>:</strong></td>
-        <td style="text-align: right;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->total, 2); ?></td>
+        <td style="text-align: right;"><?php echo Cart66Common::currency($order->total); ?></td>
       </tr>
       
     </table>
+    <?php if(isset($order->custom_field) && $order->custom_field != ''): ?>
+      <hr style="bgcolor: #FFFFFF; border:none; border-top: 1px dotted #CCCCCC; margin-top: 15px; " />
+    
+      <table border="0" cellspacing="0" cellpadding="5" style="width:100%;">
+        <tr>
+          <?php if(Cart66Setting::getValue('checkout_custom_field_label')): ?>
+            <th style="text-align:left;"><?php echo Cart66Setting::getValue('checkout_custom_field_label'); ?></th>
+          <?php else: ?>
+            <th style="text-align:left;"><?php _e('Enter any special instructions you have for this order:', 'cart66'); ?></th>
+          <?php endif; ?>
+        </tr>
+        <tr>
+          <td style="text-align:left;"><?php echo $order->custom_field; ?></td>
+        </tr>
+      </table>
+    <?php endif; ?>
     
     <hr style="bgcolor: #FFFFFF; border:none; border-top: 1px dotted #CCCCCC; margin-top: 15px; " />
 
@@ -160,12 +177,21 @@ if(isset($data['resend']) && $data['resend'] == true) {
             <?php echo $order->ship_city ?> <?php echo $order->ship_state ?> <?php echo $order->ship_zip ?><br/>
             <?php echo $order->ship_country ?><br/>
             <br/><em><?php _e( 'Delivery via' , 'cart66' ); ?>: <?php echo $order->shipping_method ?></em></br>
-            <?php if($order->shipping_method == 'Download'): ?>
+            <?php
+            $hasDigital = false;
+            $product = new Cart66Product();
+            foreach($order->getItems() as $downloadItem) {
+              if($product->loadByDuid($downloadItem->duid) && $product->isDigital()) {
+                $hasDigital = true;
+              }
+            }
+            ?>
+            <?php if($hasDigital): ?>
               <br /><?php _e('Downloads', 'cart66'); ?>:<br />
               <?php
               $product = new Cart66Product();
               foreach($order->getItems() as $downloadItem) {
-                if($product->loadByDuid($downloadItem->duid)) {
+                if($product->loadByDuid($downloadItem->duid) && $product->isDigital()) {
                   $order_item_id = $product->loadItemIdByDuid($downloadItem->duid);
                   $downloadTimes = $product->countDownloadsForDuid($downloadItem->duid, $order_item_id); ?>
                     <em><?php echo $product->name; ?>: <?php echo $downloadTimes; ?> <?php _e('out of', 'cart66'); ?> <?php echo ($product->download_limit == 0) ? __('unlimited', 'cart66') : $product->download_limit; ?></em>
@@ -175,7 +201,7 @@ if(isset($data['resend']) && $data['resend'] == true) {
                       <input type='hidden' name='order_item_id' value='<?php echo $order_item_id; ?>'>
                       <input type='hidden' name='duid' value='<?php echo $downloadItem->duid; ?>'>
                       <input type='submit' class="remove_tracking" value="<?php _e( 'Reset Downloads' , 'cart66' ); ?>" />
-                    </form>
+                    </form><br />
                 <?php }
               }
               ?>
@@ -310,7 +336,7 @@ if(isset($data['resend']) && $data['resend'] == true) {
         $opts = explode(',', Cart66Setting::getValue('status_options'));
         foreach($opts as $o):
           $o_name = trim($o);
-          $o = str_replace(' ', '_', trim($o));
+          $o = trim(strtolower($o)); 
       ?>
       <option value='<?php echo $o ?>' <?php if($o == $order->status) { echo 'selected="selected"'; } ?>><?php echo ucwords($o_name); ?></option>
       <?php endforeach; ?>
@@ -340,7 +366,6 @@ if(isset($data['resend']) && $data['resend'] == true) {
         newElem.children(':nth-child(3)').attr('id', newNum + '_tracking').attr('name', newNum + '_tracking').val('');
         $('#' + num + '_input').after(newElem);
         $('#btnDel').removeAttr('disabled');
-        console.log($('.carrier').length);
       });
 
       $('#btnDel').click(function() {

@@ -17,8 +17,13 @@ class Cart66Dialog {
   }
   
   public static function cart66_dialog_box() {
+    global $wp_version;
+    $button = '';
+    if(version_compare($wp_version, '3.5-beta-1', '>=')) {
+      $button = ' button';
+    }
     $image = CART66_URL . '/images/cart66_tiny_type.png';
-    $cart66_button = '<a id="Cart66Thickbox" href="#TB_inline?width=670&height=440&inlineId=select_cart66_shortcode" class="thickbox" title="' . 
+    $cart66_button = '<a id="Cart66Thickbox" href="#TB_inline?width=670&height=440&inlineId=select_cart66_shortcode" class="thickbox' . $button . '" title="' . 
       __("Add Cart66 Shortcodes", 'cart66') 
       . '"><img src="'.$image.'" alt="' . 
       __("Add Cart66 Shortcodes", 'cart66') 
@@ -78,7 +83,7 @@ class Cart66Dialog {
             //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] subscription price in dialog: $subPrice");
           }
           else {
-            $priceDescription = __('Price:', 'cart66') . ' ' . CART66_CURRENCY_SYMBOL . $p->price;
+            $priceDescription = __('Price:', 'cart66') . ' ' . Cart66Common::currency($p->price);
             if($p->price_description != null) {
               $priceDescription = $p->price_description;
             }
@@ -314,6 +319,8 @@ class Cart66Dialog {
           'cart' => __('Show the shopping cart', 'cart66'),
           'cart mode=&quot;read&quot;' => __('Show the shopping cart in read-only mode', 'cart66'),
           'checkout_mijireh' => __('Mijireh Checkout Accept Credit Cards - PCI Compliant', 'cart66'),
+          'checkout_stripe' => __('Stripe Checkout form', 'cart66'),
+          'checkout_2checkout' => __('2Checkout checkout form', 'cart66'),
           'checkout_manual' => __('Checkout form that does not process credit cards', 'cart66'),
           'checkout_paypal' => __('PayPal Website Payments Standard checkout button', 'cart66'),
           'checkout_paypal_express' => __('PayPal Express checkout button', 'cart66'),

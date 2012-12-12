@@ -41,18 +41,75 @@ var ajaxManager = (function() {
 ajaxManager.run();
 (function($){
   $(document).ready(function(){
+    $('.Cart66AjaxWarning').hide();
+    $('.ajax-button').click(function() {
+      var id = $(this).attr('id').replace('addToCart_', '');
+      $('#task_' + id).val('ajax');
+      var product = C66.products[id];
+      if(C66.trackInventory) {
+        inventoryCheck(id, C66.ajaxurl, product.ajax, product.name, product.returnUrl, product.addingText);
+      }
+      else {
+        if(product.ajax === 'no') {
+          $('#task_' + id).val('addToCart');
+          $('#cartButtonForm_' + id).submit();
+          return false;
+        }
+        else if(product.ajax === 'yes' || product.ajax === 'true') {
+          buttonTransform(id, C66.ajaxurl, product.name, product.returnUrl, product.addingText);
+        }
+      }
+      return false;
+    });
     $('.modalClose').click(function() {
       $('.Cart66Unavailable, .Cart66Warning, .Cart66Error').fadeOut(800);
     });
-
+    
     $('#Cart66CancelPayPalSubscription').click(function() {
       return confirm('Are you sure you want to cancel your subscription?\n');
     });
+    
+    var original_methods = $('#shipping_method_id').html();
+    var selected_country = $('#shipping_country_code').val();
+    $('.methods-country').each(function() {
+      if(!$(this).hasClass(selected_country) && !$(this).hasClass('all-countries') && !$(this).hasClass('select')) {
+        $(this).remove();
+      }
+    });
+    $('#shipping_country_code').change(function() {
+      var selected_country = $(this).val();
+      $('#shipping_method_id').html(original_methods);
+      $('.methods-country').each(function() {
+        if(!$(this).hasClass(selected_country) && !$(this).hasClass('all-countries') && !$(this).hasClass('select')) {
+          $(this).remove();
+        }
+      });
+    });
+    
+    $('#shipping_method_id').change(function() {
+      $('#Cart66CartForm').submit();
+    });
+    
+    $('#live_rates').change(function() {
+      $('#Cart66CartForm').submit();
+    });
+    
+    $('.showEntriesLink').click(function() {
+      var panel = $(this).attr('rel');
+      $('#' + panel).toggle();
+      return false;
+    });
+    
+    $('#change_shipping_zip_link').click(function() {
+      $('#set_shipping_zip_row').toggle();
+      return false;
+    });
+    
   })
 })(jQuery);
 
 function getCartButtonFormData(formId) {
-	$jq = jQuery.noConflict();
+  $jq = jQuery.noConflict();
   var theForm = $jq('#' + formId);
   var str = '';
   $jq('input:not([type=checkbox], :radio), input[type=checkbox]:checked, input:radio:checked, select, textarea', theForm).each(
@@ -105,13 +162,13 @@ function addToCartAjax(formId, ajaxurl, productName, productUrl, buttonText) {
   var cleanProductId = formId.split('_');
   cleanProductId = cleanProductId[0];
   var data = {
-	  cart66ItemId: cleanProductId,
-	  itemName: productName,
-	  options_1: options1,
-	  options_2: options2,
-	  item_quantity: itemQuantity,
-	  item_user_price: itemUserPrice,
-	  product_url: productUrl
+    cart66ItemId: cleanProductId,
+    itemName: productName,
+    options_1: options1,
+    options_2: options2,
+    item_quantity: itemQuantity,
+    item_user_price: itemUserPrice,
+    product_url: productUrl
   };
   
   ajaxManager.addReq({
@@ -159,7 +216,7 @@ function ajaxUpdateCartWidgets(ajaxurl) {
   $jq = jQuery.noConflict();
   var widgetId = $jq('.Cart66CartWidget').attr('id');
   var data = {
-	  action: "ajax_cart_elements"
+    action: "ajax_cart_elements"
   };
   ajaxManager.addReq({
     type: "POST",
@@ -174,7 +231,7 @@ function ajaxUpdateCartWidgets(ajaxurl) {
         widgetContent = "<span id=\"Cart66WidgetCartCount\">" + response.summary.count + "</span>";
         widgetContent += "<span id=\"Cart66WidgetCartCountText\">" + response.summary.items + "</span>";
         widgetContent += "<span id=\"Cart66WidgetCartCountDash\"> – </span>"
-        widgetContent += "<span id=\"Cart66WidgetCartPrice\">" + response.summary.currencySymbol + response.summary.amount + "</span>";
+        widgetContent += "<span id=\"Cart66WidgetCartPrice\">" + response.summary.amount + "</span>";
         $jq(this).html(widgetContent).fadeIn('slow');
       });
       $jq('.Cart66RequireShipping').each(function(){
@@ -183,7 +240,7 @@ function ajaxUpdateCartWidgets(ajaxurl) {
         }
       })
       $jq('#Cart66WidgetCartEmptyAdvanced').each(function(){
-        widgetContent = "You have " + response.summary.count + " " + response.summary.items + " (" + response.summary.currencySymbol + response.summary.amount + ") in your shopping cart";
+        widgetContent = C66.youHave + ' ' + response.summary.count + " " + response.summary.items + " (" + response.summary.amount + ") " + C66.inYourShoppingCart;
         $jq(this).html(widgetContent).fadeIn('slow');
       });
       $jq("#Cart66AdvancedWidgetCartTable .product_items").remove();
@@ -193,7 +250,6 @@ function ajaxUpdateCartWidgets(ajaxurl) {
         widgetContent += "<span class=\"Cart66QuanPrice\">";
         widgetContent += "<span class=\"Cart66ProductQuantity\">" + array.productQuantity + "</span>";
         widgetContent += "<span class=\"Cart66MetaSep\"> x </span>"; 
-        widgetContent += "<span class=\"Cart66CurSymbol\">" + array.currencySymbol + "</span> ";
         widgetContent += "<span class=\"Cart66ProductPrice\">" + array.productPrice + "</span>";
         widgetContent += "</span>";
         widgetContent += "</td><td class=\"Cart66ProductSubtotalColumn\">";
@@ -203,6 +259,9 @@ function ajaxUpdateCartWidgets(ajaxurl) {
       });
       $jq('.Cart66Subtotal').each(function(){
         $jq(this).html(response.subtotal)
+      });
+      $jq('.Cart66Shipping').each(function(){
+        $jq(this).html(response.shippingAmount)
       });
     }
   })

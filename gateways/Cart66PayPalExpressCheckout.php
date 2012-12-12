@@ -187,13 +187,29 @@ class Cart66PayPalExpressCheckout extends Cart66GatewayAbstract {
    *     [PROTECTIONELIGIBILITY] => Eligible
    * )
    */
-  public function DoExpressCheckout($token, $payerId, $itemAmount, $shipping, $tax=0) {    
+  public function DoExpressCheckout($token, $payerId, $itemAmount, $shipping, $tax=0) {
     $amount = $itemAmount + $shipping + $tax;
-    $promotion = Cart66Session::get('Cart66Promotion');
-    $discount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
+    //$promotion = Cart66Session::get('Cart66Promotion');
+    //$discount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
     $itemTotal = $itemAmount;
+    if($itemTotal < 0) {
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] item total was less then zero: $itemTotal");
+      $itemTotal = 0;
+    }
+    if($shipping < 0) {
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] shipping was less then zero: $shipping");
+      $shipping = 0;
+    }
+    if($amount < 0) {
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] amount was less then zero: $amount");
+      $amount = 0;
+    }
+    if($tax < 0) {
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] tax was less then zero: $tax");
+      $tax = 0;
+    }
     
-    if(is_object($promotion) && $promotion->apply_to == 'total') {
+    /*if(is_object($promotion) && $promotion->apply_to == 'total') {
       $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount();
       $itemDiscount = Cart66Session::get('Cart66Cart')->getDiscountAmount();
       if($itemDiscount > 0) {
@@ -207,11 +223,12 @@ class Cart66PayPalExpressCheckout extends Cart66GatewayAbstract {
       
     }
     
-    if(is_object($promotion) && $promotion->apply_to == 'products'){
+    if(is_object($promotion) && ($promotion->apply_to == 'products' || $promotion->apply_to == 'subtotal')){
       $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
     }
     
     if(is_object($promotion) && $promotion->apply_to == 'shipping'){
+      $amount = $amount - Cart66Session::get('Cart66Cart')->getDiscountAmount();
       $shipping = $shipping - Cart66Session::get('Cart66Cart')->getDiscountAmount();
       // make sure shipping is not negative
       $shipping = ($shipping < 0) ? 0 : $shipping;
@@ -220,7 +237,7 @@ class Cart66PayPalExpressCheckout extends Cart66GatewayAbstract {
     
     if(isset($itemTotal) && $itemTotal == 0 && $shipping > 0) {
       
-    }
+    }*/
     
     $this->_requestFields = array(
       'METHOD' => 'DoExpressCheckoutPayment',
@@ -295,7 +312,7 @@ class Cart66PayPalExpressCheckout extends Cart66GatewayAbstract {
       
     }
     
-    if(is_object($promotion) && $promotion->apply_to == 'products'){
+    if(is_object($promotion) && ($promotion->apply_to == 'products' || $promotion->apply_to == 'subtotal')){
       $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
     }
     

@@ -61,9 +61,11 @@ class Cart66Notifications {
   }
   
   public function getEmailReceiptMessage($order, $html=null, $test=null) {
-    $msg = $this->defaultPlainEmailMessage($order);
     if(CART66_PRO) {
       $msg = Cart66Common::getView('pro/views/emails/default-email-receipt.php', array($order, $html, $test));
+    }
+    else {
+      $msg = $this->defaultPlainEmailMessage($order);
     }
     return $msg;
   }
@@ -90,8 +92,8 @@ class Cart66Notifications {
       if($item->quantity > 1) {
         $msg .= __("Quantity","cart66") . ": " . $item->quantity . "\n";
       }
-      $msg .= __("Item Price","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price, 2) . "\n";
-      $msg .= __("Item Total","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($item->product_price * $item->quantity, 2) . "\n\n";
+      $msg .= __("Item Price","cart66") . ": " . Cart66Common::currency($item->product_price, false) . "\n";
+      $msg .= __("Item Total","cart66") . ": " . Cart66Common::currency($item->product_price * $item->quantity, false) . "\n\n";
 
       if($product->isGravityProduct()) {
         $msg .= Cart66GravityReader::displayGravityForm($item->form_entry_ids, true);
@@ -99,7 +101,7 @@ class Cart66Notifications {
     }
 
     if($order->shipping_method != 'None' && $order->shipping_method != 'Download') {
-      $msg .= __("Shipping","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . $order->shipping . "\n";
+      $msg .= __("Shipping","cart66") . ": " . Cart66Common::currency($order->shipping, false) . "\n";
     }
 
     if(!empty($order->coupon) && $order->coupon != 'none') {
@@ -107,10 +109,10 @@ class Cart66Notifications {
     }
 
     if($order->tax > 0) {
-      $msg .= __("Tax","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->tax, 2) . "\n";
+      $msg .= __("Tax","cart66") . ": " . Cart66Common::currency($order->tax, false) . "\n";
     }
 
-    $msg .= "\n" . __("TOTAL","cart66") . ": " . CART66_CURRENCY_SYMBOL_TEXT . number_format($order->total, 2) . "\n";
+    $msg .= "\n" . __("TOTAL","cart66") . ": " . Cart66Common::currency($order->total, false) . "\n";
 
     if($order->shipping_method != 'None' && $order->shipping_method != 'Download') {
       $msg .= "\n\n" . __("SHIPPING INFORMATION","cart66") . "\n\n";

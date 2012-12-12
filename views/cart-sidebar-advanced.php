@@ -6,7 +6,7 @@
       <p id="Cart66WidgetCartEmptyAdvanced">
         <?php _e( 'You have' , 'cart66' ); ?> <?php echo $data['numItems']; ?> 
         <?php echo _n('item', 'items', $data['numItems'], 'cart66'); ?> 
-        (<?php echo CART66_CURRENCY_SYMBOL . number_format($data['cartWidget']->getSubTotal(), 2); ?>) <?php _e( 'in your shopping cart' , 'cart66' ); ?>.
+        (<?php echo Cart66Common::currency($data['cartWidget']->getSubTotal()); ?>) <?php _e( 'in your shopping cart' , 'cart66' ); ?>.
       </p>
       <?php 
         $items = $data['items'];
@@ -27,11 +27,15 @@
       <form id='Cart66WidgetCartForm' action="" method="post">
         <input type='hidden' name='task' value='updateCart' />
           <table id='Cart66AdvancedWidgetCartTable' class="Cart66AdvancedWidgetCartTable">
+            <?php $isShipped = false; ?>
             <?php foreach($items as $itemIndex => $item): ?>
               <?php 
                 $product->load($item->getProductId());
                 $productPrice = $item->getProductPrice();
                 $productSubtotal = $item->getProductPrice() * $item->getQuantity();
+                if($product->isShipped()) {
+                  $isShipped = true;
+                }
               ?>
               <tr class="product_items">
                 <td>
@@ -39,27 +43,26 @@
                   <span class="Cart66QuanPrice">
                     <span class="Cart66ProductQuantity"><?php echo $item->getQuantity() ?></span> 
                     <span class="Cart66MetaSep">x</span> 
-                    <span class="Cart66CurSymbol"><?php echo CART66_CURRENCY_SYMBOL ?></span>
-                    <span class="Cart66ProductPrice"><?php echo number_format($productPrice, 2) ?></span>
+                    <span class="Cart66ProductPrice"><?php echo Cart66Common::currency($productPrice) ?></span>
                   </span>
                 </td>
                 <td class="Cart66ProductSubtotalColumn">
-                  <span class="Cart66ProductSubtotal"><?php echo number_format($productSubtotal, 2) ?></span>
+                  <span class="Cart66ProductSubtotal"><?php echo Cart66Common::currency($productSubtotal) ?></span>
                 </td>
               </tr>
             <?php endforeach; ?>
             <tr class="Cart66SubtotalRow">
               <td colspan="2">
                 <span class="Cart66CartSubTotalLabel"><?php _e( 'Subtotal' , 'cart66' ); ?></span><span class="Cart66MetaSep">: </span>
-                <span class="Cart66CurSymbol"><?php echo CART66_CURRENCY_SYMBOL ?></span><span class="Cart66Subtotal"><?php echo number_format($subtotal, 2); ?></span>
+                <span class="Cart66Subtotal"><?php echo Cart66Common::currency($subtotal); ?></span>
               </td>
             </tr>
         
-            <?php if(isset($data['shipping'] ) && $data['shipping'] == true): ?>
+            <?php if(isset($data['shipping'] ) && $data['shipping'] == true && $isShipped): ?>
                 <tr class="Cart66ShippingRow">
                   <td colspan="2">
                     <span class="Cart66CartShippingLabel"><?php _e( 'Shipping' , 'cart66' ); ?></span><span class="Cart66MetaSep">: </span>
-                    <span class="Cart66CurSymbol"><?php echo CART66_CURRENCY_SYMBOL ?></span><span class="Cart66Shipping"><?php echo number_format($shipping, 2); ?></span>
+                    <span class="Cart66Shipping"><?php echo Cart66Common::currency($shipping); ?></span>
                   </td>
                 </tr>
                 <?php if(CART66_PRO && Cart66Setting::getValue('use_live_rates')): ?>
@@ -145,10 +148,42 @@
                   <?php if(count($shippingMethods)): ?>
                     <tr>
                       <th colspan="2"><?php _e( 'Shipping Method' , 'cart66' ); ?><span class="Cart66MetaSep">: </span> 
+                        
+                        <?php if(Cart66Setting::getValue('international_sales')): ?>
+                          <select name="shipping_country_code" id="widget_shipping_country_code">
+                            <?php
+                              $customCountries = Cart66Common::getCustomCountries();
+                              foreach($customCountries as $code => $name) {
+                                $selected_country = '';
+                                if($code == Cart66Session::get('Cart66ShippingCountryCode')) {
+                                  $selected_country = ' selected="selected"';
+                                }
+                                echo "<option value='$code'$selected_country>$name</option>\n";
+                              }
+                            ?>
+                          </select>
+                        <?php else: ?>
+                          <input type="hidden" name="shipping_country_code" value="<?php echo Cart66Common::getHomeCountryCode(); ?>" id="widget_shipping_country_code">
+                        <?php endif; ?>
                         <select name='shipping_method_id' id='widget_shipping_method_id' class="Cart66ShippingMethodSelect">
                           <?php foreach($shippingMethods as $name => $id): ?>
-                            <option value='<?php echo $id ?>' 
-                            <?php echo ($id == Cart66Session::get('Cart66Cart')->getShippingMethodId())? 'selected' : ''; ?>><?php echo $name ?></option>
+                            <?php
+                            $method_class = 'methods-country ';
+                            $method = new Cart66ShippingMethod($id);
+                            $methods = unserialize($method->countries);
+                            if(is_array($methods)) {
+                              foreach($methods as $code => $country) {
+                                $method_class .= $code . ' ';
+                              }
+                            }
+                            if($id == 'select') {
+                              $method_class = "select";
+                            }
+                            elseif($method_class == 'methods-country ') {
+                              $method_class = 'all-countries';
+                            }
+                            ?>
+                          <option class="<?php echo trim($method_class); ?>" value='<?php echo $id ?>' <?php echo ($id == Cart66Session::get('Cart66Cart')->getShippingMethodId())? 'selected' : ''; ?>><?php echo $name ?></option>
                           <?php endforeach; ?>
                         </select>
                       </th>
@@ -161,7 +196,7 @@
           <?php if($tax > 0): ?>
             <tr class="tax">
               <td colspan="2"><?php _e( 'Tax' , 'cart66' ); ?><span class="Cart66MetaSep">:</span>
-              <span class="Cart66CurSymbol"><?php echo CART66_CURRENCY_SYMBOL ?></span><span class="Cart66TaxCost"><?php echo number_format($tax, 2); ?></span></td>
+              <span class="Cart66TaxCost"><?php echo Cart66Common::currency($tax); ?></span></td>
             </tr>
           <?php endif; ?>
         
@@ -183,6 +218,23 @@
   /* <![CDATA[ */
     (function($){
       $(document).ready(function(){
+        var widget_original_methods = $('#widget_shipping_method_id').html();
+        var widget_selected_country = $('#widget_shipping_country_code').val();
+        $('.methods-country').each(function() {
+          if(!$(this).hasClass(widget_selected_country) && !$(this).hasClass('all-countries') && !$(this).hasClass('select')) {
+            $(this).remove();
+          }
+        });
+        $('#widget_shipping_country_code').change(function() {
+          var widget_selected_country = $(this).val();
+          $('#widget_shipping_method_id').html(widget_original_methods);
+          $('.methods-country').each(function() {
+            if(!$(this).hasClass(widget_selected_country) && !$(this).hasClass('all-countries') && !$(this).hasClass('select')) {
+              $(this).remove();
+            }
+          });
+        });
+        
         $('#widget_shipping_method_id').change(function() {
           $('#Cart66WidgetCartForm').submit();
         });

@@ -60,7 +60,7 @@ Class Cart66DataTables {
   	  $data[] = array(
     	  $p['name'],
     	  $p['quantity'],
-    	  CART66_CURRENCY_SYMBOL . number_format($p['sales_amount'], 2)
+    	  Cart66Common::currency($p['sales_amount'])
     	);
   	}
   	$array = array(
@@ -284,8 +284,8 @@ Class Cart66DataTables {
   	    $p->getMinOrderDescription(), 
   	    $p->enable == 1 ? 'Yes' : 'No',
   	    $p->effectiveDates(),
-  	    ($p->redemptions < 1) ? __('Never', 'cart66') : ( ($p->redemptions == 1) ? $p->redemptions . ' time' : $p->redemptions . ' times'),
-  	    ($p->apply_to == 'products') ? "Products" : ( ($p->apply_to == 'shipping') ? "Shipping" : "Cart Total" )
+  	    ($p->redemptions < 1) ? __('Never', 'cart66') : ( ($p->redemptions == 1) ? $p->redemptions . ' ' . __('time', 'cart66') : $p->redemptions . ' ' . __('times', 'cart66')),
+  	    ($p->apply_to == 'products') ? __("Products", 'cart66') : ( ($p->apply_to == 'shipping') ? __("Shipping", 'cart66') : ( ($p->apply_to == 'subtotal') ? __("Subtotal", 'cart66') : __("Cart Total", 'cart66') ) )
   	  );
   	}
   	
@@ -304,7 +304,13 @@ Class Cart66DataTables {
     $indexColumn = "id";
     $tableName = Cart66Common::getTableName('orders');
 
-    $where = self::dataTablesWhere($columns);
+    $where = self::dataTablesWhere($columns, 'status', 'checkout_pending', '!=');
+    if($where == ""){
+      $where = "WHERE `status` != 'checkout_pending'";
+    }
+    else {
+      $where .= " AND `status` != 'checkout_pending'";
+    }
     $limit = self::dataTablesLimit() == '' ? null : self::dataTablesLimit();
     $orderBy = self::dataTablesOrder($columns);
     
@@ -320,7 +326,7 @@ Class Cart66DataTables {
         $o->trans_id,
         $o->bill_first_name,
         $o->bill_last_name,
-        $o->total,
+        Cart66Common::currency($o->total),
         date('m/d/Y', strtotime($o->ordered_on)),
         $o->shipping_method,
         $o->status,
@@ -372,7 +378,7 @@ Class Cart66DataTables {
   	    $p->id,
   	    $p->item_number,
   	    $p->name . $gfTitles,
-  	    CART66_CURRENCY_SYMBOL . $p->price,
+  	    Cart66Common::currency($p->price),
   	    $p->taxable? ' Yes' : 'No',
   	    $p->shipped? ' Yes' : 'No'
   	  );
@@ -471,7 +477,7 @@ Class Cart66DataTables {
   	    $s->item_number,
   	    $s->name . $gfTitles,
   	    $s->featureLevel,
-  	    CART66_CURRENCY_SYMBOL . $s->setupFee,
+  	    Cart66Common::currency($s->setupFee),
   	    $s->getPriceDescription(false),
   	    $s->getBillingCycleDescription(),
   	    $s->getTrialPriceDescription(),
@@ -642,8 +648,7 @@ Class Cart66DataTables {
         o.ordered_on < '$end'
     ";
     global $wpdb;
-    $query = $wpdb->prepare($sql);
-    $results = $wpdb->get_results($query);
+    $results = $wpdb->get_results($sql);
     return $results;
   }
   

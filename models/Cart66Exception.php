@@ -12,6 +12,7 @@
  * 66501 - Invalid PayPal Express Configuration
  * 66502 - Invalid PayPal Pro Configuration
  * 66503 - PayPal Express Error Message
+ * 66506 - Session Expired for PayPal Express
  * 66504 - Invalid PayPal Standard Configuration
  * 66505 - Invalid Stripe Configuration
  * 66510 - Invalid Authorize.net Configuration
@@ -59,6 +60,9 @@ class Cart66Exception extends Exception {
         break;
       case 66505;
         $exception['exception'] = __('In order to use Stripe Checkout you must enter your Stripe API Key in the Cart66 Settings Panel', 'cart66');
+        break;
+      case 66506:
+        $exception['exception'] = __('Oops! Looks like you took too long to complete this order! Please try again. If you continue to receive this message, please contact a site administrator. Don\'t worry, if you are seeing this message, nothing is being charged to your account.', 'cart66');
         break;
       case 66510:
         $exception['exception'] = __('In order to use the Authorize.net Gateway, you must enter your API Login ID and Transaction Key in the Cart66 Settings Panel or use the WordPress page editor to replace the gateway shortcode on your store/checkout page with the checkout shortcode for the gateway you intend to use.', 'cart66');

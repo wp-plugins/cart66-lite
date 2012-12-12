@@ -47,6 +47,23 @@ $tab = $data['tab'];
               <p class="description"><strong><?php _e( 'WARNING:', 'cart66'); ?></strong> <?php _e('Cart66 Lite and Cart66 Professional share the same database. If you are upgrading from Cart66 Lite to Professional and want to keep all your settings', 'cart66'); ?>, <strong><?php _e('do not delete the database', 'cart66'); ?></strong> <?php _e('when uninstalling Cart66 Lite', 'cart66'); ?>.</p>
             </td>
           </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e('Reports Paging', 'cart66'); ?></th>
+            <td>
+              <input type="radio" name="page_product_report" id="page_product_report_yes" value="1" <?php echo Cart66Setting::getValue('page_product_report') == 1 ? 'checked="checked" ' : '' ?>/>
+              <label for="page_product_report_yes"><?php _e('Yes', 'cart66'); ?></label>
+              <input type="radio" name="page_product_report" id="page_product_report_no" value="" <?php echo Cart66Setting::getValue('page_product_report') != 1 ? 'checked="checked" ' : '' ?>/>
+              <label for="page_product_report_no"><?php _e('No', 'cart66'); ?></label>
+              <p class="description"><?php _e( 'Limit the number of products on the reports page to reduce server overhead. This is useful if you have very large numbers of products and/or the server utilizes shared resources.' , 'cart66' ); ?></p>
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"></th>
+            <td>
+              <input name="page_product_report_size" id="page_product_report_size" value="<?php echo (Cart66Setting::getValue('page_product_report_size')) ? Cart66Setting::getValue('page_product_report_size') : '25'; ?>" size="3">
+              <p class="description"><?php _e( 'Set the number of products per page in the reports.' , 'cart66' ); ?></p>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -320,6 +337,16 @@ $tab = $data['tab'];
             <form action="" method="post" style="display:inline-block">
               <input type="hidden" name="cart66-action" value="check followup emails" id="cart66-action" />
               <input type="submit" value="<?php _e('Send Followup Emails', 'cart66'); ?>" class="button-secondary" />
+            </form>
+          </td>
+        </tr>
+        <tr valign="top">
+          <th scope="row"><?php _e('Prune Pending Orders Last Checked', 'cart66'); ?></th>
+          <td>
+            <?php echo (Cart66Setting::getValue('daily_prune_pending_orders_last_checked')) ? Cart66Common::getElapsedTime(date('Y-m-d H:i:s', Cart66Setting::getValue('daily_prune_pending_orders_last_checked'))) : __("Never","cart66"); ?>
+            <form action="" method="post" style="display:inline-block">
+              <input type="hidden" name="cart66-action" value="prune pending orders" id="cart66-action" />
+              <input type="submit" value="<?php _e('Prune Pending Orders', 'cart66'); ?>" class="button-secondary" />
             </form>
           </td>
         </tr>

@@ -41,7 +41,6 @@ function inline_save_callback(){
         channel = pusher.subscribe(channel_name);
         
         channel.bind('status_changed', function (data) {
-          console.log(data);
           if(data.level == 'info') {
             $('#slurp_progress_bar').html(data.message);
             $('#slurp_progress_bar').width(data.progress + '%');

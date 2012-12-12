@@ -44,9 +44,16 @@ class Cart66 {
     if(CART66_PRO && !wp_next_scheduled('daily_followup_emails')) {
       wp_schedule_event($fixedtime, 'daily', 'daily_followup_emails');
     }
+    if(CART66_PRO && class_exists('RGFormsModel') && !wp_next_scheduled('daily_gravity_forms_entry_removal')) {
+      wp_schedule_event($fixedtime, 'daily', 'daily_gravity_forms_entry_removal');
+    }
+    if(!wp_next_scheduled('daily_prune_pending_orders')) {
+      wp_schedule_event($fixedtime, 'daily', 'daily_prune_pending_orders');
+    }
   }
   
   public function init() {
+    global $cart66Settings;
     $this->loadCoreModels();
     $this->initCurrencySymbols();
     $this->setDefaultPageRoles();
@@ -74,6 +81,8 @@ class Cart66 {
     if(CART66_PRO) {
       add_action('daily_subscription_reminder_emails', array('Cart66MembershipReminders', 'dailySubscriptionEmailReminderCheck'));
       add_action('daily_followup_emails', array('Cart66AdvancedNotifications', 'dailyFollowupEmailCheck'));
+      add_action('daily_gravity_forms_entry_removal', array('Cart66GravityReader', 'dailyGravityFormsOrphanedEntryRemoval'));
+      add_action('daily_prune_pending_orders', array('Cart66Order', 'dailyPrunePendingPayPalOrders'));
     }
     
     // Notification shortcodes
@@ -86,6 +95,9 @@ class Cart66 {
     }
     
     if(IS_ADMIN) {
+      if(Cart66Setting::getValue('capost_merchant_id')) {
+        add_action('admin_notices', array($this, 'cart66_canada_post_upgrade'));
+      }
       //add_action( 'admin_notices', 'cart66_data_collection' );
 
       add_action('admin_head', array( $this, 'registerBasicScripts'));
@@ -157,6 +169,7 @@ class Cart66 {
     else {
       $this->initShortcodes();
       $this->initCart();
+      $this->checkIPN();
       $order = new Cart66Order();
       add_action('wp_enqueue_scripts', array('Cart66', 'enqueueScripts'));
 
@@ -166,6 +179,7 @@ class Cart66 {
         add_action('wp_head', array($this, 'checkZipOnCheckout'));
         add_action('wp_head', array($this, 'checkTermsOnCheckout'));
         add_action('wp_head', array($this, 'checkMinAmountOnCheckout'));
+        add_action('wp_head', array($this, 'checkCustomFieldsOnCheckout'));
         add_action('template_redirect', array($this, 'protectSubscriptionPages'));
         add_filter('wp_list_pages_excludes', array($this, 'hideStorePages'));
         add_filter('wp_list_pages_excludes', array($this, 'hidePrivatePages'));
@@ -218,6 +232,30 @@ class Cart66 {
       $mijireh->saveOrder($order_number);
     }
     
+    $promotion_var_name = Cart66Setting::getValue('promotion_get_varname') ? Cart66Setting::getValue('promotion_get_varname') : 'promotion';
+    if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET[$promotion_var_name])) {
+      Cart66Session::get('Cart66Cart')->applyPromotion(strtoupper($_GET[$promotion_var_name]), true);
+    }
+    
+  }
+  
+  public function checkIPN() {
+    if(isset($_GET['listener']) && $_GET['listener'] == '2CO') {
+      $sid = (isset($_REQUEST['vender_number']) && $_REQUEST['vendor_number'] != '') ? $_REQUEST['vendor_number'] : $_REQUEST['sid'];
+      if(Cart66Setting::getValue('tco_test_mode')) {
+        $order_number = 1;
+      }
+      else {
+        $order_number = $_REQUEST['order_number'];
+      }
+      $order_total = $_REQUEST['total'];
+      $string = Cart66Setting::getValue('tco_secret_word') . $sid . $order_number . $order_total;
+      $key = strtoupper(md5($string));
+      if($key == $_REQUEST['key']) {
+        $tco = new Cart662Checkout();
+        $tco->saveOrder();
+      }
+    }
   }
   
   public function cart66_page_check($return = false){
@@ -325,6 +363,17 @@ class Cart66 {
 		}
 	}
   
+  public function cart66_canada_post_upgrade(){
+    global $current_screen;
+     
+    echo '<div class="error">';
+    echo '<H3>Canada Post Live Rates Update</h3>';
+    echo '<p>The Canada Post API has been updated.  If you have been using the Canada Post Live Rates feature, you will need to update your credentials. Please login to your <a href="https://www.canadapost.ca/cpid/apps/signIn" target="_blank">Canada Post account</a> and register for the Developer Program.  Once you have done that, you will receive an API username and password that must be entered in the <a href="admin.php?page=cart66-shipping">Canada Post shipping settings</a>.</p>';
+    echo '<p><strong>NOTE: Canada Post Live Rates will not work until you update these credentials.</strong></p>';
+    echo '<p><a class="button-secondary" href="admin.php?page=cart66-shipping&dismiss_canada_post_update=true">Dismiss</a></p>';
+    echo '</div>';
+  }
+  
   public function cart66_data_collection(){
        global $current_screen;
        
@@ -397,7 +446,7 @@ class Cart66 {
     
     // Include the cart66 javascript library
     $path = CART66_URL . '/js/cart66-library.js';
-    wp_enqueue_script('cart66-library', $path, array('jquery'), CART66_VERSION_NUMBER);
+    wp_enqueue_script('cart66-library', $path, array('jquery'), CART66_VERSION_NUMBER, true);
   }
   
   public function loadCoreModels() {
@@ -430,6 +479,7 @@ class Cart66 {
     require_once(CART66_PATH . "/models/Cart66Updater.php");
     require_once(CART66_PATH . "/gateways/Cart66GatewayAbstract.php");
     require_once(CART66_PATH . "/gateways/Cart66PayPalExpressCheckout.php");
+    require_once(CART66_PATH . "/gateways/Cart662Checkout.php");
     require_once(CART66_PATH . "/models/Cart66Updater.php");
     require_once(CART66_PATH . "/models/Cart66Notifications.php");
     
@@ -554,12 +604,14 @@ class Cart66 {
       wp_enqueue_script('jquery');
       wp_enqueue_script('jquery-ui-core');
       wp_enqueue_script('jquery-ui-sortable');
+      wp_enqueue_script('jquery-ui-datepicker');
+      wp_enqueue_script('jquery-ui-dialog');
+      wp_enqueue_script('jquery-ui-slider');
       $path = CART66_URL . '/js/ui.multiselect.js';
-      wp_enqueue_script('jquery-multiselect', $path, null, CART66_VERSION_NUMBER, true);
-      $path = CART66_URL . '/js/jquery-ui.core.datepicker.slider.js';
-      wp_enqueue_script('jquery-datepicker', $path, null, CART66_VERSION_NUMBER, true);
+      wp_enqueue_script('jquery-multiselect', $path, array('jquery-ui-sortable'), CART66_VERSION_NUMBER, true);
+      
       $path = CART66_URL . '/js/ui.timepicker.addon.js';
-      wp_enqueue_script('jquery-timepicker-addon', $path, null, CART66_VERSION_NUMBER, true);
+      wp_enqueue_script('jquery-timepicker-addon', $path, array('jquery-ui-datepicker', 'jquery-ui-slider'), CART66_VERSION_NUMBER, true);
       $path = CART66_URL . '/js/jquery.tokeninput.js';
       wp_enqueue_script('jquery-tokeninput', $path, null, CART66_VERSION_NUMBER, true);
       $path = CART66_URL . '/js/cart66-codemirror.js';
@@ -685,6 +737,35 @@ class Cart66 {
             exit;
           }
         }
+        else {
+          if(Cart66Setting::getValue('require_shipping_validation')) {
+            if(Cart66Session::get('Cart66Cart')->requireShipping()) {
+              $shippingMethods = Cart66Session::get('Cart66Cart')->getShippingMethods();
+              $selectedShippingMethod = Cart66Session::get('Cart66Cart')->getShippingMethodId();
+              if($selectedShippingMethod == 'select') {
+                Cart66Session::set('Cart66ShippingWarning', true);
+                $viewCartPage = get_page_by_path('store/cart');
+                $viewCartLink = get_permalink($viewCartPage->ID);
+                wp_redirect($viewCartLink);
+                exit;
+              }
+              else {
+                $method = new Cart66ShippingMethod(Cart66Session::get('Cart66Cart')->getShippingMethodId());
+                if(is_array($accepted_countries = unserialize($method->countries))) {
+                  $selectedCountry = Cart66Session::get('Cart66ShippingCountryCode');
+                  Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] accepted countries: " . print_r($accepted_countries, true));
+                  if(!array_key_exists($selectedCountry, $accepted_countries)) {
+                    Cart66Session::set('Cart66ShippingWarning', true);
+                    $viewCartPage = get_page_by_path('store/cart');
+                    $viewCartLink = get_permalink($viewCartPage->ID);
+                    wp_redirect($viewCartLink);
+                    exit;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -703,7 +784,7 @@ class Cart66 {
           if($post->ID == $cartPage->ID && isset($_POST['terms_acceptance']) && $_POST['terms_acceptance'] == "I_Accept"){
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Terms are accepted, forwarding to checkout");
             Cart66Session::set("terms_acceptance","accepted",true);
-            $link = get_permalink($checkoutPage->ID);
+            $link = Cart66Setting::getValue('auth_force_ssl') ? str_replace('http://', 'https://', get_permalink($checkoutPage->ID)) : get_permalink($checkoutPage->ID);
             $sendBack = true;
           }
           elseif($post->ID == $checkoutPage->ID && (!Cart66Session::get('terms_acceptance') || Cart66Session::get('terms_acceptance') != "accepted")) {
@@ -719,6 +800,40 @@ class Cart66 {
       }
       
     }
+  }
+  
+  public function checkCustomFieldsOnCheckout() {
+    global $post;
+    $checkoutPage = get_page_by_path('store/checkout');
+    $cartPage = get_page_by_path('store/cart');
+    
+    $sendBack = false;
+    if(isset($post) && is_object($post) && is_object($cartPage) && is_object($checkoutPage)) {
+      
+      if($post->ID == $checkoutPage->ID || $post->ID == $cartPage->ID) {
+        $items = Cart66Session::get('Cart66Cart')->getItems();
+        $product = new Cart66Product();
+        $requiredProducts = array();
+        foreach($items as $itemIndex => $item) {
+          $product->load($item->getProductId());
+          if($post->ID == $checkoutPage->ID && $product->custom_required && !$item->getCustomFieldInfo()) {
+            Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] required custom field is empty");
+            $requiredProducts[] = $product->name;
+            $link = get_permalink($cartPage->ID);
+            $sendBack = true;
+          }
+        }
+        if(!empty($requiredProducts)) {
+          Cart66Session::set('Cart66CustomFieldWarning', $requiredProducts);
+        }
+        if($sendBack) {
+          wp_redirect($link);
+          exit;
+        }
+      }
+      
+    }
+    
   }
   
   public function checkMinAmountOnCheckout() {
@@ -846,6 +961,7 @@ class Cart66 {
     add_shortcode('account_logout',               array($sc, 'accountLogout'));
     add_shortcode('account_logout_link',          array($sc, 'accountLogoutLink'));
     add_shortcode('account_info',                 array($sc, 'accountInfo'));
+    add_shortcode('account_create',               array($sc, 'accountCreate'));
     add_shortcode('account_details',              array($sc, 'accountDetails'));
     add_shortcode('add_to_cart',                  array($sc, 'showCartButton'));
     add_shortcode('add_to_cart_anchor',           array($sc, 'showCartAnchor'));
@@ -859,6 +975,7 @@ class Cart66 {
     add_shortcode('checkout_paypal',              array($sc, 'paypalCheckout'));
     add_shortcode('checkout_paypal_express',      array($sc, 'payPalExpressCheckout'));
     add_shortcode('checkout_paypal_pro',          array($sc, 'payPalProCheckout'));
+    add_shortcode('checkout_2checkout',           array($sc, 'twoCheckout'));
     add_shortcode('clear_cart',                   array($sc, 'clearCart'));
     add_shortcode('hide_from',                    array($sc, 'hideFrom'));
     add_shortcode('post_sale',                    array($sc, 'postSale'));
@@ -923,6 +1040,12 @@ class Cart66 {
     if ( intval( get_query_var( 'cart66AjaxCartRequests' ) ) == 4 ) {
       //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] CONFIRM ORDER VERIFICATION");
       Cart66Ajax::ajaxTaxUpdate();
+      exit;
+    }
+    
+    if ( intval( get_query_var( 'cart66AjaxCartRequests' ) ) == 5 ) {
+      //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] CONFIRM ORDER VERIFICATION");
+      Cart66Ajax::ajaxOrderLookUp();
       exit;
     }
   }

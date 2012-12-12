@@ -39,7 +39,7 @@ class Cart66Dashboard {
 	  $dashboardOrderLimit = (Cart66Setting::getValue('dashboard_order_limit')) ? Cart66Setting::getValue('dashboard_order_limit') : 10;
 	  
     $order = new Cart66Order();
-    $orderRows = $order->getOrderRows(null, 'order by ordered_on DESC', $dashboardOrderLimit);
+    $orderRows = $order->getOrderRows("WHERE `status` != 'checkout_pending'", 'order by ordered_on DESC', $dashboardOrderLimit);
 
   ?>
 	
@@ -89,8 +89,7 @@ class Cart66Dashboard {
       <tbody>
       <?php
       foreach($orderRows as $order):
-        $proper_currency = $order->total;
-        $total = number_format($proper_currency, 2, '.', ',');
+        $total = $order->total;
         ?>
         <tr class="orderDetails" onclick="window.location.href='?page=cart66_admin&task=view&id=<?php echo $order->id; ?>';">
           <td class="right orderRow numberTD">
@@ -134,7 +133,7 @@ class Cart66Dashboard {
   		  
           <td class="right orderRow middle">
             <a class="orderLinks" href='?page=cart66_admin&task=view&id=<?php echo $order->id ?>'>
-              <p><strong><?php echo CART66_CURRENCY_SYMBOL . $total; ?></strong></p>
+              <p><strong><?php echo Cart66Common::currency($total); ?></strong></p>
             </a>
           </td>
         </tr>
@@ -153,7 +152,7 @@ class Cart66Dashboard {
              <?php } ?></span></p>
            </td>
            <td colspan="4" class="right orderTotal middle">
-             <p><span class="recentOrderTotal"><?php _e('Recent Orders Total', 'cart66' ); ?>:</span> <strong><?php echo CART66_CURRENCY_SYMBOL . number_format($displayed_total, 2); ?></strong></p>
+             <p><span class="recentOrderTotal"><?php _e('Recent Orders Total', 'cart66' ); ?>:</span> <strong><?php echo Cart66Common::currency($displayed_total); ?></strong></p>
            </td>
          </tr>
       </tfoot>
@@ -264,7 +263,7 @@ class Cart66Dashboard {
     	       <?php echo date('F'); _e(' Daily Average', 'cart66') ?>:
     	      </td>
     	      <td class="right">
-    	       <a class="t4 tab" href="javascript:void(0)"><?php echo CART66_CURRENCY_SYMBOL . number_format($daily_avg,2) ?></a>
+    	       <a class="t4 tab" href="javascript:void(0)"><?php echo Cart66Common::currency($daily_avg) ?></a>
     	      </td>
     	    </tr>
     	    <tr class="t2 tab summaryDetails">
@@ -272,7 +271,7 @@ class Cart66Dashboard {
     	        <?php _e('Today\'s Total', 'cart66') ?>:
     	      </td>
     	      <td class="right">
-    	        <a class="t2 tab" href="javascript:void(0)"><?php echo CART66_CURRENCY_SYMBOL . number_format($today_total,2); ?></a>
+    	        <a class="t2 tab" href="javascript:void(0)"><?php echo Cart66Common::currency($today_total); ?></a>
     	      </td>
     	    </tr>
     	    <tr class="t2 tab summaryDetails">
@@ -280,7 +279,7 @@ class Cart66Dashboard {
     	        <?php _e('Yesterday\'s Total', 'cart66') ?>:
     	      </td>
     	      <td class="right">
-    	        <a class="t2 tab" href="javascript:void(0)"><?php echo CART66_CURRENCY_SYMBOL . number_format($yesterday_total,2);?></a>
+    	        <a class="t2 tab" href="javascript:void(0)"><?php echo Cart66Common::currency($yesterday_total);?></a>
     	      </td>
     	    </tr>
     	    <tr class="t3 tab summaryDetails">
@@ -288,7 +287,7 @@ class Cart66Dashboard {
     	        <?php echo date("F",strtotime("now"))?> <?php _e('Total', 'cart66') ?>:
     	      </td>
     	      <td class="right">
-    	       <a class="t3 tab" href="javascript:void(0)"><?php echo CART66_CURRENCY_SYMBOL . number_format($month_total,2); ?></a>
+    	       <a class="t3 tab" href="javascript:void(0)"><?php echo Cart66Common::currency($month_total); ?></a>
     	      </td>
     	    </tr>
     	    <tr class="t5 tab summaryDetails">
@@ -296,7 +295,7 @@ class Cart66Dashboard {
     	       <?php _e('Estimated', 'cart66') ?> <?php echo date("F",strtotime('now'))?> <?php _e('Total', 'cart66') ?>:
     	      </td>
     	      <td class="right">
-    	       <a class="t5 tab" href="javascript:void(0)"><?php echo CART66_CURRENCY_SYMBOL . number_format($est_month,2); ?></a>
+    	       <a class="t5 tab" href="javascript:void(0)"><?php echo Cart66Common::currency($est_month); ?></a>
     	      </td>
     	    </tr>
     	    </tbody>
@@ -306,10 +305,10 @@ class Cart66Dashboard {
         <table id="dayStats" cellpadding="0" cellspacing="0">
           <tr class="summaryDetails dayStats">
             <td>
-              <?php _e('Today\'s Total', 'cart66') ?>: <strong><?php echo CART66_CURRENCY_SYMBOL . number_format($today_total,2); ?></strong>
+              <?php _e('Today\'s Total', 'cart66') ?>: <strong><?php echo Cart66Common::currency($today_total); ?></strong>
             </td>
             <td class="right">
-              <?php _e('Yesterday\'s Total', 'cart66') ?>: <strong><?php echo CART66_CURRENCY_SYMBOL . number_format($yesterday_total,2);?></strong>
+              <?php _e('Yesterday\'s Total', 'cart66') ?>: <strong><?php echo Cart66Common::currency($yesterday_total);?></strong>
             </td>
           </tr>
           <tr>
@@ -339,7 +338,7 @@ class Cart66Dashboard {
           					    </p>
           					  </td>
           					  <td class='right'>
-          					    <?php echo CART66_CURRENCY_SYMBOL . number_format($order->total,2) ?>
+          					    <?php echo Cart66Common::currency($order->total) ?>
           					  </td>
           					  <?php $i++; ?>
           					</tr>
@@ -383,7 +382,7 @@ class Cart66Dashboard {
                 }
                 ?>
                 <th class="center"><strong><?php echo $totalSales; ?></strong></th>
-                <th class="right"><strong><?php echo CART66_CURRENCY_SYMBOL . number_format($totalAmount,2); ?></strong></th>
+                <th class="right"><strong><?php echo Cart66Common::currency($totalAmount); ?></strong></th>
               </tr>
             </tfoot>
           </tr>
@@ -411,11 +410,11 @@ class Cart66Dashboard {
 					    <tbody>
 					      <tr>
   						    <td><?php _e('Total Income', 'cart66') ?>:</td>
-  						    <td class="right"><strong><?php echo CART66_CURRENCY_SYMBOL . number_format($tmonth_total,2); ?></strong></td>
+  						    <td class="right"><strong><?php echo Cart66Common::currency($tmonth_total); ?></strong></td>
   						  </tr>
   						  <tr>
   						    <td><?php _e('Daily Average', 'cart66') ?>:</td>
-  						    <td class="right"><strong><?php echo CART66_CURRENCY_SYMBOL . number_format($tmonth_total/$tmonth_days,2);?></strong></td>
+  						    <td class="right"><strong><?php echo Cart66Common::currency($tmonth_total / $tmonth_days);?></strong></td>
   					    </tr>
   					    </tbody>
   				      <?php
@@ -434,11 +433,11 @@ class Cart66Dashboard {
     			    <tbody>
         			  <tr>
         			    <td><?php _e('Total Income', 'cart66') ?>:</td>
-        			    <td class="right"><strong><?php echo CART66_CURRENCY_SYMBOL . number_format($year_total,2); ?></strong></td>
+        			    <td class="right"><strong><?php echo Cart66Common::currency($year_total); ?></strong></td>
         			  </tr>
         			  <tr>
         			      <td><?php _e('Daily Average', 'cart66') ?>:</td>
-        			      <td class="right"><strong><?php echo CART66_CURRENCY_SYMBOL . number_format($year_total/$day_of_year,2);?></strong></td>
+        			      <td class="right"><strong><?php echo Cart66Common::currency($year_total / $day_of_year);?></strong></td>
         			  </tr>
         			</tbody>
     			</table>
@@ -476,7 +475,7 @@ class Cart66Dashboard {
     	          <?php _e('Estimated Remaining Income', 'cart66') ?>:
     	        </td>
     	        <td class="right">
-    	          <?php echo CART66_CURRENCY_SYMBOL . number_format(($total_days-date('j',strtotime('now'))) * $daily_avg,2); ?>
+    	          <?php echo Cart66Common::currency(($total_days-date('j',strtotime('now'))) * $daily_avg); ?>
     	        </td>
     	      </tr>
     	    </tbody>

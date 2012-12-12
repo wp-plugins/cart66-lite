@@ -152,7 +152,7 @@
            }
            ?>
          </td>
-         <td><?php echo number_format($rate->rate,2) ?>%</td>
+         <td><?php echo Cart66Common::tax($rate->rate); ?></td>
          <td>
            <?php
            echo $rate->tax_shipping > 0 ? __("yes","cart66") : __("no","cart66");

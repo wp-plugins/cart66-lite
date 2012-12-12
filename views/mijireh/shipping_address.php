@@ -43,7 +43,7 @@
           echo ' subscription'; 
         }
       ?>">
-    
+      <input type="hidden" class="ajax-tax-cart" name="ajax-tax-cart" value="<?php echo Cart66Session::get('Cart66Cart')->hasTaxableProducts() ? 'true' : 'false'; ?>" />
       <input type="hidden" name="cart66-gateway-name" value="<?php echo $gatewayName ?>" id="cart66-gateway-name" />
       <?php
         $url = Cart66Common::appendWurlQueryString('cart66AjaxCartRequests');
@@ -125,8 +125,20 @@
         
         <li>
           <label for="Cart66CheckoutButton" class="short">&nbsp;</label>
-          <input id="Cart66CheckoutButton" class="Cart66ButtonPrimary Cart66CompleteOrderButton" 
-            type="submit"  value="<?php _e( 'Continue' , 'cart66' ); ?>" name="Complete Order"/>
+          <?php
+          $cartImgPath = Cart66Setting::getValue('cart_images_url');
+          if($cartImgPath && stripos(strrev($cartImgPath), '/') !== 0) {
+            $cartImgPath .= '/';
+          }
+          if($cartImgPath) {
+            $continueImg = $cartImgPath . 'continue.png';
+          }
+          ?>
+          <?php if($cartImgPath && Cart66Common::urlIsLIve($continueImg)): ?>
+            <input class="Cart66CheckoutButton" type="image" src='<?php echo $continueImg ?>' value="<?php _e( 'Continue' , 'cart66' ); ?>" name="Complete Order"/>
+          <?php else: ?>
+            <input id="Cart66CheckoutButton" class="Cart66ButtonPrimary Cart66CompleteOrderButton Cart66ContinueButton" type="submit"  value="<?php _e( 'Continue' , 'cart66' ); ?>" name="Complete Order"/>
+          <?php endif; ?>
         </li>
     
       </ul>

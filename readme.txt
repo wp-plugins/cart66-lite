@@ -93,6 +93,65 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.5.1
+
+* NEW: 2Checkout gateway integration
+* NEW: Override Mijireh Checkout Continue button
+* NEW: Auto-minifying of views to reduce the risk of wpautop problems
+* NEW: Error message when invalid products are added to the cart
+* NEW: Ability to change Out of Stock label
+* NEW: Option to require custom fields to be filled for purchase
+* NEW: Added support for load balancers in HTTPS detection
+* NEW: Display Receipt automatically when PayPal Standard return url is set to the Receipt page
+* NEW: Shipping validation option for flat rate shipping methods
+* NEW: Country validation for flat rate shipping methods
+* NEW: Product subtotal option for promotions
+* NEW: Currency options to allow placing currency symbol before or after the dollar amount
+* NEW: Ability to change currency options for decimal separator and thousands separator
+* NEW: Ability to add coupons to cart using custom get variable (default: promotion)
+* NEW: Session Timeout message for PayPal Express
+* NEW: Options to display Product Item Numbers in the cart and email receipts
+* NEW: Filter to allow content to be appended to add to cart buttons
+* UPDATED: Compatibility with WordPress 3.5 and Twenty-Twelve theme
+* UPDATED: Localization strings
+* UPDATED: Messages that explain minimum and maximum quantity when adding to the cart via ajax
+* UPDATED: Deprecated split() function to explode()
+* UPDATED: Download link to have class on receipt page for better customization
+* UPDATED: Settings function to minimize the number of queries to the database
+* UPDATED: Removed all javascript out of cart button view
+* UPDATED: Promotion error messages for shipping promotions when shipping is free or doesn’t apply
+* UPDATED: Display of tax rates to 3 decimal points
+* UPDATED: Disabled Ajax tax calculations when no products are taxable
+* UPDATED: Styles on cart error messages
+* UPDATED: Add to Cart anchor urls to validate
+* UPDATED: Tax rate information for Express page
+* UPDATED: Tax settings on checkout form
+* UPDATED: CSS on checkout form
+* FIXED: Currency symbol setting adding extra characters
+* FIXED: Invalid markup in style tag in PayPal Standard checkout
+* FIXED: Rare case of PayPal Standard not redirecting to PayPal
+* FIXED: Promotion redemptions not updating when using Mijireh Checkout
+* FIXED: Invalid shipping total issue in PayPal Express
+* FIXED: Incorrect display of price string in add to cart button view
+* FIXED: Display of currency when not using a decimal point for the decimal indicator
+* FIXED: Display of background color for alert messages in IE
+* FIXED: PayPal Standard URL to use unencoded ampersand to prevent malformed urls
+* FIXED: State/Province and country resetting when toggling ‘same as billing’
+* FIXED: Undefined index when adding to the cart via ajax
+* FIXED: IE issue with console.log statements
+* FIXED: Display of tax rates with no decimals (7% vs. 7.%)
+* FIXED: $0 Transactions created from PayPal Express URLS
+* FIXED: Issue with shipping promotion not working with PayPal Express
+* FIXED: Disable Cart66 database sessions for WordPress admin requests
+* FIXED: Display of order notes boxes when showing a new order note
+* FIXED: Rendering of Complete Order button
+* FIXED: Shopping widget not updating shipping on Ajax add to cart
+* FIXED: User price not working when set to 0
+* FIXED: Tax rates not displaying correctly for “all sales”
+* FIXED: Tax settings to not allow saving of empty tax rates
+* FIXED: Missing dashboard update message
+* FIXED: Download links in email receipt showing for every product
+
 = 1.5.0.2 =
 * FIXED: Tax rates not displaying correctly for "all sales"
 * FIXED: Tax settings to not allow saving of empty tax rates

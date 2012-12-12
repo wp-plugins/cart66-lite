@@ -56,7 +56,8 @@ abstract class Cart66GatewayAbstract {
       'phone' => '',
       'email' => '',
       'password' => '',
-      'password2' => ''
+      'password2' => '',
+      'custom-field' => ''
     );
     
     $this->_shipping = array(
@@ -123,8 +124,11 @@ abstract class Cart66GatewayAbstract {
       }
 
       $this->_payment = $p;
-
+      
       foreach($p as $key => $value) {
+        if($key == 'custom-field') {
+          continue;
+        }
         $value = trim($value);
         if($value == '') {
           $keyName = preg_replace('/([A-Z])/', " $1", $key);
@@ -140,6 +144,12 @@ abstract class Cart66GatewayAbstract {
       if(!Cart66Common::isValidEmail($p['email'])) {
         $this->_errors['Email'] = __("Email address is not valid","cart66");
         $this->_jqErrors[] = 'payment-email';
+      }
+      
+      if(Cart66Setting::getValue('checkout_custom_field_display') == 'required' && $p['custom-field'] == '') {
+        $this->_errors['Custom Field'] = Cart66Setting::getValue('checkout_custom_field_error_label') ? Cart66Setting::getValue('checkout_custom_field_error_label') : __('The Special Instructions Field is required', 'cart66');
+        $this->_jqErrors[] = 'checkout-custom-field-multi';
+        $this->_jqErrors[] = 'checkout-custom-field-single';
       }
 
       // For subscription accounts
@@ -293,6 +303,7 @@ abstract class Cart66GatewayAbstract {
 
     $orderInfo['phone'] = preg_replace("/[^0-9]/", "", $p['phone']);
     $orderInfo['email'] = $p['email'];
+    $orderInfo['custom_field'] = $p['custom-field'];
     $orderInfo['coupon'] = Cart66Common::getPromoMessage();
     $orderInfo['tax'] = $tax;
     $orderInfo['shipping'] = Cart66Session::get('Cart66Cart')->getShippingCost();

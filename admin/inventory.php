@@ -31,5 +31,5 @@ if(CART66_PRO) {
   require_once(CART66_PATH . "/pro/admin/inventory.php");
 }
 else { ?>
- <p class="description"><?php _e('Account functionality is only available in', 'cart66'); ?> <a href='http://cart66.com'><?php _e('Cart66 Professional', 'cart66'); ?></a></p>
+ <p class="description"><?php _e('Inventory functionality is only available in', 'cart66'); ?> <a href='http://cart66.com'><?php _e('Cart66 Professional', 'cart66'); ?></a></p>
 <?php }

@@ -5,9 +5,8 @@ $tab = 'cc-cart_checkout';
 <div id="cart66-inner-tabs">
   <ul class="subsubsub">
     <li><a href="#cc-cart_checkout" class="cc-cart_checkout"><?php _e('Cart & Checkout Settings', 'cart66'); ?></a> | </li>
-    <?php if(CART66_PRO): ?>
-      <li><a href="#cc-mimimum_cart_amount" class="cc-mimimum_cart_amount"><?php _e('Minimum Cart Amount', 'cart66'); ?></a> | </li>
-    <?php endif; ?>
+    <li><a href="#cc-checkout_custom_field" class="cc-custom_checkout_field"><?php _e('Checkout Custom Field', 'cart66'); ?></a> | </li>
+    <li><a href="#cc-mimimum_cart_amount" class="cc-mimimum_cart_amount"><?php _e('Minimum Cart Amount', 'cart66'); ?></a> | </li>
     <li><a href="#cc-terms_of_service" class="cc-terms_of_service"><?php _e('Terms of Service', 'cart66'); ?></a></li>
   </ul>
   <br clear="all">
@@ -18,6 +17,26 @@ $tab = 'cc-cart_checkout';
       <h3><?php _e('Cart & Checkout Settings', 'cart66'); ?></h3>
       <table class="form-table">
         <tbody>
+          <tr valign="top">
+            <th scope="row"><?php _e('Display Product Item Numbers in the Cart', 'cart66'); ?></th>
+            <td>
+              <input type="radio" id="display_item_number_cart_yes" name="display_item_number_cart" value="1" <?php echo Cart66Setting::getValue('display_item_number_cart') == 1 ? 'checked="checked" ' : '' ?>/>
+              <label for="display_item_number_cart_yes"><?php _e( 'Yes' , 'cart66' ); ?></label>
+              <input type="radio" id="display_item_number_cart_no" name="display_item_number_cart" value="" <?php echo Cart66Setting::getValue('display_item_number_cart') != 1 ? 'checked="checked" ' : '' ?>/>
+              <label for="display_item_number_cart_no"><?php _e( 'No' , 'cart66' ); ?></label>
+              <p class="description"><?php _e( 'Choose whether or not to display the product item numbers in the cart.' , 'cart66' ); ?></p>
+            </td>
+          </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e('Display Product Item Numbers in Emails', 'cart66'); ?></th>
+            <td>
+              <input type="radio" id="display_item_number_receipt_yes" name="display_item_number_receipt" value="1" <?php echo Cart66Setting::getValue('display_item_number_receipt') == 1 ? 'checked="checked" ' : '' ?>/>
+              <label for="display_item_number_yes"><?php _e( 'Yes' , 'cart66' ); ?></label>
+              <input type="radio" id="display_item_number_receipt_no" name="display_item_number_receipt" value="" <?php echo Cart66Setting::getValue('display_item_number_receipt') != 1 ? 'checked="checked" ' : '' ?>/>
+              <label for="display_item_number_receipt_no"><?php _e( 'No' , 'cart66' ); ?></label>
+              <p class="description"><?php _e( 'Choose whether or not to display the product item numbers in the email receipt. If you are using a completely customized email, you will need the {{receipt}} or {{products}} data tag for this to work.' , 'cart66' ); ?></p>
+            </td>
+          </tr>
           <tr valign="top">
             <th scope="row"><?php _e('Shipping Form', 'cart66'); ?></th>
             <td>
@@ -63,6 +82,13 @@ $tab = 'cc-cart_checkout';
             </td>
           </tr>
           <tr valign="top">
+            <th scope="row"><?php _e('Promotion Variable Name', 'cart66'); ?></th>
+            <td>
+              <input type="text" name="promotion_get_varname" id="promotion_get_varname" value="<?php echo Cart66Setting::getValue('promotion_get_varname'); ?>" />
+              <p class="description"><?php _e( 'Use this to set the variable you want to use to allow coupons to be added to the cart via a link. Leave empty to use the default. Default: promotion' , 'cart66' ); ?></p>
+            </td>
+          </tr>
+          <tr valign="top">
             <th scope="row"><?php _e('Checkout Tax Order Summary', 'cart66'); ?></th>
             <td>
               <input type="radio" name="checkout_order_summary" id="checkout_order_summary_yes" value="1" <?php echo Cart66Setting::getValue('checkout_order_summary') == 1 ? 'checked="checked" ' : '' ?>/>
@@ -105,9 +131,53 @@ $tab = 'cc-cart_checkout';
         </tbody>
       </table>
     </div>
-    <?php if(CART66_PRO): ?>
-      <div id="cc-mimimum_cart_amount" class="pane">
-        <h3><?php _e('Minimum Cart Amount', 'cart66'); ?></h3>
+    <div id="cc-checkout_custom_field" class="pane">
+      <h3><?php _e('Checkout Custom Field', 'cart66'); ?></h3>
+      <?php if(CART66_PRO): ?>
+        <table class="form-table">
+          <tbody>
+            <tr valign="top">
+              <th scope="row"><?php _e('Display', 'cart66'); ?></th>
+              <td>
+                <select name="checkout_custom_field_display">
+                  <option value="disabled"<?php echo !Cart66Setting::getValue('checkout_custom_field_display') || Cart66Setting::getValue('checkout_custom_field_display') == 'disabled' ? ' selected="selected"' : '' ?>><?php _e('Disabled', 'cart66'); ?></option>
+                  <option value="optional"<?php echo Cart66Setting::getValue('checkout_custom_field_display') == 'optional' ? ' selected="selected"' : '' ?>><?php _e('Optional', 'cart66'); ?></option>
+                  <option value="required"<?php echo Cart66Setting::getValue('checkout_custom_field_display') == 'required' ? ' selected="selected"' : '' ?>><?php _e('Required', 'cart66'); ?></option>
+                </select>
+              </td>
+            </tr>
+            <tr valign="top">
+              <th scope="row"><?php _e('Field Type', 'cart66'); ?></th>
+              <td>
+                <select name="checkout_custom_field">
+                  <option value="single"<?php echo Cart66Setting::getValue('checkout_custom_field') == 'single' ? ' selected="selected"' : '' ?>><?php _e( 'Single Line Text Field' , 'cart66' ); ?></option>
+                  <option value="multi"<?php echo Cart66Setting::getValue('checkout_custom_field') == 'multi' ? ' selected="selected"' : '' ?>><?php _e( 'Multi Line Text Field' , 'cart66' ); ?></option>
+                </select>
+              </td>
+            </tr>
+            <tr valign="top">
+              <th scope="row"><?php _e('Instructions Label', 'cart66'); ?></th>
+              <td>
+                <input type="text" name="checkout_custom_field_label" value="<?php echo Cart66Setting::getValue('checkout_custom_field_label'); ?>" />
+                <p class="description"><?php _e( 'Defaults to "Enter any special instructions you have for this order: "' , 'cart66' ); ?></p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <th scope="row"><?php _e('Required Error Label', 'cart66'); ?></th>
+              <td>
+                <input type="text" name="checkout_custom_field_error_label" value="<?php echo Cart66Setting::getValue('checkout_custom_field_error_label'); ?>" />
+                <p class="description"><?php _e( 'Defaults to "the special instructions field is required"' , 'cart66' ); ?></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      <?php else: ?>
+        <p class="description"><?php _e( 'This feature is only available in', 'cart66'); ?> <a href="http://cart66.com"><?php _e('Cart66 Professional', 'cart66'); ?></a>.</p>
+      <?php endif; ?>
+    </div>
+    <div id="cc-mimimum_cart_amount" class="pane">
+      <h3><?php _e('Minimum Cart Amount', 'cart66'); ?></h3>
+      <?php if(CART66_PRO): ?>
         <table class="form-table">
           <tbody>
             <tr valign="top">
@@ -123,9 +193,10 @@ $tab = 'cc-cart_checkout';
             <tr valign="top">
               <th scope="row"><?php _e('Amount', 'cart66'); ?></th>
               <td>
-                <?php echo CART66_CURRENCY_SYMBOL; ?>
-                <input type="text" name="minimum_amount" value="<?php echo htmlentities(Cart66Setting::getValue('minimum_amount'));  ?>" id="minimum_amount">
-                <span class="description"><?php _e( 'Set the amount required in order for a customer to checkout' , 'cart66' ); ?>.</span>
+                <?php echo Cart66Common::currencySymbol('before'); ?>
+                <input class="small-text" type="text" name="minimum_amount" value="<?php echo htmlentities(Cart66Setting::getValue('minimum_amount'));  ?>" id="minimum_amount">
+                <?php echo Cart66Common::currencySymbol('after'); ?>
+                <p class="description"><?php _e( 'Set the amount required in order for a customer to checkout' , 'cart66' ); ?>.</p>
               </td>
             </tr>
             <tr valign="top">
@@ -137,8 +208,10 @@ $tab = 'cc-cart_checkout';
             </tr>
           </tbody>
         </table>
-      </div>
-    <?php endif; ?>
+      <?php else: ?>
+        <p class="description"><?php _e( 'This feature is only available in', 'cart66'); ?> <a href="http://cart66.com"><?php _e('Cart66 Professional', 'cart66'); ?></a>.</p>
+      <?php endif; ?>
+    </div>
     <div id="cc-terms_of_service" class="pane">
       <h3><?php _e('Terms of Service', 'cart66'); ?></h3>
       <?php if(CART66_PRO): ?>

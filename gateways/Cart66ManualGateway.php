@@ -24,6 +24,12 @@ class Cart66ManualGateway extends Cart66GatewayAbstract {
       $this->_jqErrors[] = 'payment-email';
     }
     
+    if(Cart66Setting::getValue('checkout_custom_field_display') == 'required' && $p['custom-field'] == '') {
+      $this->_errors['Custom Field'] = Cart66Setting::getValue('checkout_custom_field_error_label') ? Cart66Setting::getValue('checkout_custom_field_error_label') : __('The Special Instructions Field is required', 'cart66');
+      $this->_jqErrors[] = 'checkout-custom-field-multi';
+      $this->_jqErrors[] = 'checkout-custom-field-single';
+    }
+    
   }
   
    public function getCreditCardTypes() {

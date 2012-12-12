@@ -41,7 +41,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cart66-action']) && $_P
 
   }
 
-  if(is_object($promotion) && $promotion->apply_to == 'products'){
+  if(is_object($promotion) && ($promotion->apply_to == 'products' || $promotion->apply_to == 'subtotal')){
     $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
   }
 

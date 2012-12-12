@@ -118,7 +118,10 @@ class Cart66CartItem {
     if($this->_productId > 0) {
       $p = new Cart66Product();
       $p->load($this->_productId);
-      
+      $errorClass = '';
+      if(is_array(Cart66Session::get('Cart66CustomFieldWarning')) && in_array($p->name, Cart66Session::get('Cart66CustomFieldWarning'))) {
+        $errorClass = ' Cart66ErrorField';
+      }
       if($p->custom == 'single') {
         $desc = $p->custom_desc;
         $value = $this->_customFieldInfo;
@@ -139,7 +142,7 @@ class Cart66CartItem {
           </script>
           <br/><p class=\"Cart66CustomFieldDesc\">$desc:<br/><strong>$value</strong> $change</p>
           <div id='customForm_$itemIndex' style='display: $showCustomForm;'>
-          <input type=\"text\" name=\"customFieldInfo[$itemIndex]\" value=\"$value\" class=\"Cart66CustomTextField\" id=\"custom_field_info_$itemIndex\" />
+          <input type=\"text\" name=\"customFieldInfo[$itemIndex]\" value=\"$value\" class=\"Cart66CustomTextField" . $errorClass . "\" id=\"custom_field_info_$itemIndex\" />
           <input type=\"submit\" value=\"$buttonValue\" /></div>";
         }
         else {
@@ -283,7 +286,7 @@ class Cart66CartItem {
     
     if(CART66_PRO && !empty($product->gravity_form_id) && $product->gravity_form_pricing == 1){
       // gravity form price
-      $price = Cart66GravityReader::getPrice($this->getFirstFormEntryId());
+      $price = Cart66GravityReader::getPrice($this->getFirstFormEntryId()) / $this->getQuantity();
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Gravity Form product price: $price");
     }
     
@@ -316,7 +319,7 @@ class Cart66CartItem {
           if($product->max_price > 0 && $userPrice > $product->max_price){
             $userPrice = $product->max_price;
           }
-          $priceDescription = CART66_CURRENCY_SYMBOL.number_format($userPrice,2);
+          $priceDescription = Cart66Common::currency($userPrice);
         }
         else{
           $priceDescription = $product->price;
@@ -367,7 +370,7 @@ class Cart66CartItem {
     $fullName = $product->name;
     $optionInfo = $this->getOptionInfo();
     if(strlen($optionInfo) >= 1) {
-      $options = split(',', $optionInfo);
+      $options = explode(',', $optionInfo);
       $options = implode(', ', $options);
       $fullName .= " ($options)";
     }

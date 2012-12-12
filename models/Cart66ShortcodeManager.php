@@ -11,6 +11,7 @@ class Cart66ShortcodeManager {
     $cartPage = get_page_by_path('store/cart');
     $checkoutPage = get_page_by_path('store/checkout');
     $cart = Cart66Session::get('Cart66Cart');
+    $checkoutUrl = Cart66Setting::getValue('auth_force_ssl') ? str_replace('http://', 'https://', get_permalink($checkoutPage->ID)) : get_permalink($checkoutPage->ID);
     if(is_object($cart) && $cart->countItems()) {
       ?>
       <div id="Cart66scCartContents">
@@ -18,12 +19,11 @@ class Cart66ShortcodeManager {
         <span id="Cart66scCartCount"><?php echo $cart->countItems(); ?></span>
         <span id="Cart66scCartCountText"><?php echo $cart->countItems() > 1 ? ' items' : ' item' ?></span> 
         <span id="Cart66scCartCountDash">&ndash;</span>
-        <span id="Cart66scCartPrice"><?php echo CART66_CURRENCY_SYMBOL . 
-          number_format($cart->getSubTotal(), 2); ?>
+        <span id="Cart66scCartPrice"><?php echo Cart66Common::currency($cart->getSubTotal()); ?>
         </span></a>
         <a id="Cart66scViewCart" href='<?php echo get_permalink($cartPage->ID) ?>'>View Cart</a>
         <span id="Cart66scLinkSeparator"> | </span>
-        <a id="Cart66scCheckout" href='<?php echo get_permalink($checkoutPage->ID) ?>'>Check out</a>
+        <a id="Cart66scCheckout" href='<?php echo $checkoutUrl; ?>'>Check out</a>
       </div>
       <?php
     }
@@ -43,7 +43,7 @@ class Cart66ShortcodeManager {
     $product = new Cart66Product();
     $product->loadFromShortcode($attrs);
     $options = isset($attrs['options']) ? $attrs['options'] : '';
-    $urlOptions = isset($attrs['options']) ? '&options=' . urlencode($options) : '';
+    $urlOptions = isset($attrs['options']) ? '&amp;options=' . urlencode($options) : '';
     
     $content = do_shortcode($content);
     
@@ -66,12 +66,12 @@ class Cart66ShortcodeManager {
       
 
       $data = array(
-        'url' => $cartLink . $joinChar . "task=add-to-cart-anchor&cart66ItemId=${id}${urlOptions}",
+        'url' => $cartLink . $joinChar . "task=add-to-cart-anchor&amp;cart66ItemId=${id}${urlOptions}",
         'text' => $content,
         'class' => $class
       );
 
-      $view = Cart66Common::getView('views/cart-button-anchor.php', $data);
+      $view = Cart66Common::getView('views/cart-button-anchor.php', $data, true, true);
     }
     else {
       $view = $content;
@@ -87,7 +87,7 @@ class Cart66ShortcodeManager {
         Cart66Session::get('Cart66Cart')->detachFormEntry($entryId);
       }
     }
-    $view = Cart66Common::getView('views/cart.php', $attrs);
+    $view = Cart66Common::getView('views/cart.php', $attrs, true, true);
     return $view;
   }
 
@@ -141,7 +141,7 @@ class Cart66ShortcodeManager {
     }
     
     $attrs['account'] = $account;
-    $view = Cart66Common::getView('views/receipt.php', $attrs);
+    $view = Cart66Common::getView('views/receipt.php', $attrs, true, true);
     return $view;
   }
 
@@ -355,6 +355,31 @@ class Cart66ShortcodeManager {
       }
     }
   }
+  
+  public function twoCheckout($attrs) {
+    if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+      if(!Cart66Session::get('Cart66Cart')->hasPayPalSubscriptions() && !Cart66Session::get('Cart66Cart')->hasSpreedlySubscriptions()) {
+        if(Cart66Session::get('Cart66Cart')->getGrandTotal() > 0) {
+          try {
+            $tco = new Cart662Checkout();
+            $view = $this->_buildCheckoutView($tco);
+          }
+          catch(Cart66Exception $e) {
+            $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage());
+            $view = Cart66Common::getView('views/error-messages.php', $exception);
+          }
+          return $view;
+        }
+        elseif(Cart66Session::get('Cart66Cart')->countItems() > 0) {
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Displaying manual checkout instead of 2Checkout because the cart value is $0.00");
+          return $this->manualCheckout();
+        }
+      }
+      else {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not rendering 2Checkout form because the cart contains a PayPal subscription or Spreedly subscription");
+      }
+    }
+  }
 
   public function payPalProCheckout($attrs) {
     if(Cart66Session::get('Cart66Cart')->countItems() > 0) {
@@ -461,6 +486,27 @@ class Cart66ShortcodeManager {
     Cart66Session::drop('Cart66Promotion');
     Cart66Session::drop('terms_acceptance');
     Cart66Session::drop('Cart66ProRateAmount');
+    Cart66Session::drop('Cart66ShippingCountryCode');
+  }
+  
+  public function accountCreate($attrs) {
+    $render_form = false;
+    if(isset($attrs['product'])) {
+      $product = new Cart66Product();
+      $product->load($attrs['product']);
+      if($product->id <= 0) {
+        $product->loadByItemNumber($attrs['product']);
+      }
+      if($product->isMembershipProduct() || $product->isPayPalSubscription()) {
+        $render_form = true;
+      }
+    }
+    $data = array(
+      'attrs' => $attrs,
+      'render_form' => $render_form
+    );
+    $view = Cart66Common::getView('pro/views/account-create.php', $data);
+    return $view;
   }
   
   public function accountLogin($attrs) {
@@ -792,7 +838,7 @@ class Cart66ShortcodeManager {
           $options = $product->gravityGetVariationPrices($entry);
           $productUrl = Cart66Common::getCurrentPageUrl();
           $cart = Cart66Session::get('Cart66Cart');
-          $item = $cart->addItem($productId, $qty, $options, $entry['id'], $productUrl);
+          $item = $cart->addItem($productId, $qty, $options, $entry['id'], $productUrl, false, true);
           Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Cart Item Value: " . print_r($item, true));
           Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Should we use the gravity forms price? " . $product->gravity_form_pricing . 
             ' :: Session value: ' . Cart66Session::get('userPrice_' . $product->id));
@@ -809,7 +855,14 @@ class Cart66ShortcodeManager {
           $cartPage = get_page_by_path('store/cart');
           $cartPageLink = get_permalink($cartPage->ID);
           Cart66Session::set('Cart66LastPage', $_SERVER['HTTP_REFERER']);
-		  Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Cart66 Session Dump: " . Cart66Session::dump());
+          Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Cart66 Session Dump: " . Cart66Session::dump());
+          
+          if(!Cart66Setting::getValue('display_form_entries_before_sale')) {
+            $entry["status"] = 'unpaid';
+          }
+          RGFormsModel::update_lead($entry);
+          $cart->applyAutoPromotions();
+          do_action('cart66_after_add_to_cart', $product, $qty);
           wp_redirect($cartPageLink);
           exit;
         }
@@ -937,7 +990,7 @@ class Cart66ShortcodeManager {
       $gateway = new Cart66ManualGateway();
     }
     
-    $view = Cart66Common::getView('views/checkout.php', array('gateway' => $gateway));
+    $view = Cart66Common::getView('views/checkout.php', array('gateway' => $gateway), true, true);
     return $view;
   }
   
@@ -972,6 +1025,7 @@ class Cart66ShortcodeManager {
         'tax',
         'total',
         'non_subscription_total',
+        'custom_field',
         'ordered_on',
         'status',
         'ip',
@@ -1018,13 +1072,13 @@ class Cart66ShortcodeManager {
             $output = Cart66Common::getView('/pro/views/emails/email-receipt.php', array('order' => $order, 'type' => $attrs['type']));
             break;
           case 'phone':
-            $output = Cart66Common::formatPhone($attrs['att']);
+            $output = Cart66Common::formatPhone($order->$attrs['att']);
             break;
           case 'total':
-            $output = CART66_CURRENCY_SYMBOL_TEXT . number_format($order->$attrs['att'], 2);
+            $output = Cart66Common::currency($order->$attrs['att'], false);
             break;
           case 'tax':
-            $output = CART66_CURRENCY_SYMBOL_TEXT . number_format($order->$attrs['att'], 2);
+            $output = Cart66Common::currency($order->$attrs['att'], false);
             break;
           case 'receipt_link':
             $receiptPage = get_page_by_path('store/receipt');

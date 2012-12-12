@@ -16,7 +16,7 @@ class Cart66AmazonS3 {
     $file = str_replace('%2F', '/', $file);
     $path = $bucket .'/'. $file;
 
-    $expires = strtotime($duration);
+    $expires = strtotime("+ $duration", current_time('timestamp', 1));
 
     $stringToSign = self::getStringToSign('GET', $expires, "/$path"); 
     $signature = self::encodeSignature($stringToSign, $awsSecretKey); 

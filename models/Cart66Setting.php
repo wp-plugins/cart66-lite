@@ -246,6 +246,11 @@ class Cart66Setting {
       Cart66AdvancedNotifications::dailyFollowupEmailCheck();
       $tab = 'debug-debug_data';
     }
+    elseif(isset($_POST['cart66-action']) && $_POST['cart66-action'] == 'prune pending orders') {
+      $order = new Cart66Order();
+      $order->dailyPrunePendingPayPalOrders();
+      $tab = 'debug-debug_data';
+    }
     elseif(isset($_GET['sessions']) && $_GET['sessions'] == 'repair') {
       $tab = 'debug-session_settings';
     }
@@ -291,9 +296,17 @@ class Cart66Setting {
   }
   
   public static function getValue($key, $entities=false) {
-    global $wpdb;
-    $settingsTable = Cart66Common::getTableName('cart_settings');
-    $value = $wpdb->get_var("SELECT `value` from $settingsTable where `key`='$key'");
+    global $cart66Settings;
+    
+    if(isset($cart66Settings[$key])){
+      $value = $cart66Settings[$key];
+    }
+    else {
+      global $wpdb;
+      $settingsTable = Cart66Common::getTableName('cart_settings');
+      $value = $wpdb->get_var("SELECT `value` from $settingsTable where `key`='$key'");
+      $GLOBALS['cart66Settings'][$key] = $value;
+    }
     
     if(!empty($value) && $entities) {
       $value = htmlentities($value);

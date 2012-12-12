@@ -81,6 +81,14 @@ class Cart66Order extends Cart66ModelAbstract {
         $formEntryIds = '';
         $fIds = $item->getFormEntryIds();
         if(is_array($fIds) && count($fIds)) {
+          foreach($fIds as $entryId) {
+            if(class_exists('RGFormsModel')) {
+              if($lead = RGFormsModel::get_lead($entryId)) {
+                $lead['status'] = 'active';
+                RGFormsModel::update_lead($lead);
+              }
+            }
+          }
           $formEntryIds = implode(',', $fIds);
         }
         $data['form_entry_ids'] = $formEntryIds;
@@ -215,9 +223,8 @@ class Cart66Order extends Cart66ModelAbstract {
     return false;
   }
   
-  public function deleteMe() {
+  public function deleteMe($resetInventory=false, $resetRedemptions=false) {
     if($this->id > 0) {
-      
       // Delete attached Gravity Forms if they exist
       $items = $this->getItems();
       foreach($items as $item) {
@@ -231,6 +238,13 @@ class Cart66Order extends Cart66ModelAbstract {
         }
       }
       
+      if($resetInventory && Cart66Setting::getValue('track_inventory')) {
+        $this->resetInventoryForItems();
+      }
+      if($resetRedemptions && $this->coupon != 'none') {
+        $this->resetRedemptionsForCoupon();
+      }
+      
       // Delete order items
       $orderItems = Cart66Common::getTableName('order_items');
       $sql = "DELETE from $orderItems where order_id = $this->id";
@@ -239,6 +253,33 @@ class Cart66Order extends Cart66ModelAbstract {
       // Delete the order
       $sql = "DELETE from $this->_tableName where id = $this->id";
       $this->_db->query($sql);
+    }
+  }
+  
+  public function resetRedemptionsForCoupon() {
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] about to reset the number of redemptions");
+    $coupon = explode(' (', $this->coupon);
+    $promotion = new Cart66Promotion();
+    $promotion->loadByCode($coupon[0]);
+    $promotion->resetRedemptions();
+  }
+  
+  public function resetInventoryForItems() {
+    $orderItems = $this->getItems();
+    foreach($orderItems as $item) {
+      // Decrement inventory
+      $variation = '';
+      $info = $item->description;
+      if(strpos($info, '(') > 0) {
+        $info = strrchr($info, '(');
+        $start = strpos($info, '(');
+        $end = strpos($info, ')');
+        $length = $end - $start;
+        $variation = substr($info, $start+1, $length-1);
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Variation: $variation Info: $info");
+      }
+      $qty = $item->quantity;
+      Cart66Product::increaseInventory($item->product_id, $variation, $qty);
     }
   }
   
@@ -287,6 +328,20 @@ class Cart66Order extends Cart66ModelAbstract {
       $is_loaded = $id;
     }
     return $is_loaded;
+  }
+  
+  public function dailyPrunePendingPayPalOrders() {
+    Cart66Setting::setValue('daily_prune_pending_orders_last_checked', Cart66Common::localTs());
+    $o = new Cart66Order();
+    $dayStart = date('Y-m-d 00:00:00', strtotime('48 hours ago', Cart66Common::localTs()));
+    $dayEnd = date('Y-m-d 00:00:00', strtotime('24 hours ago', Cart66Common::localTs()));
+    
+    $orders = $this->getOrderRows("WHERE status in ('paypal_pending','checkout_pending') AND ordered_on >= '$dayStart' AND ordered_on < '$dayEnd'");
+    foreach($orders as $order) {
+      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] yes, i am to delete an order or more: " . $order->id);
+      $o->load($order->id);
+      $o->deleteMe(true, true);
+    }
   }
   
 }

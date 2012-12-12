@@ -1,5 +1,23 @@
 <!-- PayPal Checkout -->
 <?php
+
+  if(isset($_POST['cmd'])) {
+    $paypalAction = 'https://www.paypal.com/cgi-bin/webscr';
+    if(SANDBOX) {
+      $paypalAction = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+    }
+    
+    // store pending order with all information, then send to paypal at the above address via curl... so as to keep all the post data
+    require_once(CART66_PATH . "/gateways/Cart66PayPalStandard.php");
+    $paypalStandard = new Cart66PayPalStandard();
+    $pendingOrderId = $paypalStandard->storePendingOrder();
+    $order = new Cart66Order($pendingOrderId);
+    $_POST['custom'] = $order->ouid . $_POST['custom'];
+    Cart66Session::set('Cart66PendingOUID', $order->ouid);
+    wp_redirect($paypalAction . '?' . http_build_query($_POST, '', '&') );
+    exit;
+  }
+
   $items = Cart66Session::get('Cart66Cart')->getItems();
   $shipping = Cart66Session::get('Cart66Cart')->getShippingCost();
   $shippingMethod = Cart66Session::get('Cart66Cart')->getShippingMethodName();
@@ -60,21 +78,15 @@
   #paypalCheckout {
     clear:both; 
     float: right; 
-    margin: 10px 10px 0px 0px;";
+    margin: 10px 10px 0px 0px;
   }
 </style>
 <?php endif; ?>
 
 
 <?php if(Cart66Session::get('Cart66Cart')->countItems() > 0): ?>
-  <?php
-    $paypalAction = 'https://www.paypal.com/cgi-bin/webscr';
-    if(SANDBOX) {
-      $paypalAction = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
-    }
-  ?>
   <?php if($checkoutOk): ?>
-    <form id='paypalCheckout' action="<?php echo $paypalAction ?>" method="post">
+    <form id='paypalCheckout' action='' method='post'>
       <?php 
         $i = 1;
         $gfIds = array();
@@ -113,7 +125,7 @@
           
         }
         
-        if(is_object($promotion) && $promotion->apply_to == 'products'){
+        if(is_object($promotion) && ($promotion->apply_to == 'products' || $promotion->apply_to == 'subtotal')){
           $itemTotal = Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() - Cart66Session::get('Cart66Cart')->getDiscountAmount();
         }
         
@@ -137,7 +149,7 @@
       <input type='hidden' name='upload' value='1' />
       <input type='hidden' name='no_shipping' value='2' />
       <input type='hidden' name='currency_code' value='<?php echo CURRENCY_CODE; ?>' id='currency_code' />
-      <input type='hidden' name='custom' value='<?php echo $shippingMethod ?>|<?php echo $aff;  ?>|<?php echo $gfIds ?>|<?php if(Cart66Session::get('Cart66PromotionCode')) { echo Cart66Session::get('Cart66PromotionCode'); } ?>' />
+      <input type='hidden' name='custom' value='|<?php echo $aff;  ?>|<?php echo $gfIds ?>|' />
       <?php if($shipping > 0): ?>
         <input type='hidden' name='handling_cart' value='<?php echo $shipping ?>' />
       <?php endif;?>

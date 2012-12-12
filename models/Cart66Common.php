@@ -73,7 +73,7 @@ class Cart66Common {
     echo isset($value)? $value : '';
   }
   
-  public static function getView($filename, $data=null, $notices=true) {
+  public static function getView($filename, $data=null, $notices=true, $minify=false) {
     $notice = '';
     if(strpos($filename, 'admin') !== false) {
       $mijireh_notice = Cart66Setting::getValue('mijireh_notice');
@@ -127,6 +127,7 @@ class Cart66Common {
       "views/cart-sidebar-advanced.php",
       "views/receipt.php",
       "views/receipt_print_version.php",
+      "views/paypal-express.php",
       "pro/views/terms.php",
       "pro/views/emails/default-email-followup.php",
       "pro/views/emails/default-email-fulfillment.php",
@@ -172,7 +173,22 @@ class Cart66Common {
     $contents = ob_get_contents();
     ob_end_clean();
     
-    return $notice . $contents;
+    return ($minify) ? Cart66Common::minifyMarkup($notice . $contents) : $notice . $contents;
+  }
+  
+  public static function minifyMarkup($markup){
+    $search = array(
+            '/\>[^\S ]+/s', //strip whitespaces after tags, except space
+            '/[^\S ]+\</s', //strip whitespaces before tags, except space
+            '/(\s)+/s'  // shorten multiple whitespace sequences
+            );
+    $replace = array(
+            '>',
+            '<',
+            '\\1'
+            );
+    $output = preg_replace($search, $replace, $markup);
+    return $output;
   }
   
   public static function getTableName($name, $prefix='cart66_'){
@@ -341,7 +357,7 @@ class Cart66Common {
   public static function isValidDate($val) {
     $isValid = false;
     if(preg_match("/\d{1,2}\/\d{1,2}\/\d{4}/", $val)) {
-      list($month, $day, $year) = split("/", $val);
+      list($month, $day, $year) = explode("/", $val);
       if(is_numeric($month) && is_numeric($day) && is_numeric($year) ) {
         if($month > 12 || $month < 1) {
           $isValid = false;
@@ -434,6 +450,30 @@ class Cart66Common {
     return $localeCode;
   }
   
+  public static function getShippingCountries() {
+    $countries = self::getCountries();
+    $use_array = false;
+    if($selected_country = Cart66Session::get('Cart66ShippingCountryCode')) {
+      $method = new Cart66ShippingMethod(Cart66Session::get('Cart66Cart')->getShippingMethodId());
+      $accepted_countries = unserialize($method->countries);
+      foreach($countries as $code => $country) {
+        if(is_array($accepted_countries) && !array_key_exists($code, $accepted_countries)) {
+          $countries[$code] = array(
+            'country' => $country,
+            'disabled' => 'true'
+          );
+        }
+        else {
+          $countries[$code] = array(
+            'country' => $country,
+            'disabled' => 'false'
+          );
+        }
+      }
+    }
+    return $countries;
+  }
+  
   public static function getCountries($all=false) {
     $countries = array(
       'AF'=>'Afghanistan',
@@ -488,7 +528,7 @@ class Cart66Common {
       'CG'=>'Congo',
       'CK'=>'Cook Islands',
       'CR'=>'Costa Rica',
-      'CI'=>'Côte d\'Ivoire',
+      'CI'=>'Côte d Ivoire',
       'HR'=>'Croatia',
       'CU'=>'Cuba',
       'CW'=>'Curaçao',
@@ -993,7 +1033,7 @@ class Cart66Common {
     $promo = Cart66Session::get('Cart66Promotion');
     $promoMsg = "none";
     if($promo) {
-      $promoMsg = $promo->getCode() . ' (-' . CART66_CURRENCY_SYMBOL . number_format(Cart66Session::get('Cart66Promotion')->getDiscountAmount(Cart66Session::get('Cart66Cart')), 2) . ')';
+      $promoMsg = $promo->getCode() . ' (-' . Cart66Common::currency(Cart66Session::get('Cart66Promotion')->getDiscountAmount(Cart66Session::get('Cart66Cart')), false) . ')';
     }
     return $promoMsg;
   }
@@ -1082,7 +1122,8 @@ class Cart66Common {
    */
   public static function isHttps() {
     $isHttps = false;
-    if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+    if((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || 
+        (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) {
       $isHttps = true;
     }
     return $isHttps;
@@ -1527,6 +1568,8 @@ class Cart66Common {
   
   // Remove all non-numeric characters except for the decimal
   public function cleanNumber($string) {
+    $dec_point = Cart66Setting::getValue('currency_dec_point') ? Cart66Setting::getValue('currency_dec_point') : '.';
+    $string = str_replace($dec_point, '.', $string);
     $number = preg_replace('/[^\d\.]/', '', $string);
     return $number;
   }
@@ -1568,5 +1611,98 @@ class Cart66Common {
     
   }
   
+  public static function currency($amount, $html=true, $markup=false, $symbol=true) {
+    if(!is_numeric($amount)) {
+      $amount = 0;
+    }
+    $decimal = Cart66Setting::getValue('currency_decimals') == 'no_decimal' ? 0 : (Cart66Setting::getValue('currency_decimals') ? Cart66Setting::getValue('currency_decimals') : 2);
+    $dec_point = Cart66Setting::getValue('currency_dec_point') ? Cart66Setting::getValue('currency_dec_point') : '.';
+    $thousands_sep = Cart66Setting::getValue('currency_thousands_sep') ? Cart66Setting::getValue('currency_thousands_sep') : ',';
+    
+    if($markup) {
+      $amount = self::currencyMarkup($amount);
+    }
+    else {
+      if($symbol) {
+        if($html) {
+          if(Cart66Setting::getValue('currency_position') == 'after') {
+            $amount = self::currencyFormat($amount, $decimal, $dec_point, $thousands_sep) . CART66_CURRENCY_SYMBOL;
+          }
+          else {
+            $amount = CART66_CURRENCY_SYMBOL . self::currencyFormat($amount, $decimal, $dec_point, $thousands_sep);
+          }
+        }
+        else {
+          if(Cart66Setting::getValue('currency_position') == 'after') {
+            $amount = self::currencyFormat($amount, $decimal, $dec_point, $thousands_sep) . CART66_CURRENCY_SYMBOL_TEXT;
+          }
+          else {
+            $amount = CART66_CURRENCY_SYMBOL_TEXT . self::currencyFormat($amount, $decimal, $dec_point, $thousands_sep);
+          }
+        }
+      }
+      else {
+        $amount = self::currencyFormat($amount, $decimal, $dec_point, $thousands_sep);
+      }
+    }
+    
+    return $amount;
+  }
+  
+  public static function tax($rate) {
+    if($rate == 0) {
+      $rate = '0.00%';
+    }
+    if(is_numeric($rate)) {
+      $rate = trim(number_format($rate, 3), 0);
+      if(substr($rate, -1) == '.') {
+        $rate = substr($rate, 0, -1);
+      }
+    }
+    return $rate . '%';
+  }
+  
+  public static function currencyFormat($amount, $decimal, $dec_point, $thousands_sep) {
+    return number_format($amount, $decimal, $dec_point, $thousands_sep);
+  }
+  
+  public static function currencyMarkup($amount) {
+    $amount = str_replace(CART66_CURRENCY_SYMBOL, '', $amount);
+    if(is_numeric(str_replace(",", "", $amount))){
+      $decimalBreak = explode(".", $amount);
+      $preDecimal = $decimalBreak[0];
+      $postDecimal = isset($decimalBreak[1]) ? $decimalBreak[1] : '';
+      $dec_point = $postDecimal != '' ? (Cart66Setting::getValue('currency_dec_point') ? Cart66Setting::getValue('currency_dec_point') : '.') : '';
+      $html = '<span class="Cart66CurrencySymbol Cart66CurrencySymbolbefore">' . self::currencySymbol('before') . '</span>';
+      $html .= '<span class="Cart66PreDecimal">' . $preDecimal . '</span><span class="Cart66DecimalSep">' . $dec_point . '</span><span class="Cart66PostDecimal">' . $postDecimal . '</span>';
+      $html .= '<span class="Cart66CurrencySymbol Cart66CurrencySymbolAfter">' . self::currencySymbol('after') . '</span>';
+    }
+    else {
+      $html = $amount;
+    }
+    
+    return $html;
+  }
+  
+  public static function currencySymbol($position, $html=true) {
+    $symbol = '';
+    if(Cart66Setting::getValue('currency_position')) {
+      if($position == Cart66Setting::getValue('currency_position') && $html) {
+        $symbol = CART66_CURRENCY_SYMBOL;
+      }
+      elseif($position == Cart66Setting::getValue('currency_position') && !$html) {
+        $symbol = CART66_CURRENCY_SYMBOL_TEXT;
+      }
+    }
+    else {
+      if($position == 'before' && $html) {
+        $symbol = CART66_CURRENCY_SYMBOL;
+      }
+      elseif($position == 'before' && !$html) {
+        $symbol = CART66_CURRENCY_SYMBOL_TEXT;
+      }
+    }
+    return $symbol;
+  }
   
 }

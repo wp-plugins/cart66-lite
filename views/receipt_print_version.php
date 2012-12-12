@@ -146,6 +146,14 @@
         </td>
       <?php endif; ?>
     </tr>
+    <?php if(isset($order->custom_field) && $order->custom_field != ''): ?>    
+      <tr>
+        <td colspan="3">
+          <p><strong><?php echo Cart66Setting::getValue('checkout_custom_field_label'); ?></strong><br/>
+          <p><?php echo $order->custom_field; ?></p>
+        </td>
+      </tr>
+    <?php endif; ?>
   </table>
 
   <table id="viewCartTable" cellspacing="0" cellpadding="0">
@@ -176,8 +184,8 @@
 
         </td>
         <td style="text-align: center;"><?php echo $item->quantity ?></td>
-        <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($item->product_price, 2) ?></td>
-        <td><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($item->product_price * $item->quantity, 2) ?></td>
+        <td><?php echo Cart66Common::currency($item->product_price) ?></td>
+        <td><?php echo Cart66Common::currency($item->product_price * $item->quantity) ?></td>
       </tr>
       <?php
         if(!empty($item->form_entry_ids)) {
@@ -200,7 +208,7 @@
       <td class='noBorder' colspan='1'>&nbsp;</td>
       <td class='noBorder' colspan="1" style='text-align: center;'>&nbsp;</td>
       <td class='noBorder' colspan="1" style='text-align: right; font-weight: bold;'><?php _e( 'Subtotal' , 'cart66' ); ?>:</td>
-      <td class='noBorder' colspan="1" style="text-align: left; font-weight: bold;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $order->subtotal; ?></td>
+      <td class='noBorder' colspan="1" style="text-align: left; font-weight: bold;"><?php echo Cart66Common::currency($order->subtotal); ?></td>
     </tr>
 
     <?php if($order->shipping_method != 'None' && $order->shipping_method != 'Download'): ?>
@@ -208,7 +216,7 @@
       <td class='noBorder' colspan='1'>&nbsp;</td>
       <td class='noBorder' colspan="1" style='text-align: center;'>&nbsp;</td>
       <td class='noBorder' colspan="1" style='text-align: right; font-weight: bold;'><?php _e( 'Shipping' , 'cart66' ); ?>:</td>
-      <td class='noBorder' colspan="1" style="text-align: left; font-weight: bold;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo $order->shipping; ?></td>
+      <td class='noBorder' colspan="1" style="text-align: left; font-weight: bold;"><?php echo Cart66Common::currency($order->shipping); ?></td>
     </tr>
     <?php endif; ?>
 
@@ -216,7 +224,7 @@
       <tr>
         <td class='noBorder' colspan='2'>&nbsp;</td>
         <td class='noBorder' colspan="1" style='text-align: right; font-weight: bold;'><?php _e( 'Discount' , 'cart66' ); ?>:</td>
-        <td class='noBorder' colspan="1" style="text-align: left; font-weight: bold;">-<?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->discount_amount, 2); ?></td>
+        <td class='noBorder' colspan="1" style="text-align: left; font-weight: bold;">-<?php echo Cart66Common::currency($order->discount_amount); ?></td>
       </tr>
     <?php endif; ?>
 
@@ -224,14 +232,14 @@
       <tr>
         <td class='noBorder' colspan='2'>&nbsp;</td>
         <td class='noBorder' colspan="1" style='text-align: right; font-weight: bold;'><?php _e( 'Tax' , 'cart66' ); ?>:</td>
-        <td class='noBorder' colspan="1" style="text-align: left; font-weight: bold;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->tax, 2); ?></td>
+        <td class='noBorder' colspan="1" style="text-align: left; font-weight: bold;"><?php echo Cart66Common::currency($order->tax); ?></td>
       </tr>
     <?php endif; ?>
 
     <tr>
       <td class='noBorder' colspan='2' style='text-align: center;'>&nbsp;</td>
       <td class='noBorder' colspan="1" style='text-align: right; font-weight: bold;'><?php _e( 'Total' , 'cart66' ); ?>:</td>
-      <td class='noBorder' colspan="1" style="text-align: left; font-weight: bold;"><?php echo CART66_CURRENCY_SYMBOL ?><?php echo number_format($order->total, 2); ?></td>
+      <td class='noBorder' colspan="1" style="text-align: left; font-weight: bold;"><?php echo Cart66Common::currency($order->total); ?></td>
     </tr>
   </table>
   
