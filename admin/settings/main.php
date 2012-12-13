@@ -194,15 +194,17 @@ elseif($_SERVER['REQUEST_METHOD'] == "POST") {
               <p class="description"><?php _e( 'Use this option to enable the edit product links on your product pages' , 'cart66' ); ?>.</span>
             </td>
           </tr>
-          <tr valign="top">
-            <th scope="row"><?php _e('Out of Stock Label', 'cart66'); ?></th>
-            <td>
-              <input type="text" name="label_out_of_stock" id="label_out_of_stock" class="regular-text" value="<?php echo Cart66Setting::getValue('label_out_of_stock'); ?>" />
-              <p class="description">
-                <label for="label_out_of_stock"><?php _e('Set the label for the out of stock label for products.  Default: Out of stock', 'cart66'); ?></label>
-              </p>
-            </td>
-          </tr>
+          <?php if(CART66_PRO): ?>
+            <tr valign="top">
+              <th scope="row"><?php _e('Out of Stock Label', 'cart66'); ?></th>
+              <td>
+                <input type="text" name="label_out_of_stock" id="label_out_of_stock" class="regular-text" value="<?php echo Cart66Setting::getValue('label_out_of_stock'); ?>" />
+                <p class="description">
+                  <label for="label_out_of_stock"><?php _e('Set the label for the out of stock label for products.  Default: Out of stock', 'cart66'); ?></label>
+                </p>
+              </td>
+            </tr>
+          <?php endif; ?>
           <tr valign="top">
             <th scope="row"><?php _e('Digital Product Folder', 'cart66'); ?></th>
             <td>

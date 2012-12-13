@@ -168,7 +168,7 @@ class Cart662Checkout extends Cart66GatewayAbstract {
     $this->addField('mode', '2CO');
     $this->addField('return_url', Cart66Setting::getValue('shopping_url') );
     $this->addField('pay_method', 'CC');
-    $this->addField('x_receipt_link_url', Cart66Common::getPageLink('store/receipt') . '?listener=2CO');
+    $this->addField('x_receipt_link_url', add_query_arg('listener', '2CO', Cart66Common::getPageLink('store/receipt')));
     $this->addField('tco_currency', 'USD');
     
     $redirect_url = $this->gatewayUrl . '?' . http_build_query($this->fields, '', '&');
