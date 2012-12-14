@@ -93,7 +93,7 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
-= 1.5.1.1
+= 1.5.1.1 =
 
 * UPDATED: Form elements for the products, promotions and shipping pages
 * UPDATED: Add to cart success and error messages
@@ -104,7 +104,7 @@ We are not able to provide anything other than community based support for Cart6
 * FIXED: Undefined constant error if DOING_AJAX is not defined
 * FIXED: PHP Warning trying to get class of non-object
 
-= 1.5.1
+= 1.5.1 =
 
 * NEW: 2Checkout gateway integration
 * NEW: Override Mijireh Checkout Continue button
