@@ -244,228 +244,16 @@ class Cart66Ajax {
   }
   
   public static function ajaxAddToCart() {
-    $message = self::addToCartFunctions();
-    echo json_encode($message);
-    die();
-  }
-  
-  public function addToCartFunctions() {
-    $message = '';
-    $msgId = '';
-    $itemId = Cart66Common::postVal('cart66ItemId');
-    $itemName = Cart66Common::postVal('itemName');
-    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Adding item to cart: $itemId");
-    
-    $options = '';
-    $optionResult = '';
-    if(isset($_POST['options_1'])) {
-      $options = Cart66Common::postVal('options_1');
-      $optionResult = Cart66Common::postVal('options_1');
-    }
-    if(isset($_POST['options_2'])) {
-      $options .= '~' . Cart66Common::postVal('options_2');
-      $optionResult .= ', ' . Cart66Common::postVal('options_2');
-    }
-    
-    $optionResult = ($optionResult !=null) ? '(' . $optionResult . ') ' : '';
-    
-    $itemQuantity = '';
-    if(isset($_POST['item_quantity'])) {
-      $itemQuantity = ($_POST['item_quantity'] > 0) ? round($_POST['item_quantity'],0) : 1;
-    }
-    else{
-      $itemQuantity = 1;
-    }
-    
-    if(isset($_POST['item_user_price'])){
-      $sanitizedPrice = Cart66Common::cleanNumber($_POST['item_user_price']);
-      Cart66Session::set("userPrice_$itemId",$sanitizedPrice);
-    }
-    
-    $productUrl = null;
-    if(isset($_POST['product_url'])){
-      $productUrl = $_POST['product_url'];
-    }
-    
-    if(Cart66Setting::getValue('continue_shopping') == 1){
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] continue shopping is 1");
-      // force the last page to be store home
-      $lastPage = Cart66Setting::getValue('store_url') ? Cart66Setting::getValue('store_url') : get_bloginfo('url');
-      Cart66Session::set('Cart66LastPage', $lastPage);
-    }
-    else{
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] add to cart task and http referrer is set last page is being set as referrer");
-      Cart66Session::set('Cart66LastPage', $productUrl);
-    }
-    
-    $items = Cart66Session::get('Cart66Cart')->getItems();
-    if($items) {
-      foreach($items as $itemIndex => $item) {
-        $productId = $item->getProductId();
-        $productOptions = $item->getOptionInfo();
-        $actualQuantity = $itemQuantity + $item->getQuantity();
-        if($productId == $itemId && $productOptions == $options) {
-          if(Cart66Product::confirmInventory($itemId, $options, $itemQuantity)) {
-            $product = new Cart66Product($itemId);
-            if($itemQuantity < $product->min_quantity || ($itemQuantity > $product->max_quantity && $product->max_quantity != 0)) {
-              Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
-              if($itemQuantity < $product->min_quantity) {
-                $message = __('We have added', 'cart66') . " <strong>" . $product->min_quantity . "</strong> $itemName $optionResult" . __('to the cart because that is the minimum required quantity for this product', 'cart66') . ".";
-                $msgQuantityInCart = $product->min_quantity;
-              }
-              elseif($itemQuantity > $product->max_quantity) {
-                $message = __('We have only added', 'cart66') . " <strong>$product->max_quantity</strong> $itemName $optionResult" . __('to the cart because that is the maximum allowed quantity for this product', 'cart66') . ".";
-                $msgQuantityInCart = $product->max_quantity;
-              }
-              $msgId = -1;
-            }
-            else {
-              Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
-              if(Cart66Session::get('Cart66InvalidOptions')) {
-                $message = Cart66Session::get('Cart66InvalidOptions');
-                Cart66Session::drop('Cart66InvalidOptions');
-                $msgQuantityInCart = 0;
-                $msgId = -2;
-              }
-              else {
-                $message = __('We have successfully added', 'cart66') . " <strong>$itemQuantity</strong> $itemName $optionResult" . __('to the cart', 'cart66') . ".";
-                $msgQuantityInCart = $itemQuantity;
-                $msgId = 0;
-              }
-            }
-          }
-          else {
-            $qtyAvailable = Cart66Product::checkInventoryLevelForProduct($productId, $productOptions);
-            if($qtyAvailable > 0) {
-              Cart66Session::get('Cart66Cart')->addItem($itemId, $qtyAvailable, $options, null, $productUrl, true);
-              $message = __('The quantity for', 'cart66') . " $itemName $optionResult" . __("could not be changed to","cart66") . " <strong>$actualQuantity</strong> " . __("because we only have", "cart66") . " $qtyAvailable " . __("in stock","cart66") . ". " . __('Your cart has been updated based on our available inventory', 'cart66') . ".";
-              Cart66Common::log("Quantity available ($qtyAvailable) cannot meet desired quantity ($itemQuantity) for product id: " . $item->getProductId());
-              $msgQuantityInCart = $qtyAvailable;
-              $msgId = -1;
-              break;
-            }
-            else {
-              Cart66Common::log("Item not added due to inventory failure");
-              $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
-              $message = __('We could not add', 'cart66') . " <strong>$actualQty $itemName $optionResult</strong>" . __('to the cart because we are ', 'cart66') . $soldOutLabel . ".";
-              $msgQuantityInCart = 0;
-              $msgId = -2;
-              break;
-            }
-          }
-        }
-        else {
-          if(Cart66Product::confirmInventory($itemId, $options, $itemQuantity)) {
-            $product = new Cart66Product($itemId);
-            if($itemQuantity < $product->min_quantity || ($itemQuantity > $product->max_quantity && $product->max_quantity != 0)) {
-              Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
-              if($itemQuantity < $product->min_quantity) {
-                $message = __('We have added', 'cart66') . " <strong>" . $product->min_quantity . "</strong> $itemName $optionResult" . __('to the cart because that is the minimum required quantity for this product', 'cart66') . ".";
-                $msgQuantityInCart = $product->min_quantity;
-              }
-              elseif($itemQuantity > $product->max_quantity) {
-                $message = __('We have only added', 'cart66') . " <strong>$product->max_quantity</strong> $itemName $optionResult" . __('to the cart because that is the maximum allowed quantity for this product', 'cart66') . ".";
-                $msgQuantityInCart = $product->max_quantity;
-              }
-              $msgId = -1;
-            }
-            else {
-              Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
-              if(Cart66Session::get('Cart66InvalidOptions')) {
-                $message = Cart66Session::get('Cart66InvalidOptions');
-                Cart66Session::drop('Cart66InvalidOptions');
-                $msgQuantityInCart = 0;
-                $msgId = -2;
-              }
-              else {
-                $message = __('We have successfully added', 'cart66') . " <strong>$itemQuantity</strong> $itemName $optionResult" . __('to the cart', 'cart66') . ".";
-                $msgQuantityInCart = $itemQuantity;
-                $msgId = 0;
-              }
-            }
-          }
-          else {
-            $actualQty = Cart66Product::checkInventoryLevelForProduct($itemId, $options);
-            if($actualQty > 0){
-              Cart66Session::get('Cart66Cart')->addItem($itemId, $actualQty, $options, null, $productUrl, true);
-              $message = __('We only added', 'cart66') . " <strong>$actualQty</strong> $itemName $optionResult" . __('to the cart because that is all we have in stock', 'cart66') . ". " . __('Your cart has been updated based on our available inventory', 'cart66') . ".";
-              $msgQuantityInCart = $actualQty;
-              $msgId = -1;
-              break;
-            }
-            else {
-              Cart66Common::log("Item not added due to inventory failure");
-              $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
-              $message = __('We could not add', 'cart66') . " <strong>$actualQty $itemName $optionResult</strong>" . __('to the cart because we are ', 'cart66') . $soldOutLabel . ".";
-              $msgQuantityInCart = 0;
-              $msgId = -2;
-              break;
-            }
-          }
-        }
-      }
-    }
-    else {
-      if(Cart66Product::confirmInventory($itemId, $options, $itemQuantity)) {
-        $product = new Cart66Product($itemId);
-        if($itemQuantity < $product->min_quantity || ($itemQuantity > $product->max_quantity && $product->max_quantity != 0)) {
-          Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
-          if($itemQuantity < $product->min_quantity) {
-            $message = __('We have added', 'cart66') . " <strong>" . $product->min_quantity . "</strong> $itemName $optionResult" . __('to the cart because that is the minimum required quantity for this product', 'cart66') . ".";
-            $msgQuantityInCart = $product->min_quantity;
-          }
-          elseif($itemQuantity > $product->max_quantity) {
-            $message = __('We have only added', 'cart66') . " <strong>$product->max_quantity</strong> $itemName $optionResult" . __('to the cart because that is the maximum allowed quantity for this product', 'cart66') . ".";
-            $msgQuantityInCart = $product->max_quantity;
-          }
-          $msgId = -1;
-        }
-        else {
-          Cart66Session::get('Cart66Cart')->addItem($itemId, $itemQuantity, $options, null, $productUrl, true);
-          if(Cart66Session::get('Cart66InvalidOptions')) {
-            $message = Cart66Session::get('Cart66InvalidOptions');
-            Cart66Session::drop('Cart66InvalidOptions');
-            $msgQuantityInCart = 0;
-            $msgId = -2;
-          }
-          else {
-            $message = __('We have successfully added', 'cart66') . " <strong>$itemQuantity</strong> $itemName $optionResult" . __('to the cart', 'cart66') . ".";
-            $msgQuantityInCart = $itemQuantity;
-            $msgId = 0;
-          }
-        }
-      }
-      else {
-        $actualQty = Cart66Product::checkInventoryLevelForProduct($itemId, $options);
-        if($actualQty > 0){
-          Cart66Session::get('Cart66Cart')->addItem($itemId, $actualQty, $options, null, $productUrl, true);
-          $message = __('We only added', 'cart66') . " <strong>$actualQty</strong> $itemName $optionResult" . __('to the cart because that is all we have in stock', 'cart66') . ". " . __('Your cart has been updated based on our available inventory', 'cart66') . ".";
-          $msgQuantityInCart = $actualQty;
-          $msgId = -1;
-        }
-        else {
-          Cart66Common::log("Item not added due to inventory failure");
-          $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
-          $message = __('We could not add', 'cart66') . " <strong>$actualQty $itemName $optionResult</strong>" . __('to the cart because we are ', 'cart66') . $soldOutLabel . ".";
-          $msgQuantityInCart = 0;
-          $msgId = -2;
-        }
-      }
-    }
-    if(!empty($message)) {
-      $msgRequestedQuantity = $itemQuantity;
-      $msgProductName = $itemName;
-      $msgOptions = $optionResult;
+    $message = Cart66Session::get('Cart66Cart')->addToCart(true);
+    if(!is_array($message)) {
       $message = array(
-        'msgId' => $msgId, 
-        'msg' => $message, 
-        'quantityInCart' => $msgQuantityInCart, 
-        'requestedQuantity' => $msgRequestedQuantity, 
-        'productName' => $msgProductName, 
-        'productOptions' => $options
+        'msgId' => -2,
+        'msgHeader' => __('Error', 'cart66'),
+        'msg' => '<p>' . __('An error occurred while trying to add a product to the cart. Please contact the site administrator.', 'cart66') . '</p>'
       );
     }
-    return $message;
+    echo json_encode($message);
+    die();
   }
   
   public static function promotionProductSearch() {
@@ -608,7 +396,7 @@ class Cart66Ajax {
 
       if(count($counts)) {
         $out = '<table class="inventoryCountTableModal">';
-        $out .= '<tr><td colspan="2"><strong>Currently In Stock</strong></td></tr>';
+        $out .= '<tr><td colspan="2"><strong>' . __('Currently In Stock', 'cart66') . '</strong></td></tr>';
         foreach($counts as $name => $qty) {
           $out .= '<tr>';
           $out .= "<td>$name</td><td>$qty</td>";

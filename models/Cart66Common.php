@@ -1611,6 +1611,19 @@ class Cart66Common {
     
   }
   
+  public static function convert_currency_to_number($amount) {
+    if(is_numeric($amount)) {
+      return $amount;
+    }
+    $decimal = Cart66Setting::getValue('currency_decimals') == 'no_decimal' ? 0 : (Cart66Setting::getValue('currency_decimals') ? Cart66Setting::getValue('currency_decimals') : 2);
+    $dec_point = Cart66Setting::getValue('currency_dec_point') ? Cart66Setting::getValue('currency_dec_point') : '.';
+    $thousands_sep = Cart66Setting::getValue('currency_thousands_sep') ? Cart66Setting::getValue('currency_thousands_sep') : ',';
+    $amount = str_replace($dec_point, '', $amount);
+    $amount = str_replace($thousands_sep, '', $amount);
+    $amount = substr_replace($amount, '.', - $decimal, 0);
+    return $amount;
+  }
+  
   public static function currency($amount, $html=true, $markup=false, $symbol=true) {
     if(!is_numeric($amount)) {
       $amount = 0;
@@ -1668,13 +1681,16 @@ class Cart66Common {
   
   public static function currencyMarkup($amount) {
     $amount = str_replace(CART66_CURRENCY_SYMBOL, '', $amount);
-    if(is_numeric(str_replace(",", "", $amount))){
+    $decimal = Cart66Setting::getValue('currency_decimals') == 'no_decimal' ? 0 : (Cart66Setting::getValue('currency_decimals') ? Cart66Setting::getValue('currency_decimals') : 2);
+    $dec_point = Cart66Setting::getValue('currency_dec_point') ? Cart66Setting::getValue('currency_dec_point') : '.';
+    $thousands_sep = Cart66Setting::getValue('currency_thousands_sep') ? Cart66Setting::getValue('currency_thousands_sep') : ',';
+    if(is_numeric(self::convert_currency_to_number($amount))) {
       $decimalBreak = explode(".", $amount);
       $preDecimal = $decimalBreak[0];
       $postDecimal = isset($decimalBreak[1]) ? $decimalBreak[1] : '';
-      $dec_point = $postDecimal != '' ? (Cart66Setting::getValue('currency_dec_point') ? Cart66Setting::getValue('currency_dec_point') : '.') : '';
+      $dec_point = $postDecimal != '' ? $dec_point : '';
       $html = '<span class="Cart66CurrencySymbol Cart66CurrencySymbolbefore">' . self::currencySymbol('before') . '</span>';
-      $html .= '<span class="Cart66PreDecimal">' . $preDecimal . '</span><span class="Cart66DecimalSep">' . $dec_point . '</span><span class="Cart66PostDecimal">' . $postDecimal . '</span>';
+      $html .= '<span class="Cart66PreDecimal">' . number_format($preDecimal, 0, '', $thousands_sep) . '</span><span class="Cart66DecimalSep">' . $dec_point . '</span><span class="Cart66PostDecimal">' . $postDecimal . '</span>';
       $html .= '<span class="Cart66CurrencySymbol Cart66CurrencySymbolAfter">' . self::currencySymbol('after') . '</span>';
     }
     else {

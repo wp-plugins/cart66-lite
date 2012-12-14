@@ -25,7 +25,7 @@ class Cart66ButtonManager {
       $subscription = 0;
       
       if($showPrice == 'yes' || $showPrice == 'only') {
-        $price = Cart66Common::currency($product->price);
+        $price = $product->price;
         
         // Check for subscription pricing
         if($product->isSubscription()) {

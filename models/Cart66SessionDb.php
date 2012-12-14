@@ -84,7 +84,7 @@ class Cart66SessionDb {
     self::$_validRequest = true;
     
     // Do not start sessions for admin requests or requests to these file extensions
-    if(IS_ADMIN && !DOING_AJAX) {
+    if(IS_ADMIN && (!defined('DOING_AJAX') || (defined('DOING_AJAX') && !DOING_AJAX))) {
       self::$_validRequest = false;
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not starting Cart66 session for admin request");
     }

@@ -273,13 +273,13 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
     <p><?php _e( 'Using live shipping rates overrides all other types of shipping settings.' , 'cart66' ); ?></p>
   
     <?php if(Cart66Setting::getValue('use_live_rates')): ?>
-      <form action="" method="post">
+      <form action="admin.php?page=cart66-shipping" method="post">
         <p><?php _e( 'Live shipping rates are enabled.' , 'cart66' ); ?></p>
         <input type='hidden' name='cart66-action' value='disable live rates' />
         <input type="submit" name="submit" value="Disable Live Shipping Rates" id="submit" class="button-secondary" />
       </form>
     <?php else: ?>
-      <form action="" method="post">
+      <form action="admin.php?page=cart66-shipping" method="post">
         <p><?php _e( 'Live shipping rates are not enabled.' , 'cart66' ); ?></p>
         <input type='hidden' name='cart66-action' value='enable live rates' />
         <input type="submit" name="submit" value="Enable Live Shipping Rates" id="submit" class="button-primary" />
@@ -296,7 +296,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
     <h3 style="clear: both;"><?php _e( 'Shipping Validation' , 'cart66' ); ?></h3>
     <p style="width: 400px;"><?php _e( 'Set the options here whether or not to require shipping validation on the cart page.' , 'cart66' ); ?></p> 
 
-    <form action="" method='post'>
+    <form action="admin.php?page=cart66-shipping" method='post'>
       <input type='hidden' name='cart66-action' value='save shipping validation' />
       
       <table class="form-table">
@@ -331,7 +331,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
     <h3 style="clear: both;"><?php _e( 'Shipping Methods' , 'cart66' ); ?></h3>
     <p style="width: 400px;"><?php _e( 'Create the shipping methods you will offer your customers. If no shipping price is defined for a product, the default rates entered here will be used to calculate shipping costs.' , 'cart66' ); ?></p> 
 
-    <form action="" method='post'>
+    <form action="admin.php?page=cart66-shipping" method='post'>
       <input type='hidden' name='cart66-action' value='save shipping method' />
       <input type='hidden' name='shipping_method[id]' value='<?php echo $method->id ?>' />
       
@@ -439,7 +439,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
     <?php
       $products = Cart66Product::loadProductsOutsideOfClass();
       if(count($method->getModels()) && count($products)): ?>
-      <form action="" method='post'>
+      <form action="admin.php?page=cart66-shipping" method='post'>
         <input type="hidden" name="cart66-action" value="save product rate" />
         <input type="hidden" name="rate[id]" value="<?php echo $rate->id ?>" id="rate-id" />
         <ul>
@@ -545,7 +545,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
     </table>
 
     <?php if(count($method->getModels())): ?>
-    <form action="" method='post'>
+    <form action="admin.php?page=cart66-shipping" method='post'>
       <input type='hidden' name='cart66-action' value='save rule' />
       <input type='hidden' name='rule[id]' value='<?php echo $rule->id ?>' />
       <ul>

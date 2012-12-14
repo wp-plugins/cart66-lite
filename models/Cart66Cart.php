@@ -33,17 +33,22 @@ class Cart66Cart {
    * If the inventory check fails redirect the user back to the referring page.
    * This function assumes that a form post triggered the call.
    */
-  public function addToCart() {
+  public function addToCart($ajax=false) {
     $itemId = Cart66Common::postVal('cart66ItemId');
     Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Adding item to cart: $itemId");
     
     $options = '';
+    $optionResult = '';
     if(isset($_POST['options_1'])) {
       $options = Cart66Common::postVal('options_1');
+      $optionResult = Cart66Common::postVal('options_1');
     }
     if(isset($_POST['options_2'])) {
       $options .= '~' . Cart66Common::postVal('options_2');
+      $optionResult .= ', ' . Cart66Common::postVal('options_2');
     }
+    
+    $optionResult = ($optionResult != null) ? '(' . $optionResult . ') ' : '';
     
     if(isset($_POST['item_quantity'])) {
       $itemQuantity = ($_POST['item_quantity'] > 0) ? round($_POST['item_quantity'],0) : 1;
@@ -64,6 +69,10 @@ class Cart66Cart {
     }
 
     if(Cart66Product::confirmInventory($itemId, $options)) {
+      if($ajax) {
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] yes, ajax here");
+        return $this->addItem($itemId, $itemQuantity, $options, null, $productUrl, $ajax, false, $optionResult);
+      }
       $this->addItem($itemId, $itemQuantity, $options, null, $productUrl);
     }
     else {
@@ -95,10 +104,11 @@ class Cart66Cart {
    * 
    * @return Cart66CartItem
    */
-  public function addItem($id, $qty=1, $optionInfo='', $formEntryId=0, $productUrl='', $ajax=false, $suppressHook=false) {
+  public function addItem($id, $qty=1, $optionInfo='', $formEntryId=0, $productUrl='', $ajax=false, $suppressHook=false, $optionResult) {
     Cart66Session::set('Cart66Tax', 0);
     Cart66Session::set('Cart66TaxRate', 0);
     $the_final_item = false;
+    $alert = array();
     $options_valid = true;
     $product = new Cart66Product($id);
     do_action('cart66_before_add_to_cart', $product, $qty);
@@ -108,8 +118,16 @@ class Cart66Cart {
     catch(Exception $e) {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Exception due to invalid product option: " . $e->getMessage());
       $options_valid = false;
-      $alert = __('We could not add the product', 'cart66') . ' <strong>' . $product->name . '</strong> ' . __('to the cart because the product options are invalid.', 'cart66');
-      Cart66Session::set('Cart66InvalidOptions', $alert);
+      $message = __('We could not add the product', 'cart66') . ' <strong>' . $product->name . '</strong> ' . __('to the cart because the product options are invalid.', 'cart66');
+      $alert['msg'] = $message;
+      $alert['msgId'] = -2;
+      $alert['quantityInCart'] = 0;
+      $alert['requestedQuantity'] = $qty;
+      $alert['productName'] = $product->name;
+      $alert['productOptions'] = $optionInfo;
+      if(!$ajax) {
+        Cart66Session::set('Cart66InvalidOptions', $message);
+      }
     }
     
     if($product->id > 0 && $options_valid) {
@@ -143,25 +161,46 @@ class Cart66Cart {
             $confirmInventory = Cart66Product::confirmInventory($id, $optionInfo->options, $newQuantity);
             if($actualQty !== NULL && $actualQty < $newQuantity && !$confirmInventory){
               if($actualQty > 0) {
-                $alert = '<p>We are not able to fulfill your order for <strong>' .  $qty . '</strong> ' . $item->getFullDisplayName() . "  because we only have <strong>$actualQty in stock</strong>.</p>";
+                $message = '<p>' . __('We are not able to fulfill your order for', 'cart66') . ' <strong>' .  $qty . '</strong> ' . $item->getFullDisplayName() . " " . __('because we only have', 'cart66') .  " <strong>$actualQty " . __('in stock.', 'cart66') . "</strong></p>";
+                $message = "$message <p>" . __('Your cart has been updated based on our available inventory.', 'cart66') . "</p>";
+                $alert['msg'] = $message;
+                $alert['msgId'] = -1;
+                $alert['quantityInCart'] = $actualQty;
+                $alert['requestedQuantity'] = $qty;
+                $alert['productName'] = $item->getFullDisplayName();
+                $alert['productOptions'] = $optionInfo;
               }
               else {
                 $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
-                $alert = '<p>We are not able to fulfill your order for <strong>' .  $qty . '</strong> ' . $item->getFullDisplayName() . "  because it is <strong>" . $soldOutLabel . "</strong>.</p>";
+                $message = '<p>' . __('We are not able to fulfill your order for', 'cart66') . ' <strong>' .  $qty . '</strong> ' . $item->getFullDisplayName() . " " . __('because it is', 'cart66') . " <strong>" . $soldOutLabel . ".</strong></p>";
+                $message = "$message <p>" . __('Your cart has been updated based on our available inventory.', 'cart66') . "</p>";
+                $alert['msg'] = $message;
+                $alert['msgId'] = -2;
+                $alert['quantityInCart'] = $actualQty;
+                $alert['requestedQuantity'] = $qty;
+                $alert['productName'] = $item->getFullDisplayName();
+                $alert['productOptions'] = $optionInfo;
               }
-              if(!empty($alert)) {
-                $alert = "<div class='alert-message alert-error Cart66Unavailable'><h1>Inventory Restriction</h1> $alert <p>Your cart has been updated based on our available inventory.</p>";
-                $alert .= '<input type="button" name="close" value="Ok" class="Cart66ButtonSecondary modalClose" /></div>';
-                Cart66Session::set('Cart66InventoryWarning', $alert);
-              }
-              if($ajax==true) {
-                Cart66Session::drop('Cart66InventoryWarning');
+              if(!empty($message)) {
+                if(!$ajax) {
+                  Cart66Session::set('Cart66InventoryWarning', $message);
+                }
               }
               $newQuantity = $actualQty;
             }
             $item->setQuantity($newQuantity);
             if($formEntryId > 0) {
               $item->addFormEntryId($formEntryId);
+            }
+            if(empty($alert)) {
+              $message = __('We have successfully added', 'cart66') . " <strong>$newQuantity</strong> " . $product->name . " $optionResult " . __('to the cart', 'cart66') . ".";
+              $message = "<p>$message</p>";
+              $alert['msg'] = $message;
+              $alert['msgId'] = 0;
+              $alert['quantityInCart'] = $newQuantity;
+              $alert['requestedQuantity'] = $qty;
+              $alert['productName'] = $product->name;
+              $alert['productOptions'] = $optionInfo;
             }
             $the_final_item = $item;
             break;
@@ -173,19 +212,30 @@ class Cart66Cart {
           $confirmInventory = Cart66Product::confirmInventory($id, $optionInfo->options, $newQuantity);
           if($actualQty !== NULL && $actualQty < $newQuantity && !$confirmInventory){
             if($actualQty > 0) {
-              $alert = '<p>We are not able to fulfill your order for <strong>' .  $qty . '</strong> ' . $newItem->getFullDisplayName() . "  because we only have <strong>$actualQty in stock</strong>.</p>";
+              $message = '<p>' . __('We are not able to fulfill your order for', 'cart66') . ' <strong>' .  $qty . '</strong> ' . $product->name . " " . __('because we only have', 'cart66') .  " <strong>$actualQty " . __('in stock.', 'cart66') . "</strong></p>";
+              $message = "$message <p>" . __('Your cart has been updated based on our available inventory.', 'cart66') . "</p>";
+              $alert['msg'] = $message;
+              $alert['msgId'] = -1;
+              $alert['quantityInCart'] = $actualQty;
+              $alert['requestedQuantity'] = $qty;
+              $alert['productName'] = $product->name;
+              $alert['productOptions'] = $optionInfo;
             }
             else {
               $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
-              $alert = '<p>We are not able to fulfill your order for <strong>' .  $qty . '</strong> ' . $newItem->getFullDisplayName() . "  because it is <strong>" . $soldOutLabel . "</strong>.</p>";
+              $message = '<p>' . __('We are not able to fulfill your order for', 'cart66') . ' <strong>' .  $qty . '</strong> ' . $product->name . " " . __('because it is', 'cart66') . " <strong>" . $soldOutLabel . ".</strong></p>";
+              $message = "$message <p>" . __('Your cart has been updated based on our available inventory.', 'cart66') . "</p>";
+              $alert['msg'] = $message;
+              $alert['msgId'] = -2;
+              $alert['quantityInCart'] = $actualQty;
+              $alert['requestedQuantity'] = $qty;
+              $alert['productName'] = $product->name;
+              $alert['productOptions'] = $optionInfo;
             }
             if(!empty($alert)) {
-              $alert = "<div class='alert-message alert-error Cart66Unavailable'><h1>Inventory Restriction</h1> $alert <p>Your cart has been updated based on our available inventory.</p>";
-              $alert .= '<input type="button" name="close" value="Ok" class="Cart66ButtonSecondary modalClose" /></div>';
-              Cart66Session::set('Cart66InventoryWarning', $alert);
-            }
-            if($ajax==true) {
-              Cart66Session::drop('Cart66InventoryWarning');
+              if(!$ajax) {
+                Cart66Session::set('Cart66InventoryWarning', $message);
+              }
             }
             $newQuantity = $actualQty;
           }
@@ -193,7 +243,16 @@ class Cart66Cart {
           if($formEntryId > 0) {
             $newItem->addFormEntryId($formEntryId);
           }
-          
+          if(empty($alert)) {
+            $message = __('We have successfully added', 'cart66') . " <strong>$newQuantity</strong> " . $product->name . " $optionResult " . __('to the cart', 'cart66') . ".";
+            $message = "<p>$message</p>";
+            $alert['msg'] = $message;
+            $alert['msgId'] = 0;
+            $alert['quantityInCart'] = $newQuantity;
+            $alert['requestedQuantity'] = $qty;
+            $alert['productName'] = $product->name;
+            $alert['productOptions'] = $optionInfo;
+          }
           $the_final_item = $newItem;
           $this->_items[] = $newItem;
         }
@@ -203,6 +262,9 @@ class Cart66Cart {
       Cart66Session::touch();
       if(!$suppressHook) {
         do_action('cart66_after_add_to_cart', $product, $qty);
+      }
+      if($ajax) {
+        return $alert;
       }
       return $the_final_item;
     }
@@ -1154,7 +1216,7 @@ class Cart66Cart {
     // Set default shipping method to the cheapest method
     $method = new Cart66ShippingMethod();
     $methods = $method->getModels("where code IS NULL or code = ''", 'order by default_rate asc');
-    if(is_array($methods) && count($methods) && get_class($methods[0]) == 'Cart66ShippingMethod') {
+    if(is_array($methods) && count($methods) && is_object($methods[0]) && get_class($methods[0]) == 'Cart66ShippingMethod') {
       $this->_shippingMethodId = $methods[0]->id;
       if(Cart66Setting::getValue('require_shipping_validation')) {
         $this->_shippingMethodId = 'select';
@@ -1190,7 +1252,7 @@ class Cart66Cart {
     if(is_array($qtys)) {
       foreach($qtys as $itemIndex => $qty) {
         $item = $this->getItem($itemIndex);
-        if(!is_null($item) && get_class($item) == 'Cart66CartItem') {
+        if(!is_null($item) && is_object($item) && get_class($item) == 'Cart66CartItem') {
           
           if($qty == 0){
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Customer specified quantity of 0 - remove item.");

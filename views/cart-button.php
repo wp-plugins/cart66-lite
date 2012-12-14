@@ -4,12 +4,10 @@
   $trackInventory = Cart66Setting::getValue('track_inventory');
   $id = Cart66Common::getButtonId($data['product']->id);
   $priceString = $data['price'];
-  $noSymbol = str_replace(CART66_CURRENCY_SYMBOL, '', $priceString);
   $isNumeric = false;
-  if(is_numeric(str_replace(",","",$noSymbol))){    
+  if(is_numeric($priceString)){    
     $isNumeric = true;
   }
-  
 ?>
 
 <?php if($data['gravity_form_id'] && CART66_PRO && $data['showPrice'] != 'only'): ?>
@@ -25,7 +23,7 @@
       <?php if($isNumeric): ?>
         <span class="Cart66PriceLabel"><?php _e( 'Price' , 'cart66' ); ?>: </span>
       <?php endif; ?>
-      <?php echo Cart66Common::currency($noSymbol, true, true); ?>
+      <?php echo Cart66Common::currency($priceString, true, true); ?>
     </span>
     
   <?php endif; ?>
@@ -51,7 +49,7 @@
       <span class="Cart66Price<?php echo $isNumeric ? $css : ' Cart66PriceDescription'; ?>">
         <?php if($isNumeric): ?>
           <span class="Cart66PriceLabel"><?php _e( 'Price' , 'cart66' ); ?>: </span>
-          <?php echo Cart66Common::currency($noSymbol, true, true); ?>
+          <?php echo Cart66Common::currency($priceString, true, true); ?>
         <?php else: ?>
           <?php echo $priceString; ?>
         <?php endif; ?>
@@ -100,17 +98,14 @@
     <?php else: ?>
       <span class='Cart66OutOfStock'><?php echo Cart66Setting::getValue('label_out_of_stock') ? Cart66Setting::getValue('label_out_of_stock') : __( 'Out of stock' , 'cart66' ); ?></span>
     <?php endif; ?>
-    
-    <?php if($trackInventory): ?>
-      <input type="hidden" name="action" value="check_inventory_on_add_to_cart" />
-      <span id="stock_message_box_<?php echo $id ?>" class="Cart66Unavailable Cart66Error" style="display: none;">
-        <h2><?php _e('We\'re Sorry','cart66'); ?></h2>
-        <p id="stock_message_<?php echo $id ?>"></p>
-        <input type="button" name="close" value="Ok" id="close" class="Cart66ButtonSecondary modalClose" />
-      </span>
-    <?php endif; ?>
-
   </form>
+  <?php if($trackInventory): ?>
+    <div id="stock_message_box_<?php echo $id ?>" class="alert-message alert-error" style="display: none;">
+      <h2><?php _e('We\'re Sorry','cart66'); ?></h2>
+      <p id="stock_message_<?php echo $id ?>"></p>
+      <input type="button" name="close" value="<?php _e('OK', 'cart66'); ?>" id="close" class="Cart66ButtonSecondary modalClose" />
+    </div>
+  <?php endif; ?>
 <?php endif; ?>
 
 <?php if($data['ajax'] == 'yes' || $data['ajax'] == 'true'): ?>

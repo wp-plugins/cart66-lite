@@ -62,7 +62,7 @@ ajaxManager.run();
       return false;
     });
     $('.modalClose').click(function() {
-      $('.Cart66Unavailable, .Cart66Warning, .Cart66Error').fadeOut(800);
+      $('.Cart66Unavailable, .Cart66Warning, .Cart66Error, .alert-message').fadeOut(800);
     });
     
     $('#Cart66CancelPayPalSubscription').click(function() {
@@ -190,15 +190,24 @@ function addToCartAjax(formId, ajaxurl, productName, productUrl, buttonText) {
         if((response.msgId) == 0){
           $jq('.success_' + formId).fadeIn(300);
           $jq('.success_message_' + formId).html(response.msg);
+          if(typeof response.msgHeader !== 'undefined') {
+            $jq('.success' + formId + ' .message-header').html(response.msgHeader);
+          }
           $jq('.success_' + formId).delay(2000).fadeOut(300);
         }
         if((response.msgId) == -1){
           $jq('.warning_' + formId).fadeIn(300);
           $jq('.warning_message_' + formId).html(response.msg);
+          if(typeof response.msgHeader !== 'undefined') {
+            $jq('.warning' + formId + ' .message-header').html(response.msgHeader);
+          }
         }
         if((response.msgId) == -2){
           $jq('.error_' + formId).fadeIn(300);
           $jq('.error_message_' + formId).html(response.msg);
+          if(typeof response.msgHeader !== 'undefined') {
+            $jq('.error_' + formId + ' .message-header').html(response.msgHeader);
+          }
         }
       }
     }

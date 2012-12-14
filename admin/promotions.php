@@ -4,6 +4,9 @@ $errorMessage = false;
 
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-action'] == 'save promotion') {
+  $_POST['promo']['amount'] = isset($_POST['promo']['amount']) ? Cart66Common::convert_currency_to_number($_POST['promo']['amount']) : '';
+  $_POST['promo']['min_order'] = isset($_POST['promo']['min_order']) ? Cart66Common::convert_currency_to_number($_POST['promo']['min_order']) : '';
+  $_POST['promo']['max_order'] = isset($_POST['promo']['max_order']) ? Cart66Common::convert_currency_to_number($_POST['promo']['max_order']) : '';
   try {
     $promo->load($_POST['promo']['id']);
     $promo->setData($_POST['promo']);
@@ -33,7 +36,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
 ?>
 
 
-<h2>Cart66 Promotions</h2>
+<h2><?php _e('Cart66 Promotions', 'cart66'); ?></h2>
 <div class='wrap' id="promotions">
 <?php if($errorMessage): ?>
 <div class="errormsg"><?php echo $errorMessage ?></div>
@@ -49,7 +52,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
         </div>
         <div class="widget-holder">
           <div>
-            <form action="" method='post'>
+            <form action="admin.php?page=cart66-promotions" method='post'>
               <input type='hidden' name='cart66-action' value='save promotion' />
               <input type='hidden' name='promo[id]' value='<?php echo $promo->id ?>' />
               <ul>
@@ -84,7 +87,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
                 <li>
                   <label class="long" for="promo-amount"><?php _e( 'Amount' , 'cart66' ); ?>:</label>
                   <span class="dollarSign"><?php echo Cart66Common::currencySymbol('before'); ?></span>
-                  <input type="text" name="promo[amount]" id="promo-amount" value="<?php echo $promo->amount ?>">
+                  <input type="text" name="promo[amount]" id="promo-amount" value="<?php echo $promo->id > 0 ? ($promo->type == 'percentage' ? $promo->amount : Cart66Common::currency($promo->amount, true, false, false)) : ''; ?>">
                   <span class="dollarSign"><?php echo Cart66Common::currencySymbol('after'); ?></span>
                   <span class="percentSign">%</span>
                   <span class="label_desc"><?php _e('Set the promotion amount', 'cart66'); ?>.</span>
@@ -94,11 +97,11 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
                   <div class="dateRange">
                   <div class="group">
                     <label for="promo-min_order"><?php _e( 'Minimum order amount' , 'cart66' ); ?>:</label>
-                    <?php echo Cart66Common::currencySymbol('before'); ?> <input type="text" id="promo-min_order" name="promo[min_order]" value="<?php echo $promo->minOrder ?>"> <?php echo Cart66Common::currencySymbol('after'); ?>
+                    <?php echo Cart66Common::currencySymbol('before'); ?> <input type="text" id="promo-min_order" name="promo[min_order]" value="<?php echo $promo->id > 0 ? Cart66Common::currency($promo->minOrder, true, false, false) : ''; ?>"> <?php echo Cart66Common::currencySymbol('after'); ?>
                   </div>
                   <div class="group">
                     <label for="promo-max_order"><?php _e( 'Maximum order amount' , 'cart66' ); ?>:</label>
-                    <?php echo Cart66Common::currencySymbol('before'); ?> <input type="text" id="promo-max_order" name="promo[max_order]" value="<?php echo $promo->maxOrder ?>"> <?php echo Cart66Common::currencySymbol('after'); ?>
+                    <?php echo Cart66Common::currencySymbol('before'); ?> <input type="text" id="promo-max_order" name="promo[max_order]" value="<?php echo $promo->id > 0 ? Cart66Common::currency($promo->maxOrder, true, false, false) : ''; ?>"> <?php echo Cart66Common::currencySymbol('after'); ?>
                   </div>
                   <span class="label_desc"><?php _e('Set the minimum and/or maximum amount required for this promotion to apply', 'cart66'); ?>.</span>
                   </div>

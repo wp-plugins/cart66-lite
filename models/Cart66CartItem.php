@@ -322,11 +322,14 @@ class Cart66CartItem {
           $priceDescription = Cart66Common::currency($userPrice);
         }
         else{
-          $priceDescription = $product->price;
+          $priceDescription = Cart66Common::currency($product->price);
         }
       }
       else {
         $priceDescription = $product->getPriceDescription($this->_priceDifference);
+        if(is_numeric($priceDescription)) {
+          $priceDescription = Cart66Common::currency($priceDescription);
+        }
       }
     }
     return $priceDescription;

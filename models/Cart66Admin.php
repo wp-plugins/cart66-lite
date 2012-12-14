@@ -157,6 +157,8 @@ class Cart66Admin {
 
       if($_SERVER['REQUEST_METHOD'] == 'POST' && Cart66Common::postVal('cart66-action') == 'save paypal subscription') {
         $subData = Cart66Common::postVal('subscription');
+        $subData['setup_fee'] = isset($subData['setup_fee']) ? Cart66Common::convert_currency_to_number($subData['setup_fee']) : '';
+        $subData['price'] = isset($subData['price']) ? Cart66Common::convert_currency_to_number($subData['price']) : '';
         $sub->setData($subData);
         $errors = $sub->validate();
         if(count($errors) == 0) {

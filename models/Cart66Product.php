@@ -937,7 +937,7 @@ class Cart66Product extends Cart66ModelAbstract {
         $price = $this->price + $priceDifference;
         $priceDescription = "";
         if($price > 0) {
-          $priceDescription = Cart66Common::currency($price);
+          $priceDescription = $price;
         }
 
         if($this->hasFreeTrial()) {
@@ -945,10 +945,11 @@ class Cart66Product extends Cart66ModelAbstract {
             $priceDescription = "Free Trial";
           }
           else{
-          	$priceDescription = $this->priceDescription;	
+            $priceDescription = $this->priceDescription;	
           }
         }
         else {
+          $priceDescription = Cart66Common::currency($priceDescription);
           if($price > 0) { $priceDescription .= ' (one time) +<br/> '; }
           $priceDescription .= $this->getSubscriptionPriceSummary();
         }
@@ -976,7 +977,7 @@ class Cart66Product extends Cart66ModelAbstract {
           $priceDescription = $this->priceDescription;
         }
         else {
-          $priceDescription = Cart66Common::currency($this->price + $priceDifference);
+          $priceDescription = $this->price + $priceDifference;
         }
       }
     }
