@@ -3,7 +3,7 @@
 Plugin Name: Cart66 Lite
 Plugin URI: http://www.cart66.com
 Description: Wordpress Shopping Cart
-Version: 1.5.1.1
+Version: 1.5.1.2
 Author: Reality 66
 Author URI: http://www.Reality66.com
 Text Domain: cart66
@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 if(!class_exists('Cart66')) {
   ob_start();
-  
+
   // Discover plugin path and url even if symlinked
   if(!defined('CART66_PATH')) {
     $mj_plugin_file = __FILE__;
@@ -55,7 +55,7 @@ if(!class_exists('Cart66')) {
   define("WPURL", Cart66Common::getWpUrl());
   define("MIJIREH_CHECKOUT", 'https://secure.mijireh.com');
 
-  
+
   if(CART66_PRO) {
     require_once(CART66_PATH. "/pro/models/Cart66ProCommon.php");
   }
@@ -66,23 +66,23 @@ if(!class_exists('Cart66')) {
   }
 
   /* Uncomment this block of code for load time debugging
-  $filename = CART66_PATH . "/log.txt"; 
+  $filename = CART66_PATH . "/log.txt";
   if(file_exists($filename) && is_writable($filename)) {
-    file_put_contents($filename, "\n\n\n================= Loading Cart66 Main File [" . date('m/d/Y g:i:s a') . "] " . 
+    file_put_contents($filename, "\n\n\n================= Loading Cart66 Main File [" . date('m/d/Y g:i:s a') . "] " .
       $_SERVER['REMOTE_ADDR'] . " " . $_SERVER['REQUEST_URI'] . " =================\n\n", FILE_APPEND);
   }
   */
-  
+
   $cart66 = new Cart66();
   load_plugin_textdomain( 'cart66', false, '/' . basename(dirname(__FILE__)) . '/languages/' );
-  
+
   // Register activation hook to install Cart66 database tables and system code
   register_activation_hook(CART66_PATH . '/cart66.php', array($cart66, 'install'));
-  
+
   if(CART66_PRO) {
     register_activation_hook(CART66_PATH . '/cart66.php', array($cart66, 'scheduledEvents'));
   }
-  
+
   // Check for WordPress 3.1 auto-upgrades
   if(function_exists('register_update_hook')) {
     register_update_hook(CART66_PATH . '/cart66.php', array($cart66, 'install'));
@@ -130,7 +130,7 @@ function cart66SettingsLink($links, $file) {
 }
 
 /**
- * Prevent the link rel="next" content from showing up in the wordpress header 
+ * Prevent the link rel="next" content from showing up in the wordpress header
  * because it can potentially prefetch a page with a [clearcart] shortcode
  */
 remove_action('wp_head', 'adjacent_posts_rel_link_wp_head');

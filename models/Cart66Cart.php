@@ -104,7 +104,7 @@ class Cart66Cart {
    * 
    * @return Cart66CartItem
    */
-  public function addItem($id, $qty=1, $optionInfo='', $formEntryId=0, $productUrl='', $ajax=false, $suppressHook=false, $optionResult) {
+  public function addItem($id, $qty=1, $optionInfo='', $formEntryId=0, $productUrl='', $ajax=false, $suppressHook=false, $optionResult='') {
     Cart66Session::set('Cart66Tax', 0);
     Cart66Session::set('Cart66TaxRate', 0);
     $the_final_item = false;

@@ -155,8 +155,8 @@ function inventoryCheck(formId, ajaxurl, useAjax, productName, productUrl, addin
 
 function addToCartAjax(formId, ajaxurl, productName, productUrl, buttonText) {
   $jq = jQuery.noConflict();
-  var options1 = $jq('.cart66Options.options_1',$jq('#cartButtonForm_' + formId)).val();
-  var options2 = $jq('.cart66Options.options_2',$jq('#cartButtonForm_' + formId)).val();
+  var options1 = $jq('#cartButtonForm_' + formId + ' .cart66Options.options_1').val();
+  var options2 = $jq('#cartButtonForm_' + formId + ' .cart66Options.options_2').val();
   var itemQuantity = $jq('#Cart66UserQuantityInput_' + formId).val();
   var itemUserPrice = $jq('#Cart66UserPriceInput_' + formId).val();
   var cleanProductId = formId.split('_');
