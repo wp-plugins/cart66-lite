@@ -4,7 +4,7 @@ Donate link: http://cart66.com/
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales, shopping cart
 Requires at least: 2.8.2
 Tested up to: 3.5
-Stable tag: 1.5.1.1
+Stable tag: 1.5.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
