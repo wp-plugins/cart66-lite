@@ -14,7 +14,7 @@ Sell digital products and/or physical products with Cart66. The easiest to use W
 
 Cart66 is a simple to use yet powerful ecommerce plugin for WordPress.
 
-* [Process credit cards securely](http://www.mijireh.com "Secure credit card processing") using your payment gateway with [Mijireh](http://www.mijireh.com "Secure credit card processing")
+* [Supports 93 payment gateways](http://www.mijireh.com "Secure credit card processing") and makes your store PCI compliant with [Mijireh Checkout](http://www.mijireh.com "Secure credit card processing")
 * Sell digital products with Amazon S3 integration
 * Sell physical products
 * Sell services
