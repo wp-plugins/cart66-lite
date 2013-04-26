@@ -77,8 +77,8 @@ if($session_token == $token):
         }
 
         if(is_object($promotion) && $promotion->apply_to == 'shipping'){
-          //$shipping = $shipping - Cart66Session::get('Cart66Cart')->getDiscountAmount();
-          //$discount = 0;
+          $shipping = $shipping - Cart66Session::get('Cart66Cart')->getDiscountAmount();
+          $discount = 0;
         }
       if(isset($_POST['tax']) && $_POST['tax'] > 0) {
         $tax = Cart66Common::postVal('tax');
@@ -271,7 +271,7 @@ if($session_token == $token):
     }
   
     if($isTaxed) {
-      $taxable = Cart66Session::get('Cart66Cart')->getTaxableAmount();
+      $taxable = Cart66Session::get('Cart66Cart')->getTaxableAmount($taxRate->tax_shipping);
       $tax = number_format($taxable * ($taxRate->rate/100), 2, '.', '');
       if($tax == 0) {
         $tax = Cart66Session::get('Cart66Cart')->getTax('All Sales');
@@ -443,10 +443,10 @@ if($session_token == $token):
                 $cartImgPath .= '/';
               }
               $completeImgPath = $cartImgPath . 'complete-order.png';
-              echo "<input type='image' src='$completeImgPath' value='Complete Order' />";
+              echo "<input type='image' class='Cart66CompleteOrderButton' src='$completeImgPath' value='" . __('Complete Order', 'cart66') . "' />";
             }
             else {
-              echo "<input type='submit' class='Cart66ButtonPrimary' value='Complete Order' />";
+              echo "<input type='submit' class='Cart66CompleteOrderButton Cart66ButtonPrimary' value='" . __('Complete Order', 'cart66') . "' />";
             }
           ?>
         </li>
@@ -460,10 +460,10 @@ if($session_token == $token):
             $cartImgPath .= '/';
           }
           $completeImgPath = $cartImgPath . 'complete-order.png';
-          echo "<input type='image' src='$completeImgPath' value='Complete Order' />";
+          echo "<input type='image' class='Cart66CompleteOrderButton' src='$completeImgPath' value='" . __('Complete Order', 'cart66') . "' />";
         }
         else {
-          echo "<input type='submit' class='Cart66ButtonPrimary Cart66CompleteOrderButton' value='Complete Order' />";
+          echo "<input type='submit' class='Cart66ButtonPrimary Cart66CompleteOrderButton' value='" . __('Complete Order', 'cart66') . "' />";
         }
       ?>
       <p id="Cart66ReceiptExpectation"><?php _e( 'Your receipt will be on the next page and also emailed to you.' , 'cart66' ); ?></p>
@@ -471,6 +471,15 @@ if($session_token == $token):
     
     
     </form>
+    <script type="text/javascript">
+      (function($){
+        $(document).ready(function() {
+          $('.phorm2').submit(function(){
+            $(".Cart66CompleteOrderButton").attr("disabled", "disabled");
+          });
+        })
+      })(jQuery);
+    </script>
   <?php endif; ?>
 <?php else: ?>
   <?php

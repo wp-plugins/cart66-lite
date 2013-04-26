@@ -522,7 +522,7 @@ class Cart66Promotion extends Cart66ModelAbstract {
     return $total;
   }
   
-  public function getAmount($percentTarget=""){
+  public function getAmount($percentTarget="", $maximum=false){
     if($percentTarget==""){
       $output = $this->amount;
     }
@@ -534,6 +534,9 @@ class Cart66Promotion extends Cart66ModelAbstract {
       
       if($this->type=="dollar"){
         $output = $this->amount;
+        if($maximum && $output > $maximum) {
+          $output = $maximum;
+        }
       }
       
     }
@@ -637,7 +640,7 @@ class Cart66Promotion extends Cart66ModelAbstract {
         
       if(empty($this->products)) {
         $products = $cartObject->getSubTotal();
-        $discount = $this->getAmount($products);
+        $discount = $this->getAmount($products, $products);
       }
       else {
         $itemSubtotal = 0;
@@ -657,7 +660,7 @@ class Cart66Promotion extends Cart66ModelAbstract {
           }
         }
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] item subtotal: $itemSubtotal");
-        $discount = $this->getAmount($itemSubtotal);
+        $discount = $this->getAmount($itemSubtotal, $itemSubtotal);
         $discount = $this->stayPositive($itemSubtotal, $discount);
       }
       

@@ -128,7 +128,7 @@ class Cart66CartItem {
         if($fullMode) {
           $buttonValue = empty($value) ? 'Save' : 'Update';
           $showCustomForm = empty($value) ? '' : 'none';
-          $change = empty($value) ? '' : "<a href='' onclick='' id='change_$itemIndex'>Change</a>";
+          $change = empty($value) ? '' : "<a href=\"\" onclick=\"\" id=\"change_$itemIndex\">Change</a>";
           $out = "
           <script type='text/javascript'>
             (function($){
@@ -161,7 +161,7 @@ class Cart66CartItem {
         if($fullMode) {
           $buttonValue = empty($value) ? 'Save' : 'Update';
           $showCustomForm = empty($value) ? '' : 'none';
-          $change = empty($value) ? '' : "<a href='' onclick='' id='change_$itemIndex'>Change</a>";
+          $change = empty($value) ? '' : "<a href=\"\" onclick=\"\" id=\"change_$itemIndex\">Change</a>";
           $brValue = nl2br($value);
           $out = "
           <script type='text/javascript'>
@@ -183,7 +183,7 @@ class Cart66CartItem {
           if(empty($value)) {
             $cartPage = get_page_by_path('store/cart');
             $viewCartLink = get_permalink($cartPage->ID);
-            $value = "<a href='$viewCartLink'>Click here to enter your information</a>";
+            $value = "<a href=\"$viewCartLink\">Click here to enter your information</a>";
           }
           $value = nl2br($value);
           $out = "<br/><p class=\"Cart66CustomFieldDesc\">$desc:<br/><strong>$value</strong></p>";

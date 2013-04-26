@@ -117,22 +117,24 @@
           "sProcessing": "<?php _e('Processing', 'cart66'); ?>..." 
         }
       }).css('width','');
-      $('.Cart66ViewOrderNote').live('click', function () {
-        $(".Cart66OrderNote").hide();
-        var id = $(this).attr('rel');
-        $('#' + id).show();
-        return false;
-      });
-      $('.Cart66CloseNoteView').live('click', function () {
-        var id = $(this).attr('rel');
-        $('#' + id).hide();
-        return false;
-      });
-      $('.delete').live('click', function() {
-        return confirm('Are you sure you want to delete this item?');
-      });
       orders_table.fnFilter( '<?php echo $status ?>', 7 );
-    } );    
+    } );
+    $(document).on('click', '.Cart66ViewOrderNote', function(e) {
+      e.preventDefault();
+      $(".Cart66OrderNote").hide();
+      var id = $(this).attr('rel');
+      $('#' + id).show();
+      return false;
+    });
+    $(document).on('click', '.Cart66CloseNoteView', function(e) {
+      e.preventDefault();
+      var id = $(this).attr('rel');
+      $('#' + id).hide();
+      return false;
+    });
+    $(document).on('click', '.delete', function(e) {
+      return confirm('Are you sure you want to delete this item?');
+    });
   })(jQuery);
   function printView(id) {
     var url = ajaxurl + '?action=print_view&order_id=' + id

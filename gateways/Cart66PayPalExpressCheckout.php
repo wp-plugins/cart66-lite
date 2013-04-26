@@ -128,11 +128,11 @@ class Cart66PayPalExpressCheckout extends Cart66GatewayAbstract {
       'METHOD' => 'SetExpressCheckout',
       'PAYMENTACTION' => 'Sale'
     );
-    if(CART66_PRO && !Cart66Setting::getValue('disable_landing_page')){
+    if(!Cart66Setting::getValue('disable_landing_page')){
       $this->_requestFields['LANDINGPAGE'] = 'Billing';
     }
 
-    if(CART66_PRO && Cart66Setting::getValue('express_force_paypal')){
+    if(Cart66Setting::getValue('express_force_paypal')){
       $this->_requestFields['SOLUTIONTYPE'] = 'Sole';
     }
 

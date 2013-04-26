@@ -134,7 +134,7 @@
     });
 
     // Dynamically configure shipping state based on country
-    $('select[name="shipping[country]"]').live('change', function() { 
+    $('select[name="shipping[country]"]').on('change', function() { 
       setState($(this).closest('form').attr('id'), 'shipping');
     });
 
@@ -202,7 +202,7 @@
       updateAjaxTax();
     });
     $('#billing-state, #billing-zip, #billing-state_text, #shipping-state, #shipping-zip, #shipping-state_text').listenForChange();
-    $('.ajax-tax').live("change", function() {
+    $('.ajax-tax').on("change", function() {
       updateAjaxTax();
     })
     

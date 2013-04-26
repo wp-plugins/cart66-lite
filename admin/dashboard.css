@@ -318,6 +318,7 @@ p.left img {
 }
 
 .alert-message.alert-danger, .alert-message.alert-error {
+  background-color: #c43c35;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ee5f5b), color-stop(100%, #c43c35));
   background-image: -webkit-linear-gradient(#ee5f5b, #c43c35);
   background-image: -moz-linear-gradient(#ee5f5b, #c43c35);
@@ -329,6 +330,7 @@ p.left img {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 .alert-message.success {
+  background-color: #57a957;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #62c462), color-stop(100%, #57a957));
   background-image: -webkit-linear-gradient(#62c462, #57a957);
   background-image: -moz-linear-gradient(#62c462, #57a957);
@@ -340,6 +342,7 @@ p.left img {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 .alert-message.info {
+  background-color: #339bb9;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5bc0de), color-stop(100%, #339bb9));
   background-image: -webkit-linear-gradient(#5bc0de, #339bb9);
   background-image: -moz-linear-gradient(#5bc0de, #339bb9);
@@ -362,6 +365,7 @@ p.left img {
   margin-bottom: 18px;
   margin-right:25px;
   color: #404040;
+  background-color: #eedc94;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fceec1), color-stop(100%, #eedc94));
   background-image: -webkit-linear-gradient(#fceec1, #eedc94);
   background-image: -moz-linear-gradient(#fceec1, #eedc94);

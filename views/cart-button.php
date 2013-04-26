@@ -22,8 +22,10 @@
     <span class="Cart66Price<?php echo $isNumeric ? '' : ' Cart66PriceDescription'; ?>">
       <?php if($isNumeric): ?>
         <span class="Cart66PriceLabel"><?php _e( 'Price' , 'cart66' ); ?>: </span>
+        <?php echo Cart66Common::currency($priceString, true, true); ?>
+      <?php else: ?>
+        <?php echo $priceString; ?>
       <?php endif; ?>
-      <?php echo Cart66Common::currency($priceString, true, true); ?>
     </span>
     
   <?php endif; ?>
@@ -155,7 +157,10 @@ $localized_data = array(
 $localized_data['products'][$id] = $product;
 
 global $wp_scripts;
-$data = $wp_scripts->get_data('cart66-library', 'data');
+$data = array();
+if(is_object($wp_scripts)) {
+  $data = $wp_scripts->get_data('cart66-library', 'data');
+}
 if(empty($data)) {
   wp_localize_script('cart66-library', 'C66', $localized_data);
 }

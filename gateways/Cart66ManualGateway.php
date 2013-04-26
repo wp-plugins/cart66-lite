@@ -9,6 +9,38 @@ class Cart66ManualGateway extends Cart66GatewayAbstract {
   
   public function setPayment($p) {
     $this->_payment = $p;
+    $skip = array('email', 'phone', 'custom-field');
+    $custom_payment_fields = apply_filters('cart66_after_payment_form', '');
+    if(is_array($custom_payment_fields)) {
+      foreach($custom_payment_fields as $key => $payment_field) {
+        if(!$payment_field['required']) {
+          $skip[] = $payment_field['slug'];
+        }
+        if(isset($payment_field['validator']) && $payment_field['validator'] != '') {
+          if(function_exists($payment_field['validator'])) {
+            $skip[] = $payment_field['slug'];
+            $data_to_validate = isset($p[$payment_field['slug']]) ? $p[$payment_field['slug']] : '';
+            $validated = call_user_func($payment_field['validator'], $data_to_validate);
+            if(!$validated['valid']) {
+              foreach($validated['errors'] as $key => $error) {
+                $this->_errors['Payment ' . $payment_field['slug'] . $key] = $error;
+                $this->_jqErrors[] = 'payment-' . $payment_field['slug'];
+              }
+            }
+          }
+        }
+      }
+    }
+    foreach($p as $key => $value) {
+      if(!in_array($key, $skip)) {
+        $value = trim($value);
+        if($value == '') {
+          $keyName = ucwords(preg_replace('/([A-Z])/', " $1", $key));
+          $this->_errors['Payment ' . $keyName] = __('Payment ','cart66') . $keyName . __(' required','cart66');
+          $this->_jqErrors[] = "payment-$key";
+        }
+      }
+    }
     if($p['email'] == '') {
       $this->_errors['Email address'] = __('Email address is required','cart66');
       $this->_jqErrors[] = "payment-email";

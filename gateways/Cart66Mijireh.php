@@ -22,7 +22,7 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
     $tax = $this->getTaxAmount();
     
     $order = array(
-      'return_url' => Cart66Common::appendWurlQueryString('task=mijireh-notification'),
+      'return_url' => Cart66Common::appendWurlQueryString('task=mijireh_notification'),
       'tax' => $tax,
       'shipping' => $cart->getShippingCost(),
       'discount' => $cart->getDiscountAmount(),

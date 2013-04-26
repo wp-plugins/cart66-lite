@@ -306,6 +306,16 @@ $tab = 'gateway-gateway_settings';
                 <p class="description authorize_help"><a href="http://cart66.com/system66/wp-content/uploads/authnet-api-login.jpg" target="_blank"><?php _e( 'Where can I find my Authorize.net API Login ID and Transaction Key?' , 'cart66' ); ?></a></p>
               </td>
             </tr>
+            <tr valign="top" class="authorize_row">
+              <th scope="row"><?php _e('Disable Line Item Submission', 'cart66'); ?></th>
+              <td>
+                <input type="radio" name="disable_authorizenet_items" id="disable_authorizenet_items_yes" value="1" <?php echo Cart66Setting::getValue('disable_authorizenet_items') == 1 ? 'checked="checked" ' : ''; ?>/>
+                <label for="disable_authorizenet_items_yes"><?php _e('Yes', 'cart66'); ?></label>
+                <input type="radio" name="disable_authorizenet_items" id="disable_authorizenet_items_no" value="0" <?php echo Cart66Setting::getValue('disable_authorizenet_items') != 1 ? 'checked="checked" ' : ''; ?>/>
+                <label for="disable_authorizenet_items_no"><?php _e('No', 'cart66'); ?></label>
+                <p class="description"><?php _e('Set this to yes to disable sending the item list to Authorize.net. This may be helpful if your product names include characters that Authorize.net does not support.', 'cart66'); ?></p>
+              </td>
+            </tr>
             <tr valign="top" class="emulation_url_row">
               <th scope="row"><?php _e('Emulation URL', 'cart66'); ?></th>
               <td>

@@ -77,7 +77,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     
     // Note that mijireh does not have a "same as billing" checkbox
     if(isset($_POST['sameAsBilling'])) {
-      $gateway->setShipping(Cart66Common::postVal('billing'));
+      $gateway->setShipping(Cart66Common::postVal('billing'), true);
     }
     elseif(isset($_POST['shipping'])) {
       $gateway->setShipping(Cart66Common::postVal('shipping'));
@@ -321,12 +321,12 @@ $billingCountryCode =  (isset($b['country']) && !empty($b['country'])) ? $b['cou
 $shippingCountryCode = (isset($s['country']) && !empty($s['country'])) ? $s['country'] : Cart66Common::getHomeCountryCode();
 
 // Include the HTML markup for the checkout form
-$checkoutFormFile = '/views/checkout-form.php';
+$checkoutFormFile = CART66_PATH . '/views/checkout-form.php';
 if($gatewayName == 'Cart66Mijireh') {
-  $checkoutFormFile =  '/views/mijireh/shipping_address.php';
+  $checkoutFormFile =  CART66_PATH . '/views/mijireh/shipping_address.php';
 }
 elseif($gatewayName == 'Cart662Checkout') {
-  $checkoutFormFile =  '/views/2Checkout.php';
+  $checkoutFormFile =  CART66_PATH . '/views/2checkout.php';
 }
 else {
   $userViewFile = get_stylesheet_directory() . '/cart66-templates/views/checkout-form.php';
@@ -337,7 +337,7 @@ else {
 Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Using Checkout Form File :: $checkoutFormFile");
 
 ob_start();
-include(CART66_PATH . $checkoutFormFile);
+include($checkoutFormFile);
 $checkoutFormFileContents = ob_get_contents();
 ob_end_clean();
 echo Cart66Common::minifyMarkup($checkoutFormFileContents);
@@ -355,7 +355,7 @@ $shipping_address_display = (!$same_as_billing || $gatewayName == 'Cart66Mijireh
 $billing_country = '';
 if(isset($b['country']) && !empty($b['country'])) {
   $billing_country = $b['country'];
-  $shipping_country = $s['country'];
+  $shipping_country = isset($s['country']) ? $s['country'] : $b['country'];
 }
 
 $error_field_names = array();

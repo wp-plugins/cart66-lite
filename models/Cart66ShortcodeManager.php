@@ -827,6 +827,18 @@ class Cart66ShortcodeManager {
     return do_shortcode($content);
   }
   
+  public function cart66Affiliate($attrs) {
+    $content = '';
+    if(isset($_GET['ouid']) && isset($attrs['display'])) {
+      $order = new Cart66Order();
+      $order->loadByOuid($_GET['ouid']);
+      //if($order->viewed == 0) {
+        $content = $order->$attrs['display'];
+      //}
+    }
+    return $content;
+  }
+  
   public function gravityFormToCart($entry) {
     if(CART66_PRO) {
       $formId = Cart66GravityReader::getGravityFormIdForEntry($entry['id']);
@@ -1154,7 +1166,7 @@ class Cart66ShortcodeManager {
         
       }
     }
-    
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] output: $output");
     return $output;
   }
   

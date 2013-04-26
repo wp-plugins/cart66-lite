@@ -160,7 +160,7 @@ class Cart66Ajax {
       'state' => $s['state'],
       'zip' => $s['zip'],
       'tax' => Cart66Common::currency($tax),
-      'rate' => $rate = 0 ? '0.00' . '%' : Cart66Common::tax($rate),
+      'rate' => $rate == 0 ? '0.00%' : Cart66Common::tax($rate),
       'total' => Cart66Common::currency($total)
     );
     echo json_encode($result);
@@ -423,34 +423,33 @@ class Cart66Ajax {
     $html = false;
     $job_id = $slurp_url;
     
-    wp_update_post(array('ID' => $page->ID, 'post_status' => 'publish'));
-    $remote = wp_remote_get($slurp_url);
-    if(!is_wp_error($remote) && $remote['response']['code'] == '200') {
-      $html = $remote['body'];
-    }
-    wp_update_post(array('ID' => $page->ID, 'post_status' => 'private'));
+    if(wp_update_post(array('ID' => $page->ID, 'post_status' => 'publish'))) {
+      $remote = wp_remote_get($slurp_url);
+      if(!is_wp_error($remote) && $remote['response']['code'] == '200') {
+        $access_key = Cart66Setting::getValue('mijireh_access_key');
+        $rest = new PestJSON(MIJIREH_CHECKOUT);
+        $rest->setupAuth($access_key, '');
+        $data = array(
+          'url' => $slurp_url,
+          'page_id' => $page->ID,
+          'return_url' => add_query_arg('task', 'mijireh_page_slurp', $slurp_url)
+        );
     
-    if($html) {
-      $access_key = Cart66Setting::getValue('mijireh_access_key');
-      $rest = new PestJSON(MIJIREH_CHECKOUT);
-      $rest->setupAuth($access_key, '');
-      $data = array(
-        'url' => $slurp_url,
-        'html' => htmlentities($html, ENT_COMPAT | 0, 'UTF-8')
-      );
-      
-      try {
-        $response = $rest->post('/api/1/slurps', $data);
-        $job_id = $response['job_id'];
+        try {
+          $response = $rest->post('/api/1/slurps', $data);
+          $job_id = $response['job_id'];
+        }
+        catch(Pest_Unauthorized $e) {
+          header('Bad Request', true, 400);
+          die();
+        }
       }
-      catch(Pest_Unauthorized $e) {
-        header('Bad Request', true, 400);
-        die();
+      else {
+        $job_id = 'no remote page found';
       }
-      
     }
     else {
-      Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] NO HTML!!!!");
+      $job_id = 'did not update post successfully';
     }
     
     echo $job_id;

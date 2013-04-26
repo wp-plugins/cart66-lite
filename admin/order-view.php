@@ -155,10 +155,20 @@ if(isset($data['resend']) && $data['resend'] == true) {
           <?php endif; ?>
           <?php echo $order->bill_city ?> <?php echo $order->bill_state ?> <?php echo $order->bill_zip ?><br />
           <?php echo $order->bill_country ?>
+          <?php if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['billing'])): ?><br /><br />
+            <?php foreach($additional_fields['billing'] as $af): ?>
+              <?php echo $af['label']; ?>: <?php echo $af['value']; ?><br />
+            <?php endforeach; ?>
+          <?php endif; ?>
         </td>
         <td valign="top">
           <?php _e( 'Email' , 'cart66' ); ?>: <?php echo $order->email ?><br/>
           <?php _e( 'Phone' , 'cart66' ); ?>: <?php echo Cart66Common::formatPhone($order->phone) ?><br/>
+          <?php if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['payment'])): ?>
+            <?php foreach($additional_fields['payment'] as $af): ?>
+              <?php echo $af['label']; ?>: <?php echo $af['value']; ?><br />
+            <?php endforeach; ?>
+          <?php endif; ?>
         </td>
       </tr>
       <?php if($order->shipping_method != 'None' && $order->hasShippingInfo()): ?>
@@ -176,6 +186,11 @@ if(isset($data['resend']) && $data['resend'] == true) {
             <?php endif; ?>
             <?php echo $order->ship_city ?> <?php echo $order->ship_state ?> <?php echo $order->ship_zip ?><br/>
             <?php echo $order->ship_country ?><br/>
+            <?php if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['shipping'])): ?><br />
+              <?php foreach($additional_fields['shipping'] as $af): ?>
+                <?php echo $af['label']; ?>: <?php echo $af['value']; ?><br />
+              <?php endforeach; ?>
+            <?php endif; ?>
             <br/><em><?php _e( 'Delivery via' , 'cart66' ); ?>: <?php echo $order->shipping_method ?></em></br>
             <?php
             $hasDigital = false;

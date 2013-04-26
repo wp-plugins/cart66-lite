@@ -482,7 +482,7 @@ div.token-input-dropdown-facebook ul li.token-input-selected-dropdown-item-faceb
     color: #fff;
 }
 
-#inventory_table_length { display:none !important; }
+/*#inventory_table_length { display:none !important; }*/
 
 .dataTables_filter {
 float: left;
@@ -842,6 +842,7 @@ overflow: hidden;
 }
 
 .alert-message.alert-danger, .alert-message.alert-error {
+  background-color: #c43c35;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ee5f5b), color-stop(100%, #c43c35));
   background-image: -webkit-linear-gradient(#ee5f5b, #c43c35);
   background-image: -moz-linear-gradient(#ee5f5b, #c43c35);
@@ -853,6 +854,7 @@ overflow: hidden;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 .alert-message.success {
+  background-color: #57a957;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #62c462), color-stop(100%, #57a957));
   background-image: -webkit-linear-gradient(#62c462, #57a957);
   background-image: -moz-linear-gradient(#62c462, #57a957);
@@ -864,6 +866,7 @@ overflow: hidden;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 .alert-message.info {
+  background-color: #339bb9;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5bc0de), color-stop(100%, #339bb9));
   background-image: -webkit-linear-gradient(#5bc0de, #339bb9);
   background-image: -moz-linear-gradient(#5bc0de, #339bb9);
@@ -875,6 +878,7 @@ overflow: hidden;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 .alert-message.hint {
+  background-color: #efefef;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ececec), color-stop(100%, #efefef));
   background-image: -webkit-linear-gradient(#ececec, #efefef);
   background-image: -moz-linear-gradient(#ececec, #efefef);
@@ -897,6 +901,7 @@ overflow: hidden;
   margin-bottom: 18px;
   margin-right:25px;
   color: #404040;
+  background-color: #eedc94;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fceec1), color-stop(100%, #eedc94));
   background-image: -webkit-linear-gradient(#fceec1, #eedc94);
   background-image: -moz-linear-gradient(#fceec1, #eedc94);
@@ -1054,4 +1059,18 @@ font-size:1.3em
 #forcePluginUpdate{
 	display:inline-block;
 	margin:-2px 0px 0px 5px;
+}
+tr#cart66-lite.inactive td:last-child, tr#cart66-professional.inactive td:last-child {
+  background: none;
+}
+@media only screen and (max-width: 481px) {
+  
+  tr#cart66-professional td:last-child, tr#cart66-lite td:last-child {
+    background: none;
+  }
+}
+@media only screen and (min-width: 768px) {
+  tr#cart66-professional td:last-child, tr#cart66-lite td:last-child {
+    background: url(../images/cart66_upgrade.png) 99% 12px no-repeat;
+  }
 }

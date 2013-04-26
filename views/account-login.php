@@ -58,5 +58,5 @@ endif; ?>
 
 <?php if(isset($data['resetResult'])): ?>
   <?php $messageClass = ($data['resetResult']->success) ? 'Cart66Success' : 'Cart66Error'; ?>
-  <div id='msg' class='<?php echo $messageClass ?>' style='width: 300px; margin: 10px 0px;'><p><?php echo $data['resetResult']->message ?></p></div>
+  <div id='msg' class='<?php echo $messageClass ?>'><p><?php echo $data['resetResult']->message ?></p></div>
 <?php endif; ?>

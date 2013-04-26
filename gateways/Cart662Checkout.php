@@ -124,7 +124,7 @@ class Cart662Checkout extends Cart66GatewayAbstract {
     // Shipping
     $shipping = Cart66Session::get('Cart66Cart')->getShippingCost();
     if(CART66_PRO && Cart66Setting::getValue('use_live_rates')) {
-      $selectedRate = $liveRates->getSelected();
+      $selectedRate = Cart66Session::get('Cart66LiveRates')->getSelected();
       $shippingMethod = $selectedRate->service;
     }
     else {

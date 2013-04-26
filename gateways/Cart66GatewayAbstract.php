@@ -46,6 +46,12 @@ abstract class Cart66GatewayAbstract {
       'zip' => '',
       'country' => ''
     );
+    $custom_billing_fields = apply_filters('cart66_after_billing_form', '');
+    if(is_array($custom_billing_fields)) {
+      foreach($custom_billing_fields as $key => $billing_field) {
+        $this->_billing[$key] = isset($billing_field['default']) ? $billing_field['default'] : '';
+      }
+    }
     
     $this->_payment = array(
       'cardType' => '',
@@ -59,6 +65,12 @@ abstract class Cart66GatewayAbstract {
       'password2' => '',
       'custom-field' => ''
     );
+    $custom_payment_fields = apply_filters('cart66_after_payment_form', '');
+    if(is_array($custom_payment_fields)) {
+      foreach($custom_payment_fields as $key => $payment_field) {
+        $this->_payment[$key] = isset($payment_field['default']) ? $payment_field['default'] : '';
+      }
+    }
     
     $this->_shipping = array(
       'firstName' => '',
@@ -70,6 +82,13 @@ abstract class Cart66GatewayAbstract {
       'zip' => '',
       'country' => ''
     );
+    $custom_shipping_fields = apply_filters('cart66_after_shipping_form', '');
+    if(is_array($custom_shipping_fields)) {
+      foreach($custom_shipping_fields as $key => $shipping_field) {
+        $this->_shipping[$key] = isset($shipping_field['default']) ? $shipping_field['default'] : '';
+      }
+    }
+    
   }
   
   public function getErrors() {
@@ -102,6 +121,27 @@ abstract class Cart66GatewayAbstract {
 
       $this->_billing = $b;
       $skip = array('address2', 'billing-state_text');
+      $custom_billing_fields = apply_filters('cart66_after_billing_form', '');
+      if(is_array($custom_billing_fields)) {
+        foreach($custom_billing_fields as $key => $billing_field) {
+          if(!$billing_field['required']) {
+            $skip[] = $billing_field['slug'];
+          }
+          if(isset($billing_field['validator']) && $billing_field['validator'] != '') {
+            if(function_exists($billing_field['validator'])) {
+              $skip[] = $billing_field['slug'];
+              $data_to_validate = isset($b[$billing_field['slug']]) ? $b[$billing_field['slug']] : '';
+              $validated = call_user_func($billing_field['validator'], $data_to_validate);
+              if(!$validated['valid']) {
+                foreach($validated['errors'] as $key => $error) {
+                  $this->_errors['Billing ' . $billing_field['slug'] . $key] = $error;
+                  $this->_jqErrors[] = 'billing-' . $billing_field['slug'];
+                }
+              }
+            }
+          }
+        }
+      }
       foreach($b as $key => $value) {
         if(!in_array($key, $skip)) {
           $value = trim($value);
@@ -124,7 +164,38 @@ abstract class Cart66GatewayAbstract {
       }
 
       $this->_payment = $p;
-      
+      $skip = array('email', 'phone', 'custom-field');
+      $custom_payment_fields = apply_filters('cart66_after_payment_form', '');
+      if(is_array($custom_payment_fields)) {
+        foreach($custom_payment_fields as $key => $payment_field) {
+          if(!$payment_field['required']) {
+            $skip[] = $payment_field['slug'];
+          }
+          if(isset($payment_field['validator']) && $payment_field['validator'] != '') {
+            if(function_exists($payment_field['validator'])) {
+              $skip[] = $payment_field['slug'];
+              $data_to_validate = isset($p[$payment_field['slug']]) ? $p[$payment_field['slug']] : '';
+              $validated = call_user_func($payment_field['validator'], $data_to_validate);
+              if(!$validated['valid']) {
+                foreach($validated['errors'] as $key => $error) {
+                  $this->_errors['Payment ' . $payment_field['slug'] . $key] = $error;
+                  $this->_jqErrors[] = 'payment-' . $payment_field['slug'];
+                }
+              }
+            }
+          }
+        }
+      }
+      foreach($p as $key => $value) {
+        if(!in_array($key, $skip)) {
+          $value = trim($value);
+          if($value == '') {
+            $keyName = ucwords(preg_replace('/([A-Z])/', " $1", $key));
+            $this->_errors['Payment ' . $keyName] = __('Payment ','cart66') . $keyName . __(' required','cart66');
+            $this->_jqErrors[] = "payment-$key";
+          }
+        }
+      }
       foreach($p as $key => $value) {
         if($key == 'custom-field') {
           continue;
@@ -162,7 +233,7 @@ abstract class Cart66GatewayAbstract {
     }
   }
 
-  public function setShipping($s) {
+  public function setShipping($s, $billing_fields=false) {
     if(is_array($s)) {
       if(!(isset($s['state']) && !empty($s['state']))) {
         $s['state'] = trim($s['state_text']);
@@ -171,6 +242,37 @@ abstract class Cart66GatewayAbstract {
 
       $this->_shipping = $s;
       $skip = array('address2', 'shipping-state_text');
+      $custom_shipping_fields = apply_filters('cart66_after_shipping_form', '');
+      if(is_array($custom_shipping_fields)) {
+        foreach($custom_shipping_fields as $key => $shipping_field) {
+          if(!$shipping_field['required']) {
+            $skip[] = $shipping_field['slug'];
+          }
+          if(isset($shipping_field['validator']) && $shipping_field['validator'] != '') {
+            if(function_exists($shipping_field['validator'])) {
+              $skip[] = $shipping_field['slug'];
+              $data_to_validate = isset($s[$shipping_field['slug']]) ? $s[$shipping_field['slug']] : '';
+              $validated = call_user_func($shipping_field['validator'], $data_to_validate);
+              if(!$validated['valid']) {
+                foreach($validated['errors'] as $key => $error) {
+                  $this->_errors['Shipping ' . $shipping_field['slug'] . $key] = $error;
+                  $this->_jqErrors[] = 'shipping-' . $shipping_field['slug'];
+                }
+              }
+            }
+          }
+        }
+      }
+      if($billing_fields) {
+        $custom_billing_fields = apply_filters('cart66_after_billing_form', '');
+        if(is_array($custom_billing_fields)) {
+          foreach($custom_billing_fields as $key => $billing_field) {
+            if(!$billing_field['required']) {
+              $skip[] = $billing_field['slug'];
+            }
+          }
+        }
+      }
       foreach($s as $key => $value) {
         if(!in_array($key, $skip)) {
           $value = trim($value);
@@ -314,7 +416,38 @@ abstract class Cart66GatewayAbstract {
     $orderInfo['ordered_on'] = date('Y-m-d H:i:s', Cart66Common::localTs());
     $orderInfo['shipping_method'] = Cart66Session::get('Cart66Cart')->getShippingMethodName();
     $orderInfo['account_id'] = $accountId;
-    $orderId = Cart66Session::get('Cart66Cart')->storeOrder($orderInfo);  
+    
+    $additional_fields = array();
+    $custom_payment_fields = apply_filters('cart66_after_payment_form', '');
+    if(is_array($custom_payment_fields)) {
+      foreach($custom_payment_fields as $key => $payment_field) {
+        if(isset($p[$payment_field['slug']])) {
+          $additional_fields[$payment_field['section']][$payment_field['slug']] = array('label' => $payment_field['label'], 'value' => $p[$payment_field['slug']]);
+        }
+      }
+    }
+    $custom_billing_fields = apply_filters('cart66_after_billing_form', '');
+    if(is_array($custom_billing_fields)) {
+      foreach($custom_billing_fields as $key => $billing_field) {
+        if(isset($b[$billing_field['slug']])) {
+          $additional_fields[$billing_field['section']][$billing_field['slug']] = array('label' => $billing_field['label'], 'value' => $b[$billing_field['slug']]);
+        }
+      }
+    }
+    $custom_shipping_fields = apply_filters('cart66_after_shipping_form', '');
+    if(is_array($custom_shipping_fields)) {
+      foreach($custom_shipping_fields as $key => $shipping_field) {
+        if(isset($s[$shipping_field['slug']])) {
+          $additional_fields[$shipping_field['section']][$shipping_field['slug']] = array('label' => $shipping_field['label'], 'value' => $s[$shipping_field['slug']]);
+        }
+      }
+    }
+    Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] additional fields: " . print_r($additional_fields, true));
+    if(!empty($additional_fields)) {
+      $orderInfo['additional_fields'] = serialize($additional_fields);
+    }
+    
+    $orderId = Cart66Session::get('Cart66Cart')->storeOrder($orderInfo);
     return $orderId;
   }
   

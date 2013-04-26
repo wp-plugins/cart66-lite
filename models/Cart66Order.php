@@ -336,7 +336,7 @@ class Cart66Order extends Cart66ModelAbstract {
     $dayStart = date('Y-m-d 00:00:00', strtotime('48 hours ago', Cart66Common::localTs()));
     $dayEnd = date('Y-m-d 00:00:00', strtotime('24 hours ago', Cart66Common::localTs()));
     
-    $orders = $this->getOrderRows("WHERE status in ('paypal_pending','checkout_pending') AND ordered_on >= '$dayStart' AND ordered_on < '$dayEnd'");
+    $orders = $o->getOrderRows("WHERE status in ('paypal_pending','checkout_pending') AND ordered_on >= '$dayStart' AND ordered_on < '$dayEnd'");
     foreach($orders as $order) {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] yes, i am to delete an order or more: " . $order->id);
       $o->load($order->id);

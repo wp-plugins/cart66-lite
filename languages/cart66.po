@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: teste\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-26 10:02-0500\n"
-"PO-Revision-Date: 2012-10-26 10:02-0500\n"
+"POT-Creation-Date: 2013-02-12 10:59-0500\n"
+"PO-Revision-Date: 2013-02-12 10:59-0500\n"
 "Last-Translator: Bobby Smith <bobby@reality66.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../cart66 (trunk)/cart66.php:126 (trunk)/admin/settings/main.php:355
-#: (trunk)/models/Cart66.php:697
+#: ../cart66 (trunk)/cart66.php:126 (trunk)/admin/settings/main.php:357
+#: (trunk)/models/Cart66.php:708
 msgid "Settings"
 msgstr ""
 
@@ -34,7 +34,7 @@ msgid "Inventory updated"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/inventory.php:34
-msgid "Account functionality is only available in"
+msgid "Inventory functionality is only available in"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/inventory.php:34
@@ -43,13 +43,14 @@ msgstr ""
 #: (trunk)/admin/settings/cart-checkout.php:257
 #: (trunk)/admin/settings/gateways.php:45
 #: (trunk)/admin/settings/gateways.php:63
-#: (trunk)/admin/settings/gateways.php:449
-#: (trunk)/admin/settings/integrations.php:74
-#: (trunk)/admin/settings/integrations.php:112
-#: (trunk)/admin/settings/integrations.php:204
-#: (trunk)/admin/settings/integrations.php:276
-#: (trunk)/admin/settings/integrations.php:303
-#: (trunk)/admin/settings/integrations.php:331
+#: (trunk)/admin/settings/gateways.php:458
+#: (trunk)/admin/settings/integrations.php:75
+#: (trunk)/admin/settings/integrations.php:106
+#: (trunk)/admin/settings/integrations.php:144
+#: (trunk)/admin/settings/integrations.php:236
+#: (trunk)/admin/settings/integrations.php:308
+#: (trunk)/admin/settings/integrations.php:345
+#: (trunk)/admin/settings/integrations.php:373
 #: (trunk)/views/cart-button.php:91
 msgid "Cart66 Professional"
 msgstr ""
@@ -72,7 +73,7 @@ msgstr ""
 
 #: ../cart66 (trunk)/admin/order-view.php:32 (trunk)/admin/orders.php:53
 #: (trunk)/admin/orders.php:66 (trunk)/admin/settings/main.php:44
-#: (trunk)/admin/settings/main.php:428
+#: (trunk)/admin/settings/main.php:430
 #: (trunk)/admin/settings/notifications.php:1211
 #: (trunk)/admin/settings/notifications.php:1226
 #: (trunk)/models/Cart66Dashboard.php:66 (trunk)/models/Cart66Exporter.php:14
@@ -89,7 +90,7 @@ msgstr ""
 msgid "Order Number"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:39 (trunk)/admin/products.php:75
+#: ../cart66 (trunk)/admin/order-view.php:39 (trunk)/admin/products.php:76
 #: (trunk)/admin/shipping.php:447 (trunk)/admin/shipping.php:494
 #: (trunk)/pro/admin/accounts.php:62
 #: (trunk)/pro/views/emails/default-email-fulfillment.php:95
@@ -97,16 +98,16 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-receipt.php:128
 #: (trunk)/pro/views/emails/default-email-receipt.php:500
 #: (trunk)/pro/views/emails/default-email-status.php:130
-#: (trunk)/pro/views/emails/default-email-status.php:483
+#: (trunk)/pro/views/emails/default-email-status.php:490
 #: (trunk)/pro/views/emails/email-products.php:16
 #: (trunk)/pro/views/emails/email-products.php:81
-#: (trunk)/pro/views/emails/email-receipt.php:79 (trunk)/views/cart.php:144
-#: (trunk)/views/receipt.php:305 (trunk)/views/receipt_print_version.php:161
+#: (trunk)/pro/views/emails/email-receipt.php:79 (trunk)/views/cart.php:153
+#: (trunk)/views/receipt.php:328 (trunk)/views/receipt_print_version.php:161
 msgid "Product"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/order-view.php:40
-#: (trunk)/models/Cart66Dialog.php:260
+#: (trunk)/models/Cart66Dialog.php:265
 #: (trunk)/models/Cart66Notifications.php:93
 #: (trunk)/pro/admin/inventory.php:28 (trunk)/pro/admin/inventory.php:36
 #: (trunk)/pro/views/emails/default-email-fulfillment.php:98
@@ -117,23 +118,23 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-receipt.php:503
 #: (trunk)/pro/views/emails/default-email-receipt.php:618
 #: (trunk)/pro/views/emails/default-email-status.php:133
-#: (trunk)/pro/views/emails/default-email-status.php:301
-#: (trunk)/pro/views/emails/default-email-status.php:486
-#: (trunk)/pro/views/emails/default-email-status.php:602
+#: (trunk)/pro/views/emails/default-email-status.php:308
+#: (trunk)/pro/views/emails/default-email-status.php:493
+#: (trunk)/pro/views/emails/default-email-status.php:609
 #: (trunk)/pro/views/emails/email-products.php:19
 #: (trunk)/pro/views/emails/email-products.php:84
 #: (trunk)/pro/views/emails/email-products.php:234
 #: (trunk)/pro/views/emails/email-products.php:278
 #: (trunk)/pro/views/emails/email-receipt.php:82
-#: (trunk)/pro/views/emails/email-receipt.php:222 (trunk)/views/cart.php:145
-#: (trunk)/views/receipt.php:306 (trunk)/views/receipt_print_version.php:162
+#: (trunk)/pro/views/emails/email-receipt.php:222 (trunk)/views/cart.php:154
+#: (trunk)/views/receipt.php:329 (trunk)/views/receipt_print_version.php:162
 msgid "Quantity"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:41 (trunk)/admin/products.php:151
-#: (trunk)/admin/products.php:415 (trunk)/admin/products.php:426
-#: (trunk)/admin/products.php:444 (trunk)/admin/products.php:455
-#: (trunk)/views/cart-button.php:26 (trunk)/views/cart-button.php:53
+#: ../cart66 (trunk)/admin/order-view.php:41 (trunk)/admin/products.php:152
+#: (trunk)/admin/products.php:416 (trunk)/admin/products.php:427
+#: (trunk)/admin/products.php:445 (trunk)/admin/products.php:456
+#: (trunk)/views/cart-button.php:24 (trunk)/views/cart-button.php:53
 msgid "Price"
 msgstr ""
 
@@ -142,32 +143,32 @@ msgstr ""
 #: (trunk)/models/Cart66Dashboard.php:295 (trunk)/models/Cart66Exporter.php:39
 #: (trunk)/pro/views/emails/default-email-receipt.php:242
 #: (trunk)/pro/views/emails/default-email-receipt.php:575
-#: (trunk)/pro/views/emails/default-email-status.php:237
-#: (trunk)/pro/views/emails/default-email-status.php:558
+#: (trunk)/pro/views/emails/default-email-status.php:240
+#: (trunk)/pro/views/emails/default-email-status.php:565
 #: (trunk)/pro/views/emails/email-products.php:197
-#: (trunk)/pro/views/emails/email-receipt.php:191 (trunk)/views/cart.php:421
-#: (trunk)/views/checkout-form.php:404 (trunk)/views/receipt.php:424
+#: (trunk)/pro/views/emails/email-receipt.php:191 (trunk)/views/cart.php:430
+#: (trunk)/views/checkout-form.php:428 (trunk)/views/receipt.php:447
 #: (trunk)/views/receipt_print_version.php:241
 msgid "Total"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:67
+#: ../cart66 (trunk)/admin/order-view.php:67 (trunk)/views/receipt.php:386
 msgid ""
 "This order requires Gravity Forms in order to view all of the order "
 "information"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:80 (trunk)/admin/promotions.php:79
+#: ../cart66 (trunk)/admin/order-view.php:80 (trunk)/admin/promotions.php:82
 #: (trunk)/models/Cart66DataTables.php:288
 #: (trunk)/models/Cart66Exporter.php:37
 #: (trunk)/pro/views/emails/default-email-receipt.php:190
 #: (trunk)/pro/views/emails/default-email-receipt.php:531
-#: (trunk)/pro/views/emails/default-email-status.php:185
-#: (trunk)/pro/views/emails/default-email-status.php:514
+#: (trunk)/pro/views/emails/default-email-status.php:188
+#: (trunk)/pro/views/emails/default-email-status.php:521
 #: (trunk)/pro/views/emails/email-products.php:147
 #: (trunk)/pro/views/emails/email-receipt.php:141
-#: (trunk)/views/cart-sidebar-advanced.php:56 (trunk)/views/cart.php:360
-#: (trunk)/views/checkout-form.php:384 (trunk)/views/receipt.php:393
+#: (trunk)/views/cart-sidebar-advanced.php:56 (trunk)/views/cart.php:369
+#: (trunk)/views/checkout-form.php:408 (trunk)/views/receipt.php:416
 #: (trunk)/views/receipt_print_version.php:210
 msgid "Subtotal"
 msgstr ""
@@ -176,35 +177,35 @@ msgstr ""
 #: (trunk)/gateways/Cart662Checkout.php:118
 #: (trunk)/pro/views/emails/default-email-receipt.php:215
 #: (trunk)/pro/views/emails/default-email-receipt.php:553
-#: (trunk)/pro/views/emails/default-email-status.php:210
-#: (trunk)/pro/views/emails/default-email-status.php:536
+#: (trunk)/pro/views/emails/default-email-status.php:213
+#: (trunk)/pro/views/emails/default-email-status.php:543
 #: (trunk)/pro/views/emails/email-products.php:172
 #: (trunk)/pro/views/emails/email-receipt.php:166
-#: (trunk)/views/checkout-form.php:395 (trunk)/views/receipt.php:409
+#: (trunk)/views/checkout-form.php:419 (trunk)/views/receipt.php:432
 #: (trunk)/views/receipt_print_version.php:226
 msgid "Discount"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:93 (trunk)/admin/promotions.php:78
-#: (trunk)/admin/settings/main.php:344
-#: (trunk)/gateways/Cart662Checkout.php:136 (trunk)/models/Cart66.php:696
+#: ../cart66 (trunk)/admin/order-view.php:93 (trunk)/admin/promotions.php:81
+#: (trunk)/admin/settings/main.php:346
+#: (trunk)/gateways/Cart662Checkout.php:136 (trunk)/models/Cart66.php:707
 #: (trunk)/models/Cart66DataTables.php:288
 #: (trunk)/models/Cart66Notifications.php:104
 #: (trunk)/pro/views/emails/default-email-receipt.php:202
 #: (trunk)/pro/views/emails/default-email-receipt.php:326
 #: (trunk)/pro/views/emails/default-email-receipt.php:542
 #: (trunk)/pro/views/emails/default-email-receipt.php:621
-#: (trunk)/pro/views/emails/default-email-status.php:197
-#: (trunk)/pro/views/emails/default-email-status.php:312
-#: (trunk)/pro/views/emails/default-email-status.php:525
-#: (trunk)/pro/views/emails/default-email-status.php:605
+#: (trunk)/pro/views/emails/default-email-status.php:200
+#: (trunk)/pro/views/emails/default-email-status.php:319
+#: (trunk)/pro/views/emails/default-email-status.php:532
+#: (trunk)/pro/views/emails/default-email-status.php:612
 #: (trunk)/pro/views/emails/email-products.php:159
 #: (trunk)/pro/views/emails/email-products.php:247
 #: (trunk)/pro/views/emails/email-products.php:289
 #: (trunk)/pro/views/emails/email-receipt.php:153
 #: (trunk)/pro/views/emails/email-receipt.php:233
-#: (trunk)/views/cart-sidebar-advanced.php:64 (trunk)/views/cart.php:368
-#: (trunk)/views/checkout-form.php:389 (trunk)/views/receipt.php:401
+#: (trunk)/views/cart-sidebar-advanced.php:64 (trunk)/views/cart.php:377
+#: (trunk)/views/checkout-form.php:413 (trunk)/views/receipt.php:424
 #: (trunk)/views/receipt_print_version.php:218
 msgid "Shipping"
 msgstr ""
@@ -217,17 +218,17 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-receipt.php:334
 #: (trunk)/pro/views/emails/default-email-receipt.php:564
 #: (trunk)/pro/views/emails/default-email-receipt.php:623
-#: (trunk)/pro/views/emails/default-email-status.php:223
-#: (trunk)/pro/views/emails/default-email-status.php:320
-#: (trunk)/pro/views/emails/default-email-status.php:547
-#: (trunk)/pro/views/emails/default-email-status.php:607
+#: (trunk)/pro/views/emails/default-email-status.php:226
+#: (trunk)/pro/views/emails/default-email-status.php:327
+#: (trunk)/pro/views/emails/default-email-status.php:554
+#: (trunk)/pro/views/emails/default-email-status.php:614
 #: (trunk)/pro/views/emails/email-products.php:185
 #: (trunk)/pro/views/emails/email-products.php:255
 #: (trunk)/pro/views/emails/email-products.php:297
 #: (trunk)/pro/views/emails/email-receipt.php:179
 #: (trunk)/pro/views/emails/email-receipt.php:241
-#: (trunk)/views/cart-sidebar-advanced.php:198 (trunk)/views/cart.php:392
-#: (trunk)/views/checkout-form.php:400 (trunk)/views/receipt.php:417
+#: (trunk)/views/cart-sidebar-advanced.php:198 (trunk)/views/cart.php:401
+#: (trunk)/views/checkout-form.php:424 (trunk)/views/receipt.php:440
 #: (trunk)/views/receipt_print_version.php:234
 msgid "Tax"
 msgstr ""
@@ -237,37 +238,42 @@ msgstr ""
 #: (trunk)/models/Cart66Notifications.php:108
 #: (trunk)/pro/views/emails/default-email-receipt.php:330
 #: (trunk)/pro/views/emails/default-email-receipt.php:622
-#: (trunk)/pro/views/emails/default-email-status.php:316
-#: (trunk)/pro/views/emails/default-email-status.php:606
+#: (trunk)/pro/views/emails/default-email-status.php:323
+#: (trunk)/pro/views/emails/default-email-status.php:613
 #: (trunk)/pro/views/emails/email-products.php:251
 #: (trunk)/pro/views/emails/email-products.php:293
-#: (trunk)/pro/views/emails/email-receipt.php:237 (trunk)/views/cart.php:375
+#: (trunk)/pro/views/emails/email-receipt.php:237 (trunk)/views/cart.php:384
 msgid "Coupon"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:142
+#: ../cart66 (trunk)/admin/order-view.php:133
+#: (trunk)/views/checkout-form.php:41 (trunk)/views/receipt.php:317
+msgid "Enter any special instructions you have for this order:"
+msgstr ""
+
+#: ../cart66 (trunk)/admin/order-view.php:146
 #: (trunk)/pro/views/emails/default-email-receipt.php:62
 #: (trunk)/pro/views/emails/default-email-receipt.php:451
 #: (trunk)/pro/views/emails/default-email-status.php:65
-#: (trunk)/pro/views/emails/default-email-status.php:434
+#: (trunk)/pro/views/emails/default-email-status.php:441
 #: (trunk)/pro/views/emails/email-receipt.php:7 (trunk)/views/receipt.php:196
 #: (trunk)/views/receipt_print_version.php:79
 msgid "Billing Information"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:143
+#: ../cart66 (trunk)/admin/order-view.php:147
 #: (trunk)/pro/views/emails/default-email-receipt.php:76
 #: (trunk)/pro/views/emails/default-email-receipt.php:461
 #: (trunk)/pro/views/emails/default-email-status.php:79
-#: (trunk)/pro/views/emails/default-email-status.php:444
+#: (trunk)/pro/views/emails/default-email-status.php:451
 #: (trunk)/pro/views/emails/email-receipt.php:21
-#: (trunk)/views/checkout-form.php:216 (trunk)/views/receipt.php:214
-#: (trunk)/views/receipt.php:257 (trunk)/views/receipt_print_version.php:97
+#: (trunk)/views/checkout-form.php:232 (trunk)/views/receipt.php:219
+#: (trunk)/views/receipt.php:271 (trunk)/views/receipt_print_version.php:97
 #: (trunk)/views/receipt_print_version.php:139
 msgid "Contact Information"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:156
+#: ../cart66 (trunk)/admin/order-view.php:165
 #: (trunk)/admin/settings/notifications.php:743
 #: (trunk)/admin/settings/notifications.php:751
 #: (trunk)/models/Cart66Exporter.php:33
@@ -280,18 +286,18 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-receipt.php:464
 #: (trunk)/pro/views/emails/default-email-receipt.php:637
 #: (trunk)/pro/views/emails/default-email-status.php:87
-#: (trunk)/pro/views/emails/default-email-status.php:354
-#: (trunk)/pro/views/emails/default-email-status.php:447
-#: (trunk)/pro/views/emails/default-email-status.php:621
+#: (trunk)/pro/views/emails/default-email-status.php:361
+#: (trunk)/pro/views/emails/default-email-status.php:454
+#: (trunk)/pro/views/emails/default-email-status.php:628
 #: (trunk)/pro/views/emails/email-receipt.php:29
 #: (trunk)/pro/views/emails/email-receipt.php:277
-#: (trunk)/views/account-info.php:23 (trunk)/views/checkout-form.php:282
-#: (trunk)/views/paypal-express.php:426 (trunk)/views/receipt.php:218
-#: (trunk)/views/receipt.php:261
+#: (trunk)/views/account-info.php:23 (trunk)/views/checkout-form.php:298
+#: (trunk)/views/paypal-express.php:426 (trunk)/views/receipt.php:223
+#: (trunk)/views/receipt.php:275
 msgid "Email"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:157
+#: ../cart66 (trunk)/admin/order-view.php:166
 #: (trunk)/models/Cart66Exporter.php:32
 #: (trunk)/models/Cart66Notifications.php:144
 #: (trunk)/pro/views/emails/default-email-fulfillment.php:360
@@ -299,29 +305,29 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-receipt.php:366
 #: (trunk)/pro/views/emails/default-email-receipt.php:636
 #: (trunk)/pro/views/emails/default-email-status.php:84
-#: (trunk)/pro/views/emails/default-email-status.php:350
-#: (trunk)/pro/views/emails/default-email-status.php:620
+#: (trunk)/pro/views/emails/default-email-status.php:357
+#: (trunk)/pro/views/emails/default-email-status.php:627
 #: (trunk)/pro/views/emails/email-receipt.php:26
 #: (trunk)/pro/views/emails/email-receipt.php:273
-#: (trunk)/views/2checkout.php:123 (trunk)/views/checkout-form.php:277
-#: (trunk)/views/receipt.php:216 (trunk)/views/receipt.php:259
-#: (trunk)/views/mijireh/shipping_address.php:122
+#: (trunk)/views/2checkout.php:138 (trunk)/views/checkout-form.php:293
+#: (trunk)/views/receipt.php:221 (trunk)/views/receipt.php:273
+#: (trunk)/views/mijireh/shipping_address.php:138
 msgid "Phone"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:163
+#: ../cart66 (trunk)/admin/order-view.php:177
 #: (trunk)/pro/views/emails/default-email-fulfillment.php:55
 #: (trunk)/pro/views/emails/default-email-fulfillment.php:273
 #: (trunk)/pro/views/emails/default-email-receipt.php:94
 #: (trunk)/pro/views/emails/default-email-receipt.php:472
 #: (trunk)/pro/views/emails/default-email-status.php:97
-#: (trunk)/pro/views/emails/default-email-status.php:455
-#: (trunk)/pro/views/emails/email-receipt.php:39 (trunk)/views/receipt.php:229
+#: (trunk)/pro/views/emails/default-email-status.php:462
+#: (trunk)/pro/views/emails/email-receipt.php:39 (trunk)/views/receipt.php:239
 #: (trunk)/views/receipt_print_version.php:112
 msgid "Shipping Information"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:175
+#: ../cart66 (trunk)/admin/order-view.php:194
 #: (trunk)/models/Cart66Notifications.php:127
 #: (trunk)/pro/views/emails/default-email-fulfillment.php:72
 #: (trunk)/pro/views/emails/default-email-fulfillment.php:223
@@ -332,45 +338,45 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-receipt.php:480
 #: (trunk)/pro/views/emails/default-email-receipt.php:630
 #: (trunk)/pro/views/emails/default-email-status.php:114
-#: (trunk)/pro/views/emails/default-email-status.php:335
-#: (trunk)/pro/views/emails/default-email-status.php:463
-#: (trunk)/pro/views/emails/default-email-status.php:614
+#: (trunk)/pro/views/emails/default-email-status.php:342
+#: (trunk)/pro/views/emails/default-email-status.php:470
+#: (trunk)/pro/views/emails/default-email-status.php:621
 #: (trunk)/pro/views/emails/email-receipt.php:56
 #: (trunk)/pro/views/emails/email-receipt.php:256
-#: (trunk)/views/receipt.php:247 (trunk)/views/receipt_print_version.php:129
+#: (trunk)/views/receipt.php:261 (trunk)/views/receipt_print_version.php:129
 msgid "Delivery via"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:186
+#: ../cart66 (trunk)/admin/order-view.php:205
 msgid "Downloads"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:193
+#: ../cart66 (trunk)/admin/order-view.php:212
 msgid "out of"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:193
+#: ../cart66 (trunk)/admin/order-view.php:212
 msgid "unlimited"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:199
+#: ../cart66 (trunk)/admin/order-view.php:218
 msgid "Reset Downloads"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:222 (trunk)/admin/order-view.php:308
-#: (trunk)/views/receipt.php:281
+#: ../cart66 (trunk)/admin/order-view.php:241 (trunk)/admin/order-view.php:327
+#: (trunk)/views/receipt.php:300
 msgid "Tracking Number"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:226
+#: ../cart66 (trunk)/admin/order-view.php:245
 msgid "Remove"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:237
+#: ../cart66 (trunk)/admin/order-view.php:256
 msgid "Remove All Tracking Numbers"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:259
+#: ../cart66 (trunk)/admin/order-view.php:278
 #: (trunk)/pro/views/emails/default-email-followup.php:99
 #: (trunk)/pro/views/emails/default-email-followup.php:140
 #: (trunk)/pro/views/emails/default-email-followup.php:226
@@ -378,81 +384,81 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-fulfillment.php:328
 #: (trunk)/pro/views/emails/default-email-receipt.php:271
 #: (trunk)/pro/views/emails/default-email-receipt.php:594
-#: (trunk)/pro/views/emails/default-email-status.php:266
-#: (trunk)/pro/views/emails/default-email-status.php:577
+#: (trunk)/pro/views/emails/default-email-status.php:269
+#: (trunk)/pro/views/emails/default-email-status.php:584
 msgid "View Receipt Online"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:260 (trunk)/views/receipt.php:429
+#: ../cart66 (trunk)/admin/order-view.php:279 (trunk)/views/receipt.php:452
 msgid "Printer Friendly Receipt"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:266
+#: ../cart66 (trunk)/admin/order-view.php:285
 msgid "Resend Email Receipt"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:271
+#: ../cart66 (trunk)/admin/order-view.php:290
 msgid "View Account"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:304
+#: ../cart66 (trunk)/admin/order-view.php:323
 msgid "Notes about this order - not viewable by customer."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:310
+#: ../cart66 (trunk)/admin/order-view.php:329
 msgid "Carrier"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:313
+#: ../cart66 (trunk)/admin/order-view.php:332
 msgid "FedEx"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:314
+#: ../cart66 (trunk)/admin/order-view.php:333
 msgid "UPS"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:315
+#: ../cart66 (trunk)/admin/order-view.php:334
 msgid "USPS"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:316
+#: ../cart66 (trunk)/admin/order-view.php:335
 msgid "DHL"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:317
+#: ../cart66 (trunk)/admin/order-view.php:336
 msgid "Canada Post"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:318
+#: ../cart66 (trunk)/admin/order-view.php:337
 msgid "Australia Post"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:323
+#: ../cart66 (trunk)/admin/order-view.php:342
 msgid "+"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:324
+#: ../cart66 (trunk)/admin/order-view.php:343
 msgid "-"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:328
+#: ../cart66 (trunk)/admin/order-view.php:347
 #: (trunk)/admin/settings/notifications.php:1126
 #: (trunk)/pro/views/emails/default-email-status.php:39
-#: (trunk)/pro/views/emails/default-email-status.php:289
-#: (trunk)/pro/views/emails/default-email-status.php:408
-#: (trunk)/pro/views/emails/default-email-status.php:600
+#: (trunk)/pro/views/emails/default-email-status.php:292
+#: (trunk)/pro/views/emails/default-email-status.php:415
+#: (trunk)/pro/views/emails/default-email-status.php:607
 msgid "Order Status"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:343
+#: ../cart66 (trunk)/admin/order-view.php:362
 msgid "Send Email Status Update"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:345
+#: ../cart66 (trunk)/admin/order-view.php:364
 msgid "Update"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/order-view.php:350
+#: ../cart66 (trunk)/admin/order-view.php:369
 msgid "Back To Orders"
 msgstr ""
 
@@ -472,9 +478,9 @@ msgid ""
 msgstr ""
 
 #: ../cart66 (trunk)/admin/orders.php:52 (trunk)/admin/orders.php:65
-#: (trunk)/admin/products.php:412 (trunk)/admin/products.php:423
-#: (trunk)/admin/products.php:441 (trunk)/admin/products.php:452
-#: (trunk)/admin/promotions.php:199 (trunk)/admin/promotions.php:213
+#: (trunk)/admin/products.php:413 (trunk)/admin/products.php:424
+#: (trunk)/admin/products.php:442 (trunk)/admin/products.php:453
+#: (trunk)/admin/promotions.php:202 (trunk)/admin/promotions.php:216
 #: (trunk)/admin/settings/notifications.php:1206
 #: (trunk)/admin/settings/notifications.php:1221
 #: (trunk)/pro/admin/accounts.php:115 (trunk)/pro/admin/accounts.php:129
@@ -485,7 +491,7 @@ msgstr ""
 
 #: ../cart66 (trunk)/admin/orders.php:54 (trunk)/admin/orders.php:55
 #: (trunk)/admin/orders.php:67 (trunk)/admin/orders.php:68
-#: (trunk)/admin/promotions.php:200 (trunk)/admin/promotions.php:214
+#: (trunk)/admin/promotions.php:203 (trunk)/admin/promotions.php:217
 #: (trunk)/admin/settings/notifications.php:742
 #: (trunk)/admin/settings/notifications.php:750
 #: (trunk)/pro/admin/accounts.php:116 (trunk)/pro/admin/accounts.php:130
@@ -495,8 +501,8 @@ msgid "Name"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/orders.php:56 (trunk)/admin/orders.php:69
-#: (trunk)/admin/promotions.php:85 (trunk)/admin/promotions.php:202
-#: (trunk)/admin/promotions.php:216
+#: (trunk)/admin/promotions.php:88 (trunk)/admin/promotions.php:205
+#: (trunk)/admin/promotions.php:219
 #: (trunk)/admin/settings/cart-checkout.php:194
 #: (trunk)/pro/admin/shipping.php:378
 msgid "Amount"
@@ -507,9 +513,9 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-receipt.php:85
 #: (trunk)/pro/views/emails/default-email-receipt.php:465
 #: (trunk)/pro/views/emails/default-email-status.php:88
-#: (trunk)/pro/views/emails/default-email-status.php:448
-#: (trunk)/pro/views/emails/email-receipt.php:30 (trunk)/views/receipt.php:219
-#: (trunk)/views/receipt.php:262
+#: (trunk)/pro/views/emails/default-email-status.php:455
+#: (trunk)/pro/views/emails/email-receipt.php:30 (trunk)/views/receipt.php:224
+#: (trunk)/views/receipt.php:276
 msgid "Date"
 msgstr ""
 
@@ -526,9 +532,9 @@ msgid "Status"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/orders.php:60 (trunk)/admin/orders.php:73
-#: (trunk)/admin/products.php:418 (trunk)/admin/products.php:429
-#: (trunk)/admin/products.php:447 (trunk)/admin/products.php:458
-#: (trunk)/admin/promotions.php:208 (trunk)/admin/promotions.php:222
+#: (trunk)/admin/products.php:419 (trunk)/admin/products.php:430
+#: (trunk)/admin/products.php:448 (trunk)/admin/products.php:459
+#: (trunk)/admin/promotions.php:211 (trunk)/admin/promotions.php:225
 #: (trunk)/admin/shipping.php:595 (trunk)/admin/settings/notifications.php:745
 #: (trunk)/admin/settings/notifications.php:753
 #: (trunk)/admin/settings/notifications.php:1058
@@ -553,8 +559,8 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:101 (trunk)/admin/products.php:492
-#: (trunk)/admin/products.php:526 (trunk)/admin/promotions.php:271
+#: ../cart66 (trunk)/admin/orders.php:101 (trunk)/admin/products.php:503
+#: (trunk)/admin/products.php:550 (trunk)/admin/promotions.php:284
 #: (trunk)/admin/shipping.php:427 (trunk)/admin/shipping.php:514
 #: (trunk)/admin/shipping.php:610 (trunk)/admin/settings/notifications.php:770
 #: (trunk)/admin/settings/notifications.php:1079
@@ -573,32 +579,32 @@ msgstr ""
 msgid "No matching Orders found"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:105 (trunk)/admin/products.php:496
-#: (trunk)/admin/products.php:530 (trunk)/admin/promotions.php:275
+#: ../cart66 (trunk)/admin/orders.php:105 (trunk)/admin/products.php:509
+#: (trunk)/admin/products.php:556 (trunk)/admin/promotions.php:290
 #: (trunk)/models/Cart66Dashboard.php:596 (trunk)/pro/admin/accounts.php:171
 #: (trunk)/pro/admin/inventory.php:63
 #: (trunk)/pro/admin/paypal-subscriptions.php:259
 msgid "Search"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:106 (trunk)/admin/products.php:497
-#: (trunk)/admin/products.php:531 (trunk)/admin/promotions.php:276
+#: ../cart66 (trunk)/admin/orders.php:106 (trunk)/admin/products.php:510
+#: (trunk)/admin/products.php:557 (trunk)/admin/promotions.php:291
 #: (trunk)/models/Cart66Dashboard.php:597 (trunk)/pro/admin/accounts.php:172
 #: (trunk)/pro/admin/inventory.php:64
 #: (trunk)/pro/admin/paypal-subscriptions.php:260
 msgid "Showing"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:106 (trunk)/admin/products.php:497
-#: (trunk)/admin/products.php:531 (trunk)/admin/promotions.php:276
+#: ../cart66 (trunk)/admin/orders.php:106 (trunk)/admin/products.php:510
+#: (trunk)/admin/products.php:557 (trunk)/admin/promotions.php:291
 #: (trunk)/models/Cart66Dashboard.php:597 (trunk)/pro/admin/accounts.php:172
 #: (trunk)/pro/admin/inventory.php:64
 #: (trunk)/pro/admin/paypal-subscriptions.php:260
 msgid "to"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:106 (trunk)/admin/products.php:497
-#: (trunk)/admin/products.php:531 (trunk)/admin/promotions.php:276
+#: ../cart66 (trunk)/admin/orders.php:106 (trunk)/admin/products.php:510
+#: (trunk)/admin/products.php:557 (trunk)/admin/promotions.php:291
 #: (trunk)/models/Cart66Dashboard.php:597 (trunk)/pro/admin/accounts.php:172
 #: (trunk)/pro/admin/inventory.php:64
 #: (trunk)/pro/admin/paypal-subscriptions.php:260
@@ -606,9 +612,9 @@ msgid "of"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/orders.php:106 (trunk)/admin/orders.php:115
-#: (trunk)/admin/products.php:497 (trunk)/admin/products.php:506
-#: (trunk)/admin/products.php:531 (trunk)/admin/products.php:540
-#: (trunk)/admin/promotions.php:276 (trunk)/admin/promotions.php:285
+#: (trunk)/admin/products.php:510 (trunk)/admin/products.php:519
+#: (trunk)/admin/products.php:557 (trunk)/admin/products.php:566
+#: (trunk)/admin/promotions.php:291 (trunk)/admin/promotions.php:300
 #: (trunk)/models/Cart66Dashboard.php:597
 #: (trunk)/models/Cart66Dashboard.php:606 (trunk)/pro/admin/accounts.php:172
 #: (trunk)/pro/admin/accounts.php:181 (trunk)/pro/admin/inventory.php:64
@@ -618,136 +624,136 @@ msgstr ""
 msgid "entries"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:107 (trunk)/admin/products.php:498
-#: (trunk)/admin/products.php:532 (trunk)/admin/promotions.php:277
+#: ../cart66 (trunk)/admin/orders.php:107 (trunk)/admin/products.php:511
+#: (trunk)/admin/products.php:558 (trunk)/admin/promotions.php:292
 #: (trunk)/models/Cart66Dashboard.php:598 (trunk)/pro/admin/accounts.php:173
 #: (trunk)/pro/admin/inventory.php:65
 #: (trunk)/pro/admin/paypal-subscriptions.php:261
 msgid "Showing 0 to 0 of 0 entries"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:109 (trunk)/admin/products.php:500
-#: (trunk)/admin/products.php:534 (trunk)/admin/promotions.php:279
+#: ../cart66 (trunk)/admin/orders.php:109 (trunk)/admin/products.php:513
+#: (trunk)/admin/products.php:560 (trunk)/admin/promotions.php:294
 #: (trunk)/models/Cart66Dashboard.php:600 (trunk)/pro/admin/accounts.php:175
 #: (trunk)/pro/admin/inventory.php:67
 #: (trunk)/pro/admin/paypal-subscriptions.php:263
 msgid "Next"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:110 (trunk)/admin/products.php:501
-#: (trunk)/admin/products.php:535 (trunk)/admin/promotions.php:280
+#: ../cart66 (trunk)/admin/orders.php:110 (trunk)/admin/products.php:514
+#: (trunk)/admin/products.php:561 (trunk)/admin/promotions.php:295
 #: (trunk)/models/Cart66Dashboard.php:601 (trunk)/pro/admin/accounts.php:176
 #: (trunk)/pro/admin/inventory.php:68
 #: (trunk)/pro/admin/paypal-subscriptions.php:264
 msgid "Previous"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:111 (trunk)/admin/products.php:502
-#: (trunk)/admin/products.php:536 (trunk)/admin/promotions.php:281
+#: ../cart66 (trunk)/admin/orders.php:111 (trunk)/admin/products.php:515
+#: (trunk)/admin/products.php:562 (trunk)/admin/promotions.php:296
 #: (trunk)/models/Cart66Dashboard.php:602 (trunk)/pro/admin/accounts.php:177
 #: (trunk)/pro/admin/inventory.php:69
 #: (trunk)/pro/admin/paypal-subscriptions.php:265
 msgid "Last"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:112 (trunk)/admin/products.php:503
-#: (trunk)/admin/products.php:537 (trunk)/admin/promotions.php:282
+#: ../cart66 (trunk)/admin/orders.php:112 (trunk)/admin/products.php:516
+#: (trunk)/admin/products.php:563 (trunk)/admin/promotions.php:297
 #: (trunk)/models/Cart66Dashboard.php:603 (trunk)/pro/admin/accounts.php:178
 #: (trunk)/pro/admin/inventory.php:70
 #: (trunk)/pro/admin/paypal-subscriptions.php:266
 msgid "First"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:114 (trunk)/admin/products.php:505
-#: (trunk)/admin/products.php:539 (trunk)/admin/promotions.php:284
+#: ../cart66 (trunk)/admin/orders.php:114 (trunk)/admin/products.php:518
+#: (trunk)/admin/products.php:565 (trunk)/admin/promotions.php:299
 #: (trunk)/models/Cart66Dashboard.php:605 (trunk)/pro/admin/accounts.php:180
 #: (trunk)/pro/admin/inventory.php:72
 #: (trunk)/pro/admin/paypal-subscriptions.php:268
 msgid "filtered from"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:114 (trunk)/admin/products.php:505
-#: (trunk)/admin/products.php:539 (trunk)/admin/promotions.php:284
+#: ../cart66 (trunk)/admin/orders.php:114 (trunk)/admin/products.php:518
+#: (trunk)/admin/products.php:565 (trunk)/admin/promotions.php:299
 #: (trunk)/models/Cart66Dashboard.php:605 (trunk)/pro/admin/accounts.php:180
 #: (trunk)/pro/admin/inventory.php:72
 #: (trunk)/pro/admin/paypal-subscriptions.php:268
 msgid "total entries"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:115 (trunk)/admin/products.php:506
-#: (trunk)/admin/products.php:540 (trunk)/admin/promotions.php:285
+#: ../cart66 (trunk)/admin/orders.php:115 (trunk)/admin/products.php:519
+#: (trunk)/admin/products.php:566 (trunk)/admin/promotions.php:300
 #: (trunk)/models/Cart66Dashboard.php:606 (trunk)/pro/admin/accounts.php:181
 #: (trunk)/pro/admin/inventory.php:73
 #: (trunk)/pro/admin/paypal-subscriptions.php:269
 msgid "Show"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:116 (trunk)/admin/products.php:507
-#: (trunk)/admin/products.php:541 (trunk)/admin/promotions.php:286
+#: ../cart66 (trunk)/admin/orders.php:116 (trunk)/admin/products.php:520
+#: (trunk)/admin/products.php:567 (trunk)/admin/promotions.php:301
 #: (trunk)/models/Cart66Dashboard.php:607 (trunk)/pro/admin/accounts.php:182
 #: (trunk)/pro/admin/inventory.php:74
 #: (trunk)/pro/admin/paypal-subscriptions.php:270
 msgid "Loading"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/orders.php:117 (trunk)/admin/products.php:508
-#: (trunk)/admin/products.php:542 (trunk)/admin/promotions.php:287
+#: ../cart66 (trunk)/admin/orders.php:117 (trunk)/admin/products.php:521
+#: (trunk)/admin/products.php:568 (trunk)/admin/promotions.php:302
 #: (trunk)/models/Cart66Dashboard.php:608 (trunk)/pro/admin/accounts.php:183
 #: (trunk)/pro/admin/inventory.php:75
 #: (trunk)/pro/admin/paypal-subscriptions.php:271
 msgid "Processing"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:18
+#: ../cart66 (trunk)/admin/products.php:19
 msgid "The product could not be saved for the following reasons"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:23
+#: ../cart66 (trunk)/admin/products.php:24
 msgid "The file upload failed"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:64
+#: ../cart66 (trunk)/admin/products.php:65
 #: (trunk)/admin/settings/notifications.php:886
 #: (trunk)/admin/settings/notifications.php:1087
 #: (trunk)/models/Cart66Dashboard.php:54
 msgid "Cart66 Products"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:81
+#: ../cart66 (trunk)/admin/products.php:82
 msgid "Product name"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:85
+#: ../cart66 (trunk)/admin/products.php:86
 #: (trunk)/pro/admin/paypal-subscriptions.php:36
 msgid "Item number"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:87
+#: ../cart66 (trunk)/admin/products.php:88
 msgid "Unique item number required."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:92
+#: ../cart66 (trunk)/admin/products.php:93
 #: (trunk)/pro/admin/paypal-subscriptions.php:81
 msgid "Attach Gravity Form"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:94 (trunk)/admin/products.php:127
+#: ../cart66 (trunk)/admin/products.php:95 (trunk)/admin/products.php:128
 #: (trunk)/pro/admin/paypal-subscriptions.php:83
 msgid "None"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:111
+#: ../cart66 (trunk)/admin/products.php:112
 #: (trunk)/pro/admin/paypal-subscriptions.php:99
 msgid "A Gravity Form may only be linked to one product"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:115
+#: ../cart66 (trunk)/admin/products.php:116
 msgid "Gravity Forms pricing"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:117 (trunk)/admin/products.php:164
-#: (trunk)/admin/products.php:180 (trunk)/admin/products.php:191
-#: (trunk)/admin/products.php:230 (trunk)/admin/shipping.php:310
+#: ../cart66 (trunk)/admin/products.php:118 (trunk)/admin/products.php:165
+#: (trunk)/admin/products.php:181 (trunk)/admin/products.php:192
+#: (trunk)/admin/products.php:231 (trunk)/admin/shipping.php:310
 #: (trunk)/admin/settings/cart-checkout.php:26
 #: (trunk)/admin/settings/cart-checkout.php:36
 #: (trunk)/admin/settings/cart-checkout.php:70
@@ -756,17 +762,21 @@ msgstr ""
 #: (trunk)/admin/settings/cart-checkout.php:189
 #: (trunk)/admin/settings/cart-checkout.php:226
 #: (trunk)/admin/settings/debug.php:25 (trunk)/admin/settings/debug.php:46
-#: (trunk)/admin/settings/debug.php:66 (trunk)/admin/settings/debug.php:76
-#: (trunk)/admin/settings/gateways.php:60
+#: (trunk)/admin/settings/debug.php:56 (trunk)/admin/settings/debug.php:83
+#: (trunk)/admin/settings/debug.php:93 (trunk)/admin/settings/gateways.php:60
 #: (trunk)/admin/settings/gateways.php:73
 #: (trunk)/admin/settings/gateways.php:235
-#: (trunk)/admin/settings/gateways.php:266
-#: (trunk)/admin/settings/gateways.php:329
-#: (trunk)/admin/settings/gateways.php:371
-#: (trunk)/admin/settings/gateways.php:410
-#: (trunk)/admin/settings/gateways.php:437
-#: (trunk)/admin/settings/integrations.php:45
-#: (trunk)/admin/settings/integrations.php:104
+#: (trunk)/admin/settings/gateways.php:265
+#: (trunk)/admin/settings/gateways.php:315
+#: (trunk)/admin/settings/gateways.php:338
+#: (trunk)/admin/settings/gateways.php:380
+#: (trunk)/admin/settings/gateways.php:419
+#: (trunk)/admin/settings/gateways.php:446
+#: (trunk)/admin/settings/integrations.php:46
+#: (trunk)/admin/settings/integrations.php:90
+#: (trunk)/admin/settings/integrations.php:100
+#: (trunk)/admin/settings/integrations.php:136
+#: (trunk)/admin/settings/integrations.php:337
 #: (trunk)/admin/settings/main.php:141 (trunk)/admin/settings/main.php:169
 #: (trunk)/admin/settings/main.php:178 (trunk)/admin/settings/main.php:193
 #: (trunk)/admin/settings/notifications.php:230
@@ -791,14 +801,14 @@ msgstr ""
 #: (trunk)/admin/settings/notifications.php:1185
 #: (trunk)/admin/settings/notifications.php:1268
 #: (trunk)/admin/settings/notifications.php:1298
-#: (trunk)/models/Cart66Dialog.php:281 (trunk)/models/Cart66Dialog.php:284
-#: (trunk)/models/Cart66Dialog.php:290
+#: (trunk)/models/Cart66Dialog.php:286 (trunk)/models/Cart66Dialog.php:289
+#: (trunk)/models/Cart66Dialog.php:295
 msgid "No"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:118 (trunk)/admin/products.php:163
-#: (trunk)/admin/products.php:179 (trunk)/admin/products.php:190
-#: (trunk)/admin/products.php:231 (trunk)/admin/shipping.php:308
+#: ../cart66 (trunk)/admin/products.php:119 (trunk)/admin/products.php:164
+#: (trunk)/admin/products.php:180 (trunk)/admin/products.php:191
+#: (trunk)/admin/products.php:232 (trunk)/admin/shipping.php:308
 #: (trunk)/admin/settings/cart-checkout.php:24
 #: (trunk)/admin/settings/cart-checkout.php:34
 #: (trunk)/admin/settings/cart-checkout.php:68
@@ -807,17 +817,21 @@ msgstr ""
 #: (trunk)/admin/settings/cart-checkout.php:187
 #: (trunk)/admin/settings/cart-checkout.php:224
 #: (trunk)/admin/settings/debug.php:23 (trunk)/admin/settings/debug.php:44
-#: (trunk)/admin/settings/debug.php:64 (trunk)/admin/settings/debug.php:74
-#: (trunk)/admin/settings/gateways.php:58
+#: (trunk)/admin/settings/debug.php:54 (trunk)/admin/settings/debug.php:81
+#: (trunk)/admin/settings/debug.php:91 (trunk)/admin/settings/gateways.php:58
 #: (trunk)/admin/settings/gateways.php:71
 #: (trunk)/admin/settings/gateways.php:233
-#: (trunk)/admin/settings/gateways.php:264
-#: (trunk)/admin/settings/gateways.php:327
-#: (trunk)/admin/settings/gateways.php:369
-#: (trunk)/admin/settings/gateways.php:408
-#: (trunk)/admin/settings/gateways.php:435
-#: (trunk)/admin/settings/integrations.php:43
-#: (trunk)/admin/settings/integrations.php:102
+#: (trunk)/admin/settings/gateways.php:263
+#: (trunk)/admin/settings/gateways.php:313
+#: (trunk)/admin/settings/gateways.php:336
+#: (trunk)/admin/settings/gateways.php:378
+#: (trunk)/admin/settings/gateways.php:417
+#: (trunk)/admin/settings/gateways.php:444
+#: (trunk)/admin/settings/integrations.php:44
+#: (trunk)/admin/settings/integrations.php:88
+#: (trunk)/admin/settings/integrations.php:98
+#: (trunk)/admin/settings/integrations.php:134
+#: (trunk)/admin/settings/integrations.php:335
 #: (trunk)/admin/settings/main.php:139 (trunk)/admin/settings/main.php:167
 #: (trunk)/admin/settings/main.php:177 (trunk)/admin/settings/main.php:191
 #: (trunk)/admin/settings/notifications.php:228
@@ -842,82 +856,82 @@ msgstr ""
 #: (trunk)/admin/settings/notifications.php:1183
 #: (trunk)/admin/settings/notifications.php:1265
 #: (trunk)/admin/settings/notifications.php:1296
-#: (trunk)/models/Cart66Dialog.php:280 (trunk)/models/Cart66Dialog.php:283
-#: (trunk)/models/Cart66Dialog.php:289
+#: (trunk)/models/Cart66Dialog.php:285 (trunk)/models/Cart66Dialog.php:288
+#: (trunk)/models/Cart66Dialog.php:294
 #: (trunk)/pro/admin/paypal-subscriptions.php:107
 msgid "Yes"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:121
+#: ../cart66 (trunk)/admin/products.php:122
 msgid "Use the Gravity Form pricing fields instead of the pricing fields here."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:125
+#: ../cart66 (trunk)/admin/products.php:126
 msgid "Quantity field"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:146
+#: ../cart66 (trunk)/admin/products.php:147
 msgid "Use one of the Gravity Form fields as the quantity for your product."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:156
+#: ../cart66 (trunk)/admin/products.php:157
 #: (trunk)/pro/admin/paypal-subscriptions.php:168
 msgid "Price description"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:158
+#: ../cart66 (trunk)/admin/products.php:159
 msgid "If you would like to customize the display of the price"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:161
+#: ../cart66 (trunk)/admin/products.php:162
 msgid "User defined price"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:165
+#: ../cart66 (trunk)/admin/products.php:166
 msgid "Allow the customer to specify a price."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:169
+#: ../cart66 (trunk)/admin/products.php:170
 msgid "Min price"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:171
+#: ../cart66 (trunk)/admin/products.php:172
 msgid "Max price"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:173
+#: ../cart66 (trunk)/admin/products.php:174
 msgid "Set to $0.00 for no limit "
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:177 (trunk)/admin/products.php:416
-#: (trunk)/admin/products.php:427 (trunk)/admin/products.php:445
-#: (trunk)/admin/products.php:456
+#: ../cart66 (trunk)/admin/products.php:178 (trunk)/admin/products.php:417
+#: (trunk)/admin/products.php:428 (trunk)/admin/products.php:446
+#: (trunk)/admin/products.php:457
 msgid "Taxed"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:183
+#: ../cart66 (trunk)/admin/products.php:184
 msgid "Do you want to collect sales tax when this item is purchased?"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:184
+#: ../cart66 (trunk)/admin/products.php:185
 msgid "For subscriptions, tax is only collected on the one time fee."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:188 (trunk)/admin/products.php:417
-#: (trunk)/admin/products.php:428 (trunk)/admin/products.php:446
-#: (trunk)/admin/products.php:457
+#: ../cart66 (trunk)/admin/products.php:189 (trunk)/admin/products.php:418
+#: (trunk)/admin/products.php:429 (trunk)/admin/products.php:447
+#: (trunk)/admin/products.php:458
 msgid "Shipped"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:193
+#: ../cart66 (trunk)/admin/products.php:194
 msgid "Does this product require shipping"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:196
+#: ../cart66 (trunk)/admin/products.php:197
 msgid "Weight"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:198
+#: ../cart66 (trunk)/admin/products.php:199
 msgid ""
 "Shipping weight in pounds. Used for live rates calculations. Weightless "
 "items ship free.<br/>\n"
@@ -925,15 +939,15 @@ msgid ""
 "shipping you can enter 0 for the weight."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:202
+#: ../cart66 (trunk)/admin/products.php:203
 msgid "Min quantity"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:204
+#: ../cart66 (trunk)/admin/products.php:205
 msgid "Max quantity"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:206
+#: ../cart66 (trunk)/admin/products.php:207
 msgid ""
 "Limit the quantity that can be added to the cart. Set to 0 for unlimited.<br/"
 ">\n"
@@ -941,38 +955,38 @@ msgid ""
 "the quantity of the product to 1."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:212
+#: ../cart66 (trunk)/admin/products.php:213
 msgid "Attach Spreedly subscription"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:228
+#: ../cart66 (trunk)/admin/products.php:229
 msgid "Membership Product"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:234
+#: ../cart66 (trunk)/admin/products.php:235
 msgid "Should purchasing this product create a membership account?"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:235
+#: ../cart66 (trunk)/admin/products.php:236
 msgid ""
 "If this is a spreedly subscription it already creates a membership account "
 "so leave this set to 'No'."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:239
+#: ../cart66 (trunk)/admin/products.php:240
 #: (trunk)/pro/admin/paypal-subscriptions.php:32
 msgid "Feature level"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:241
+#: ../cart66 (trunk)/admin/products.php:242
 msgid "Enter the feature level. No spaces are allowed."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:244
+#: ../cart66 (trunk)/admin/products.php:245
 msgid "Duration"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:247
+#: ../cart66 (trunk)/admin/products.php:248
 #: (trunk)/admin/settings/notifications.php:574
 #: (trunk)/admin/settings/notifications.php:921
 #: (trunk)/pro/admin/paypal-subscriptions.php:57
@@ -981,7 +995,7 @@ msgstr ""
 msgid "Days"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:248
+#: ../cart66 (trunk)/admin/products.php:249
 #: (trunk)/admin/settings/notifications.php:575
 #: (trunk)/admin/settings/notifications.php:922
 #: (trunk)/pro/admin/paypal-subscriptions.php:58
@@ -990,7 +1004,7 @@ msgstr ""
 msgid "Weeks"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:249
+#: ../cart66 (trunk)/admin/products.php:250
 #: (trunk)/admin/settings/notifications.php:576
 #: (trunk)/admin/settings/notifications.php:923
 #: (trunk)/pro/admin/paypal-subscriptions.php:59
@@ -999,67 +1013,67 @@ msgstr ""
 msgid "Months"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:250
+#: ../cart66 (trunk)/admin/products.php:251
 #: (trunk)/pro/admin/paypal-subscriptions.php:60
 #: (trunk)/pro/admin/paypal-subscriptions.php:121
 #: (trunk)/pro/admin/paypal-subscriptions.php:162
 msgid "Years"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:253 (trunk)/admin/products.php:323
+#: ../cart66 (trunk)/admin/products.php:254 (trunk)/admin/products.php:324
 #: (trunk)/admin/settings/notifications.php:1087
 #: (trunk)/admin/settings/tax.php:116 (trunk)/models/Cart66Dashboard.php:657
 msgid "or"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:254 (trunk)/pro/admin/accounts.php:85
+#: ../cart66 (trunk)/admin/products.php:255 (trunk)/pro/admin/accounts.php:85
 msgid "Lifetime"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:265
+#: ../cart66 (trunk)/admin/products.php:266
 msgid "Digital Product Options"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:269
+#: ../cart66 (trunk)/admin/products.php:270
 msgid "Limit The Number Of Times This File Can Be Downloaded"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:272
+#: ../cart66 (trunk)/admin/products.php:273
 msgid "Download limit"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:274
+#: ../cart66 (trunk)/admin/products.php:275
 msgid ""
 "Max number of times customer may download product. Enter 0 for no limit."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:279
+#: ../cart66 (trunk)/admin/products.php:280
 msgid "Deliver Digital Products With Amazon S3"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:282
+#: ../cart66 (trunk)/admin/products.php:283
 msgid "Bucket"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:284
+#: ../cart66 (trunk)/admin/products.php:285
 msgid "The Amazon S3 bucket name that is holding the digital file."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:290
+#: ../cart66 (trunk)/admin/products.php:291
 msgid "File"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:292
+#: ../cart66 (trunk)/admin/products.php:293
 msgid "The Amazon S3 file name of your digital product."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:295
+#: ../cart66 (trunk)/admin/products.php:296
 msgid ""
 "How do I force the file to download rather than being displayed in the "
 "browser?"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:296
+#: ../cart66 (trunk)/admin/products.php:297
 msgid ""
 "If you want your digital product to download rather than display in the web "
 "browser, log into your Amazon S3 account and click on the file that you want "
@@ -1069,14 +1083,14 @@ msgid ""
 "                Key = Content-Disposition | Value = attachment"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:306
+#: ../cart66 (trunk)/admin/products.php:307
 msgid ""
 "<strong>WARNING:</strong> The digital products folder does not exist. Please "
 "update your <strong>Digital Product Settings</strong> on the <a href='?"
 "page=cart66-settings'>settings page</a>."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:307
+#: ../cart66 (trunk)/admin/products.php:308
 msgid ""
 "<strong>WARNING:</strong> WordPress cannot write to your digital products "
 "folder. Please make your digital products file writeable or change your "
@@ -1084,7 +1098,7 @@ msgid ""
 "the <a href='?page=cart66-settings'>settings page</a>."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:311
+#: ../cart66 (trunk)/admin/products.php:312
 msgid ""
 "Before you can upload your digital product, please specify a folder for your "
 "digital products in the<br/>\n"
@@ -1092,43 +1106,43 @@ msgid ""
 "page=cart66-settings'>settings page</a>."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:315
+#: ../cart66 (trunk)/admin/products.php:316
 msgid "Deliver Digital Products From Your Server"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:318
+#: ../cart66 (trunk)/admin/products.php:319
 msgid "Upload product"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:320
+#: ../cart66 (trunk)/admin/products.php:321
 msgid ""
 "If you FTP your product to your product folder, enter the name of the file "
 "you uploaded in the field below."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:323
+#: ../cart66 (trunk)/admin/products.php:324
 msgid "File name"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:329
+#: ../cart66 (trunk)/admin/products.php:330
 msgid "Delete this file from the server"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:332
+#: ../cart66 (trunk)/admin/products.php:333
 msgid "<strong>WARNING:</strong> This file is not in your products folder"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:341
+#: ../cart66 (trunk)/admin/products.php:342
 msgid ""
 "NOTE: If you are delivering large digital files, please consider using "
 "Amazon S3."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:342
+#: ../cart66 (trunk)/admin/products.php:343
 msgid "View local delivery information"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:343
+#: ../cart66 (trunk)/admin/products.php:344
 msgid ""
 "There are several settings built into PHP that affect the size of the files "
 "you can upload. These settings are set by your web host and can usually be "
@@ -1139,85 +1153,85 @@ msgid ""
 "this form, you can FTP the file to the products folder"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:346
+#: ../cart66 (trunk)/admin/products.php:347
 msgid "then enter the name of the file in the \"File name\" field above."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:348
+#: ../cart66 (trunk)/admin/products.php:349
 msgid "Max Upload Filesize"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:348
+#: ../cart66 (trunk)/admin/products.php:349
 msgid "Max Postsize"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:357
+#: ../cart66 (trunk)/admin/products.php:358
 msgid "Product Variations"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:363
+#: ../cart66 (trunk)/admin/products.php:364
 msgid "Option Group 1"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:365
+#: ../cart66 (trunk)/admin/products.php:366
 msgid "Small, Medium +$2.00, Large +$4.00"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:368
+#: ../cart66 (trunk)/admin/products.php:369
 msgid "Option Group 2"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:370
+#: ../cart66 (trunk)/admin/products.php:371
 msgid "Red, White, Blue"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:373
+#: ../cart66 (trunk)/admin/products.php:374
 msgid "Custom field"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:375
+#: ../cart66 (trunk)/admin/products.php:376
 msgid "No custom field"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:376
+#: ../cart66 (trunk)/admin/products.php:377
 msgid "Single line text field"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:377
+#: ../cart66 (trunk)/admin/products.php:378
 msgid "Multi line text field"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:381
+#: ../cart66 (trunk)/admin/products.php:382
 #: (trunk)/admin/settings/cart-checkout.php:145
 msgid "Required"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:382
+#: ../cart66 (trunk)/admin/products.php:383
 msgid ""
 "Include a free form text area so your buyer can provide custom information "
 "such as a name to engrave on the product."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:385
+#: ../cart66 (trunk)/admin/products.php:386
 msgid "Instructions"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:387
+#: ../cart66 (trunk)/admin/products.php:388
 msgid ""
 "Tell your buyer what to enter into the custom text field. (Ex. Please enter "
 "the name you want to engrave)"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:396 (trunk)/admin/promotions.php:182
+#: ../cart66 (trunk)/admin/products.php:397 (trunk)/admin/promotions.php:185
 #: (trunk)/admin/shipping.php:396 (trunk)/admin/shipping.php:575
 #: (trunk)/admin/settings/notifications.php:725
 #: (trunk)/admin/settings/notifications.php:1034
-#: (trunk)/js/cart66Dialog.php:458 (trunk)/models/Cart66Dialog.php:394
+#: (trunk)/js/cart66Dialog.php:458 (trunk)/models/Cart66Dialog.php:402
 #: (trunk)/pro/admin/accounts.php:98
 msgid "Cancel"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:398 (trunk)/admin/promotions.php:184
+#: ../cart66 (trunk)/admin/products.php:399 (trunk)/admin/promotions.php:187
 #: (trunk)/admin/shipping.php:323 (trunk)/admin/shipping.php:398
 #: (trunk)/pro/admin/accounts.php:100 (trunk)/pro/admin/inventory.php:40
 #: (trunk)/pro/admin/paypal-subscriptions.php:185
@@ -1228,30 +1242,30 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:407
+#: ../cart66 (trunk)/admin/products.php:408
 msgid "Your Products"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:413 (trunk)/admin/products.php:424
-#: (trunk)/admin/products.php:442 (trunk)/admin/products.php:453
+#: ../cart66 (trunk)/admin/products.php:414 (trunk)/admin/products.php:425
+#: (trunk)/admin/products.php:443 (trunk)/admin/products.php:454
 #: (trunk)/pro/admin/paypal-subscriptions.php:206
 #: (trunk)/pro/admin/paypal-subscriptions.php:220
 msgid "Item Number"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:414 (trunk)/admin/products.php:425
-#: (trunk)/admin/products.php:443 (trunk)/admin/products.php:454
+#: ../cart66 (trunk)/admin/products.php:415 (trunk)/admin/products.php:426
+#: (trunk)/admin/products.php:444 (trunk)/admin/products.php:455
 #: (trunk)/models/Cart66Dashboard.php:366 (trunk)/pro/admin/inventory.php:26
-#: (trunk)/pro/admin/inventory.php:34 (trunk)/pro/admin/reports.php:12
+#: (trunk)/pro/admin/inventory.php:34 (trunk)/pro/admin/reports.php:38
 msgid "Product Name"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:436
+#: ../cart66 (trunk)/admin/products.php:437
 msgid "Your Spreedly Subscription Products"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:492 (trunk)/admin/products.php:526
-#: (trunk)/admin/promotions.php:271 (trunk)/admin/shipping.php:426
+#: ../cart66 (trunk)/admin/products.php:503 (trunk)/admin/products.php:550
+#: (trunk)/admin/promotions.php:284 (trunk)/admin/shipping.php:426
 #: (trunk)/admin/shipping.php:513 (trunk)/admin/shipping.php:609
 #: (trunk)/admin/settings/notifications.php:769
 #: (trunk)/admin/settings/notifications.php:1079
@@ -1260,181 +1274,185 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:495
+#: ../cart66 (trunk)/admin/products.php:508
 #: (trunk)/models/Cart66Dashboard.php:595
 msgid "No matching Products found"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:529
+#: ../cart66 (trunk)/admin/products.php:555
 msgid "No matching Spreedly Subscriptions found"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/products.php:551
+#: ../cart66 (trunk)/admin/products.php:577
 msgid "No quotes allowed"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:18
+#: ../cart66 (trunk)/admin/promotions.php:21
 msgid "The promotion could not be saved for the following reasons"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:48
+#: ../cart66 (trunk)/admin/promotions.php:39
+msgid "Cart66 Promotions"
+msgstr ""
+
+#: ../cart66 (trunk)/admin/promotions.php:51
 msgid "Promotion"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:57
+#: ../cart66 (trunk)/admin/promotions.php:60
 msgid "Promotion name"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:59
+#: ../cart66 (trunk)/admin/promotions.php:62
 msgid "Promotion name required"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:62
+#: ../cart66 (trunk)/admin/promotions.php:65
 msgid "Promotion code"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:64
+#: ../cart66 (trunk)/admin/promotions.php:67
 msgid "Unique promotion code required"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:67
+#: ../cart66 (trunk)/admin/promotions.php:70
 msgid "Type of promotion"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:69
+#: ../cart66 (trunk)/admin/promotions.php:72
 msgid "Money Amount"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:70
+#: ../cart66 (trunk)/admin/promotions.php:73
 msgid "Percentage"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:72
+#: ../cart66 (trunk)/admin/promotions.php:75
 msgid ""
 "Select if this promotion will be applied using a specific dollar amount or a "
 "percentage of the total"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:75
+#: ../cart66 (trunk)/admin/promotions.php:78
 msgid "Apply to"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:77 (trunk)/admin/promotions.php:155
-#: (trunk)/admin/settings/main.php:300
+#: ../cart66 (trunk)/admin/promotions.php:80 (trunk)/admin/promotions.php:158
+#: (trunk)/admin/settings/main.php:302
 #: (trunk)/admin/settings/notifications.php:744
-#: (trunk)/admin/settings/notifications.php:752 (trunk)/models/Cart66.php:692
-#: (trunk)/models/Cart66DataTables.php:288 (trunk)/models/Cart66Dialog.php:245
+#: (trunk)/admin/settings/notifications.php:752 (trunk)/models/Cart66.php:703
+#: (trunk)/models/Cart66DataTables.php:288 (trunk)/models/Cart66Dialog.php:250
 msgid "Products"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:80
+#: ../cart66 (trunk)/admin/promotions.php:83
 msgid "Grand Total"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:82
+#: ../cart66 (trunk)/admin/promotions.php:85
 msgid ""
 "Select if this promotion will apply to specific products, shipping, products "
 "subtotal or the entire cart total"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:90
+#: ../cart66 (trunk)/admin/promotions.php:93
 msgid "Set the promotion amount"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:93
+#: ../cart66 (trunk)/admin/promotions.php:96
 msgid "Required Amount"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:96
+#: ../cart66 (trunk)/admin/promotions.php:99
 msgid "Minimum order amount"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:100
+#: ../cart66 (trunk)/admin/promotions.php:103
 msgid "Maximum order amount"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:103
+#: ../cart66 (trunk)/admin/promotions.php:106
 msgid ""
 "Set the minimum and/or maximum amount required for this promotion to apply"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:107
+#: ../cart66 (trunk)/admin/promotions.php:110
 msgid "Required Quantity"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:110
+#: ../cart66 (trunk)/admin/promotions.php:113
 msgid "Minimum quantity"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:114
+#: ../cart66 (trunk)/admin/promotions.php:117
 msgid "Maximum quantity"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:117
+#: ../cart66 (trunk)/admin/promotions.php:120
 msgid ""
 "Set the minimum and/or maximum quantity required for this promotion to apply"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:121
+#: ../cart66 (trunk)/admin/promotions.php:124
 msgid "Date range"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:124
+#: ../cart66 (trunk)/admin/promotions.php:127
 #: (trunk)/admin/settings/notifications.php:1208
 #: (trunk)/admin/settings/notifications.php:1223
 msgid "From"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:128
+#: ../cart66 (trunk)/admin/promotions.php:131
 #: (trunk)/admin/settings/notifications.php:1209
 #: (trunk)/admin/settings/notifications.php:1224
 msgid "To"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:131
+#: ../cart66 (trunk)/admin/promotions.php:134
 msgid ""
 "Select the date and time that this promotion will start and end. You may "
 "leave either blank"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:135
+#: ../cart66 (trunk)/admin/promotions.php:138
 msgid "Maximum redemptions"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:138 (trunk)/admin/promotions.php:206
-#: (trunk)/admin/promotions.php:220
+#: ../cart66 (trunk)/admin/promotions.php:141 (trunk)/admin/promotions.php:209
+#: (trunk)/admin/promotions.php:223
 msgid "Used"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:143
-#: (trunk)/admin/settings/debug.php:33 (trunk)/admin/settings/debug.php:309
-#: (trunk)/admin/settings/debug.php:319 (trunk)/admin/settings/debug.php:329
+#: ../cart66 (trunk)/admin/promotions.php:146
+#: (trunk)/admin/settings/debug.php:33 (trunk)/admin/settings/debug.php:326
+#: (trunk)/admin/settings/debug.php:336 (trunk)/admin/settings/debug.php:346
 #: (trunk)/models/Cart66DataTables.php:287
 msgid "Never"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:147
+#: ../cart66 (trunk)/admin/promotions.php:150
 msgid "Set the maximum number of times this promotion can be redeemed"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:150
+#: ../cart66 (trunk)/admin/promotions.php:153
 msgid "Maximum redemptions per order"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:152
+#: ../cart66 (trunk)/admin/promotions.php:155
 msgid ""
 "Set the maximum number of times this promotion can be redeemed per order"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:156
+#: ../cart66 (trunk)/admin/promotions.php:159
 msgid "Apply to the following products"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:157
+#: ../cart66 (trunk)/admin/promotions.php:160
 msgid "Exclude the following products"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:162
+#: ../cart66 (trunk)/admin/promotions.php:165
 msgid ""
 "Enter the names of products in your inventory that this promotion will "
 "either be be applied to or that will be excluded from this promotion.  You "
@@ -1445,51 +1463,51 @@ msgid ""
 "products in the cart and vice versa."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:165
+#: ../cart66 (trunk)/admin/promotions.php:168
 msgid "Additional settings"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:169
+#: ../cart66 (trunk)/admin/promotions.php:172
 #: (trunk)/admin/settings/notifications.php:1009
 #: (trunk)/pro/admin/shipping.php:366
 msgid "Enable"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:170
+#: ../cart66 (trunk)/admin/promotions.php:173
 msgid "Do you want this promotion to be valid"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:173
+#: ../cart66 (trunk)/admin/promotions.php:176
 msgid "Auto Apply"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:174
+#: ../cart66 (trunk)/admin/promotions.php:177
 msgid ""
 "Do you want this promotion to automatically apply when all conditions are "
 "met? (no user input required)"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:201 (trunk)/admin/promotions.php:215
+#: ../cart66 (trunk)/admin/promotions.php:204 (trunk)/admin/promotions.php:218
 msgid "Code"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:203 (trunk)/admin/promotions.php:217
+#: ../cart66 (trunk)/admin/promotions.php:206 (trunk)/admin/promotions.php:220
 msgid "Minimum Order"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:204 (trunk)/admin/promotions.php:218
+#: ../cart66 (trunk)/admin/promotions.php:207 (trunk)/admin/promotions.php:221
 msgid "Enabled"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:205 (trunk)/admin/promotions.php:219
+#: ../cart66 (trunk)/admin/promotions.php:208 (trunk)/admin/promotions.php:222
 msgid "Effective"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:207 (trunk)/admin/promotions.php:221
+#: ../cart66 (trunk)/admin/promotions.php:210 (trunk)/admin/promotions.php:224
 msgid "Apply To"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/promotions.php:274
+#: ../cart66 (trunk)/admin/promotions.php:289
 msgid "No matching Promotions found"
 msgstr ""
 
@@ -1609,8 +1627,8 @@ msgid ""
 msgstr ""
 
 #: ../cart66 (trunk)/admin/shipping.php:413
-#: (trunk)/views/cart-sidebar-advanced.php:150 (trunk)/views/cart.php:294
-#: (trunk)/views/cart.php:336
+#: (trunk)/views/cart-sidebar-advanced.php:150 (trunk)/views/cart.php:303
+#: (trunk)/views/cart.php:345
 msgid "Shipping Method"
 msgstr ""
 
@@ -1780,7 +1798,7 @@ msgid "Defaults to \"Quantity: \""
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/cart-checkout.php:65
-#: (trunk)/models/Cart66Dialog.php:278
+#: (trunk)/models/Cart66Dialog.php:283
 msgid "Ajax Add To Cart"
 msgstr ""
 
@@ -1897,7 +1915,7 @@ msgid "Required Error Label"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/cart-checkout.php:169
-msgid "Defaults to \"The Special Instructions Field is required\""
+msgid "Defaults to \"the special instructions field is required\""
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/cart-checkout.php:175
@@ -1905,12 +1923,13 @@ msgstr ""
 #: (trunk)/admin/settings/cart-checkout.php:257
 #: (trunk)/admin/settings/gateways.php:45
 #: (trunk)/admin/settings/gateways.php:63
-#: (trunk)/admin/settings/integrations.php:74
-#: (trunk)/admin/settings/integrations.php:112
-#: (trunk)/admin/settings/integrations.php:204
-#: (trunk)/admin/settings/integrations.php:276
-#: (trunk)/admin/settings/integrations.php:303
-#: (trunk)/admin/settings/integrations.php:331
+#: (trunk)/admin/settings/integrations.php:75
+#: (trunk)/admin/settings/integrations.php:106
+#: (trunk)/admin/settings/integrations.php:144
+#: (trunk)/admin/settings/integrations.php:236
+#: (trunk)/admin/settings/integrations.php:308
+#: (trunk)/admin/settings/integrations.php:345
+#: (trunk)/admin/settings/integrations.php:373
 msgid "This feature is only available in"
 msgstr ""
 
@@ -1978,7 +1997,7 @@ msgid "Error Logging"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/debug.php:8
-#: (trunk)/admin/settings/debug.php:54
+#: (trunk)/admin/settings/debug.php:71
 msgid "Session Management"
 msgstr ""
 
@@ -2041,203 +2060,219 @@ msgstr ""
 msgid "when uninstalling Cart66 Lite"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:58
+#: ../cart66 (trunk)/admin/settings/debug.php:51
+msgid "Reports Paging"
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/debug.php:57
+msgid ""
+"Limit the number of products on the reports page to reduce server overhead. "
+"This is useful if you have very large numbers of products and/or the server "
+"utilizes shared resources."
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/debug.php:64
+msgid "Set the number of products per page in the reports."
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/debug.php:75
 msgid "Database Sessions"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:67
+#: ../cart66 (trunk)/admin/settings/debug.php:84
 msgid ""
 "Database sessions offer better performance but if you have trouble with "
 "them, try using the standard PHP sessions by disabling database sessions"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:71
+#: ../cart66 (trunk)/admin/settings/debug.php:88
 msgid "Disable IP Validation"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:77
+#: ../cart66 (trunk)/admin/settings/debug.php:94
 msgid ""
 "If the shopping cart seems to be dropping it's contents it could be because "
 "your ip address changes while you are shopping. If so, disable IP address "
 "validation."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:81
+#: ../cart66 (trunk)/admin/settings/debug.php:98
 msgid "Session Length"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:84
+#: ../cart66 (trunk)/admin/settings/debug.php:101
 msgid ""
 "Set the length of the session in minutes. Leave this blank to keep the "
 "default session length of 30 minutes"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:88
+#: ../cart66 (trunk)/admin/settings/debug.php:105
 msgid "Session Table Status"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:97
+#: ../cart66 (trunk)/admin/settings/debug.php:114
 #: (trunk)/views/ajax-cart-button-message.php:4
 #: (trunk)/views/ajax-cart-button-message.php:9
+#: (trunk)/views/cart-button.php:108
 msgid "OK"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:99
+#: ../cart66 (trunk)/admin/settings/debug.php:116
 msgid "Repair Table"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:122
+#: ../cart66 (trunk)/admin/settings/debug.php:139
 msgid "Error Log"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:126
+#: ../cart66 (trunk)/admin/settings/debug.php:143
 msgid "Download Log File"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:130
+#: ../cart66 (trunk)/admin/settings/debug.php:147
 msgid "Clear Log File"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:136
+#: ../cart66 (trunk)/admin/settings/debug.php:153
 msgid "Cart66"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:136
+#: ../cart66 (trunk)/admin/settings/debug.php:153
 msgid " Professional"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:136
+#: ../cart66 (trunk)/admin/settings/debug.php:153
 msgid "Version"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:142
+#: ../cart66 (trunk)/admin/settings/debug.php:159
 msgid "Check for updates"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:147
+#: ../cart66 (trunk)/admin/settings/debug.php:164
 msgid "WordPress Version"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:153
+#: ../cart66 (trunk)/admin/settings/debug.php:170
 msgid "WPMU"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:159
+#: ../cart66 (trunk)/admin/settings/debug.php:176
 msgid "PHP Version"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:165
+#: ../cart66 (trunk)/admin/settings/debug.php:182
 msgid "Session Save Path"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:171
+#: ../cart66 (trunk)/admin/settings/debug.php:188
 msgid "MySQL Version"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:178
+#: ../cart66 (trunk)/admin/settings/debug.php:195
 msgid "MySQL Mode"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:183
-#: (trunk)/admin/settings/debug.php:188
+#: ../cart66 (trunk)/admin/settings/debug.php:200
+#: (trunk)/admin/settings/debug.php:205
 msgid "Normal"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:192
+#: ../cart66 (trunk)/admin/settings/debug.php:209
 msgid "Table Prefix"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:198
+#: ../cart66 (trunk)/admin/settings/debug.php:215
 msgid "Tables"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:223
+#: ../cart66 (trunk)/admin/settings/debug.php:240
 msgid "All Tables Are Missing!"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:232
+#: ../cart66 (trunk)/admin/settings/debug.php:249
 msgid "Missing tables: "
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:238
-#: (trunk)/admin/settings/debug.php:241
+#: ../cart66 (trunk)/admin/settings/debug.php:255
+#: (trunk)/admin/settings/debug.php:258
 msgid "All Tables Present"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:246
+#: ../cart66 (trunk)/admin/settings/debug.php:263
 msgid "Current Directory"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:252
+#: ../cart66 (trunk)/admin/settings/debug.php:269
 msgid "WordPress URL"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:258
+#: ../cart66 (trunk)/admin/settings/debug.php:275
 msgid "Server Name"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:264
+#: ../cart66 (trunk)/admin/settings/debug.php:281
 msgid "Cookie Domain"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:270
+#: ../cart66 (trunk)/admin/settings/debug.php:287
 msgid "Curl Test"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:274
+#: ../cart66 (trunk)/admin/settings/debug.php:291
 msgid "CURL is not installed"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:288
+#: ../cart66 (trunk)/admin/settings/debug.php:305
 msgid "PASSED"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:288
+#: ../cart66 (trunk)/admin/settings/debug.php:305
 msgid "FAILED"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:291
+#: ../cart66 (trunk)/admin/settings/debug.php:308
 msgid "Run Test"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:298
+#: ../cart66 (trunk)/admin/settings/debug.php:315
 msgid "Write Permissions"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:301
-#: (trunk)/admin/settings/debug.php:302
+#: ../cart66 (trunk)/admin/settings/debug.php:318
+#: (trunk)/admin/settings/debug.php:319
 msgid "Writable"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:301
+#: ../cart66 (trunk)/admin/settings/debug.php:318
 msgid "Not Writable"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:307
+#: ../cart66 (trunk)/admin/settings/debug.php:324
 msgid "Subscription Reminders Last Checked"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:312
+#: ../cart66 (trunk)/admin/settings/debug.php:329
 msgid "Send Subscription Reminders"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:317
+#: ../cart66 (trunk)/admin/settings/debug.php:334
 msgid "Followup Emails Last Checked"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:322
+#: ../cart66 (trunk)/admin/settings/debug.php:339
 msgid "Send Followup Emails"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:327
+#: ../cart66 (trunk)/admin/settings/debug.php:344
 msgid "Prune Pending Orders Last Checked"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:332
+#: ../cart66 (trunk)/admin/settings/debug.php:349
 msgid "Prune Pending Orders"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/debug.php:337
+#: ../cart66 (trunk)/admin/settings/debug.php:354
 msgid "Next Scheduled Cron Check"
 msgstr ""
 
@@ -2378,7 +2413,6 @@ msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/gateways.php:142
 #: (trunk)/admin/settings/gateways.php:191
-#: (trunk)/admin/settings/gateways.php:245
 msgid ""
 "If you would like to use the PayPal Sandbox to test transactions, you will "
 "need to enable it in the Gateway Settings section."
@@ -2431,7 +2465,7 @@ msgid " and Website Payments Pro"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/gateways.php:195
-#: (trunk)/admin/settings/gateways.php:393 (trunk)/pro/admin/shipping.php:300
+#: (trunk)/admin/settings/gateways.php:402 (trunk)/pro/admin/shipping.php:300
 msgid "API Username"
 msgstr ""
 
@@ -2484,255 +2518,291 @@ msgstr ""
 msgid "2Checkout Settings"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:249
+#: ../cart66 (trunk)/admin/settings/gateways.php:248
 #: (trunk)/pro/admin/shipping.php:141
 msgid "Account Number"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:255
+#: ../cart66 (trunk)/admin/settings/gateways.php:254
 msgid "Secret Word"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:261
+#: ../cart66 (trunk)/admin/settings/gateways.php:260
 msgid "Demo Mode"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:283
+#: ../cart66 (trunk)/admin/settings/gateways.php:282
 msgid "Gateway"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:293
+#: ../cart66 (trunk)/admin/settings/gateways.php:292
 msgid "Other"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:298
+#: ../cart66 (trunk)/admin/settings/gateways.php:297
 msgid "API Login ID"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:304
-#: (trunk)/admin/settings/gateways.php:399
+#: ../cart66 (trunk)/admin/settings/gateways.php:303
+#: (trunk)/admin/settings/gateways.php:408
 msgid "Transaction Key"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:307
+#: ../cart66 (trunk)/admin/settings/gateways.php:306
 msgid "Where can I find my Authorize.net API Login ID and Transaction Key?"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:311
+#: ../cart66 (trunk)/admin/settings/gateways.php:310
+msgid "Disable Line Item Submission"
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/gateways.php:316
+msgid ""
+"Set this to yes to disable sending the item list to Authorize.net. This may "
+"be helpful if your product names include characters that Authorize.net does "
+"not support."
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/gateways.php:320
 msgid "Emulation URL"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:314
+#: ../cart66 (trunk)/admin/settings/gateways.php:323
 msgid "Autorize.net AIM emulation URL"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:318
+#: ../cart66 (trunk)/admin/settings/gateways.php:327
 msgid "eWay Customer ID"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:324
+#: ../cart66 (trunk)/admin/settings/gateways.php:333
 msgid "eWay Sandbox"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:333
+#: ../cart66 (trunk)/admin/settings/gateways.php:342
 msgid "eWay Sandbox Customer ID"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:339
+#: ../cart66 (trunk)/admin/settings/gateways.php:348
 msgid "Currency"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:348
+#: ../cart66 (trunk)/admin/settings/gateways.php:357
 msgid "API Passphrase"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:354
+#: ../cart66 (trunk)/admin/settings/gateways.php:363
 msgid "MerchantUUID"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:360
+#: ../cart66 (trunk)/admin/settings/gateways.php:369
 msgid "API key"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:366
+#: ../cart66 (trunk)/admin/settings/gateways.php:375
 msgid "Merchant Warrior Test Mode"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:375
+#: ../cart66 (trunk)/admin/settings/gateways.php:384
 msgid "Test API Passphrase"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:381
+#: ../cart66 (trunk)/admin/settings/gateways.php:390
 msgid "Test MerchantUUID"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:387
+#: ../cart66 (trunk)/admin/settings/gateways.php:396
 msgid "Test API Key"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:405
+#: ../cart66 (trunk)/admin/settings/gateways.php:414
 msgid "PayLeap Test Mode"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:414
+#: ../cart66 (trunk)/admin/settings/gateways.php:423
 msgid "Test API Username"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:420
+#: ../cart66 (trunk)/admin/settings/gateways.php:429
 msgid "Test Transaction Key"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:426
+#: ../cart66 (trunk)/admin/settings/gateways.php:435
 msgid "Stripe API Key"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:432
+#: ../cart66 (trunk)/admin/settings/gateways.php:441
 msgid "Stripe Test Mode"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:441
+#: ../cart66 (trunk)/admin/settings/gateways.php:450
 msgid "Stripe Test API Key"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/gateways.php:449
+#: ../cart66 (trunk)/admin/settings/gateways.php:458
 msgid "These gateways are only available in"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/integrations.php:7
-#: (trunk)/admin/settings/integrations.php:21
+#: (trunk)/admin/settings/integrations.php:22
 msgid "Integrations"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/integrations.php:8
-#: (trunk)/admin/settings/integrations.php:117
+#: (trunk)/admin/settings/integrations.php:149
 msgid "Amazon S3"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/integrations.php:9
-#: (trunk)/admin/settings/integrations.php:139
+#: (trunk)/admin/settings/integrations.php:171
 msgid "Constant Contact"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/integrations.php:10
-#: (trunk)/admin/settings/integrations.php:35
+#: (trunk)/admin/settings/integrations.php:36
 msgid "Google Analytics Ecommerce Tracking"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/integrations.php:11
-#: (trunk)/admin/settings/integrations.php:281
-msgid "iDevAffiliate"
+#: (trunk)/admin/settings/integrations.php:80
+msgid "Gravity Forms"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/integrations.php:12
-#: (trunk)/admin/settings/integrations.php:209
-msgid "MailChimp"
+#: (trunk)/admin/settings/integrations.php:313
+msgid "iDevAffiliate"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/integrations.php:13
-#: (trunk)/admin/settings/integrations.php:79
-msgid "Spreedly"
+#: (trunk)/admin/settings/integrations.php:241
+msgid "MailChimp"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/integrations.php:14
-#: (trunk)/admin/settings/integrations.php:308
+#: (trunk)/admin/settings/integrations.php:111
+msgid "Spreedly"
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/integrations.php:15
+#: (trunk)/admin/settings/integrations.php:350
 msgid "Zendesk"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:19
+#: ../cart66 (trunk)/admin/settings/integrations.php:20
 msgid "Your integration settings have been saved"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:40
+#: ../cart66 (trunk)/admin/settings/integrations.php:41
 msgid "Enable Tracking"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:49
+#: ../cart66 (trunk)/admin/settings/integrations.php:50
 msgid "Other Plugins"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:52
+#: ../cart66 (trunk)/admin/settings/integrations.php:53
 msgid "Yes, I want to use Cart66 with other Google Analytics plugins"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:53
+#: ../cart66 (trunk)/admin/settings/integrations.php:54
 msgid "No, I want to use Cart66 to track on its own"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:58
+#: ../cart66 (trunk)/admin/settings/integrations.php:59
 msgid "Web Product ID"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:61
+#: ../cart66 (trunk)/admin/settings/integrations.php:62
 msgid "Starts with UA-XXXXXXXX-X"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:67
+#: ../cart66 (trunk)/admin/settings/integrations.php:68
 msgid ""
 "Google Analytics tracks the following kinds of data about the purchases "
 "visitors make from your online store"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:69
+#: ../cart66 (trunk)/admin/settings/integrations.php:70
 msgid ""
 "Products: Which products they buy, in what quantity, and the revenue "
 "generated by those products"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:70
+#: ../cart66 (trunk)/admin/settings/integrations.php:71
 msgid ""
 "Transactions: The revenue, tax, shipping, and quantity information for each "
 "transaction"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:71
+#: ../cart66 (trunk)/admin/settings/integrations.php:72
 msgid ""
 "Time to Purchase: The number of days from the initial visit, and the total "
 "number of visits it takes for visitors to complete transactions"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:81
+#: ../cart66 (trunk)/admin/settings/integrations.php:85
+msgid "Display Form Entries Before Sale"
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/integrations.php:91
+msgid ""
+"Set this to yes to view Cart66 product form entries in the Gravity Form "
+"entries section before a sale has been processed."
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/integrations.php:95
+msgid "Keep Orphaned Gravity Form Entries"
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/integrations.php:101
+msgid ""
+"Set this to yes to prevent orphaned Cart66 product Gravity Form entries from "
+"being removed automatically."
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/integrations.php:113
 msgid "Configure your Spreedly account information to sell subscriptions."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:85
+#: ../cart66 (trunk)/admin/settings/integrations.php:117
 msgid "Short Site Name"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:88
+#: ../cart66 (trunk)/admin/settings/integrations.php:120
 msgid ""
 "Look in your Spreedly account under Site Details for the short site name "
 "(Used in URLs, etc)"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:92
+#: ../cart66 (trunk)/admin/settings/integrations.php:124
 msgid "API Token"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:95
+#: ../cart66 (trunk)/admin/settings/integrations.php:127
 msgid ""
 "Look in your Spreedly account under Site Details for the API Authentication "
 "Token."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:99
+#: ../cart66 (trunk)/admin/settings/integrations.php:131
 msgid "Log out Link"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:105
+#: ../cart66 (trunk)/admin/settings/integrations.php:137
 msgid ""
 "Append a logout link to your site's navigation. Note, this only works with "
 "themes that build the navigation using the wp_list_pages() function. See the "
 "documentation for other log out options when using WordPress 3.0 Menus."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:111
+#: ../cart66 (trunk)/admin/settings/integrations.php:143
 msgid ""
 "Spreedly is everything subscriptions. There is a lot to selling "
 "subscriptions. Spreedly delivers it all in one convenient package so you can "
 "focus on building your business!"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:118
+#: ../cart66 (trunk)/admin/settings/integrations.php:150
 msgid ""
 "Amazon S3 provides a simple web services interface for delivering digital "
 "content. It gives you access to the same highly scalable, reliable, secure, "
@@ -2742,27 +2812,27 @@ msgid ""
 "products."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:119
+#: ../cart66 (trunk)/admin/settings/integrations.php:151
 msgid ""
 "Configure your Amazon S3 account information so Cart66 can distribute secure "
 "digital downloads from your Amazon S3 account."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:123
+#: ../cart66 (trunk)/admin/settings/integrations.php:155
 msgid "Access Key ID"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:129
+#: ../cart66 (trunk)/admin/settings/integrations.php:161
 msgid "Secret Key"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:141
+#: ../cart66 (trunk)/admin/settings/integrations.php:173
 msgid ""
 "Configure your Constant Contact account information so your buyers can opt "
 "in to your newsletter."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:145
+#: ../cart66 (trunk)/admin/settings/integrations.php:177
 #: (trunk)/pro/admin/accounts.php:42 (trunk)/pro/admin/accounts.php:117
 #: (trunk)/pro/admin/accounts.php:131 (trunk)/pro/admin/shipping.php:68
 #: (trunk)/views/account-info.php:27 (trunk)/views/account-login.php:18
@@ -2770,135 +2840,145 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:151
+#: ../cart66 (trunk)/admin/settings/integrations.php:183
 #: (trunk)/pro/admin/accounts.php:46 (trunk)/pro/admin/shipping.php:72
 #: (trunk)/pro/admin/shipping.php:137 (trunk)/views/account-info.php:35
 #: (trunk)/views/account-login.php:22 (trunk)/views/paypal-express.php:432
 msgid "Password"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:157
-#: (trunk)/admin/settings/integrations.php:222
+#: ../cart66 (trunk)/admin/settings/integrations.php:189
+#: (trunk)/admin/settings/integrations.php:254
 msgid "Opt-In Message"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:160
-#: (trunk)/admin/settings/integrations.php:225
+#: ../cart66 (trunk)/admin/settings/integrations.php:192
+#: (trunk)/admin/settings/integrations.php:257
 msgid ""
 "Provide a message to tell your buyers what your newsletter is about. For "
 "example, you might want to say something like \"Yes! I would like to "
 "subscribe to:\""
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:164
-#: (trunk)/admin/settings/integrations.php:239
+#: ../cart66 (trunk)/admin/settings/integrations.php:196
+#: (trunk)/admin/settings/integrations.php:271
 msgid "Show Lists"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:191
-#: (trunk)/admin/settings/integrations.php:195
-#: (trunk)/admin/settings/integrations.php:267
+#: ../cart66 (trunk)/admin/settings/integrations.php:223
+#: (trunk)/admin/settings/integrations.php:227
+#: (trunk)/admin/settings/integrations.php:299
 msgid "You do not yet have any lists"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:195
-#: (trunk)/admin/settings/integrations.php:267
+#: ../cart66 (trunk)/admin/settings/integrations.php:227
+#: (trunk)/admin/settings/integrations.php:299
 msgid ""
 "If you have entered your credentials above and are not seeing any lists, try "
 "refreshing this page."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:203
+#: ../cart66 (trunk)/admin/settings/integrations.php:235
 msgid ""
 "Constant Contact is an industry leader in email marketing. Constant Contact "
 "provides email marketing software that makes it easy to create professional "
 "HTML email campaigns with no tech skills."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:211
+#: ../cart66 (trunk)/admin/settings/integrations.php:243
 msgid "Configure your"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:211
+#: ../cart66 (trunk)/admin/settings/integrations.php:243
 msgid "account information so your buyers can opt in to your newsletter"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:215
+#: ../cart66 (trunk)/admin/settings/integrations.php:247
 msgid "MailChimp API Key"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:218
+#: ../cart66 (trunk)/admin/settings/integrations.php:250
 msgid "Need an API key? Find out how to get one"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:218
+#: ../cart66 (trunk)/admin/settings/integrations.php:250
 msgid "here"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:229
+#: ../cart66 (trunk)/admin/settings/integrations.php:261
 msgid "Double Opt-In"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:232
+#: ../cart66 (trunk)/admin/settings/integrations.php:264
 msgid "Send a Double Opt-In email"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:234
+#: ../cart66 (trunk)/admin/settings/integrations.php:266
 msgid "Don't send a Double Opt-In email"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:235
+#: ../cart66 (trunk)/admin/settings/integrations.php:267
 msgid "Send a double opt-in confirmation message."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:235
+#: ../cart66 (trunk)/admin/settings/integrations.php:267
 msgid "Abusing this may cause your account to be suspended"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:235
+#: ../cart66 (trunk)/admin/settings/integrations.php:267
 msgid "Read more about Opt-Ins"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:262
+#: ../cart66 (trunk)/admin/settings/integrations.php:294
 msgid "Members"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:275
+#: ../cart66 (trunk)/admin/settings/integrations.php:307
 msgid ""
 "helps you design email newsletters, share them on social networks, integrate "
 "with services you already use, and track your results. It's like your own "
 "personal publishing platform"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:283
+#: ../cart66 (trunk)/admin/settings/integrations.php:315
 msgid ""
 "Configure your iDevAffiliate account information so Cart66 can award "
 "commissions to your affiliates."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:287
+#: ../cart66 (trunk)/admin/settings/integrations.php:319
 msgid "iDevAffiliate URL"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:290
+#: ../cart66 (trunk)/admin/settings/integrations.php:322
 msgid ""
 "Copy and paste your iDevAffiliate \"3rd Party Affiliate Call\" URL. It will "
 "looks like"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:292
+#: ../cart66 (trunk)/admin/settings/integrations.php:324
 msgid ""
 "Be sure to leave the XXX's in place and Cart66 will replace the XXX's with "
 "the appropriate values for each sale."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:294
+#: ../cart66 (trunk)/admin/settings/integrations.php:326
 msgid ""
 "Note: To disable iDevAffiliate integration, simply delete this URL and click "
 "Save."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:302
+#: ../cart66 (trunk)/admin/settings/integrations.php:332
+msgid "Coupon Code Tracking"
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/integrations.php:338
+msgid ""
+"Set this to yes to enable sending coupon codes to iDevAffiliate for "
+"commission tracking."
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/integrations.php:344
 msgid ""
 "is The Industry Leader in self managed affiliate program software. Started "
 "in 1999, iDevAffiliate is the original in self managed affiliate software! "
@@ -2907,40 +2987,40 @@ msgid ""
 "runs our"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:302
+#: ../cart66 (trunk)/admin/settings/integrations.php:344
 msgid "Cart66 Affiliate Program"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:310
+#: ../cart66 (trunk)/admin/settings/integrations.php:352
 msgid ""
 "Configure your Zendesk account information to enable remote authentication."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:314
+#: ../cart66 (trunk)/admin/settings/integrations.php:356
 msgid "Token"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:317
+#: ../cart66 (trunk)/admin/settings/integrations.php:359
 msgid ""
 "Look in your Zendesk account under \"Settings > Security > Authentication > "
 "Single Sign-On\" for the Authentication Token."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:321
+#: ../cart66 (trunk)/admin/settings/integrations.php:363
 msgid "Prefix"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:324
+#: ../cart66 (trunk)/admin/settings/integrations.php:366
 msgid ""
 "The prefix is the first part of your zendesk account URL. For example, if "
 "your Zendesk URL is"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:324
+#: ../cart66 (trunk)/admin/settings/integrations.php:366
 msgid "Then your prefix is"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/integrations.php:330
+#: ../cart66 (trunk)/admin/settings/integrations.php:372
 msgid ""
 "is the industry leader in web-based help desk software with an elegant "
 "support ticket system and a self-service customer support platform. Agile, "
@@ -2953,17 +3033,17 @@ msgid "Main Settings"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/main.php:37
-#: (trunk)/admin/settings/main.php:235
+#: (trunk)/admin/settings/main.php:237
 msgid "Status Options"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/main.php:38
-#: (trunk)/admin/settings/main.php:250
+#: (trunk)/admin/settings/main.php:252
 msgid "Store Home Page"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/main.php:39
-#: (trunk)/admin/settings/main.php:283
+#: (trunk)/admin/settings/main.php:285
 msgid "Admin Roles"
 msgstr ""
 
@@ -3090,33 +3170,33 @@ msgstr ""
 msgid "Use this option to enable the edit product links on your product pages"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:198
+#: ../cart66 (trunk)/admin/settings/main.php:199
 msgid "Out of Stock Label"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:202
+#: ../cart66 (trunk)/admin/settings/main.php:203
 msgid ""
 "Set the label for the out of stock label for products.  Default: Out of stock"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:207
+#: ../cart66 (trunk)/admin/settings/main.php:209
 msgid "Digital Product Folder"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:214
-#: (trunk)/admin/settings/main.php:215
+#: ../cart66 (trunk)/admin/settings/main.php:216
+#: (trunk)/admin/settings/main.php:217
 msgid "WARNING"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:214
+#: ../cart66 (trunk)/admin/settings/main.php:216
 msgid "This directory does not exist"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:215
+#: ../cart66 (trunk)/admin/settings/main.php:217
 msgid "WordPress cannot write to this folder"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:218
+#: ../cart66 (trunk)/admin/settings/main.php:220
 msgid ""
 "Enter the absolute path to where you want to store your digital products. We "
 "suggest you choose a folder that is not web accessible. To help you figure "
@@ -3124,37 +3204,37 @@ msgid ""
 "the page you are viewing now."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:220
+#: ../cart66 (trunk)/admin/settings/main.php:222
 msgid ""
 "Please note you should NOT enter a web url starting with http:// Your "
 "filesystem path will start with just a /"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:225
+#: ../cart66 (trunk)/admin/settings/main.php:227
 msgid "Custom CSS URL"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:228
+#: ../cart66 (trunk)/admin/settings/main.php:230
 msgid ""
 "If you would like to override the default styles, you may enter the URL to "
 "your custom style sheet."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:236
+#: ../cart66 (trunk)/admin/settings/main.php:238
 msgid ""
 "Define the order status options to suit your business needs. For example, "
 "you may want to have new, complete, and canceled."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:240
+#: ../cart66 (trunk)/admin/settings/main.php:242
 msgid "Order Status Options"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:243
+#: ../cart66 (trunk)/admin/settings/main.php:245
 msgid "Separate values with commas. (ex. new,complete,cancelled)"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:251
+#: ../cart66 (trunk)/admin/settings/main.php:253
 msgid ""
 "This is the link to the page of your site that you consider to be the home "
 "page of your store.\n"
@@ -3163,41 +3243,25 @@ msgid ""
 "button to always go to the store home page."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:256
+#: ../cart66 (trunk)/admin/settings/main.php:258
 msgid "Store URL"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:259
+#: ../cart66 (trunk)/admin/settings/main.php:261
 msgid ""
 "This is the link to the page of your site that you consider to be the home "
 "page of your store."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:284
+#: ../cart66 (trunk)/admin/settings/main.php:286
 msgid ""
 "Set the role required to access the areas of the Cart66 plugin. Note that "
 "the ability to edit these settings requires the \"manage_options\" "
 "capability normally assigned to Administrators."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:289 (trunk)/models/Cart66.php:691
+#: ../cart66 (trunk)/admin/settings/main.php:291 (trunk)/models/Cart66.php:702
 msgid "Orders"
-msgstr ""
-
-#: ../cart66 (trunk)/admin/settings/main.php:292
-#: (trunk)/admin/settings/main.php:303 (trunk)/admin/settings/main.php:314
-#: (trunk)/admin/settings/main.php:325 (trunk)/admin/settings/main.php:336
-#: (trunk)/admin/settings/main.php:347 (trunk)/admin/settings/main.php:358
-#: (trunk)/admin/settings/main.php:369 (trunk)/admin/settings/main.php:380
-msgid "Administrator"
-msgstr ""
-
-#: ../cart66 (trunk)/admin/settings/main.php:293
-#: (trunk)/admin/settings/main.php:304 (trunk)/admin/settings/main.php:315
-#: (trunk)/admin/settings/main.php:326 (trunk)/admin/settings/main.php:337
-#: (trunk)/admin/settings/main.php:348 (trunk)/admin/settings/main.php:359
-#: (trunk)/admin/settings/main.php:370 (trunk)/admin/settings/main.php:381
-msgid "Editor"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/main.php:294
@@ -3205,7 +3269,7 @@ msgstr ""
 #: (trunk)/admin/settings/main.php:327 (trunk)/admin/settings/main.php:338
 #: (trunk)/admin/settings/main.php:349 (trunk)/admin/settings/main.php:360
 #: (trunk)/admin/settings/main.php:371 (trunk)/admin/settings/main.php:382
-msgid "Author"
+msgid "Administrator"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/main.php:295
@@ -3213,78 +3277,94 @@ msgstr ""
 #: (trunk)/admin/settings/main.php:328 (trunk)/admin/settings/main.php:339
 #: (trunk)/admin/settings/main.php:350 (trunk)/admin/settings/main.php:361
 #: (trunk)/admin/settings/main.php:372 (trunk)/admin/settings/main.php:383
+msgid "Editor"
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/main.php:296
+#: (trunk)/admin/settings/main.php:307 (trunk)/admin/settings/main.php:318
+#: (trunk)/admin/settings/main.php:329 (trunk)/admin/settings/main.php:340
+#: (trunk)/admin/settings/main.php:351 (trunk)/admin/settings/main.php:362
+#: (trunk)/admin/settings/main.php:373 (trunk)/admin/settings/main.php:384
+msgid "Author"
+msgstr ""
+
+#: ../cart66 (trunk)/admin/settings/main.php:297
+#: (trunk)/admin/settings/main.php:308 (trunk)/admin/settings/main.php:319
+#: (trunk)/admin/settings/main.php:330 (trunk)/admin/settings/main.php:341
+#: (trunk)/admin/settings/main.php:352 (trunk)/admin/settings/main.php:363
+#: (trunk)/admin/settings/main.php:374 (trunk)/admin/settings/main.php:385
 msgid "Contributor"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:311 (trunk)/models/Cart66.php:693
+#: ../cart66 (trunk)/admin/settings/main.php:313 (trunk)/models/Cart66.php:704
 msgid "PayPal Subscriptions"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:322 (trunk)/models/Cart66.php:694
+#: ../cart66 (trunk)/admin/settings/main.php:324 (trunk)/models/Cart66.php:705
 msgid "Inventory"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:333 (trunk)/models/Cart66.php:695
+#: ../cart66 (trunk)/admin/settings/main.php:335 (trunk)/models/Cart66.php:706
 msgid "Promotions"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:366 (trunk)/models/Cart66.php:698
+#: ../cart66 (trunk)/admin/settings/main.php:368 (trunk)/models/Cart66.php:709
 msgid "Reports"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:377 (trunk)/models/Cart66.php:699
+#: ../cart66 (trunk)/admin/settings/main.php:379 (trunk)/models/Cart66.php:710
 msgid "Accounts"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:392
+#: ../cart66 (trunk)/admin/settings/main.php:394
 msgid "Blog Post Access Denied Messages"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:393
+#: ../cart66 (trunk)/admin/settings/main.php:395
 msgid ""
 "These are the messages your visitors will see when attempting to access a "
 "blog post that they do not have permission to view."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:397
+#: ../cart66 (trunk)/admin/settings/main.php:399
 msgid "Not Logged In"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:400
+#: ../cart66 (trunk)/admin/settings/main.php:402
 msgid ""
 "The message that appears when a private posted is accessed by a visitor who "
 "is not logged in."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:404
+#: ../cart66 (trunk)/admin/settings/main.php:406
 msgid "Access denied"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:407
+#: ../cart66 (trunk)/admin/settings/main.php:409
 msgid ""
 "The message that appears when a logged in member's subscription does not "
 "allow them to view the post."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:432
+#: ../cart66 (trunk)/admin/settings/main.php:434
 msgid "Activation"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:435
+#: ../cart66 (trunk)/admin/settings/main.php:437
 msgid ""
 "Please enter your Cart66 order number to get automatic upgrades and support."
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:436
+#: ../cart66 (trunk)/admin/settings/main.php:438
 msgid "If you do not have an order number please"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:436
+#: ../cart66 (trunk)/admin/settings/main.php:438
 msgid "buy a license"
 msgstr ""
 
-#: ../cart66 (trunk)/admin/settings/main.php:445
-#: (trunk)/models/Cart66Ajax.php:530
+#: ../cart66 (trunk)/admin/settings/main.php:447
+#: (trunk)/models/Cart66Ajax.php:342
 msgid "Invalid Order Number"
 msgstr ""
 
@@ -3929,6 +4009,7 @@ msgid "Type in a product name"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/tax.php:28
+#: (trunk)/models/Cart66Ajax.php:251
 #: (trunk)/pro/models/Cart66ProCommon.php:129
 msgid "Error"
 msgstr ""
@@ -3959,7 +4040,7 @@ msgid "in your PayPal account"
 msgstr ""
 
 #: ../cart66 (trunk)/admin/settings/tax.php:42 (trunk)/views/2checkout.php:94
-#: (trunk)/views/checkout-form.php:84 (trunk)/views/checkout-form.php:162
+#: (trunk)/views/checkout-form.php:84 (trunk)/views/checkout-form.php:170
 #: (trunk)/views/checkout.php:379
 #: (trunk)/views/mijireh/shipping_address.php:93
 msgid "State"
@@ -4002,59 +4083,63 @@ msgid "Save Rates"
 msgstr ""
 
 #: ../cart66 (trunk)/gateways/Cart662Checkout.php:21
-#: (trunk)/gateways/Cart66GatewayAbstract.php:158
+#: (trunk)/gateways/Cart66GatewayAbstract.php:229
 #: (trunk)/gateways/Cart66Mijireh.php:147
 #: (trunk)/models/Cart66ShortcodeManager.php:111
 #: (trunk)/pro/views/account-create.php:20 (trunk)/views/checkout.php:46
-#: (trunk)/views/paypal-express.php:90
+#: (trunk)/views/paypal-express.php:92
 msgid "Passwords do not match"
 msgstr ""
 
-#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:110
+#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:150
 msgid "Billing "
 msgstr ""
 
-#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:110
-#: (trunk)/gateways/Cart66GatewayAbstract.php:135
-#: (trunk)/gateways/Cart66GatewayAbstract.php:179
+#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:150
+#: (trunk)/gateways/Cart66GatewayAbstract.php:194
+#: (trunk)/gateways/Cart66GatewayAbstract.php:206
+#: (trunk)/gateways/Cart66GatewayAbstract.php:281
+#: (trunk)/gateways/Cart66ManualGateway.php:39
 msgid " required"
 msgstr ""
 
-#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:135
+#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:194
+#: (trunk)/gateways/Cart66GatewayAbstract.php:206
+#: (trunk)/gateways/Cart66ManualGateway.php:39
 msgid "Payment "
 msgstr ""
 
-#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:140
+#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:211
 msgid "Invalid credit card number"
 msgstr ""
 
-#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:145
-#: (trunk)/gateways/Cart66ManualGateway.php:23
+#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:216
+#: (trunk)/gateways/Cart66ManualGateway.php:55
 msgid "Email address is not valid"
 msgstr ""
 
-#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:150
-#: (trunk)/gateways/Cart66ManualGateway.php:28
+#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:221
+#: (trunk)/gateways/Cart66ManualGateway.php:60
 msgid "The Special Instructions Field is required"
 msgstr ""
 
-#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:179
+#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:281
 msgid "Shipping "
 msgstr ""
 
-#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:249
+#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:351
 msgid "Unable to determine tax rate because shipping data is unavailable"
 msgstr ""
 
-#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:331
+#: ../cart66 (trunk)/gateways/Cart66GatewayAbstract.php:464
 msgid "There must be at least one item in the cart."
 msgstr ""
 
-#: ../cart66 (trunk)/gateways/Cart66ManualGateway.php:13
+#: ../cart66 (trunk)/gateways/Cart66ManualGateway.php:45
 msgid "Email address is required"
 msgstr ""
 
-#: ../cart66 (trunk)/gateways/Cart66ManualGateway.php:18
+#: ../cart66 (trunk)/gateways/Cart66ManualGateway.php:50
 msgid "Phone number is required"
 msgstr ""
 
@@ -4073,12 +4158,12 @@ msgstr ""
 
 #: ../cart66 (trunk)/js/cart66Dialog.php:108 (trunk)/js/cart66Dialog.php:114
 #: (trunk)/models/Cart66ButtonManager.php:19
-#: (trunk)/models/Cart66Dialog.php:198 (trunk)/models/Cart66Dialog.php:222
+#: (trunk)/models/Cart66Dialog.php:203 (trunk)/models/Cart66Dialog.php:227
 msgid "Add to Cart"
 msgstr ""
 
 #: ../cart66 (trunk)/js/cart66Dialog.php:108 (trunk)/js/cart66Dialog.php:114
-#: (trunk)/models/Cart66Dialog.php:216 (trunk)/models/Cart66Dialog.php:222
+#: (trunk)/models/Cart66Dialog.php:221 (trunk)/models/Cart66Dialog.php:227
 msgid "Cart66 Add To Cart Button"
 msgstr ""
 
@@ -4095,27 +4180,27 @@ msgid "Shortcode Reference"
 msgstr ""
 
 #: ../cart66 (trunk)/js/cart66Dialog.php:251
-#: (trunk)/models/Cart66Dialog.php:256
+#: (trunk)/models/Cart66Dialog.php:261
 msgid "Your products"
 msgstr ""
 
 #: ../cart66 (trunk)/js/cart66Dialog.php:255
-#: (trunk)/models/Cart66Dialog.php:274
+#: (trunk)/models/Cart66Dialog.php:279
 msgid "CSS style"
 msgstr ""
 
 #: ../cart66 (trunk)/js/cart66Dialog.php:259
-#: (trunk)/models/Cart66Dialog.php:288
+#: (trunk)/models/Cart66Dialog.php:293
 msgid "Show price"
 msgstr ""
 
 #: ../cart66 (trunk)/js/cart66Dialog.php:267
-#: (trunk)/models/Cart66Dialog.php:294
+#: (trunk)/models/Cart66Dialog.php:299
 msgid "Button path"
 msgstr ""
 
 #: ../cart66 (trunk)/js/cart66Dialog.php:271
-#: (trunk)/models/Cart66Dialog.php:298
+#: (trunk)/models/Cart66Dialog.php:303
 msgid "Preview"
 msgstr ""
 
@@ -4123,42 +4208,42 @@ msgstr ""
 msgid "Insert"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66.php:266
+#: ../cart66 (trunk)/models/Cart66.php:274
 msgid "A problem with Cart66 has been detected."
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66.php:267
+#: ../cart66 (trunk)/models/Cart66.php:275
 msgid ""
 "The following page(s) are missing from the proper page structure. This could "
 "be because the slug was renamed or the page was moved, set to draft, "
 "private, or deleted."
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66.php:269
+#: ../cart66 (trunk)/models/Cart66.php:277
 msgid "Please refer to"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66.php:269
+#: ../cart66 (trunk)/models/Cart66.php:277
 msgid "this article</a> for the proper configuration of pages for Cart66."
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66.php:269
+#: ../cart66 (trunk)/models/Cart66.php:277
 msgid "Cart66 will not work properly until this issue is resolved."
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66.php:340
+#: ../cart66 (trunk)/models/Cart66.php:348
 msgid "Store Pages"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66.php:1083
+#: ../cart66 (trunk)/models/Cart66.php:1097
 msgid "Feature Levels"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66.php:1234
+#: ../cart66 (trunk)/models/Cart66.php:1248
 msgid "You must be logged in to view this"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66.php:1241
+#: ../cart66 (trunk)/models/Cart66.php:1255
 msgid "Your current subscription does not allow you to view this"
 msgstr ""
 
@@ -4183,100 +4268,89 @@ msgstr ""
 msgid "Email not sent. There is an unknown error."
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Ajax.php:313
-#: (trunk)/models/Cart66Ajax.php:355 (trunk)/models/Cart66Ajax.php:398
-msgid "We have added"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:313
-#: (trunk)/models/Cart66Ajax.php:355 (trunk)/models/Cart66Ajax.php:398
+#: ../cart66 (trunk)/models/Cart66Ajax.php:252
 msgid ""
-"to the cart because that is the minimum required quantity for this product"
+"An error occurred while trying to add a product to the cart. Please contact "
+"the site administrator."
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Ajax.php:317
-#: (trunk)/models/Cart66Ajax.php:359 (trunk)/models/Cart66Ajax.php:402
-msgid "We have only added"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:317
-#: (trunk)/models/Cart66Ajax.php:359 (trunk)/models/Cart66Ajax.php:402
-msgid ""
-"to the cart because that is the maximum allowed quantity for this product"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:324
-#: (trunk)/models/Cart66Ajax.php:366 (trunk)/models/Cart66Ajax.php:409
-msgid "We have successfully added"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:324
-#: (trunk)/models/Cart66Ajax.php:366 (trunk)/models/Cart66Ajax.php:409
-msgid "to the cart"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:333
-#: (trunk)/models/Cart66Cart.php:1202
-msgid "The quantity for"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:333
-#: (trunk)/models/Cart66Cart.php:1202
-msgid "could not be changed to"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:333
-#: (trunk)/models/Cart66Cart.php:1202
-msgid "because we only have"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:333
-#: (trunk)/models/Cart66Cart.php:1202
-msgid "in stock"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:333
-#: (trunk)/models/Cart66Ajax.php:375 (trunk)/models/Cart66Ajax.php:418
-msgid "Your cart has been updated based on our available inventory"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:341
-#: (trunk)/models/Cart66Ajax.php:382 (trunk)/models/Cart66Ajax.php:424
-#: (trunk)/models/Cart66Ajax.php:595 (trunk)/models/Cart66Cart.php:147
-#: (trunk)/models/Cart66Cart.php:177 (trunk)/models/Cart66Cart.php:953
-msgid "out of stock"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:342
-#: (trunk)/models/Cart66Ajax.php:383 (trunk)/models/Cart66Ajax.php:425
-msgid "We could not add"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:342
-#: (trunk)/models/Cart66Ajax.php:383 (trunk)/models/Cart66Ajax.php:425
-msgid "to the cart because we are "
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:375
-#: (trunk)/models/Cart66Ajax.php:418
-msgid "We only added"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:375
-#: (trunk)/models/Cart66Ajax.php:418
-msgid "to the cart because that is all we have in stock"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Ajax.php:538
+#: ../cart66 (trunk)/models/Cart66Ajax.php:350
 msgid "Warning"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Ajax.php:399
+msgid "Currently In Stock"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Ajax.php:407
+#: (trunk)/models/Cart66Cart.php:174 (trunk)/models/Cart66Cart.php:225
+#: (trunk)/models/Cart66Cart.php:1021
+msgid "out of stock"
 msgstr ""
 
 #: ../cart66 (trunk)/models/Cart66ButtonManager.php:8
 msgid "Could not load product information"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Cart.php:439
+#: ../cart66 (trunk)/models/Cart66Cart.php:121
+msgid "We could not add the product"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Cart.php:121
+msgid "to the cart because the product options are invalid."
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Cart.php:164
+#: (trunk)/models/Cart66Cart.php:175 (trunk)/models/Cart66Cart.php:215
+#: (trunk)/models/Cart66Cart.php:226
+msgid "We are not able to fulfill your order for"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Cart.php:164
+#: (trunk)/models/Cart66Cart.php:215 (trunk)/models/Cart66Cart.php:1270
+msgid "because we only have"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Cart.php:164
+#: (trunk)/models/Cart66Cart.php:215
+msgid "in stock."
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Cart.php:165
+#: (trunk)/models/Cart66Cart.php:176 (trunk)/models/Cart66Cart.php:216
+#: (trunk)/models/Cart66Cart.php:227
+msgid "Your cart has been updated based on our available inventory."
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Cart.php:175
+#: (trunk)/models/Cart66Cart.php:226
+msgid "because it is"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Cart.php:196
+#: (trunk)/models/Cart66Cart.php:247
+msgid "We have successfully added"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Cart.php:196
+#: (trunk)/models/Cart66Cart.php:247
+msgid "to the cart"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Cart.php:507
 msgid "Select a Shipping Method"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Cart.php:1270
+msgid "The quantity for"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Cart.php:1270
+msgid "could not be changed to"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Cart.php:1270
+msgid "in stock"
 msgstr ""
 
 #: ../cart66 (trunk)/models/Cart66CartWidget.php:76
@@ -4299,23 +4373,23 @@ msgstr ""
 msgid "Show shipping in widget"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Common.php:1042
+#: ../cart66 (trunk)/models/Cart66Common.php:1064
 msgid ""
 "We're sorry.<br/>Your order could not be completed for the following reasons"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Common.php:1426
-#: (trunk)/models/Cart66Common.php:1453
+#: ../cart66 (trunk)/models/Cart66Common.php:1448
+#: (trunk)/models/Cart66Common.php:1475
 msgid "Now"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Common.php:1434
-#: (trunk)/models/Cart66Common.php:1438 (trunk)/models/Cart66Common.php:1442
+#: ../cart66 (trunk)/models/Cart66Common.php:1456
+#: (trunk)/models/Cart66Common.php:1460 (trunk)/models/Cart66Common.php:1464
 msgid " ago"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Common.php:1461
-#: (trunk)/models/Cart66Common.php:1465 (trunk)/models/Cart66Common.php:1469
+#: ../cart66 (trunk)/models/Cart66Common.php:1483
+#: (trunk)/models/Cart66Common.php:1487 (trunk)/models/Cart66Common.php:1491
 msgid " to go"
 msgstr ""
 
@@ -4395,7 +4469,7 @@ msgid "Estimate"
 msgstr ""
 
 #: ../cart66 (trunk)/models/Cart66Dashboard.php:246
-#: (trunk)/models/Cart66Dialog.php:250 (trunk)/pro/admin/shipping.php:20
+#: (trunk)/models/Cart66Dialog.php:255 (trunk)/pro/admin/shipping.php:20
 msgid "loading..."
 msgstr ""
 
@@ -4490,207 +4564,221 @@ msgstr ""
 msgid "Cart Total"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:22
-#: (trunk)/models/Cart66Dialog.php:24
+#: ../cart66 (trunk)/models/Cart66Dialog.php:27
+#: (trunk)/models/Cart66Dialog.php:29
 msgid "Add Cart66 Shortcodes"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:81
+#: ../cart66 (trunk)/models/Cart66Dialog.php:86
 msgid "Price:"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:96
+#: ../cart66 (trunk)/models/Cart66Dialog.php:101
 msgid "No Products"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:246
+#: ../cart66 (trunk)/models/Cart66Dialog.php:251
 msgid "Shortcodes"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:253
+#: ../cart66 (trunk)/models/Cart66Dialog.php:258
 msgid "Insert A Product"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:261
+#: ../cart66 (trunk)/models/Cart66Dialog.php:266
 msgid "User Defined"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:262
+#: ../cart66 (trunk)/models/Cart66Dialog.php:267
 msgid "Predefined"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:263
+#: ../cart66 (trunk)/models/Cart66Dialog.php:268
 msgid "Off"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:266
+#: ../cart66 (trunk)/models/Cart66Dialog.php:271
 msgid "Default Quantity"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:270
+#: ../cart66 (trunk)/models/Cart66Dialog.php:275
 msgid "Button Text"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:291
+#: ../cart66 (trunk)/models/Cart66Dialog.php:296
 msgid "Price Only"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:308
+#: ../cart66 (trunk)/models/Cart66Dialog.php:313
 msgid ""
 "Listens for PayPal Express callbacks <br/>Belongs on system page store/"
 "express"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:309
+#: ../cart66 (trunk)/models/Cart66Dialog.php:314
 msgid ""
 "PayPal Instant Payment Notification <br/>Belongs on system page store/ipn"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:310
+#: ../cart66 (trunk)/models/Cart66Dialog.php:315
 msgid ""
 "Shows the customer's receipt after a successful sale <br/>Belongs on system "
 "page store/receipt"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:313
+#: ../cart66 (trunk)/models/Cart66Dialog.php:318
 msgid "Create add to cart button"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:314
+#: ../cart66 (trunk)/models/Cart66Dialog.php:319
 msgid "Show the shopping cart"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:315
+#: ../cart66 (trunk)/models/Cart66Dialog.php:320
 msgid "Show the shopping cart in read-only mode"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:316
+#: ../cart66 (trunk)/models/Cart66Dialog.php:321
 msgid "Mijireh Checkout Accept Credit Cards - PCI Compliant"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:317
+#: ../cart66 (trunk)/models/Cart66Dialog.php:322
+msgid "Stripe Checkout form"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Dialog.php:323
+msgid "2Checkout checkout form"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Dialog.php:324
 msgid "Checkout form that does not process credit cards"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:318
+#: ../cart66 (trunk)/models/Cart66Dialog.php:325
 msgid "PayPal Website Payments Standard checkout button"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:319
+#: ../cart66 (trunk)/models/Cart66Dialog.php:326
 msgid "PayPal Express checkout button"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:320
+#: ../cart66 (trunk)/models/Cart66Dialog.php:327
 msgid "Clear the contents of the shopping cart"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:321
+#: ../cart66 (trunk)/models/Cart66Dialog.php:328
 msgid "Show the Cart66 sidebar widget"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:322
+#: ../cart66 (trunk)/models/Cart66Dialog.php:329
 msgid "Display content one time immediately after a sale"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:326
-msgid "Show link to manage subscription account information"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Dialog.php:327
-msgid "Account login form"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Dialog.php:328
-msgid "Logs user out of account"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Dialog.php:329
-msgid "Show link to log out of account"
-msgstr ""
-
 #: ../cart66 (trunk)/models/Cart66Dialog.php:330
-msgid "Show a member when their account expires"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Dialog.php:331
-msgid "Link to cancel PayPal subscription"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Dialog.php:332
-msgid "PayLeap checkout form"
-msgstr ""
-
-#: ../cart66 (trunk)/models/Cart66Dialog.php:333
-msgid "Authorize.net (or AIM compatible gateway) checkout form"
+msgid ""
+"Add order information to an affiliate URL that can be used inside the "
+"post_sale shortcode. The only attribute is \"display\""
 msgstr ""
 
 #: ../cart66 (trunk)/models/Cart66Dialog.php:334
-msgid "Eway checkout form"
+msgid "Show link to manage subscription account information"
 msgstr ""
 
 #: ../cart66 (trunk)/models/Cart66Dialog.php:335
-msgid "Merchant Warrior checkout form"
+msgid "Account login form"
 msgstr ""
 
 #: ../cart66 (trunk)/models/Cart66Dialog.php:336
-msgid "PayPal Pro checkout form"
+msgid "Logs user out of account"
 msgstr ""
 
 #: ../cart66 (trunk)/models/Cart66Dialog.php:337
-msgid "Show the terms of service agreement"
+msgid "Show link to log out of account"
 msgstr ""
 
 #: ../cart66 (trunk)/models/Cart66Dialog.php:338
+msgid "Show a member when their account expires"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Dialog.php:339
+msgid "Link to cancel PayPal subscription"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Dialog.php:340
+msgid "PayLeap checkout form"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Dialog.php:341
+msgid "Authorize.net (or AIM compatible gateway) checkout form"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Dialog.php:342
+msgid "Eway checkout form"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Dialog.php:343
+msgid "Merchant Warrior checkout form"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Dialog.php:344
+msgid "PayPal Pro checkout form"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Dialog.php:345
+msgid "Show the terms of service agreement"
+msgstr ""
+
+#: ../cart66 (trunk)/models/Cart66Dialog.php:346
 msgid ""
 "Show the name of the subscription feature level for the currently logged in "
 "user"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:339
+#: ../cart66 (trunk)/models/Cart66Dialog.php:347
 msgid "Show the name of the subscription for the currently logged in user"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:340
+#: ../cart66 (trunk)/models/Cart66Dialog.php:348
 msgid "Listens for remote login calls from Zendesk"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:341
+#: ../cart66 (trunk)/models/Cart66Dialog.php:349
 msgid ""
 "Hide content from members without the listed feature levels - opposite of "
 "[show_to]"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:342
+#: ../cart66 (trunk)/models/Cart66Dialog.php:350
 msgid ""
 "Show content only to members with the listed feature levels - opposite of "
 "[hide_from]"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:343
+#: ../cart66 (trunk)/models/Cart66Dialog.php:351
 msgid ""
 "Allow Cart66 members to opt out of receiving notifications about the status "
 "of their account."
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:346
+#: ../cart66 (trunk)/models/Cart66Dialog.php:354
 msgid ""
 "Listens for spreedly account changes <br/>Belongs on system page store/"
 "spreedly"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:351
+#: ../cart66 (trunk)/models/Cart66Dialog.php:359
 msgid "Insert A System Shortcode"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:354
+#: ../cart66 (trunk)/models/Cart66Dialog.php:362
 msgid "Shortcode Quick Reference"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:374
+#: ../cart66 (trunk)/models/Cart66Dialog.php:382
 msgid "System Shortcodes"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66Dialog.php:395
+#: ../cart66 (trunk)/models/Cart66Dialog.php:403
 msgid "Insert Shortcode"
 msgstr ""
 
@@ -4847,7 +4935,7 @@ msgid "Shipping Last Name"
 msgstr ""
 
 #: ../cart66 (trunk)/models/Cart66Exporter.php:26
-#: (trunk)/views/2checkout.php:60 (trunk)/views/checkout-form.php:126
+#: (trunk)/views/2checkout.php:60 (trunk)/views/checkout-form.php:134
 #: (trunk)/views/mijireh/shipping_address.php:59
 msgid "Shipping Address"
 msgstr ""
@@ -4893,8 +4981,8 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-fulfillment.php:351
 #: (trunk)/pro/views/emails/default-email-receipt.php:293
 #: (trunk)/pro/views/emails/default-email-receipt.php:616
-#: (trunk)/pro/views/emails/default-email-status.php:288
-#: (trunk)/pro/views/emails/default-email-status.php:599
+#: (trunk)/pro/views/emails/default-email-status.php:291
+#: (trunk)/pro/views/emails/default-email-status.php:606
 msgid "ORDER NUMBER"
 msgstr ""
 
@@ -4902,8 +4990,8 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-fulfillment.php:352
 #: (trunk)/pro/views/emails/default-email-receipt.php:303
 #: (trunk)/pro/views/emails/default-email-receipt.php:617
-#: (trunk)/pro/views/emails/default-email-status.php:299
-#: (trunk)/pro/views/emails/default-email-status.php:601
+#: (trunk)/pro/views/emails/default-email-status.php:302
+#: (trunk)/pro/views/emails/default-email-status.php:608
 #: (trunk)/pro/views/emails/email-products.php:222
 #: (trunk)/pro/views/emails/email-products.php:270
 #: (trunk)/pro/views/emails/email-receipt.php:210
@@ -4916,16 +5004,16 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-receipt.php:506
 #: (trunk)/pro/views/emails/default-email-receipt.php:619
 #: (trunk)/pro/views/emails/default-email-status.php:136
-#: (trunk)/pro/views/emails/default-email-status.php:303
-#: (trunk)/pro/views/emails/default-email-status.php:489
-#: (trunk)/pro/views/emails/default-email-status.php:603
+#: (trunk)/pro/views/emails/default-email-status.php:310
+#: (trunk)/pro/views/emails/default-email-status.php:496
+#: (trunk)/pro/views/emails/default-email-status.php:610
 #: (trunk)/pro/views/emails/email-products.php:22
 #: (trunk)/pro/views/emails/email-products.php:87
 #: (trunk)/pro/views/emails/email-products.php:236
 #: (trunk)/pro/views/emails/email-products.php:280
 #: (trunk)/pro/views/emails/email-receipt.php:85
-#: (trunk)/pro/views/emails/email-receipt.php:224 (trunk)/views/cart.php:146
-#: (trunk)/views/receipt.php:307 (trunk)/views/receipt_print_version.php:163
+#: (trunk)/pro/views/emails/email-receipt.php:224 (trunk)/views/cart.php:155
+#: (trunk)/views/receipt.php:330 (trunk)/views/receipt_print_version.php:163
 msgid "Item Price"
 msgstr ""
 
@@ -4935,24 +5023,24 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-receipt.php:509
 #: (trunk)/pro/views/emails/default-email-receipt.php:620
 #: (trunk)/pro/views/emails/default-email-status.php:139
-#: (trunk)/pro/views/emails/default-email-status.php:304
-#: (trunk)/pro/views/emails/default-email-status.php:492
-#: (trunk)/pro/views/emails/default-email-status.php:604
+#: (trunk)/pro/views/emails/default-email-status.php:311
+#: (trunk)/pro/views/emails/default-email-status.php:499
+#: (trunk)/pro/views/emails/default-email-status.php:611
 #: (trunk)/pro/views/emails/email-products.php:25
 #: (trunk)/pro/views/emails/email-products.php:90
 #: (trunk)/pro/views/emails/email-products.php:237
 #: (trunk)/pro/views/emails/email-products.php:281
 #: (trunk)/pro/views/emails/email-receipt.php:88
-#: (trunk)/pro/views/emails/email-receipt.php:225 (trunk)/views/cart.php:147
-#: (trunk)/views/receipt.php:308 (trunk)/views/receipt_print_version.php:164
+#: (trunk)/pro/views/emails/email-receipt.php:225 (trunk)/views/cart.php:156
+#: (trunk)/views/receipt.php:331 (trunk)/views/receipt_print_version.php:164
 msgid "Item Total"
 msgstr ""
 
 #: ../cart66 (trunk)/models/Cart66Notifications.php:115
 #: (trunk)/pro/views/emails/default-email-receipt.php:337
 #: (trunk)/pro/views/emails/default-email-receipt.php:624
-#: (trunk)/pro/views/emails/default-email-status.php:323
-#: (trunk)/pro/views/emails/default-email-status.php:608
+#: (trunk)/pro/views/emails/default-email-status.php:330
+#: (trunk)/pro/views/emails/default-email-status.php:615
 #: (trunk)/pro/views/emails/email-products.php:258
 #: (trunk)/pro/views/emails/email-products.php:300
 #: (trunk)/pro/views/emails/email-receipt.php:244
@@ -4964,8 +5052,8 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-fulfillment.php:354
 #: (trunk)/pro/views/emails/default-email-receipt.php:340
 #: (trunk)/pro/views/emails/default-email-receipt.php:625
-#: (trunk)/pro/views/emails/default-email-status.php:326
-#: (trunk)/pro/views/emails/default-email-status.php:609
+#: (trunk)/pro/views/emails/default-email-status.php:333
+#: (trunk)/pro/views/emails/default-email-status.php:616
 #: (trunk)/pro/views/emails/email-receipt.php:247
 msgid "SHIPPING INFORMATION"
 msgstr ""
@@ -4973,8 +5061,8 @@ msgstr ""
 #: ../cart66 (trunk)/models/Cart66Notifications.php:131
 #: (trunk)/pro/views/emails/default-email-receipt.php:353
 #: (trunk)/pro/views/emails/default-email-receipt.php:631
-#: (trunk)/pro/views/emails/default-email-status.php:339
-#: (trunk)/pro/views/emails/default-email-status.php:615
+#: (trunk)/pro/views/emails/default-email-status.php:346
+#: (trunk)/pro/views/emails/default-email-status.php:622
 #: (trunk)/pro/views/emails/email-receipt.php:260
 msgid "BILLING INFORMATION"
 msgstr ""
@@ -4982,8 +5070,8 @@ msgstr ""
 #: ../cart66 (trunk)/models/Cart66Notifications.php:161
 #: (trunk)/pro/views/emails/default-email-receipt.php:383
 #: (trunk)/pro/views/emails/default-email-receipt.php:638
-#: (trunk)/pro/views/emails/default-email-status.php:367
-#: (trunk)/pro/views/emails/default-email-status.php:622
+#: (trunk)/pro/views/emails/default-email-status.php:374
+#: (trunk)/pro/views/emails/default-email-status.php:629
 #: (trunk)/pro/views/emails/email-receipt.php:290
 msgid "DOWNLOAD LINK"
 msgstr ""
@@ -4991,8 +5079,8 @@ msgstr ""
 #: ../cart66 (trunk)/models/Cart66Notifications.php:161
 #: (trunk)/pro/views/emails/default-email-receipt.php:383
 #: (trunk)/pro/views/emails/default-email-receipt.php:638
-#: (trunk)/pro/views/emails/default-email-status.php:367
-#: (trunk)/pro/views/emails/default-email-status.php:622
+#: (trunk)/pro/views/emails/default-email-status.php:374
+#: (trunk)/pro/views/emails/default-email-status.php:629
 #: (trunk)/pro/views/emails/email-receipt.php:290
 msgid "Click the link below to download your order."
 msgstr ""
@@ -5000,8 +5088,8 @@ msgstr ""
 #: ../cart66 (trunk)/models/Cart66Notifications.php:164
 #: (trunk)/pro/views/emails/default-email-receipt.php:386
 #: (trunk)/pro/views/emails/default-email-receipt.php:639
-#: (trunk)/pro/views/emails/default-email-status.php:370
-#: (trunk)/pro/views/emails/default-email-status.php:623
+#: (trunk)/pro/views/emails/default-email-status.php:377
+#: (trunk)/pro/views/emails/default-email-status.php:630
 #: (trunk)/pro/views/emails/email-receipt.php:293
 msgid "VIEW RECEIPT ONLINE"
 msgstr ""
@@ -5009,8 +5097,8 @@ msgstr ""
 #: ../cart66 (trunk)/models/Cart66Notifications.php:164
 #: (trunk)/pro/views/emails/default-email-receipt.php:386
 #: (trunk)/pro/views/emails/default-email-receipt.php:639
-#: (trunk)/pro/views/emails/default-email-status.php:370
-#: (trunk)/pro/views/emails/default-email-status.php:623
+#: (trunk)/pro/views/emails/default-email-status.php:377
+#: (trunk)/pro/views/emails/default-email-status.php:630
 #: (trunk)/pro/views/emails/email-receipt.php:293
 msgid "Click the link below to view your receipt online."
 msgstr ""
@@ -5122,11 +5210,11 @@ msgstr ""
 msgid "Your notification settings have been saved."
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66ShortcodeManager.php:1173
+#: ../cart66 (trunk)/models/Cart66ShortcodeManager.php:1188
 msgid "This email has already been unsubscribed"
 msgstr ""
 
-#: ../cart66 (trunk)/models/Cart66ShortcodeManager.php:1176
+#: ../cart66 (trunk)/models/Cart66ShortcodeManager.php:1191
 msgid "This email does not exist in our system"
 msgstr ""
 
@@ -5136,14 +5224,14 @@ msgstr ""
 
 #: ../cart66 (trunk)/pro/admin/accounts.php:30 (trunk)/views/2checkout.php:67
 #: (trunk)/views/account-info.php:15 (trunk)/views/checkout-form.php:60
-#: (trunk)/views/checkout-form.php:137 (trunk)/views/paypal-express.php:420
+#: (trunk)/views/checkout-form.php:145 (trunk)/views/paypal-express.php:420
 #: (trunk)/views/mijireh/shipping_address.php:66
 msgid "First name"
 msgstr ""
 
 #: ../cart66 (trunk)/pro/admin/accounts.php:34 (trunk)/views/2checkout.php:72
 #: (trunk)/views/account-info.php:19 (trunk)/views/checkout-form.php:65
-#: (trunk)/views/checkout-form.php:142 (trunk)/views/paypal-express.php:423
+#: (trunk)/views/checkout-form.php:150 (trunk)/views/paypal-express.php:423
 #: (trunk)/views/mijireh/shipping_address.php:71
 msgid "Last name"
 msgstr ""
@@ -5426,29 +5514,29 @@ msgstr ""
 msgid "No matching PayPal Subscriptions found"
 msgstr ""
 
-#: ../cart66 (trunk)/pro/admin/reports.php:17
+#: ../cart66 (trunk)/pro/admin/reports.php:43
 msgid "Total Sales"
 msgstr ""
 
-#: ../cart66 (trunk)/pro/admin/reports.php:22 (trunk)/pro/admin/reports.php:25
+#: ../cart66 (trunk)/pro/admin/reports.php:48 (trunk)/pro/admin/reports.php:51
 msgid "sales"
 msgstr ""
 
-#: ../cart66 (trunk)/pro/admin/reports.php:23 (trunk)/pro/admin/reports.php:26
+#: ../cart66 (trunk)/pro/admin/reports.php:49 (trunk)/pro/admin/reports.php:52
 msgid "income"
 msgstr ""
 
-#: ../cart66 (trunk)/pro/admin/reports.php:83
+#: ../cart66 (trunk)/pro/admin/reports.php:109
 msgid "You have not yet created any products"
 msgstr ""
 
-#: ../cart66 (trunk)/pro/admin/reports.php:87
+#: ../cart66 (trunk)/pro/admin/reports.php:113
 msgid ""
 "Product sales reports are only available in <a href=\"http://cart66.com"
 "\">Cart66 Professional</a>"
 msgstr ""
 
-#: ../cart66 (trunk)/pro/admin/reports.php:92
+#: ../cart66 (trunk)/pro/admin/reports.php:144
 msgid "Daily Income Totals"
 msgstr ""
 
@@ -5746,7 +5834,7 @@ msgstr ""
 msgid "A membership or subscription product is required"
 msgstr ""
 
-#: ../cart66 (trunk)/pro/models/Cart66AdvancedNotifications.php:258
+#: ../cart66 (trunk)/pro/models/Cart66AdvancedNotifications.php:259
 msgid "TEST EMAIL"
 msgstr ""
 
@@ -5892,8 +5980,8 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-fulfillment.php:329
 #: (trunk)/pro/views/emails/default-email-receipt.php:272
 #: (trunk)/pro/views/emails/default-email-receipt.php:595
-#: (trunk)/pro/views/emails/default-email-status.php:267
-#: (trunk)/pro/views/emails/default-email-status.php:578
+#: (trunk)/pro/views/emails/default-email-status.php:270
+#: (trunk)/pro/views/emails/default-email-status.php:585
 msgid "Click the link below to view your receipt online"
 msgstr ""
 
@@ -5954,52 +6042,52 @@ msgstr ""
 #: (trunk)/pro/views/emails/default-email-receipt.php:453
 #: (trunk)/pro/views/emails/default-email-receipt.php:474
 #: (trunk)/pro/views/emails/default-email-reminder.php:280
-#: (trunk)/pro/views/emails/default-email-status.php:436
-#: (trunk)/pro/views/emails/default-email-status.php:457
+#: (trunk)/pro/views/emails/default-email-status.php:443
+#: (trunk)/pro/views/emails/default-email-status.php:464
 msgid "John Doe"
 msgstr ""
 
 #: ../cart66 (trunk)/pro/views/emails/default-email-fulfillment.php:276
 #: (trunk)/pro/views/emails/default-email-receipt.php:454
 #: (trunk)/pro/views/emails/default-email-receipt.php:475
-#: (trunk)/pro/views/emails/default-email-status.php:437
-#: (trunk)/pro/views/emails/default-email-status.php:458
+#: (trunk)/pro/views/emails/default-email-status.php:444
+#: (trunk)/pro/views/emails/default-email-status.php:465
 msgid "1234 My Street"
 msgstr ""
 
 #: ../cart66 (trunk)/pro/views/emails/default-email-fulfillment.php:277
 #: (trunk)/pro/views/emails/default-email-receipt.php:455
 #: (trunk)/pro/views/emails/default-email-receipt.php:476
-#: (trunk)/pro/views/emails/default-email-status.php:438
-#: (trunk)/pro/views/emails/default-email-status.php:459
+#: (trunk)/pro/views/emails/default-email-status.php:445
+#: (trunk)/pro/views/emails/default-email-status.php:466
 msgid "Apt. 2A"
 msgstr ""
 
 #: ../cart66 (trunk)/pro/views/emails/default-email-fulfillment.php:278
 #: (trunk)/pro/views/emails/default-email-receipt.php:456
 #: (trunk)/pro/views/emails/default-email-receipt.php:477
-#: (trunk)/pro/views/emails/default-email-status.php:439
-#: (trunk)/pro/views/emails/default-email-status.php:460
+#: (trunk)/pro/views/emails/default-email-status.php:446
+#: (trunk)/pro/views/emails/default-email-status.php:467
 msgid "Grandville, NE 69835"
 msgstr ""
 
 #: ../cart66 (trunk)/pro/views/emails/default-email-fulfillment.php:279
 #: (trunk)/pro/views/emails/default-email-receipt.php:457
 #: (trunk)/pro/views/emails/default-email-receipt.php:478
-#: (trunk)/pro/views/emails/default-email-status.php:440
-#: (trunk)/pro/views/emails/default-email-status.php:461
+#: (trunk)/pro/views/emails/default-email-status.php:447
+#: (trunk)/pro/views/emails/default-email-status.php:468
 msgid "United States"
 msgstr ""
 
 #: ../cart66 (trunk)/pro/views/emails/default-email-fulfillment.php:281
 #: (trunk)/pro/views/emails/default-email-receipt.php:480
-#: (trunk)/pro/views/emails/default-email-status.php:463
+#: (trunk)/pro/views/emails/default-email-status.php:470
 msgid "FedEx Free"
 msgstr ""
 
 #: ../cart66 (trunk)/pro/views/emails/default-email-fulfillment.php:310
 #: (trunk)/pro/views/emails/default-email-receipt.php:515
-#: (trunk)/pro/views/emails/default-email-status.php:498
+#: (trunk)/pro/views/emails/default-email-status.php:505
 msgid "Test Product"
 msgstr ""
 
@@ -6012,16 +6100,17 @@ msgstr ""
 #: ../cart66 (trunk)/pro/views/emails/default-email-receipt.php:160
 #: (trunk)/pro/views/emails/email-products.php:116
 #: (trunk)/pro/views/emails/email-receipt.php:111
+#: (trunk)/views/receipt.php:367
 msgid "Download"
 msgstr ""
 
 #: ../cart66 (trunk)/pro/views/emails/default-email-receipt.php:267
-#: (trunk)/pro/views/emails/default-email-status.php:262
+#: (trunk)/pro/views/emails/default-email-status.php:265
 msgid "View Receipt Online and Download Order"
 msgstr ""
 
 #: ../cart66 (trunk)/pro/views/emails/default-email-receipt.php:268
-#: (trunk)/pro/views/emails/default-email-status.php:263
+#: (trunk)/pro/views/emails/default-email-status.php:266
 msgid ""
 "Click the link below to view your receipt online and download your order"
 msgstr ""
@@ -6031,17 +6120,17 @@ msgid "TEST - Email Receipt"
 msgstr ""
 
 #: ../cart66 (trunk)/pro/views/emails/default-email-receipt.php:463
-#: (trunk)/pro/views/emails/default-email-status.php:446
+#: (trunk)/pro/views/emails/default-email-status.php:453
 msgid "Phone: (900) 123-6598"
 msgstr ""
 
 #: ../cart66 (trunk)/pro/views/emails/default-email-receipt.php:464
-#: (trunk)/pro/views/emails/default-email-status.php:447
+#: (trunk)/pro/views/emails/default-email-status.php:454
 msgid "johndoe@mydomain.min"
 msgstr ""
 
 #: ../cart66 (trunk)/pro/views/emails/default-email-receipt.php:615
-#: (trunk)/pro/views/emails/default-email-status.php:598
+#: (trunk)/pro/views/emails/default-email-status.php:605
 msgid ""
 "This is a test email receipt with test information. Please create a template "
 "in your settings to get it to look exactly the way you want."
@@ -6098,33 +6187,43 @@ msgid "Your Address"
 msgstr ""
 
 #: ../cart66 (trunk)/views/2checkout.php:77 (trunk)/views/checkout-form.php:70
-#: (trunk)/views/checkout-form.php:147
+#: (trunk)/views/checkout-form.php:155
 #: (trunk)/views/mijireh/shipping_address.php:76
 msgid "Address"
 msgstr ""
 
 #: ../cart66 (trunk)/views/2checkout.php:89 (trunk)/views/checkout-form.php:80
-#: (trunk)/views/checkout-form.php:157
+#: (trunk)/views/checkout-form.php:165
 #: (trunk)/views/mijireh/shipping_address.php:88
 msgid "City"
 msgstr ""
 
 #: ../cart66 (trunk)/views/2checkout.php:109
-#: (trunk)/views/checkout-form.php:105 (trunk)/views/checkout-form.php:182
+#: (trunk)/views/checkout-form.php:105 (trunk)/views/checkout-form.php:190
 #: (trunk)/views/checkout.php:380
 #: (trunk)/views/mijireh/shipping_address.php:108
 msgid "Zip code"
 msgstr ""
 
 #: ../cart66 (trunk)/views/2checkout.php:114
-#: (trunk)/views/checkout-form.php:110 (trunk)/views/checkout-form.php:187
+#: (trunk)/views/checkout-form.php:110 (trunk)/views/checkout-form.php:195
 #: (trunk)/views/mijireh/shipping_address.php:113
 msgid "Country"
 msgstr ""
 
-#: ../cart66 (trunk)/views/2checkout.php:139 (trunk)/views/2checkout.php:141
-#: (trunk)/views/mijireh/shipping_address.php:138
-#: (trunk)/views/mijireh/shipping_address.php:140
+#: ../cart66 (trunk)/views/2checkout.php:133
+#: (trunk)/views/mijireh/shipping_address.php:133
+msgid "Available countries may be limited based"
+msgstr ""
+
+#: ../cart66 (trunk)/views/2checkout.php:133
+#: (trunk)/views/mijireh/shipping_address.php:133
+msgid "on your selected shipping method"
+msgstr ""
+
+#: ../cart66 (trunk)/views/2checkout.php:154 (trunk)/views/2checkout.php:156
+#: (trunk)/views/mijireh/shipping_address.php:154
+#: (trunk)/views/mijireh/shipping_address.php:156
 msgid "Continue"
 msgstr ""
 
@@ -6190,45 +6289,56 @@ msgstr ""
 msgid "Out of stock"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart-button.php:107
+#: ../cart66 (trunk)/views/cart-button.php:106
 msgid "We're Sorry"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart-button.php:123
+#: ../cart66 (trunk)/views/cart-button.php:120
 msgid "Edit this Product"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart-button.php:125
-#: (trunk)/views/cart-button.php:127
+#: ../cart66 (trunk)/views/cart-button.php:122
+#: (trunk)/views/cart-button.php:124
 msgid "Edit this Subscription"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart-button.php:158
-#: (trunk)/views/cart-button.php:165
+#: ../cart66 (trunk)/views/cart-button.php:131
+msgid ""
+"Inventory tracking will not work because your site has javascript errors."
+msgstr ""
+
+#: ../cart66 (trunk)/views/cart-button.php:132
+msgid "Possible solutions"
+msgstr ""
+
+#: ../cart66 (trunk)/views/cart-button.php:149
 msgid "Adding..."
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart-sidebar-advanced.php:7
+#: ../cart66 (trunk)/views/cart-button.php:152
+#: (trunk)/views/cart-sidebar-advanced.php:7
 #: (trunk)/views/cart-sidebar-advanced.php:211
 msgid "You have"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart-sidebar-advanced.php:9
+#: ../cart66 (trunk)/views/cart-button.php:153
+#: (trunk)/views/cart-sidebar-advanced.php:9
 #: (trunk)/views/cart-sidebar-advanced.php:211
 msgid "in your shopping cart"
 msgstr ""
 
 #: ../cart66 (trunk)/views/cart-sidebar-advanced.php:73
-#: (trunk)/views/cart.php:220 (trunk)/views/cart.php:284
+#: (trunk)/views/cart.php:229 (trunk)/views/cart.php:293
 msgid "Shipping to"
 msgstr ""
 
 #: ../cart66 (trunk)/views/cart-sidebar-advanced.php:79
+#: (trunk)/views/cart.php:235
 msgid "change"
 msgstr ""
 
 #: ../cart66 (trunk)/views/cart-sidebar-advanced.php:105
-#: (trunk)/views/cart-sidebar-advanced.php:126 (trunk)/views/cart.php:254
+#: (trunk)/views/cart-sidebar-advanced.php:126 (trunk)/views/cart.php:263
 msgid "Enter Your Zip Code"
 msgstr ""
 
@@ -6239,7 +6349,7 @@ msgid "View Cart"
 msgstr ""
 
 #: ../cart66 (trunk)/views/cart-sidebar-advanced.php:207
-#: (trunk)/views/cart.php:470 (trunk)/views/checkout-form.php:359
+#: (trunk)/views/cart.php:479 (trunk)/views/checkout-form.php:383
 msgid "Checkout"
 msgstr ""
 
@@ -6251,86 +6361,94 @@ msgstr ""
 msgid "Your cart is empty."
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:82
+#: ../cart66 (trunk)/views/cart.php:67
+msgid "Invalid Product Options"
+msgstr ""
+
+#: ../cart66 (trunk)/views/cart.php:91
 msgid "Please Provide Your Zip Code"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:83
+#: ../cart66 (trunk)/views/cart.php:92
 msgid ""
 "Before you can checkout, please provide the zip code for where we will be "
 "shipping your order and click"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:83 (trunk)/views/cart.php:271
-#: (trunk)/views/cart.php:273
+#: ../cart66 (trunk)/views/cart.php:92 (trunk)/views/cart.php:280
+#: (trunk)/views/cart.php:282
 msgid "Calculate Shipping"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:91
+#: ../cart66 (trunk)/views/cart.php:100
 msgid "No Shipping Service Selected"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:92
+#: ../cart66 (trunk)/views/cart.php:101
 msgid ""
 "We cannot process your order because you have not selected a shipping "
 "method. If there are no shipping services available, we may not be able to "
 "ship to your location."
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:98
+#: ../cart66 (trunk)/views/cart.php:107
 msgid "Custom Field Error"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:99
+#: ../cart66 (trunk)/views/cart.php:108
 msgid ""
 "We cannot process your order because you have not filled out the custom "
 "field required for these products:"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:111
+#: ../cart66 (trunk)/views/cart.php:120
 msgid "Too Many Subscriptions"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:112
+#: ../cart66 (trunk)/views/cart.php:121
 msgid "Only one subscription may be purchased at a time."
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:126
+#: ../cart66 (trunk)/views/cart.php:135
 msgid ""
 "Your current subscription will be canceled when you purchase your new "
 "subscription."
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:200
+#: ../cart66 (trunk)/views/cart.php:197
+msgid "Remove item from cart"
+msgstr ""
+
+#: ../cart66 (trunk)/views/cart.php:197
+msgid "Remove Item"
+msgstr ""
+
+#: ../cart66 (trunk)/views/cart.php:209
 msgid "Show Details"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:284
+#: ../cart66 (trunk)/views/cart.php:293
 msgid "via"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:352 (trunk)/views/cart.php:354
+#: ../cart66 (trunk)/views/cart.php:361 (trunk)/views/cart.php:363
 msgid "Update Total"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:400
+#: ../cart66 (trunk)/views/cart.php:409
 msgid "Do you have a coupon?"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:411 (trunk)/views/cart.php:413
+#: ../cart66 (trunk)/views/cart.php:420 (trunk)/views/cart.php:422
 msgid "Apply Coupon"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:439 (trunk)/views/cart.php:499
+#: ../cart66 (trunk)/views/cart.php:448 (trunk)/views/cart.php:508
 msgid "Continue Shopping"
 msgstr ""
 
-#: ../cart66 (trunk)/views/cart.php:495
+#: ../cart66 (trunk)/views/cart.php:504
 msgid "Your Cart Is Empty"
-msgstr ""
-
-#: ../cart66 (trunk)/views/checkout-form.php:41
-msgid "Enter any special instructions you have for this order:"
 msgstr ""
 
 #: ../cart66 (trunk)/views/checkout-form.php:54
@@ -6342,50 +6460,52 @@ msgid "Address 2"
 msgstr ""
 
 #: ../cart66 (trunk)/views/checkout-form.php:101
-#: (trunk)/views/checkout-form.php:178
+#: (trunk)/views/checkout-form.php:186
 msgid "tax"
 msgstr ""
 
 #: ../cart66 (trunk)/views/checkout-form.php:117
-#: (trunk)/views/checkout-form.php:204
+#: (trunk)/views/checkout-form.php:212
 msgid ""
 "Available countries may be limited based on your selected shipping method"
 msgstr ""
 
-#: ../cart66 (trunk)/views/checkout-form.php:129
+#: ../cart66 (trunk)/views/checkout-form.php:137
 msgid "Same as billing address"
 msgstr ""
 
-#: ../cart66 (trunk)/views/checkout-form.php:218
+#: ../cart66 (trunk)/views/checkout-form.php:234
 msgid "Payment Information"
 msgstr ""
 
-#: ../cart66 (trunk)/views/checkout-form.php:232
+#: ../cart66 (trunk)/views/checkout-form.php:248
 msgid "Card Number"
 msgstr ""
 
-#: ../cart66 (trunk)/views/checkout-form.php:237
+#: ../cart66 (trunk)/views/checkout-form.php:253
 msgid "Expiration"
 msgstr ""
 
-#: ../cart66 (trunk)/views/checkout-form.php:270
+#: ../cart66 (trunk)/views/checkout-form.php:286
 msgid "Security ID"
 msgstr ""
 
-#: ../cart66 (trunk)/views/checkout-form.php:272
+#: ../cart66 (trunk)/views/checkout-form.php:288
 msgid "Security code on back of card"
 msgstr ""
 
-#: ../cart66 (trunk)/views/checkout-form.php:381
+#: ../cart66 (trunk)/views/checkout-form.php:405
 msgid "Order Summary"
 msgstr ""
 
-#: ../cart66 (trunk)/views/checkout-form.php:413
-#: (trunk)/views/checkout-form.php:415 (trunk)/views/paypal-express.php:438
+#: ../cart66 (trunk)/views/checkout-form.php:437
+#: (trunk)/views/checkout-form.php:439 (trunk)/views/paypal-express.php:438
+#: (trunk)/views/paypal-express.php:446 (trunk)/views/paypal-express.php:449
+#: (trunk)/views/paypal-express.php:463 (trunk)/views/paypal-express.php:466
 msgid "Complete Order"
 msgstr ""
 
-#: ../cart66 (trunk)/views/checkout-form.php:418
+#: ../cart66 (trunk)/views/checkout-form.php:442
 msgid ""
 "Your receipt will be on the next page and also immediately emailed to you. "
 "<strong>We respect your privacy!</strong>"
@@ -6460,7 +6580,7 @@ msgstr ""
 msgid "Log into your account"
 msgstr ""
 
-#: ../cart66 (trunk)/views/receipt.php:450
+#: ../cart66 (trunk)/views/receipt.php:474
 msgid "Receipt not available"
 msgstr ""
 

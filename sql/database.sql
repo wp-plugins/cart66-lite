@@ -376,3 +376,6 @@ alter table `[prefix]products` add column `custom_required` tinyint(1) unsigned 
 alter table `[prefix]promotions` modify `apply_to` enum('products','shipping','subtotal','total') not null default 'total';
 alter table `[prefix]shipping_methods` add column `countries` longtext default '' not null;
 alter table `[prefix]orders` add column `custom_field` text default '' not null;
+
+-- Upgrading to Cart66 1.5.1.4
+alter table `[prefix]orders` add column `additional_fields` longtext default '' not null;

@@ -260,19 +260,31 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
         "aLengthMenu": [[30, 60, 150, -1], [30, 60, 150, "All"]],
         "sPaginationType": "bootstrap",
         "bAutoWidth": false,
-				"sAjaxSource": ajaxurl + "?action=promotions_table",
-				"aaSorting": [[8,'desc']],
+        "sAjaxSource": ajaxurl + "?action=promotions_table",
+        "aaSorting": [[8,'desc']],
         "aoColumns": [
           null, 
-          { "bsortable": true, "fnRender": function(oObj) { return '<a href="?page=cart66-promotions&task=edit&id=' + oObj.aData[0] + '">' + oObj.aData[1] + '</a>'}},
+          {
+            "bsortable": true,
+            "fnRender": function(oObj) {
+              return "<a href=\"?page=cart66-promotions&task=edit&id=" + oObj.aData[0] + "\">" + oObj.aData[1] + "</a>"
+            }
+          },
           null, null, 
           { "bSearchable": false }, 
           { "bSearchable": false }, 
           { "bSearchable": false }, 
           { "bSearchable": false }, 
           null, 
-          { "bSearchable": false, "bSortable": false, "fnRender": function(oObj) { return '<a href="?page=cart66-promotions&task=edit&id=' + oObj.aData[0] + '"><?php _e( "Edit" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66-promotions&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a>' }
-        }],
+          {
+            "mData": null,
+            "bSearchable": false,
+            "bSortable": false,
+            "fnRender": function(oObj) {
+              return "<a href=\"?page=cart66-promotions&task=edit&id=" + oObj.aData[0] + "\"><?php _e( 'Edit' , 'cart66' ); ?></a> | <a class=\"delete\" href=\"?page=cart66-promotions&task=delete&id=" + oObj.aData[0] + "\"><?php _e( 'Delete' , 'cart66' ); ?></a>"
+            }
+          }
+        ],
         "oLanguage": { 
           "sZeroRecords": "<?php _e('No matching Promotions found', 'cart66'); ?>", 
           "sSearch": "<?php _e('Search', 'cart66'); ?>:", 
@@ -289,9 +301,6 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
           "sLoadingRecords": "<?php _e('Loading', 'cart66'); ?>...", 
           "sProcessing": "<?php _e('Processing', 'cart66'); ?>..." 
         }
-      });
-      $('.delete').live('click', function() {
-        return confirm('Are you sure you want to delete this item?');
       });
       $(".promo-rows tr:nth-child(even)").css("background-color", "#fff");
       setPromoSign();
@@ -316,6 +325,9 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
       $(".to").datetimepicker({ changeMonth: true, numberOfMonths: 2, ampm: true, hour: 23, minute: 59 })
       $('#Cart66AccountSearchField').quicksearch('table tbody tr');
     })
+    $(document).on('click', '.delete', function(e) {
+      return confirm('Are you sure you want to delete this item?');
+    });
     function productSearchUrl() {
       var url = ajaxurl + '?action=promotionProductSearch';
       return url;

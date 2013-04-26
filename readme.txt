@@ -93,7 +93,26 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
-= 1..5.1.2 =
+= 1.5.1.8 = 
+
+* NEW: Add to cart button is disabled after clicking on it with custom add to cart button
+* NEW: Added new wp_mail plugin exception for WP SES
+* UPDATED: "Change" link in cart to use double quotes instead of single quotes for attributes
+* UPDATED: Javascript to work better with data tables integration
+* UPDATED: Custom complete order button to include CSS classes
+* UPDATED: Mijireh integration to work with new slurp technology
+* FIXED: Fatal error with daily pending order pruner
+* FIXED: Yellow label displaying on checkout page when country shipping validation is off
+* FIXED: PayPal Express settings not working
+* FIXED: Dialog box "enable ajax by default" option
+* FIXED: Fatal error when getting live rates in 2checkout
+* FIXED: User defined price not working when set to 0
+* FIXED: Auto shipping promotions not applying
+* FIXED: Incorrect taxed shipping amount
+* FIXED: Rare occurance of an incorrect grand total
+* FIXED: Removed invalid shipping validation options
+
+= 1.5.1.2 =
 
 * UPDATED: JavaScript for add to cart ajax grabbing product options
 * UPDATED: Subtotal in sidebar widget reflects actual subtotal, not discounted subtotal

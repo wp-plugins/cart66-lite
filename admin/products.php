@@ -474,24 +474,36 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
         $('#gravity_qty_field_element').hide('slow');
       }
       */
-      
       $('#products_table').dataTable({
         "bProcessing": true,
         "bServerSide": true,
         "bPagination": true,
         "iDisplayLength": 30,
+        "sAjaxSource": ajaxurl + "?action=products_table",
         "aLengthMenu": [[30, 60, 150, -1], [30, 60, 150, "All"]],
         "sPaginationType": "bootstrap",
         "bAutoWidth": false,
-				"sAjaxSource": ajaxurl + "?action=products_table",
         "aoColumns": [
-          null, 
-          { "bsortable": true, "fnRender": function(oObj) { return '<a href="?page=cart66-products&task=edit&id=' + oObj.aData[0] + '">' + oObj.aData[1] + '</a>'}},
-          null, null, 
+          null,
+          {
+            "bsortable": true,
+            "fnRender": function(oObj) {
+              return "<a href=\"?page=cart66-products&task=edit&id=" + oObj.aData[0] + "\">" + oObj.aData[1] + "</a>"
+            }
+          },
+          null,
+          null,
           { "bSearchable": false }, 
           { "bSearchable": false },
-          { "bSearchable": false, "bSortable": false, "fnRender": function(oObj) { return '<a href="?page=cart66-products&task=edit&id=' + oObj.aData[0] + '"><?php _e( "Edit" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66-products&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a>' }
-        }],
+          {
+            "mData": null,
+            "bSearchable": false,
+            "bSortable": false,
+            "fnRender": function(oObj) {
+              return "<a href=\"?page=cart66-products&task=edit&id=" + oObj.aData[0] + "\"><?php _e( 'Edit' , 'cart66' ); ?></a> | <a class=\"delete\" href=\"?page=cart66-products&task=delete&id=" + oObj.aData[0] + "\"><?php _e( 'Delete' , 'cart66' ); ?></a>"
+            }
+          }
+        ],
         "oLanguage": { 
           "sZeroRecords": "<?php _e('No matching Products found', 'cart66'); ?>", 
           "sSearch": "<?php _e('Search', 'cart66'); ?>:", 
@@ -514,18 +526,31 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
         "bServerSide": true,
         "bPagination": true,
         "iDisplayLength": 30,
+        "sAjaxSource": ajaxurl + "?action=spreedly_table",
         "aLengthMenu": [[30, 60, 150, -1], [30, 60, 150, "All"]],
         "sPaginationType": "bootstrap",
         "bAutoWidth": false,
-				"sAjaxSource": ajaxurl + "?action=spreedly_table",
         "aoColumns": [
           null, 
-          { "bsortable": true, "fnRender": function(oObj) { return '<a href="?page=cart66-products&task=edit&id=' + oObj.aData[0] + '">' + oObj.aData[1] + '</a>'}},
-          null, null, 
+          {
+            "bsortable": true,
+            "fnRender": function(oObj) {
+              return "<a href=\"?page=cart66-products&task=edit&id=" + oObj.aData[0] + "\">" + oObj.aData[1] + "</a>"
+            }
+          },
+          null,
+          null, 
           { "bSearchable": false }, 
           { "bSearchable": false },
-          { "bSearchable": false, "bSortable": false, "fnRender": function(oObj) { return '<a href="?page=cart66-products&task=edit&id=' + oObj.aData[0] + '"><?php _e( "Edit" , "cart66" ); ?></a> | <a class="delete" href="?page=cart66-products&task=delete&id=' + oObj.aData[0] + '"><?php _e( "Delete" , "cart66" ); ?></a>' }
-        }],
+          {
+            "mData": null,
+            "bSearchable": false,
+            "bSortable": false,
+            "fnRender": function(oObj) {
+              return "<a href=\"?page=cart66-products&task=edit&id=" + oObj.aData[0] + "\"><?php _e( 'Edit' , 'cart66' ); ?></a> | <a class=\"delete\" href=\"?page=cart66-products&task=delete&id=" + oObj.aData[0] + "\"><?php _e( 'Delete' , 'cart66' ); ?></a>"
+            }
+          }
+        ],
         "oLanguage": { 
           "sZeroRecords": "<?php _e('No matching Spreedly Subscriptions found', 'cart66'); ?>", 
           "sSearch": "<?php _e('Search', 'cart66'); ?>:", 
@@ -609,11 +634,6 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
           $(".userPriceSettings").hide();
         }
       })
-
-      $('.delete').live('click', function() {
-        return confirm('Are you sure you want to delete this item?');
-      });
-
       // Ajax to populate gravity_form_qty_id when gravity_form_id changes
       $('#product-gravity_form_id').change(function() {
         var gravityFormId = $('#product-gravity_form_id').val();
@@ -685,6 +705,9 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
          validateS3BucketName();        
       })
     })
+    $(document).on('click', '.delete', function(e) {
+      return confirm('Are you sure you want to delete this item?');
+    });
     function toggleLifeTime() {
       if($('#product-lifetime_membership').attr('checked')) {
         $('#product-billing_interval').val('');

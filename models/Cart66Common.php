@@ -73,6 +73,20 @@ class Cart66Common {
     echo isset($value)? $value : '';
   }
   
+  public static function displayCustomFormField($field, $post_data) {
+    $output = '';
+    $value = '';
+    if(isset($post_data[$field['slug']])) {
+      $value = $post_data[$field['slug']];
+    }
+    switch($field['type']) {
+      case 'text':
+        $output = '<li><label for="' . $field['section'] . '-' . $field['slug'] . '">' . $field['label'] . ':</label>&nbsp;<input type="text" id="' . $field['section'] . '-' . $field['slug'] . '" name="' . $field['section'] . '[' . $field['slug'] . ']" value="' . $value . '"></li>';
+        break;
+    }
+    return $output;
+  }
+  
   public static function getView($filename, $data=null, $notices=true, $minify=false) {
     $notice = '';
     if(strpos($filename, 'admin') !== false) {
@@ -1664,7 +1678,7 @@ class Cart66Common {
   
   public static function tax($rate) {
     if($rate == 0) {
-      $rate = '0.00%';
+      $rate = '0.00';
     }
     if(is_numeric($rate)) {
       $rate = trim(number_format($rate, 3), 0);
@@ -1684,7 +1698,9 @@ class Cart66Common {
     $decimal = Cart66Setting::getValue('currency_decimals') == 'no_decimal' ? 0 : (Cart66Setting::getValue('currency_decimals') ? Cart66Setting::getValue('currency_decimals') : 2);
     $dec_point = Cart66Setting::getValue('currency_dec_point') ? Cart66Setting::getValue('currency_dec_point') : '.';
     $thousands_sep = Cart66Setting::getValue('currency_thousands_sep') ? Cart66Setting::getValue('currency_thousands_sep') : ',';
-    if(is_numeric(self::convert_currency_to_number($amount))) {
+    $amount = self::convert_currency_to_number($amount);
+    if(is_numeric($amount)) {
+      $amount = number_format($amount, $decimal, '.', '');
       $decimalBreak = explode(".", $amount);
       $preDecimal = $decimalBreak[0];
       $postDecimal = isset($decimalBreak[1]) ? $decimalBreak[1] : '';

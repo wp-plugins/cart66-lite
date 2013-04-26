@@ -113,12 +113,26 @@ if($cart->requireShipping() || $cart->hasTaxableProducts()): ?>
       <li>
         <label for="shipping-country" class="short"><?php _e( 'Country' , 'cart66' ); ?>:</label>
         <select title="country" id="shipping-country" name="shipping[country]">
-          <?php foreach(Cart66Common::getCountries() as $code => $name): ?>
-            <option value="<?php echo $code ?>" <?php if($code == $shippingCountryCode) { echo 'selected="selected"'; } ?>><?php echo $name ?></option>
+          <?php foreach(Cart66Common::getShippingCountries() as $code => $country_name): ?>
+            <?php
+            $disabled = false;
+            if(is_array($country_name)) {
+              $disabled = isset($country_name['disabled']) ? $country_name['disabled'] : 'true';
+              $country_name = $country_name['country'];
+            }
+            if($disabled == 'true') {
+              $disabled = 'disabled';
+            }
+            ?>
+            <option value="<?php echo $code ?>" <?php if($code == $shippingCountryCode  && !$disabled) { echo 'selected="selected"'; } ?> <?php echo $disabled; ?>><?php echo $country_name ?></option>
           <?php endforeach; ?>
         </select>
       </li>
-
+      <?php if(Cart66Session::get('Cart66ShippingCountryCode') && Cart66Setting::getValue('international_sales')): ?>
+        <li class="limited-countries-label-shipping summary-message cart66-align-center">
+          <p><?php _e('Available countries may be limited based', 'cart66'); ?><br /><?php _e('on your selected shipping method', 'cart66'); ?></p>
+        </li>
+      <?php endif; ?>
       <li>
         <label for="payment-phone"><?php _e( 'Phone' , 'cart66' ); ?>:</label>
         <input type="text" id="payment-phone" name="payment[phone]" value="<?php Cart66Common::showValue($p['phone']); ?>">

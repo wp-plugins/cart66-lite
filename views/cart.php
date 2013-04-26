@@ -139,9 +139,9 @@ if($cartImgPath) {
   } 
 ?>
 
-<form id='Cart66CartForm' action="" method="post">
-  <input type='hidden' name='task' value='updateCart' />
-  <table id='viewCartTable'>
+<form id="Cart66CartForm" action="" method="post">
+  <input type="hidden" name="task" value="updateCart" />
+  <table id="viewCartTable">
     <colgroup>
       <col class="col1" />
       <col class="col2" />
@@ -189,12 +189,12 @@ if($cartImgPath) {
           <?php if($item->isSubscription() || $item->isMembershipProduct() || $product->is_user_price==1): ?>
             <span class="subscriptionOrMembership"><?php echo $item->getQuantity() ?></span>
           <?php else: ?>
-            <input type='text' name='quantity[<?php echo $itemIndex ?>]' value='<?php echo $item->getQuantity() ?>' class="itemQuantity"/>
+            <input type="text" name="quantity[<?php echo $itemIndex ?>]" value="<?php echo $item->getQuantity() ?>" class="itemQuantity"/>
           <?php endif; ?>
           
           <?php $removeLink = get_permalink($cartPage->ID); ?>
           <?php $taskText = (strpos($removeLink, '?')) ? '&task=removeItem&' : '?task=removeItem&'; ?>
-          <a href='<?php echo $removeLink . $taskText ?>itemIndex=<?php echo $itemIndex ?>' title='Remove item from cart'><img src='<?php echo $removeItemImg ?>' alt="Remove Item" /></a>
+          <a href="<?php echo $removeLink . $taskText ?>itemIndex=<?php echo $itemIndex ?>" title="<?php _e('Remove item from cart', 'cart66'); ?>"><img src="<?php echo $removeItemImg ?>" alt="<?php _e('Remove Item', 'cart66'); ?>" /></a>
           
         </td>
         <?php else: ?>
@@ -206,7 +206,7 @@ if($cartImgPath) {
       <?php if($item->hasAttachedForms()): ?>
         <tr>
           <td colspan="4">
-            <a href='#' class="showEntriesLink" rel="<?php echo 'entriesFor_' . $itemIndex ?>"><?php _e( 'Show Details' , 'cart66' ); ?> <?php #echo count($item->getFormEntryIds()); ?></a>
+            <a href="#" class="showEntriesLink" rel="<?php echo 'entriesFor_' . $itemIndex ?>"><?php _e( 'Show Details' , 'cart66' ); ?> <?php #echo count($item->getFormEntryIds()); ?></a>
             <div id="<?php echo 'entriesFor_' . $itemIndex ?>" class="showGfFormData" style="display: none;">
               <?php echo $item->showAttachedForms($fullMode); ?>
             </div>
@@ -232,7 +232,7 @@ if($cartImgPath) {
                     echo Cart66Session::get('cart66_shipping_country_code');
                   }
                 ?>
-                (<a href="#" id="change_shipping_zip_link">change</a>)
+                (<a href="#" id="change_shipping_zip_link"><?php _e('change', 'cart66'); ?></a>)
                 &nbsp;
                 <?php
                   $liveRates = Cart66Session::get('Cart66Cart')->getLiveRates();
@@ -243,7 +243,7 @@ if($cartImgPath) {
                 ?>
                 <select name="live_rates" id="live_rates">
                   <?php foreach($rates as $rate): ?>
-                    <option value='<?php echo $rate->service ?>' <?php if($selectedRate->service == $rate->service) { echo 'selected="selected"'; } ?>>
+                    <option value="<?php echo $rate->service ?>" <?php if($selectedRate->service == $rate->service) { echo 'selected="selected"'; } ?>>
                       <?php 
                         if($rate->rate !== false) {
                           echo "$rate->service: \$$rate->rate";
@@ -277,7 +277,7 @@ if($cartImgPath) {
               <?php endif; ?>
               
               <?php if($cartImgPath && Cart66Common::urlIsLIve($calculateShippingImg)): ?>
-                <input class="Cart66CalculateShippingButton" type="image" src='<?php echo $calculateShippingImg ?>' value="<?php _e( 'Calculate Shipping' , 'cart66' ); ?>" name="calculateShipping" />
+                <input class="Cart66CalculateShippingButton" type="image" src="<?php echo $calculateShippingImg ?>" value="<?php _e( 'Calculate Shipping' , 'cart66' ); ?>" name="calculateShipping" />
               <?php else: ?>
                 <input type="submit" name="calculateShipping" value="<?php _e('Calculate Shipping', 'cart66'); ?>" id="shipping_submit" class="Cart66CalculateShippingButton Cart66ButtonSecondary" />
               <?php endif; ?>
@@ -285,7 +285,7 @@ if($cartImgPath) {
           </tr>
         <?php else:  // Cart in read mode ?>
           <tr>
-            <th colspan="4" class='alignRight'>
+            <th colspan="4" class="alignRight">
               <?php
                 $liveRates = Cart66Session::get('Cart66Cart')->getLiveRates();
                 if($liveRates && Cart66Session::get('cart66_shipping_zip') && Cart66Session::get('cart66_shipping_country_code')) {
@@ -300,7 +300,7 @@ if($cartImgPath) {
       <?php  else: ?>
         <?php if(count($shippingMethods) > 1 && $fullMode): ?>
         <tr>
-          <th colspan='4' class="alignRight"><?php _e( 'Shipping Method' , 'cart66' ); ?>: &nbsp;
+          <th colspan="4" class="alignRight"><?php _e( 'Shipping Method' , 'cart66' ); ?>: &nbsp;
             <?php if(Cart66Setting::getValue('international_sales')): ?>
               <select name="shipping_country_code" id="shipping_country_code">
                 <?php
@@ -317,7 +317,7 @@ if($cartImgPath) {
             <?php else: ?>
               <input type="hidden" name="shipping_country_code" value="<?php echo Cart66Common::getHomeCountryCode(); ?>" id="shipping_country_code">
             <?php endif; ?>
-            <select name='shipping_method_id' id='shipping_method_id'>
+            <select name="shipping_method_id" id="shipping_method_id">
               <?php foreach($shippingMethods as $name => $id): ?>
                 <?php
                 $method_class = 'methods-country ';
@@ -335,14 +335,14 @@ if($cartImgPath) {
                   $method_class = 'all-countries';
                 }
                 ?>
-              <option class="<?php echo trim($method_class); ?>" value='<?php echo $id ?>' <?php echo ($id == Cart66Session::get('Cart66Cart')->getShippingMethodId())? 'selected' : ''; ?>><?php echo $name ?></option>
+              <option class="<?php echo trim($method_class); ?>" value="<?php echo $id ?>" <?php echo ($id == Cart66Session::get('Cart66Cart')->getShippingMethodId())? 'selected' : ''; ?>><?php echo $name ?></option>
               <?php endforeach; ?>
             </select>
           </th>
         </tr>
         <?php elseif(!$fullMode): ?>
         <tr>
-          <th colspan='4' class="alignRight"><?php _e( 'Shipping Method' , 'cart66' ); ?>: 
+          <th colspan="4" class="alignRight"><?php _e( 'Shipping Method' , 'cart66' ); ?>: 
             <?php 
               $method = new Cart66ShippingMethod(Cart66Session::get('Cart66Cart')->getShippingMethodId());
               echo $method->name;
@@ -358,16 +358,16 @@ if($cartImgPath) {
       <td>&nbsp;</td>
       <td>
         <?php if($cartImgPath && Cart66Common::urlIsLIve($updateTotalImg)): ?>
-          <input class="Cart66UpdateTotalButton" type="image" src='<?php echo $updateTotalImg ?>' value="<?php _e( 'Update Total' , 'cart66' ); ?>" name="updateCart"/>
+          <input class="Cart66UpdateTotalButton" type="image" src="<?php echo $updateTotalImg ?>" value="<?php _e( 'Update Total' , 'cart66' ); ?>" name="updateCart"/>
         <?php else: ?>
-          <input type='submit' name='updateCart' value='<?php _e( 'Update Total' , 'cart66' ); ?>' class="Cart66UpdateTotalButton Cart66ButtonSecondary" />
+          <input type="submit" name="updateCart" value="<?php _e( 'Update Total' , 'cart66' ); ?>" class="Cart66UpdateTotalButton Cart66ButtonSecondary" />
         <?php endif; ?>
       </td>
       <?php else: ?>
-        <td colspan='2'>&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
       <?php endif; ?>
       <td class="alignRight strong"><?php _e( 'Subtotal' , 'cart66' ); ?>:</td>
-      <td class='strong cart66-align-right'><?php echo Cart66Common::currency($subtotal); ?></td>
+      <td class="strong cart66-align-right"><?php echo Cart66Common::currency($subtotal); ?></td>
     </tr>
     
     <?php if(Cart66Session::get('Cart66Cart')->requireShipping()): ?>
@@ -396,7 +396,7 @@ if($cartImgPath) {
     <?php endif; ?>
     
     <tr class="tax-row <?php echo $tax > 0 ? 'show-tax-row' : 'hide-tax-row'; ?>">
-      <td colspan='2'>&nbsp;</td>
+      <td colspan="2">&nbsp;</td>
       <?php $taxRate = isset($data['rate']) ? Cart66Common::tax($data['rate']) : Cart66Session::get('Cart66TaxRate'); ?>
       <td class="alignRight strong"><span class="ajax-spin"><img src="<?php echo CART66_URL; ?>/images/ajax-spin.gif" /></span> <?php _e( 'Tax' , 'cart66' ); ?> (<span class="tax-rate"><?php echo $taxRate; ?></span>):</td>
       <td class="strong tax-amount cart66-align-right"><?php echo Cart66Common::currency($tax); ?></td>
@@ -404,7 +404,7 @@ if($cartImgPath) {
     
       <tr class="total">
         <?php if(Cart66Session::get('Cart66Cart')->getNonSubscriptionAmount() > 0): ?>
-        <td class="alignRight" colspan='2'>
+        <td class="alignRight" colspan="2">
           <?php if($fullMode && Cart66Common::activePromotions()): ?>
             <p class="haveCoupon"><?php _e( 'Do you have a coupon?' , 'cart66' ); ?></p>
           <?php if(Cart66Session::get('Cart66PromotionErrors')):
@@ -414,18 +414,18 @@ if($cartImgPath) {
               <?php endforeach;?>
               <?php Cart66Session::get('Cart66Cart')->clearPromotion();
                   endif; ?>
-            <div id="couponCode"><input type='text' name='couponCode' value='' /></div>
+            <div id="couponCode"><input type="text" name="couponCode" value="" /></div>
             <div id="updateCart">
               <?php if($cartImgPath && Cart66Common::urlIsLIve($applyCouponImg)): ?>
-                <input class="Cart66ApplyCouponButton" type="image" src='<?php echo $applyCouponImg ?>' value="<?php _e( 'Apply Coupon' , 'cart66' ); ?>" name="updateCart"/>
+                <input class="Cart66ApplyCouponButton" type="image" src="<?php echo $applyCouponImg ?>" value="<?php _e( 'Apply Coupon' , 'cart66' ); ?>" name="updateCart"/>
               <?php else: ?>
-                <input type='submit' name='updateCart' value='<?php _e( 'Apply Coupon' , 'cart66' ); ?>' class="Cart66ApplyCouponButton Cart66ButtonSecondary" />
+                <input type="submit" name="updateCart" value="<?php _e( 'Apply Coupon' , 'cart66' ); ?>" class="Cart66ApplyCouponButton Cart66ButtonSecondary" />
               <?php endif; ?>
             </div>
           <?php endif; ?>
         </td>
         <?php else: ?>
-          <td colspan='2'>&nbsp;</td>
+          <td colspan="2">&nbsp;</td>
         <?php endif; ?>
         <td class="alignRight strong Cart66CartTotalLabel"><span class="ajax-spin"><img src="<?php echo CART66_URL; ?>/images/ajax-spin.gif" /></span> <?php _e( 'Total' , 'cart66' ); ?>:</td>
         <td class="strong grand-total-amount cart66-align-right">
@@ -443,9 +443,9 @@ if($cartImgPath) {
   <div id="viewCartNav">
 	<div id="continueShopping">
         <?php if($cartImgPath): ?>
-          <a href='<?php echo Cart66Session::get('Cart66LastPage'); ?>' class="Cart66CartContinueShopping" ><img src='<?php echo $continueShoppingImg ?>' /></a>
+          <a href="<?php echo Cart66Session::get('Cart66LastPage'); ?>" class="Cart66CartContinueShopping" ><img src="<?php echo $continueShoppingImg ?>" /></a>
         <?php else: ?>
-          <a href='<?php echo Cart66Session::get('Cart66LastPage'); ?>' class="Cart66ButtonSecondary Cart66CartContinueShopping" title="Continue Shopping"><?php _e( 'Continue Shopping' , 'cart66' ); ?></a>
+          <a href="<?php echo Cart66Session::get('Cart66LastPage'); ?>" class="Cart66ButtonSecondary Cart66CartContinueShopping" title="Continue Shopping"><?php _e( 'Continue Shopping' , 'cart66' ); ?></a>
         <?php endif; ?>
 	</div>
 
@@ -474,9 +474,9 @@ if($cartImgPath) {
         $checkoutUrl = Cart66Setting::getValue('auth_force_ssl') ? str_replace('http://', 'https://', get_permalink($checkoutPage->ID)) : get_permalink($checkoutPage->ID);
         ?>
         <?php if($checkoutImg): ?>
-          <a id="Cart66CheckoutButton" href='<?php echo $checkoutUrl; ?>'><img src='<?php echo $checkoutImg ?>' /></a>
+          <a id="Cart66CheckoutButton" href="<?php echo $checkoutUrl; ?>"><img src="<?php echo $checkoutImg ?>" /></a>
         <?php else: ?>
-          <a id="Cart66CheckoutButton" href='<?php echo $checkoutUrl; ?>' class="Cart66ButtonPrimary" title="Continue to Checkout"><?php _e( 'Checkout' , 'cart66' ); ?></a>
+          <a id="Cart66CheckoutButton" href="<?php echo $checkoutUrl; ?>" class="Cart66ButtonPrimary" title="Continue to Checkout"><?php _e( 'Checkout' , 'cart66' ); ?></a>
         <?php endif; ?>
     	</div>
     	<?php endif; ?>
@@ -503,9 +503,9 @@ if($cartImgPath) {
   <div id="emptyCartMsg">
   <h3><?php _e('Your Cart Is Empty','cart66'); ?></h3>
   <?php if($cartImgPath): ?>
-    <p><a href='<?php echo Cart66Session::get('Cart66LastPage'); ?>' title="Continue Shopping" class="Cart66CartContinueShopping"><img alt="Continue Shopping" class="continueShoppingImg" src='<?php echo $continueShoppingImg ?>' /></a>
+    <p><a href="<?php echo Cart66Session::get('Cart66LastPage'); ?>" title="Continue Shopping" class="Cart66CartContinueShopping"><img alt="Continue Shopping" class="continueShoppingImg" src="<?php echo $continueShoppingImg ?>" /></a>
   <?php else: ?>
-    <p><a href='<?php echo Cart66Session::get('Cart66LastPage'); ?>' class="Cart66ButtonSecondary" title="Continue Shopping"><?php _e( 'Continue Shopping' , 'cart66' ); ?></a>
+    <p><a href="<?php echo Cart66Session::get('Cart66LastPage'); ?>" class="Cart66ButtonSecondary" title="Continue Shopping"><?php _e( 'Continue Shopping' , 'cart66' ); ?></a>
   <?php endif; ?>
   </div>
   <?php

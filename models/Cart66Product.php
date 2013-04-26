@@ -950,7 +950,12 @@ class Cart66Product extends Cart66ModelAbstract {
         }
         else {
           $priceDescription = Cart66Common::currency($priceDescription);
-          if($price > 0) { $priceDescription .= ' (one time) +<br/> '; }
+          if($price > 0) {
+            $priceDescription .= ' (one time) +<br/> ';
+          }
+          else {
+            $priceDescription = '';
+          }
           $priceDescription .= $this->getSubscriptionPriceSummary();
         }
         

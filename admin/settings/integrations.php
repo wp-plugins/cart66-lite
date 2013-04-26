@@ -101,6 +101,16 @@ $tab = 'integrations-amazon_s3';
                 <p class="description"><?php _e('Set this to yes to prevent orphaned Cart66 product Gravity Form entries from being removed automatically.', 'cart66'); ?></p>
               </td>
             </tr>
+            <tr valign="top">
+              <th scope="row"><?php _e('Display Option Labels', 'cart66'); ?></th>
+              <td>
+                <input type="radio" name="gravity_display_option_labels" id="gravity_display_option_labels_yes" value="1" <?php echo (Cart66Setting::getValue('gravity_display_option_labels') == 1) ? 'checked="checked" ' : ''; ?>/>
+                <label for="gravity_display_option_labels_yes"><?php _e('Yes', 'cart66'); ?></label>
+                <input type="radio" name="gravity_display_option_labels" id="gravity_display_option_labels_no" value="" <?php echo (Cart66Setting::getValue('gravity_display_option_labels') != 1) ? 'checked="checked" ' : ''; ?>/>
+                <label for="gravity_display_option_labels_no"><?php _e('No', 'cart66'); ?></label>
+                <p class="description"><?php _e('Set this to yes to display option labels instead of the default values in the cart, email and order view pages.', 'cart66'); ?></p>
+              </td>
+            </tr>
         </table>
       <?php else: ?>
         <p class="description"><?php _e( 'This feature is only available in', 'cart66'); ?> <a href="http://cart66.com"><?php _e('Cart66 Professional', 'cart66'); ?></a>.</p>

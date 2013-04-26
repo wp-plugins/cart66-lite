@@ -60,6 +60,7 @@ class Cart66Cart {
     if(isset($_POST['item_user_price'])){
       $userPrice = $_POST['item_user_price'] === 0 ? '0' . Cart66Setting::getValue('currency_dec_point') . '00' : $_POST['item_user_price'];
       $sanitizedPrice = Cart66Common::cleanNumber($userPrice);
+      $sanitizedPrice = $sanitizedPrice === 0 ? '0.00' : $sanitizedPrice;
       Cart66Session::set("userPrice_$itemId",$sanitizedPrice);
     }
     
@@ -88,6 +89,7 @@ class Cart66Cart {
     if(Cart66Common::postVal('calculateShipping')) {
       Cart66Session::set('cart66_shipping_zip', Cart66Common::postVal('shipping_zip'));
       Cart66Session::set('cart66_shipping_country_code', Cart66Common::postVal('shipping_country_code'));
+      Cart66Session::get('Cart66Cart')->getLiveRates();
     }
     $this->_setShippingMethodFromPost();
     $this->_updateQuantitiesFromPost();
@@ -463,6 +465,11 @@ class Cart66Cart {
       $shipping = $this->getShippingCost();
       $total = $total += $shipping;
     }
+    else {
+      if($promotion && $promotion->apply_to == 'shipping') {
+        $discount = 0;
+      }
+    }
     
     if($discount > $total) {
       $total = 0;
@@ -702,7 +709,7 @@ class Cart66Cart {
       }
     }
     
-    $total = ($total < 0) ? 0 : $total;
+    $total = (abs($total) < 0.0001) ? 0 : $total;
     return $total; 
   }
   
