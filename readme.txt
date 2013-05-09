@@ -1,5 +1,5 @@
 === Cart66 Lite :: WordPress Ecommerce ===
-Contributors: reality66, lamininit,
+Contributors: reality66, davidjrojas,
 Donate link: http://cart66.com/
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales, shopping cart
 Requires at least: 2.8.2
