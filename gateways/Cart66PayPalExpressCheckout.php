@@ -244,6 +244,7 @@ class Cart66PayPalExpressCheckout extends Cart66GatewayAbstract {
       'PAYMENTACTION' => 'Sale',
       'TOKEN' => $token,
       'PAYERID' => $payerId,
+      'BUTTONSOURCE' => 'Reality66_SP',
       'AMT' => number_format($amount, 2, '.', ''),
       'ITEMAMT' => number_format($itemTotal, 2, '.', ''),
       'SHIPPINGAMT' => number_format($shipping, 2, '.', ''),

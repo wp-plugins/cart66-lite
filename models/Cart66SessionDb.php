@@ -80,7 +80,7 @@ class Cart66SessionDb {
     }
   }
   
-  protected function _start() {
+  protected static function _start() {
     self::$_validRequest = true;
     
     // Do not start sessions for admin requests or requests to these file extensions
@@ -89,9 +89,12 @@ class Cart66SessionDb {
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not starting Cart66 session for admin request");
     }
     else {
-      $url = array_shift(explode('?', $_SERVER['REQUEST_URI']));
-      if(strpos(basename($url), '.')) {
-        $ext = strtolower(end(explode('.', basename($url))));
+      $exploded = explode('?', $_SERVER['REQUEST_URI']);
+      $url = array_shift($exploded);
+      $basename = basename($url);
+      if(strpos($basename, '.')) {
+        $explode_again = explode('.', $basename);
+        $ext = strtolower(end($explode_again));
         $ignoreList = array('png', 'jpg', 'jpeg', 'css', 'gif', 'js', 'txt', 'mp3', 'wma', 'swf', 'fla', 'zip');
         if(in_array($ext, $ignoreList)) {
           self::$_validRequest = false;
@@ -171,7 +174,7 @@ class Cart66SessionDb {
     self::_save();
     
     header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
-    setcookie("Cart66DBSID",self::$_data['session_id'] , false, "/", false);
+    setcookie("Cart66DBSID", self::$_data['session_id'], false, "/", false, false, true);
     
     self::_deleteExpiredSessions();
     return $data['session_id'];
@@ -228,7 +231,7 @@ class Cart66SessionDb {
    * 
    * @return string
    */
-  protected function _newSessionId() {
+  protected static function _newSessionId() {
     global $wpdb;
     
     do {
@@ -259,7 +262,7 @@ class Cart66SessionDb {
 	}
 	
 	
-	protected function _deleteExpiredSessions() {
+	protected static function _deleteExpiredSessions() {
 	  global $wpdb;
 	  $tableName = Cart66Common::getTableName('sessions');
 	  $cutOffDate = date('Y-m-d H:i:s', strtotime('-' . self::$_maxLifetime . ' minutes', Cart66Common::localTs()));

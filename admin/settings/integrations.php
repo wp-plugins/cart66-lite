@@ -376,6 +376,16 @@ $tab = 'integrations-amazon_s3';
               <p class="description"><?php _e( 'The prefix is the first part of your zendesk account URL. For example, if your Zendesk URL is', 'cart66'); ?> http://<strong style="font-size: 14px;">mycompany</strong>.zendesk.com <?php _e('Then your prefix is', 'cart66'); ?> mycompany.</p>
             </td>
           </tr>
+          <tr valign="top">
+            <th scope="row"><?php _e('JWT Authentication', 'cart66'); ?></th>
+            <td>
+              <input type="radio" name="zendesk_jwt" id="zendesk_jwt_yes" value="1" <?php echo (Cart66Setting::getValue('zendesk_jwt') == 1) ? 'checked="checked" ' : ''; ?>/>
+              <label for="zendesk_jwt_yes"><?php _e('Yes', 'cart66'); ?></label>
+              <input type="radio" name="zendesk_jwt" id="zendesk_jwt_no" value="" <?php echo (Cart66Setting::getValue('zendesk_jwt') != 1) ? 'checked="checked" ' : ''; ?>/>
+              <label for="zendesk_jwt_no"><?php _e('No', 'cart66'); ?></label>
+              <p class="description"><?php _e('Set this to yes if you want to use the JWT (JSON Web Token) authentication method.', 'cart66'); ?></p>
+            </td>
+          </tr>
         </tbody>
       </table>
       <?php else: ?>

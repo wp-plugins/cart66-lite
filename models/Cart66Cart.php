@@ -58,9 +58,9 @@ class Cart66Cart {
     }
     
     if(isset($_POST['item_user_price'])){
-      $userPrice = $_POST['item_user_price'] === 0 ? '0' . Cart66Setting::getValue('currency_dec_point') . '00' : $_POST['item_user_price'];
+      $userPrice = $_POST['item_user_price'] === 0 || $_POST['item_user_price'] == '0' ? '0' . Cart66Setting::getValue('currency_dec_point') . '00' : $_POST['item_user_price'];
       $sanitizedPrice = Cart66Common::cleanNumber($userPrice);
-      $sanitizedPrice = $sanitizedPrice === 0 ? '0.00' : $sanitizedPrice;
+      $sanitizedPrice = $sanitizedPrice === 0 || $sanitizedPrice == '0' ? '0.00' : $sanitizedPrice;
       Cart66Session::set("userPrice_$itemId",$sanitizedPrice);
     }
     

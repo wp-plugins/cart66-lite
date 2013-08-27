@@ -1,7 +1,7 @@
 <div class='alert-message alert-error Cart66AjaxMessage'>
   <p><strong><?php echo $data['errorMessage']; ?></strong></p>
 
-  <ul><?php 
+  <?php 
   if(is_array($data['exception'])) {
     if(isset($data['exception']['error_code'])) {
       echo $data['exception']['error_code'];
@@ -15,5 +15,5 @@
   }
   else {
     echo $data['exception'];
-  } ?></ul>
+  } ?>
 </div>

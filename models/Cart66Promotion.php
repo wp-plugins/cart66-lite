@@ -101,12 +101,12 @@ class Cart66Promotion extends Cart66ModelAbstract {
     if(empty($from) || $from == "0000-00-00 00:00:00") {
       $from = __('No Start Date', 'cart66');
     } else {
-      $from = date("m/d/Y h:i a",strtotime($from));
+      $from = date(get_option('date_format'), strtotime($from)) . ' ' . date(get_option('time_format'), strtotime($from));
     }
     if(empty($to) || $to == "0000-00-00 00:00:00") {
       $to = '<br />' . __('No End Date', 'cart66');
     } else {
-      $to = '<br />' . date("m/d/Y h:i a",strtotime($to));
+      $to = '<br />' . date(get_option('date_format'), strtotime($to)) . ' ' . date(get_option('time_format'), strtotime($to));
     }
     if((empty($this->effective_to) || $this->effective_to == "0000-00-00 00:00:00") && (empty($this->effective_from) || $this->effective_from == "0000-00-00 00:00:00")) {
       $from = __('Ongoing', 'cart66');
@@ -630,7 +630,7 @@ class Cart66Promotion extends Cart66ModelAbstract {
     if($this->apply_to == "total"){
       $shipping = $cartObject->getShippingCost();
       $products = $cartObject->getSubTotal();
-      $discount = $this->getAmount($shipping + $products);
+      $discount = $this->getAmount($shipping + $products, $shipping + $products);
     }
     
     if($this->apply_to == "subtotal") {

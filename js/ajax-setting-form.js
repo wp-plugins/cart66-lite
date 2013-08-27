@@ -121,7 +121,8 @@
       return false;
     });
 		
-		$('#forcePluginUpdate').submit(function() {
+		$('#forcePluginUpdate').submit(function(e) {
+      e.preventDefault();
       var data = getFormData($(this).attr('id'));
       $.ajax({
           type: "POST",

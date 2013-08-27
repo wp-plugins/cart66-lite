@@ -223,11 +223,11 @@ if($session_token == $token):
             $newOrder = new Cart66Order($orderId);
           
             // Send email receipts
-            if(CART66_PRO && Cart66Setting::getValue('enable_advanced_notifications') ==1) {
+            if(CART66_PRO && CART66_EMAILS && Cart66Setting::getValue('enable_advanced_notifications') ==1) {
               $notify = new Cart66AdvancedNotifications($orderId);
               $notify->sendAdvancedEmailReceipts();
             }
-            else {
+            elseif(CART66_EMAILS) {
               $notify = new Cart66Notifications($orderId);
               $notify->sendEmailReceipts();
             }

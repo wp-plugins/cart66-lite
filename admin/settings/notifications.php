@@ -1247,7 +1247,7 @@ $mustache_elements = array(
            ?>
            <tr <?php echo $successClass?>>
              <td><?php echo $e->id; ?></td>
-             <td><?php echo date('n/j/Y', strtotime($e->send_date)) ?><br /><?php echo date('g:i a', strtotime($e->send_date)) ?></td>
+             <td><?php echo date(get_option('date_format'), strtotime($e->send_date)) ?><br /><?php echo date(get_option('time_format'), strtotime($e->send_date)) ?></td>
              <td><?php echo $e->from_name ?><br /><?php echo $e->from_email ?></td>
              <td><?php echo $e->to_name ?><br /><?php echo $e->to_email ?></td>
              <!-- <td><?php //echo $e->attachments ?></td> -->

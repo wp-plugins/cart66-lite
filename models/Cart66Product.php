@@ -31,7 +31,7 @@ class Cart66Product extends Cart66ModelAbstract {
   }
   
   public function loadByItemNumber($itemNumber) {
-    $itemNumber = $this->_db->escape($itemNumber);
+    $itemNumber = esc_sql($itemNumber);
     $sql = "SELECT id from $this->_tableName where item_number = '$itemNumber'";
     $id = $this->_db->get_var($sql);
     $this->load($id);
@@ -456,7 +456,7 @@ class Cart66Product extends Cart66ModelAbstract {
         $opt = str_replace('+$', '+ $', $opt);
         $opt = trim($opt);
         $optDisplay = str_replace('$', CART66_CURRENCY_SYMBOL, $opt);
-        $select .= "\n\t<option value=\"" . htmlentities($opt) . "\">$optDisplay</option>";
+        $select .= "\n\t<option value=\"" . htmlentities($opt, ENT_COMPAT, 'UTF-8') . "\">$optDisplay</option>";
       }
       $select .= "\n</select>";
     }

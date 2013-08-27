@@ -87,7 +87,7 @@ class Cart66ButtonManager {
   /**
    * Return the image path for the add to cart button or false if no path is available
    */
-  public function getAddToCartImagePath($attrs) {
+  public static function getAddToCartImagePath($attrs) {
     $path = false;
 
     if(isset($attrs['img'])) {

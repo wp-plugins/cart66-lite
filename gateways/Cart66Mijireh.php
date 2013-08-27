@@ -59,7 +59,7 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
     }
     
     // Add coupon code as meta_data
-    foreach($cart->getItems() as $item) {
+    foreach($cart->getItems() as $key => $item) {
       $sku = $item->getItemNumber();
       $order_item_data = array(
         'sku' => $sku,
@@ -76,7 +76,7 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
         $order_item_data['name'] .= "\n" . $custom_info;
       }
       
-      $order['items'][] = $order_item_data;
+      $order['items'][$key] = $order_item_data;
       
       $option_info = trim($item->getOptionInfo());
       if(!empty($option_info)) {
@@ -87,7 +87,7 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
         $form_ids = $item->getFormEntryIds();
         if(is_array($form_ids) && count($form_ids)) {
           $form_ids = implode(',', $form_ids);
-          $order['meta_data']['gforms_' . $sku] = $form_ids;
+          $order['meta_data'][$key]['gforms_' . $sku] = $form_ids;
         }
       }
     }
@@ -150,7 +150,7 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
     }
   }
   
-  public function saveOrder($order_number) {
+  public function saveMijirehOrder($order_number) {
     global $wpdb;
     
     // Make sure the order is not already in the database
@@ -169,7 +169,7 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
 
       // Save the order items
       $order_items_table = Cart66Common::getTableName('order_items');
-      foreach($cloud_order['items'] as $item) {
+      foreach($cloud_order['items'] as $key => $item) {
         $product = new Cart66Product();
         $product->loadByItemNumber($item['sku']);
         $data = array(
@@ -183,16 +183,19 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
         );
         
         // Look for gravity forms data
-        if(isset($cloud_order['meta_data']['gforms_' . $item['sku']])){
-          $data['form_entry_ids'] = $cloud_order['meta_data']['gforms_' . $item['sku']];
+        if(isset($cloud_order['meta_data'][$key]['gforms_' . $item['sku']])){
+          $data['form_entry_ids'] = $cloud_order['meta_data'][$key]['gforms_' . $item['sku']];
         }
-        $fIds = explode(',', $data['form_entry_ids']);
-        if(is_array($fIds) && count($fIds)) {
-          foreach($fIds as $entryId) {
-            if(class_exists('RGFormsModel')) {
-              if($lead = RGFormsModel::get_lead($entryId)) {
-                $lead['status'] = 'active';
-                RGFormsModel::update_lead($lead);
+        $fIds = array();
+        if(isset($data['form_entry_ids'])) {
+          $fIds = explode(',', $data['form_entry_ids']);
+          if(is_array($fIds) && count($fIds)) {
+            foreach($fIds as $entryId) {
+              if(class_exists('RGFormsModel')) {
+                if($lead = RGFormsModel::get_lead($entryId)) {
+                  $lead['status'] = 'active';
+                  RGFormsModel::update_lead($lead);
+                }
               }
             }
           }
@@ -232,11 +235,11 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
       }
       
       // Send email receipts
-      if(CART66_PRO && Cart66Setting::getValue('enable_advanced_notifications') == 1) {
+      if(CART66_PRO && CART66_EMAILS && Cart66Setting::getValue('enable_advanced_notifications') == 1) {
         $notify = new Cart66AdvancedNotifications($order_id);
         $notify->sendAdvancedEmailReceipts();
       }
-      else {
+      elseif(CART66_EMAILS) {
         $notify = new Cart66Notifications($order_id);
         $notify->sendEmailReceipts();
       }

@@ -92,7 +92,7 @@
         $gfIds = array();
         foreach($items as $item) {
           $name  = $item->getFullDisplayName() .  ' ' . $item->getCustomFieldInfo();
-          $escapedName = htmlentities($name);
+          $escapedName = htmlentities($name, ENT_COMPAT, 'UTF-8');
           echo "\n<input type='hidden' name='item_name_$i' value=\"" . $escapedName . "\" />";
           echo "\n<input type='hidden' name='item_number_$i' value='" . $item->getItemNumber() . "' />";
           echo "\n<input type='hidden' name='amount_$i' value='" . $item->getProductPrice() . "' />";
@@ -143,7 +143,7 @@
           $shipping = 0;
         }
       ?>
-      
+      <input type='hidden' name='lc' value='en_US' />
       <input type='hidden' name='cmd' value='_cart' />
       <input type='hidden' name='charset' value='utf-8'>
       <input type='hidden' name='upload' value='1' />
@@ -169,6 +169,7 @@
         $paypalImageUrl = Cart66Setting::getValue('custom_paypal_standard_image');
       }
       ?>
+      <input type='hidden' name='bn' value='Reality66_SP' />
       <input id='PayPalCheckoutButton' type='image' src='<?php echo $paypalImageUrl; ?>' value='Checkout With PayPal' />
     </form>
   <?php endif; ?>

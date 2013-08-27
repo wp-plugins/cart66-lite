@@ -105,21 +105,22 @@ class Cart66TaxRate extends Cart66ModelAbstract {
     $isLoaded = false;
     
     if(strlen($state) > 2) {
-      $state = $this->getStateAbbreviation($state);
+      $state = strlen($this->getStateAbbreviation($state)) > 1 ? $this->getStateAbbreviation($state) : false;
     }
+    if($state) {
+      $state = strtoupper($state);
     
-    $state = strtoupper($state);
-    
-    $sql = "SELECT * from $this->_tableName where state='$state'";
-    if($row = $this->_db->get_row($sql, ARRAY_A)) {
-      $this->setData($row);
-      $isLoaded = true;
-    }
-    else {
-      $sql = "SELECT * from $this->_tableName where state='All Sales'";
+      $sql = "SELECT * from $this->_tableName where state='$state'";
       if($row = $this->_db->get_row($sql, ARRAY_A)) {
         $this->setData($row);
         $isLoaded = true;
+      }
+      else {
+        $sql = "SELECT * from $this->_tableName where state='All Sales'";
+        if($row = $this->_db->get_row($sql, ARRAY_A)) {
+          $this->setData($row);
+          $isLoaded = true;
+        }
       }
     }
     

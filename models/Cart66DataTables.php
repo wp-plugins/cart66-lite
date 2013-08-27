@@ -26,7 +26,7 @@ Class Cart66DataTables {
     return $result;
   }
   
-  public function productsSearch() {
+  public static function productsSearch() {
     $where = "";
   	if(isset($_GET['sSearch']) && $_GET['sSearch'] != ""){
   		$where = $_GET['sSearch'];
@@ -76,6 +76,7 @@ Class Cart66DataTables {
   public static function inventoryTable() {
     $columns = array(
       'id',
+      'item_number',
       'name',
       'options_1',
       'options_2'
@@ -86,7 +87,8 @@ Class Cart66DataTables {
         0 => 0,
         1 => 1,
         2 => 2,
-        3 => 3
+        3 => 3,
+        4 => 4,
       );
       $_GET['iSortCol_0'] = $sortingColumns[$_GET['iSortCol_0']];
     }
@@ -116,6 +118,7 @@ Class Cart66DataTables {
           if($save) { $p->updateInventoryFromPost($k); }
           $data[] = array(
             $p->isInventoryTracked($k),
+            $p->item_number,
             $p->name,
             $c,
             $p->getInventoryCount($k),
@@ -129,6 +132,7 @@ Class Cart66DataTables {
         if($save) { $p->updateInventoryFromPost($k); }
         $data[] = array(
           $p->isInventoryTracked($k),
+          $p->item_number,
           $p->name,
           $c='',
           $p->getInventoryCount($k),
@@ -160,6 +164,7 @@ Class Cart66DataTables {
       's.subscription_plan_name',
       's.feature_level',
       's.active_until',
+      "concat_ws(' ', a.first_name,a.last_name)"
     );
     $indexColumn = "DISTINCT a.id";
     $tableName = Cart66Common::getTableName('accounts') . ' as a, ' . Cart66Common::getTableName('account_subscriptions') . ' as s';
@@ -194,7 +199,7 @@ Class Cart66DataTables {
       if($sub = $a->getCurrentAccountSubscription(true)) {
         $planName = $sub->subscriptionPlanName;
         $featureLevel = $sub->isActive() ? $sub->featureLevel : 'No Access - Expired';
-        $activeUntil = $sub->isActive() ? date('m/d/Y', strtotime($sub->activeUntil)) : 'No Access';
+        $activeUntil = $sub->isActive() ? date(get_option('date_format'), strtotime($sub->activeUntil)) : 'No Access';
         $activeUntil = ($sub->lifetime == 1) ? "Lifetime" : $activeUntil;
         $type = 'Manual';
         if($sub->isPayPalSubscription()) {
@@ -300,7 +305,7 @@ Class Cart66DataTables {
   }
   
   public static function ordersTable() {
-    $columns = array( 'id', 'trans_id', 'bill_first_name', 'bill_last_name', 'total', 'ordered_on', 'shipping_method', 'status', 'email', 'notes', 'authorization' );
+    $columns = array( 'id', 'trans_id', 'bill_first_name', 'bill_last_name', 'total', 'ordered_on', 'shipping_method', 'status', 'email', 'notes', 'authorization', "concat_ws(' ', bill_first_name,bill_last_name)");
     $indexColumn = "id";
     $tableName = Cart66Common::getTableName('orders');
 
@@ -327,7 +332,7 @@ Class Cart66DataTables {
         $o->bill_first_name,
         $o->bill_last_name,
         Cart66Common::currency($o->total),
-        date('m/d/Y', strtotime($o->ordered_on)),
+        date(get_option('date_format'), strtotime($o->ordered_on)),
         $o->shipping_method,
         $o->status,
         $o->notes
@@ -495,7 +500,7 @@ Class Cart66DataTables {
   	die();
   }
   
-  public function gfData() {
+  public static function gfData() {
     global $wpdb;
     $gfTitles = array();
     if(CART66_PRO && class_exists('RGFormsModel')) {
@@ -510,7 +515,7 @@ Class Cart66DataTables {
     return $gfTitles;
   }
   
-  public function totalRows($indexColumn, $tableName, $where=null) {
+  public static function totalRows($indexColumn, $tableName, $where=null) {
     global $wpdb;
     $sql = "
     	SELECT COUNT(" . $indexColumn . ")
@@ -521,7 +526,7 @@ Class Cart66DataTables {
     return $sql[0];
   }
   
-  public function filteredRows($indexColumn, $tableName, $where) {
+  public static function filteredRows($indexColumn, $tableName, $where) {
     global $wpdb;
     $sqlTotal = "
       SELECT COUNT(" . $indexColumn . ")
@@ -532,12 +537,12 @@ Class Cart66DataTables {
     return $sqlTotal;
   }
   
-  public function dataTablesWhere($columns) {
+  public static function dataTablesWhere($columns) {
     $where = "";
   	if($_GET['sSearch'] != ""){
   		$where = "WHERE (";
   		for ($i=0; $i<count($columns); $i++){
-  			$where .= $columns[$i] . " LIKE '%" . mysql_real_escape_string($_GET['sSearch']) . "%' OR ";
+  			$where .= $columns[$i] . " LIKE '%" . mysql_real_escape_string(trim($_GET['sSearch'])) . "%' OR ";
   		}
   		$where = substr_replace($where, "", -3) . ')';
   	}
@@ -550,13 +555,13 @@ Class Cart66DataTables {
   			else {
   				$where .= " AND ";
   			}
-  			$where .= $columns[$i] . " LIKE '%" . mysql_real_escape_string($_GET['sSearch_' . $i]) . "%' ";
+  			$where .= $columns[$i] . " LIKE '%" . mysql_real_escape_string(trim($_GET['sSearch_' . $i])) . "%' ";
   		}
   	}
     return $where;
   }
   
-  public function dataTablesLimit() {
+  public static function dataTablesLimit() {
     $limit = "";
   	if(isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1'){
   		$limit = mysql_real_escape_string($_GET['iDisplayStart']) . ", " . mysql_real_escape_string($_GET['iDisplayLength']);
@@ -564,7 +569,7 @@ Class Cart66DataTables {
     return $limit;
   }
   
-  public function dataTablesOrder($columns) {
+  public static function dataTablesOrder($columns) {
     if(isset($_GET['iSortCol_0'])){
   		$order = "ORDER BY  ";
   		for($i=0; $i<intval($_GET['iSortingCols']); $i++){

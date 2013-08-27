@@ -108,7 +108,7 @@ elseif($_SERVER['REQUEST_METHOD'] == "POST") {
           <tr valign="top">
             <th scope="row"><?php _e('Thousands Separator', 'cart66'); ?></th>
             <td>
-              <input class="small-text" type="text" name="currency_thousands_sep" value="<?php echo Cart66Setting::getValue('currency_thousands_sep') ? htmlentities(Cart66Setting::getValue('currency_thousands_sep')) : ',';  ?>" id="currency_thousands_sep">
+              <input class="small-text" type="text" name="currency_thousands_sep" value="<?php echo Cart66Setting::getValue('currency_thousands_sep') ? htmlentities(Cart66Setting::getValue('currency_thousands_sep'), ENT_COMPAT, 'UTF-8') : ',';  ?>" id="currency_thousands_sep">
               <label for="currency_thousands_sep">
                 <span class="description"><?php _e( 'This sets the thousands separator.  This is usually a' , 'cart66' ); ?> ,</span>
               </label>
@@ -117,7 +117,7 @@ elseif($_SERVER['REQUEST_METHOD'] == "POST") {
           <tr valign="top">
             <th scope="row"><?php _e('Decimal Point', 'cart66'); ?></th>
             <td>
-              <input class="small-text" type="text" name="currency_dec_point" value="<?php echo Cart66Setting::getValue('currency_dec_point') ? htmlentities(Cart66Setting::getValue('currency_dec_point')) : '.';  ?>" id="currency_dec_point">
+              <input class="small-text" type="text" name="currency_dec_point" value="<?php echo Cart66Setting::getValue('currency_dec_point') ? htmlentities(Cart66Setting::getValue('currency_dec_point'), ENT_COMPAT, 'UTF-8') : '.';  ?>" id="currency_dec_point">
               <label for="currency_dec_point">
                 <span class="description"><?php _e( 'This sets the decimal point separator.  This is usually a', 'cart66' ); ?> .</span>
               </label>
@@ -126,7 +126,7 @@ elseif($_SERVER['REQUEST_METHOD'] == "POST") {
           <tr valign="top">
             <th scope="row"><?php _e('Decimals', 'cart66'); ?></th>
             <td>
-              <input class="small-text" type="text" name="currency_decimals" value="<?php echo Cart66Setting::getValue('currency_decimals') == 'no_decimal' ? 0 : (Cart66Setting::getValue('currency_decimals') ? htmlentities(Cart66Setting::getValue('currency_decimals')) : 2);  ?>" id="currency_decimals">
+              <input class="small-text" type="text" name="currency_decimals" value="<?php echo Cart66Setting::getValue('currency_decimals') == 'no_decimal' ? 0 : (Cart66Setting::getValue('currency_decimals') ? htmlentities(Cart66Setting::getValue('currency_decimals'), ENT_COMPAT, 'UTF-8') : 2);  ?>" id="currency_decimals">
               <label for="currency_decimals">
                 <span class="description"><?php _e( 'This sets the number of decimal points.  Use 0 to set to none.  Default is 2.' , 'cart66' ); ?></span>
               </label>

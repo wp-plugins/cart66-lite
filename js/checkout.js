@@ -56,6 +56,9 @@
     if(taxed === 'true') {
       var ajaxurl = $('#confirm-url').val();
       var state = $('#billing-state').val();
+      if(state == null) {
+        state = '';
+      }
       var zip = $('#billing-zip').val();
       var state_text = $('#billing-state_text').val();
       if($('.sameAsBilling').length !=0 && !$('.sameAsBilling').attr('checked')) {
@@ -67,6 +70,9 @@
         }
         if($('#shipping-state').length != 0) {
           var state = $('#shipping-state').val();
+          if(state == null) {
+            state = '';
+          }
         }
       }
       else if($('#billing-zip').length == 0) {
@@ -78,12 +84,15 @@
         }
         if($('#shipping-state').length != 0) {
           var state = $('#shipping-state').val();
+          if(state == null) {
+            state = '';
+          }
         }
       }
       if(zip == '') {
         return false;
       }
-      if(state == 0 && state_text == '') {
+      if(state == '' && state_text == '') {
         return false;
       }
       $('.ajax-spin').show();

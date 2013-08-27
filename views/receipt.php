@@ -221,7 +221,7 @@ if(!$ajaxRefresh) :
           <?php _e( 'Phone' , 'cart66' ); ?>: <?php echo Cart66Common::formatPhone($order->phone) ?><br/>
         <?php endif; ?>
         <?php _e( 'Email' , 'cart66' ); ?>: <?php echo $order->email ?><br/>
-        <?php _e( 'Date' , 'cart66' ); ?>: <?php echo date('m/d/Y g:i a', strtotime($order->ordered_on)) ?>
+        <?php _e( 'Date' , 'cart66' ); ?>: <?php echo date(get_option('date_format'), strtotime($order->ordered_on)) ?> <?php echo date(get_option('time_format'), strtotime($order->ordered_on)) ?>
         <?php if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['payment'])): ?><br />
           <?php foreach($additional_fields['payment'] as $af): ?>
             <?php echo $af['label']; ?>: <?php echo $af['value']; ?><br />
@@ -273,7 +273,7 @@ if(!$ajaxRefresh) :
             <?php _e( 'Phone' , 'cart66' ); ?>: <?php echo Cart66Common::formatPhone($order->phone) ?><br/>
           <?php endif; ?>
           <?php _e( 'Email' , 'cart66' ); ?>: <?php echo $order->email ?><br/>
-          <?php _e( 'Date' , 'cart66' ); ?>: <?php echo date('m/d/Y g:i a', strtotime($order->ordered_on)) ?>
+          <?php _e( 'Date' , 'cart66' ); ?>: <?php echo date(get_option('date_format'), strtotime($order->ordered_on)) ?> <?php echo date(get_option('time_format'), strtotime($order->ordered_on)) ?>
           <?php if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['payment'])): ?><br />
             <?php foreach($additional_fields['payment'] as $af): ?>
               <?php echo $af['label']; ?>: <?php echo $af['value']; ?><br />

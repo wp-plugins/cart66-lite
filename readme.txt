@@ -4,7 +4,7 @@ Donate link: http://cart66.com/
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales, shopping cart
 Requires at least: 2.8.2
 Tested up to: 3.5
-Stable tag: 1.5.1.8
+Stable tag: 1.5.1.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,30 @@ We are not able to provide anything other than community based support for Cart6
 4. [Secure credit card processing with Mijireh](http://www.mijireh.com)
 
 == Changelog ==
+
+= 1.5.1.14 =
+
+* NEW: Filter to disable Cart66 email receipts
+* UPDATED: Datatables integration to allow more friendly searches in orders and accounts
+* UPDATED: PayPal to include default language
+* UPDATED: htmlentities() function to force UTF-8 Standard for compatibility between PHP 5.4 – 5.5
+* UPDATED: Most date formats to use WordPress date format and time format from the main site settings
+* UPDATED: Cookies to include HTTPONLY parameter to fix PCI compliance issues
+* FIXED: PHP 5 error messages
+* FIXED: Issue with crossover request from Cart6 Cloud
+* FIXED: Issue with function that checks to see if custom mail plugins are installed
+* FIXED: Localization issues
+* FIXED: Removed unnecessary html tags
+* FIXED: Issue with user defined price not allowing “0″
+* FIXED: Issue with coupon code making the grand total a negative number
+* FIXED: Possible race condition between setting page to public and starting the slurp for Mijireh
+* FIXED: Fixed slurper not working correctly
+* FIXED: Issue with empty countries box when no countries are selected for international sales
+* FIXED: Issue with add to cart button staying disabled after inventory fail
+* FIXED: Misplaced paragraph and list tags in cart view
+* FIXED: Invalid character issue with Order Statuses
+* FIXED: Issues with international countries calculating taxes
+* FIXED: 2Checkout issue not sending shipping details when shipping is $0
 
 = 1.5.1.8 = 
 

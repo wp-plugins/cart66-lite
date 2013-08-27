@@ -2,7 +2,7 @@
 
 class Cart66Admin {
   
-  public function productsPage() {
+  public static function productsPage() {
     $data = array();
     $subscriptions = array('0' => 'None');
     
@@ -27,7 +27,7 @@ class Cart66Admin {
     echo $view;
   }
   
-  public function settingsPage() {
+  public static function settingsPage() {
     $tabs = array(
       'main' => array('tab' => 'Main', 'title' => ''),
       'tax' => array('tab' => 'Tax', 'title' => ''),
@@ -45,12 +45,12 @@ class Cart66Admin {
     echo $view;
   }
   
-  public function notificationsPage() {
+  public static function notificationsPage() {
     $view = Cart66Common::getView('admin/notifications.php');
     echo $view;
   }
   
-  public function ordersPage() {
+  public static function ordersPage() {
     if($_SERVER['REQUEST_METHOD'] == 'GET' && Cart66Common::getVal('task') == 'view') {
       $order = new Cart66Order($_GET['id']);
       $view = Cart66Common::getView('admin/order-view.php', array('order'=>$order)); 
@@ -122,22 +122,22 @@ class Cart66Admin {
     echo $view;
   }
 
-  public function inventoryPage() {
+  public static function inventoryPage() {
     $view = Cart66Common::getView('admin/inventory.php');
     echo $view; 
   }
 
-  public function promotionsPage() {
+  public static function promotionsPage() {
     $view = Cart66Common::getView('admin/promotions.php');
     echo $view;
   }
 
-  public function shippingPage() {
+  public static function shippingPage() {
     $view = Cart66Common::getView('admin/shipping.php');
     echo $view;
   }
 
-  public function reportsPage() {
+  public static function reportsPage() {
     $view = Cart66Common::getView('admin/reports.php');
     echo $view;
   }
@@ -149,7 +149,7 @@ class Cart66Admin {
     echo $view;
   }
   
-  public function paypalSubscriptions() {
+  public static function paypalSubscriptions() {
     $data = array();
     if(CART66_PRO) {
       $sub = new Cart66PayPalSubscription();
@@ -194,7 +194,7 @@ class Cart66Admin {
     
   }
   
-  public function accountsPage() {
+  public static function accountsPage() {
     $data = array();
     if(CART66_PRO) {
       $data['plan'] = new Cart66AccountSubscription();

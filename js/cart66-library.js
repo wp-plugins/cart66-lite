@@ -149,6 +149,7 @@ function inventoryCheck(formId, ajaxurl, useAjax, productName, productUrl, addin
         $jq('.modalClose').show();
         $jq('#stock_message_box_' + formId).fadeIn(300);
         $jq('#stock_message_' + formId).html(response[1]);
+        $jq('#addToCart_' + formId).removeAttr('disabled');
       }
     },
     error: function(xhr,err){

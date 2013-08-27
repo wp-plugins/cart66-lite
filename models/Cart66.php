@@ -23,7 +23,11 @@ class Cart66 {
     // Look for hard coded order number
     if(CART66_PRO && CART66_ORDER_NUMBER !== false) {
       Cart66Setting::setValue('order_number', CART66_ORDER_NUMBER);
-      $versionInfo = Cart66ProCommon::getVersionInfo();
+      $versionInfo = get_transient('_cart66_version_request');
+      if(!$versionInfo) {
+        $versionInfo = Cart66ProCommon::getVersionInfo();
+        set_transient('_cart66_version_request', $versionInfo, 43200);
+      }
       Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Trying to register order number: " . 
         CART66_ORDER_NUMBER . print_r($versionInfo, true));
       if(!$versionInfo) {
@@ -57,6 +61,9 @@ class Cart66 {
     $this->loadCoreModels();
     $this->initCurrencySymbols();
     $this->setDefaultPageRoles();
+    
+    // Allow override for sending email receipts
+    define("CART66_EMAILS", apply_filters('cart66_send_default_emails', true));
     
     // Verify that upgrade has been run
     if(IS_ADMIN) {
@@ -173,13 +180,13 @@ class Cart66 {
       add_action('wp_enqueue_scripts', array('Cart66', 'enqueueScripts'));
 
       if(CART66_PRO) {
-        add_action('template_redirect', array($this, 'checkInventoryOnCheckout'));
-        add_action('template_redirect', array($this, 'checkShippingMethodOnCheckout'));
-        add_action('template_redirect', array($this, 'checkZipOnCheckout'));
-        add_action('template_redirect', array($this, 'checkTermsOnCheckout'));
-        add_action('template_redirect', array($this, 'checkMinAmountOnCheckout'));
-        add_action('template_redirect', array($this, 'checkCustomFieldsOnCheckout'));
-        add_action('template_redirect', array($this, 'protectSubscriptionPages'));
+        add_action('template_redirect', array($this, 'checkInventoryOnCheckout'), 0);
+        add_action('template_redirect', array($this, 'checkShippingMethodOnCheckout'), 0);
+        add_action('template_redirect', array($this, 'checkZipOnCheckout'), 0);
+        add_action('template_redirect', array($this, 'checkTermsOnCheckout'), 0);
+        add_action('template_redirect', array($this, 'checkMinAmountOnCheckout'), 0);
+        add_action('template_redirect', array($this, 'checkCustomFieldsOnCheckout'), 0);
+        add_action('template_redirect', array($this, 'protectSubscriptionPages'), 0);
         add_filter('wp_list_pages_excludes', array($this, 'hideStorePages'));
         add_filter('wp_list_pages_excludes', array($this, 'hidePrivatePages'));
         add_filter('wp_nav_menu_objects', array($this, 'filter_private_menu_items'), 10, 2);
@@ -234,7 +241,7 @@ class Cart66 {
       require_once(CART66_PATH . "/gateways/Cart66Mijireh.php");
       $order_number = Cart66Common::getVal('order_number');
       $mijireh = new Cart66Mijireh();
-      $mijireh->saveOrder($order_number);
+      $mijireh->saveMijirehOrder($order_number);
     }
     elseif(isset($_GET['task']) && Cart66Common::getVal('task') == 'mijireh_page_slurp') {
       $access_key = Cart66Setting::getValue('mijireh_access_key');
@@ -265,7 +272,7 @@ class Cart66 {
       $key = strtoupper(md5($string));
       if($key == $_REQUEST['key']) {
         $tco = new Cart662Checkout();
-        $tco->saveOrder();
+        $tco->saveTcoOrder();
       }
     }
   }

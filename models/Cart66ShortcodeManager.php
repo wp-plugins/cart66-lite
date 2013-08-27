@@ -696,7 +696,7 @@ class Cart66ShortcodeManager {
             $link = "<a id='Cart66CancelPayPalSubscription' href=\"$url\">$text</a>";
           }
           else {
-            $link = "Your account is $sub->status but will remain active until " . date('m/d/Y', strtotime($sub->activeUntil));
+            $link = "Your account is $sub->status but will remain active until " . date(get_option('date_format'), strtotime($sub->activeUntil));
           }
         }
         
@@ -924,7 +924,7 @@ class Cart66ShortcodeManager {
       $account = new Cart66Account(Cart66Session::get('Cart66AccountId'));
       $subscription = $account->getCurrentAccountSubscription($account->id);
       $expirationDate = $subscription->active_until;
-      $format = "m/d/Y";
+      $format = get_option('date_format');
       if(isset($attrs['format'])){
         $format = $attrs['format'];
       }
@@ -1152,7 +1152,7 @@ class Cart66ShortcodeManager {
             $output = ucfirst(strtolower($sub->$attrs['att']));
             break;
           case 'active_until':
-            $output = date('F d, Y', strtotime($sub->$attrs['att']));
+            $output = date(get_option('date_format'), strtotime($sub->$attrs['att']));
             break;
           case 'username':
             $output = $account->$attrs['att'];

@@ -2,7 +2,7 @@
 
 class Cart66Dialog {
   
-  public function cart66_get_popup_screens(){
+  public static function cart66_get_popup_screens(){
     $default_screens = array(
       'page',
       'post',
@@ -32,7 +32,7 @@ class Cart66Dialog {
   }
   
   //Action target that displays the popup to insert a form to a post/page
-  function add_shortcode_popup() {
+  public static function add_shortcode_popup() {
     global $current_screen;
     //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Thinking about adding code for shortcode popup: $current_screen->id");
     

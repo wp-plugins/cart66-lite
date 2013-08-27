@@ -53,7 +53,7 @@ class Cart66Common {
   		return $phone;
   }
 
-  public function isRegistered() {
+  public static function isRegistered() {
     $setting = new Cart66Setting();
     $orderNumber = Cart66Setting::getValue('order_number');
     $isRegistered = ($orderNumber !== false) ? true : false;
@@ -1043,7 +1043,7 @@ class Cart66Common {
     return $statuses;
   }
 
-  public function getPromoMessage() {
+  public static function getPromoMessage() {
     $promo = Cart66Session::get('Cart66Promotion');
     $promoMsg = "none";
     if($promo) {
@@ -1167,7 +1167,7 @@ class Cart66Common {
     return $url;
   }
   
-  public function appendWurlQueryString($nvPairs) {
+  public static function appendWurlQueryString($nvPairs) {
     $url = home_url();
     $url .= strpos($url, '?') ? '&' : '/?';
     $url .= $nvPairs;
@@ -1180,7 +1180,7 @@ class Cart66Common {
    * @param string Name value pairs formatted as name1=value1&name2=value2
    * @return string The URL to the current page with the given query string
    */
-  public function replaceQueryString($nvPairs=false) {
+  public static function replaceQueryString($nvPairs=false) {
     $url = explode('?', self::getCurrentPageUrl());
     $url = $url[0];
     if($nvPairs) {
@@ -1210,7 +1210,7 @@ class Cart66Common {
     return $paypalUrl;
   }
   
-  public function curl($url, $method='GET') {
+  public static function curl($url, $method='GET') {
     $method = strtoupper($method);
     
     // Make sure curl is installed?
@@ -1369,18 +1369,20 @@ class Cart66Common {
         $output .= self::arrayToXml($child,NULL,NULL,NULL,FALSE, $nested);
         $nested--;
         $tag = is_string($root) ? $root : $ArrayNumberPrefix . $root;
-        $tag = array_shift(explode(' ', $tag));
+        $tag = explode(' ', $tag);
+        $tag = array_shift($tag);
         $output .= str_repeat(" ", (2 * $nested)) . '  </' . $tag . '>' . "\n";
       }
       else {
         if(!isset($output)) { $output = ''; }
         $tag = is_string($root) ? $root : $ArrayNumberPrefix . $root;
-        $tag = array_shift(explode(' ', $tag));
+        $tag = explode(' ', $tag);
+        $tag = array_shift($tag);
         $output .= str_repeat(" ", (2 * $nested)) . '  <' . (is_string($root) ? $root : $ArrayNumberPrefix . $root) . '>' . $child . '</' . $tag . '>' . "\n";
       }
     }
-    
-    $name = array_shift(explode(' ', $name));
+    $name = explode(' ', $name);
+    $name = array_shift($name);
     if ($beginning) $output .= '</' . $name . '>';
 
     return $output;
@@ -1449,7 +1451,7 @@ class Cart66Common {
       }
       elseif($days=floor($totaldelay/86400)) {
         $totaldelay = $totaldelay % 86400;
-        $output = date('m/d/Y', strtotime($datestamp));
+        $output = date(get_option('date_format'), strtotime($datestamp));
       }
       elseif($hours=floor($totaldelay/3600)) {
         $totaldelay = $totaldelay % 3600;
@@ -1476,7 +1478,7 @@ class Cart66Common {
       }
       elseif($days=floor($timeleft/86400)) {
         $timeleft = $timeleft % 86400;
-        $output = date('m/d/Y', strtotime($datestamp));
+        $output = date(get_option('date_format'), strtotime($datestamp));
       }
       elseif($hours=floor($timeleft/3600)) {
         $timeleft = $timeleft % 3600;
@@ -1572,7 +1574,7 @@ class Cart66Common {
     return $values;
   }
   
-  public function sessionType() {
+  public static function sessionType() {
     $type = Cart66Setting::getValue('session_type');
     if(!$type) {
       $type = 'database';
@@ -1581,14 +1583,14 @@ class Cart66Common {
   }
   
   // Remove all non-numeric characters except for the decimal
-  public function cleanNumber($string) {
+  public static function cleanNumber($string) {
     $dec_point = Cart66Setting::getValue('currency_dec_point') ? Cart66Setting::getValue('currency_dec_point') : '.';
     $string = str_replace($dec_point, '.', $string);
     $number = preg_replace('/[^\d\.]/', '', $string);
     return $number;
   }
   
-  public function verifyCartPages($outputType = 'full'){
+  public static function verifyCartPages($outputType = 'full'){
     $requiredPages = array(
       "Store" => "store",
       "Cart" => "store/cart",

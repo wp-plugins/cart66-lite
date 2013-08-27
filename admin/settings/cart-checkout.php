@@ -194,7 +194,7 @@ $tab = 'cc-cart_checkout';
               <th scope="row"><?php _e('Amount', 'cart66'); ?></th>
               <td>
                 <?php echo Cart66Common::currencySymbol('before'); ?>
-                <input class="small-text" type="text" name="minimum_amount" value="<?php echo htmlentities(Cart66Setting::getValue('minimum_amount'));  ?>" id="minimum_amount">
+                <input class="small-text" type="text" name="minimum_amount" value="<?php echo htmlentities(Cart66Setting::getValue('minimum_amount'), ENT_COMPAT, 'UTF-8');  ?>" id="minimum_amount">
                 <?php echo Cart66Common::currencySymbol('after'); ?>
                 <p class="description"><?php _e( 'Set the amount required in order for a customer to checkout' , 'cart66' ); ?>.</p>
               </td>

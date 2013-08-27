@@ -362,12 +362,12 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
             <ul>
               <li>
                 <label class="med" for="product-options_1"><?php _e( 'Option Group 1' , 'cart66' ); ?>:</label>
-                <input style="width: 80%" type="text" name="product[options_1]" id="product-options_1" value="<?php echo htmlentities($product->options_1); ?>" />
+                <input style="width: 80%" type="text" name="product[options_1]" id="product-options_1" value="<?php echo htmlentities($product->options_1, ENT_COMPAT, 'UTF-8'); ?>" />
                 <p class="label_desc"><?php _e( 'Small, Medium +$2.00, Large +$4.00' , 'cart66' ); ?></p>
               </li>
               <li>
                 <label class="med" for="product-options_2"><?php _e( 'Option Group 2' , 'cart66' ); ?>:</label>
-                <input style="width: 80%" type="text" name='product[options_2]' id="product-options_2" value="<?php echo htmlentities($product->options_2); ?>" />
+                <input style="width: 80%" type="text" name='product[options_2]' id="product-options_2" value="<?php echo htmlentities($product->options_2, ENT_COMPAT, 'UTF-8'); ?>" />
                 <p class="label_desc"><?php _e( 'Red, White, Blue' , 'cart66' ); ?></p>
               </li>
               <li>

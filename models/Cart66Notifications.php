@@ -123,7 +123,11 @@ class Cart66Notifications {
         $msg .= $order->ship_address2 . "\n";
       }
       $msg .= $order->ship_city . ' ' . $order->ship_state . ' ' . $order->ship_zip . "\n" . $order->ship_country . "\n";
-
+      if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['shipping'])) {
+        foreach($additional_fields['shipping'] as $af) {
+          $msg .= html_entity_decode($af['label']) . ': ' . $af['value'] . "\n";
+        }
+      }
       $msg .= "\n" . __("Delivery via","cart66") . ": " . $order->shipping_method . "\n";
     }
 
@@ -138,7 +142,11 @@ class Cart66Notifications {
     $msg .= $order->bill_city . ' ' . $order->bill_state;
     $msg .= $order->bill_zip != null ? ', ' : ' ';
     $msg .= $order->bill_zip . "\n" . $order->bill_country . "\n";
-
+    if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['billing'])) {
+      foreach($additional_fields['billing'] as $af) {
+        $msg .= html_entity_decode($af['label']) . ': ' . $af['value'] . "\n";
+      }
+    }
     if(!empty($order->phone)) {
       $phone = Cart66Common::formatPhone($order->phone);
       $msg .= "\n" . __("Phone","cart66") . ": $phone\n";
@@ -147,7 +155,22 @@ class Cart66Notifications {
     if(!empty($order->email)) {
       $msg .= __("Email","cart66") . ': ' . $order->email . "\n";
     }
-
+    if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['payment'])) {
+      foreach($additional_fields['payment'] as $af) {
+        $msg .= html_entity_decode($af['label']) . ': ' . $af['value'] . "\n";
+      }
+    }
+    
+    if(isset($order->custom_field) && $order->custom_field != '') {
+      if(Cart66Setting::getValue('checkout_custom_field_label')) {
+        $msg .= "\n" . Cart66Setting::getValue('checkout_custom_field_label');
+      }
+      else {
+        $msg .= "\n" . __('Enter any special instructions you have for this order:', 'cart66');
+      }
+      $msg .= "\n" . $order->custom_field . "\n";
+    }
+    
     $receiptPage = get_page_by_path('store/receipt');
     $link = get_permalink($receiptPage->ID);
     if(strstr($link,"?")){

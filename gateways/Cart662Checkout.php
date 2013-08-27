@@ -131,7 +131,8 @@ class Cart662Checkout extends Cart66GatewayAbstract {
       $method = new Cart66ShippingMethod(Cart66Session::get('Cart66Cart')->getShippingMethodId());
       $shippingMethod = $method->name;
     }
-    if($shipping > 0) {
+    $cart = Cart66Session::get('Cart66Cart');
+    if($cart->requireShipping() || $cart->hasTaxableProducts()) {
       $this->addField('li_' . $number . '_type', 'product');
       $this->addField('li_' . $number . '_product_id', __('Shipping', 'cart66'));
       $this->addField('li_' . $number . '_name', $shippingMethod);
@@ -202,7 +203,7 @@ class Cart662Checkout extends Cart66GatewayAbstract {
     return $orderId;
   }
   
-  public function saveOrder() {
+  public function saveTcoOrder() {
     global $wpdb;
     // NEW Parse custom value
     $referrer = false;
@@ -248,11 +249,11 @@ class Cart662Checkout extends Cart66GatewayAbstract {
       $orderId = $order->id;
       
       // Handle email receipts
-      if(CART66_PRO && Cart66Setting::getValue('enable_advanced_notifications') ==1) {
+      if(CART66_PRO && CART66_EMAILS && Cart66Setting::getValue('enable_advanced_notifications') ==1) {
         $notify = new Cart66AdvancedNotifications($orderId);
         $notify->sendAdvancedEmailReceipts();
       }
-      else {
+      elseif(CART66_EMAILS) {
         $notify = new Cart66Notifications($orderId);
         $notify->sendEmailReceipts();
       }

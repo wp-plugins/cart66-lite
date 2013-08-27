@@ -69,7 +69,7 @@
     <tr>
       <td colspan="3"><p><strong><?php _e( 'Order Number' , 'cart66' ); ?>: <?php echo $order->trans_id ?></strong></p></td>
       <!-- <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-      <td align="left"><p><strong>Date: <?php echo date('m/d/Y', strtotime($order->ordered_on)); ?></strong></p></td> -->
+      <td align="left"><p><strong>Date: <?php echo date(get_option('date_format'), strtotime($order->ordered_on)); ?></strong></p></td> -->
     </tr>
     
     <?php if(strlen($order->bill_last_name) > 2): ?>
@@ -99,7 +99,7 @@
           Phone: <?php echo Cart66Common::formatPhone($order->phone) ?><br/>
         <?php endif; ?>
         Email: <?php echo $order->email ?><br/>
-        Date: <?php echo date('m/d/Y g:i a', strtotime($order->ordered_on)) ?>
+        Date: <?php echo date(get_option('date_format'), strtotime($order->ordered_on)) ?> <?php echo date(get_option('time_format'), strtotime($order->ordered_on)) ?>
         </p>
       </td>
     </tr>
@@ -141,7 +141,7 @@
             Phone: <?php echo Cart66Common::formatPhone($order->phone) ?><br/>
           <?php endif; ?>
           Email: <?php echo $order->email ?><br/>
-          Date: <?php echo date('m/d/Y g:i a', strtotime($order->ordered_on)) ?>
+          Date: <?php echo date(get_option('date_format'), strtotime($order->ordered_on)) ?> <?php echo date(get_option('time_format'), strtotime($order->ordered_on)) ?>
           </p>
         </td>
       <?php endif; ?>

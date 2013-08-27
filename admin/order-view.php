@@ -32,7 +32,7 @@ if(isset($data['resend']) && $data['resend'] == true) {
     <h3 style="float: right;"><?php _e( 'Order Number' , 'cart66' ); ?>: <?php echo $order->trans_id ?></h3>
     
     <h3><?php echo $order->first_name ?> <?php echo $order->last_name ?></h3>
-    <h3>Date: <?php echo date('n/j/Y g:i a', strtotime($order->ordered_on)); ?></h3>
+    <h3>Date: <?php echo date(get_option('date_format'), strtotime($order->ordered_on)); ?> <?php echo date(get_option('time_format'), strtotime($order->ordered_on)); ?></h3>
 
     <table border="0" cellspacing="0" cellpadding="0" style="width: 100%;" id="Cart66OrderViewTable">
       <tr>

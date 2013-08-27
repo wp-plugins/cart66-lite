@@ -363,33 +363,35 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete_rate' && isset($_GET['id
               <span class="label_desc"><?php _e( 'Rate for each additional item' , 'cart66' ); ?></span>
             </td>
           </tr>
-          <tr valign="top" class="eligible_countries_block">
-            <th scope="row"><?php _e('Eligible Countries', 'cart66'); ?></th>
-            <td>
-              <select id="countries" name="shipping_method[countries][]" class="multiselect" multiple="multiple">
-                <?php
-                  $countryList = unserialize($method->countries);
-                  $countryList = $countryList ? $countryList : array();
-                ?>
-                <?php
-                $countries = explode(',', Cart66Setting::getValue('countries'));
+          <?php
+          $countryList = unserialize($method->countries);
+          $countryList = $countryList ? $countryList : array();
+          $countries = array_filter(explode(',', Cart66Setting::getValue('countries')));
+          ?>
+          <?php if(count($countries) > 0 && Cart66Setting::getValue('international_sales')): ?>
+            <tr valign="top" class="eligible_countries_block">
+              <th scope="row"><?php _e('Eligible Countries', 'cart66'); ?></th>
+              <td>
+                <select id="countries" name="shipping_method[countries][]" class="multiselect" multiple="multiple">
+                  <?php
                 
-                foreach($countries as $c) {
-                  $ship_country = explode('~', $c);
-                  $ship_to_countries[$ship_country[0]] = $ship_country[1];
-                }
-                foreach($ship_to_countries as $code => $country): ?>
-                  <?php 
-                    $selected = (in_array($country, $countryList)) ? 'selected="selected"' : '';
-                    if(!empty($code)):
-                  ?>
-                    <option value="<?php echo $code . '~' . $country; ?>" <?php echo $selected ?>><?php echo $country ?></option>
-                  <?php endif; ?>
-                <?php endforeach; ?>
-              </select>
-              <span class="description"><?php _e('Select which countries you want this shipping method to apply to. Leave blank to apply to all countries. Only the countries selected in the main settings will appear in this list.', 'cart66'); ?></span>
-            </td>
-          </tr>
+                  foreach($countries as $c) {
+                    $ship_country = explode('~', $c);
+                    $ship_to_countries[$ship_country[0]] = $ship_country[1];
+                  }
+                  foreach($ship_to_countries as $code => $country): ?>
+                    <?php 
+                      $selected = (in_array($country, $countryList)) ? 'selected="selected"' : '';
+                      if(!empty($code)):
+                    ?>
+                      <option value="<?php echo $code . '~' . $country; ?>" <?php echo $selected ?>><?php echo $country ?></option>
+                    <?php endif; ?>
+                  <?php endforeach; ?>
+                </select>
+                <span class="description"><?php _e('Select which countries you want this shipping method to apply to. Leave blank to apply to all countries. Only the countries selected in the main settings will appear in this list.', 'cart66'); ?></span>
+              </td>
+            </tr>
+          <?php endif; ?>
           <tr valign="top">
             <th scope="row"></th>
             <td>

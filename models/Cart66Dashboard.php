@@ -27,7 +27,11 @@ class Cart66Dashboard {
     
     if(CART66_PRO) {
       $updater = new Cart66ProCommon();
-      $newVersion = $updater->getVersionInfo();
+      $newVersion = get_transient('_cart66_version_request');
+      if(!$newVersion) {
+        $newVersion = $updater->getVersionInfo();
+        set_transient('_cart66_version_request', $newVersion, 43200);
+      }
       $dismissVersion = Cart66Setting::getValue('dismiss_version');
       $currentVersion = Cart66Setting::getValue('version');
       if(version_compare($currentVersion, $newVersion['version'], '<') && version_compare($newVersion['version'], $dismissVersion, '>')){
@@ -263,7 +267,7 @@ class Cart66Dashboard {
            <?php _e('Last Updated', 'cart66') ?>:
           </td>
           <td class="right">
-            <?php echo date('D, M d, Y g:i:s A', Cart66Common::localTs()); ?>
+            <?php echo date(get_option('date_format'), Cart66Common::localTs()); ?> <?php echo date(get_option('time_format'), Cart66Common::localTs()); ?>
           </td>
         </tr>
         </tfoot>
@@ -461,7 +465,7 @@ class Cart66Dashboard {
                 <?php _e('Today', 'cart66') ?>:
               </td>
               <td class="right">
-                <?php echo date('F j',strtotime('now'));?>
+                <?php echo date(get_option('date_format'),strtotime('now'));?>
               </td>
             </tr>
             <tr>
@@ -650,7 +654,11 @@ class Cart66Dashboard {
   
   public static function cart66_upgrade_message(){
     $updater = new Cart66ProCommon();
-    $newVersion = $updater->getVersionInfo();
+    $newVersion = get_transient('_cart66_version_request');
+    if(!$newVersion) {
+      $newVersion = $updater->getVersionInfo();
+      set_transient('_cart66_version_request', $newVersion, 43200);
+    }
     $currentVersion = Cart66Setting::getValue('version');
     $cart66_plugin_url = "cart66/cart66.php";
     $cart66_upgrade_url = wp_nonce_url('update.php?action=upgrade-plugin&amp;plugin=' . urlencode($cart66_plugin_url), 'upgrade-plugin_' . $cart66_plugin_url);

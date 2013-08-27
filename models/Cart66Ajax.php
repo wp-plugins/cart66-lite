@@ -18,9 +18,10 @@ class Cart66Ajax {
   
   public function forcePluginUpdate(){
     $output = false;
-    if(update_option('_site_transient_update_plugins', '') && update_option('_transient_update_plugins', '') ){
-      $output = true;
-    }
+    update_option('_site_transient_update_plugins', '');
+    update_option('_transient_update_plugins', '');
+    delete_transient('_cart66_version_request');
+    $output = true;
     echo $output;
     die();
   }
@@ -80,7 +81,7 @@ class Cart66Ajax {
   public static function viewLoggedEmail() {
     if(isset($_POST['log_id'])) {
       $emailLog = new Cart66EmailLog($_POST['log_id']);
-      echo nl2br(htmlentities($emailLog->headers . "\r\n" . $emailLog->body));
+      echo nl2br(htmlentities($emailLog->headers . "\r\n" . $emailLog->body, ENT_COMPAT, 'UTF-8'));
       die();
     }
   }
@@ -167,7 +168,7 @@ class Cart66Ajax {
     die();
   }
   
-  public function loadAjaxGateway($gateway) {
+  public static function loadAjaxGateway($gateway) {
     switch($gateway) {
       case 'Cart66ManualGateway':
         require_once(CART66_PATH . "/gateways/$gateway.php");
@@ -296,7 +297,9 @@ class Cart66Ajax {
             $value = implode('~', $value);
           }
         }
-
+        if($key == 'status_options') {
+          $value = str_replace('&', '', Cart66Common::deepTagClean($value));
+        }
         if($key == 'home_country') {
           $hc = Cart66Setting::getValue('home_country');
           if($hc != $value) {
@@ -336,7 +339,11 @@ class Cart66Ajax {
         Cart66Setting::setValue($key, trim(stripslashes($value)));
 
         if(CART66_PRO && $key == 'order_number') {
-          $versionInfo = Cart66ProCommon::getVersionInfo();
+          $versionInfo = get_transient('_cart66_version_request');
+          if(!$versionInfo) {
+            $versionInfo = Cart66ProCommon::getVersionInfo();
+            set_transient('_cart66_version_request', $versionInfo, 43200);
+          }
           if(!$versionInfo) {
             Cart66Setting::setValue('order_number', '');
             $error = '<span>' . __( 'Invalid Order Number' , 'cart66' ) . '</span>';
@@ -368,7 +375,7 @@ class Cart66Ajax {
     die();
   }
   
-  public function checkInventoryOnAddToCart() {
+  public static function checkInventoryOnAddToCart() {
     $result = array(true);
     $itemId = Cart66Common::postVal('cart66ItemId');
     $options = '';
@@ -407,7 +414,7 @@ class Cart66Ajax {
       $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
       $result[1] = $p->name . " " . $optionsMsg . " is $soldOutLabel $out";
     }
-
+    
     $result = json_encode($result);
     echo $result;
     die();
@@ -424,28 +431,22 @@ class Cart66Ajax {
     $job_id = $slurp_url;
     
     if(wp_update_post(array('ID' => $page->ID, 'post_status' => 'publish'))) {
-      $remote = wp_remote_get($slurp_url);
-      if(!is_wp_error($remote) && $remote['response']['code'] == '200') {
-        $access_key = Cart66Setting::getValue('mijireh_access_key');
-        $rest = new PestJSON(MIJIREH_CHECKOUT);
-        $rest->setupAuth($access_key, '');
-        $data = array(
-          'url' => $slurp_url,
-          'page_id' => $page->ID,
-          'return_url' => add_query_arg('task', 'mijireh_page_slurp', $slurp_url)
-        );
-    
-        try {
-          $response = $rest->post('/api/1/slurps', $data);
-          $job_id = $response['job_id'];
-        }
-        catch(Pest_Unauthorized $e) {
-          header('Bad Request', true, 400);
-          die();
-        }
+      $access_key = Cart66Setting::getValue('mijireh_access_key');
+      $rest = new PestJSON(MIJIREH_CHECKOUT);
+      $rest->setupAuth($access_key, '');
+      $data = array(
+        'url' => $slurp_url,
+        'page_id' => $page->ID,
+        'return_url' => add_query_arg('task', 'mijireh_page_slurp', $slurp_url)
+      );
+      
+      try {
+        $response = $rest->post('/api/1/slurps', $data);
+        $job_id = $response['job_id'];
       }
-      else {
-        $job_id = 'no remote page found';
+      catch(Pest_Unauthorized $e) {
+        header('Bad Request', true, 400);
+        die();
       }
     }
     else {

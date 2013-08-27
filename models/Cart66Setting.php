@@ -37,7 +37,11 @@ class Cart66Setting {
       if($_POST['cart66-action'] == 'saveOrderNumber' && CART66_PRO) {
         $orderNumber = trim(Cart66Common::postVal('order_number'));
         Cart66Setting::setValue('order_number', $orderNumber);
-        $versionInfo = Cart66ProCommon::getVersionInfo();
+        $versionInfo = get_transient('_cart66_version_request');
+        if(!$versionInfo) {
+          $versionInfo = Cart66ProCommon::getVersionInfo();
+          set_transient('_cart66_version_request', $versionInfo, 43200);
+        }
         if($versionInfo) {
           $successMessage = __("Thank you! Cart66 has been activated","cart66");
         }
@@ -309,7 +313,7 @@ class Cart66Setting {
     }
     
     if(!empty($value) && $entities) {
-      $value = htmlentities($value);
+      $value = htmlentities($value, ENT_COMPAT, 'UTF-8');
     }
     
     return empty($value) ? false : $value;
