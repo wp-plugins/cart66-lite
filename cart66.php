@@ -3,7 +3,7 @@
 Plugin Name: Cart66 Lite
 Plugin URI: http://www.cart66.com
 Description: Wordpress Shopping Cart
-Version: 1.5.1.14
+Version: 1.5.1.15
 Author: Reality 66
 Author URI: http://www.Reality66.com
 Text Domain: cart66
@@ -11,7 +11,7 @@ Domain Path: /languages/
 
 ------------------------------------------------------------------------
 Cart66 WordPress Ecommerce Plugin
-Copyright 2013  Reality66
+Copyright 2011  Reality 66
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

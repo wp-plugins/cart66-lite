@@ -775,30 +775,35 @@ class Cart66Product extends Cart66ModelAbstract {
   public function validate() {
     $errors = array();
     
-    // Verify that the item number is present
-    if(empty($this->item_number)) {
-      $errors['item_number'] = "Item number is required";
+    if(!wp_verify_nonce($_POST['cart66_product_nonce'], 'cart66_product_nonce')) {
+      $errors['nonce'] = __("An unkown error occured, please try again later","cart66");
     }
-    
-    if(empty($this->spreedlySubscriptionId))  {
-      $this->spreedlySubscriptionId = 0;
-    }
-    
-    // Verify that no other products have the same item number
-    if(empty($errors)) {
-      $sql = "SELECT count(*) from $this->_tableName where item_number = %s and id != %d";
-      $sql = $this->_db->prepare($sql, $this->item_number, $this->id);
-      $count = $this->_db->get_var($sql);
-      if($count > 0) {
-        $errors['item_number'] = "The item number must be unique";
+    else {
+      // Verify that the item number is present
+      if(empty($this->item_number)) {
+        $errors['item_number'] = __("Item number is required","cart66");
       }
-    }
     
-    // Verify that if the product has been saved and there is a download path that there is a file located at the path
-    if(!empty($this->download_path)) {
-      $dir = Cart66Setting::getValue('product_folder');
-      if(!file_exists($dir . DIRECTORY_SEPARATOR . $this->download_path)) {
-        $errors['download_file'] = "There is no file available at the download path: " . $this->download_path;
+      if(empty($this->spreedlySubscriptionId))  {
+        $this->spreedlySubscriptionId = 0;
+      }
+    
+      // Verify that no other products have the same item number
+      if(empty($errors)) {
+        $sql = "SELECT count(*) from $this->_tableName where item_number = %s and id != %d";
+        $sql = $this->_db->prepare($sql, $this->item_number, $this->id);
+        $count = $this->_db->get_var($sql);
+        if($count > 0) {
+          $errors['item_number'] = __("The item number must be unique","cart66");
+        }
+      }
+    
+      // Verify that if the product has been saved and there is a download path that there is a file located at the path
+      if(!empty($this->download_path)) {
+        $dir = Cart66Setting::getValue('product_folder');
+        if(!file_exists($dir . DIRECTORY_SEPARATOR . $this->download_path)) {
+          $errors['download_file'] = __("There is no file available at the download path:","cart66") . " " . $this->download_path;
+        }
       }
     }
 

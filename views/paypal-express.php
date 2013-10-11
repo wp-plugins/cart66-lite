@@ -269,7 +269,11 @@ if($session_token == $token):
     if($isTaxed == false) {
       $isTaxed = $taxRate->loadByState($state);
     }
-  
+    
+    if($isTaxed == false) {
+      $isTaxed = $taxRate->loadByState('All Sales');
+    }
+    
     if($isTaxed) {
       $taxable = Cart66Session::get('Cart66Cart')->getTaxableAmount($taxRate->tax_shipping);
       $tax = number_format($taxable * ($taxRate->rate/100), 2, '.', '');

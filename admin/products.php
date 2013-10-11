@@ -7,7 +7,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['cart66-action'] == 'save prod
   $_POST['product']['price'] = isset($_POST['product']['price']) ? Cart66Common::convert_currency_to_number($_POST['product']['price']) : '';
   try {
     $product->handleFileUpload();
-    $product->setData($_POST['product']);
+    $product->setData(Cart66Common::postVal('product'));
     $product->save();
     $product->clear();
   }
@@ -65,6 +65,7 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
 <h2><?php _e('Cart66 Products', 'cart66'); ?></h2>
 
 <form action="admin.php?page=cart66-products" method="post" enctype="multipart/form-data" id="products-form">
+  <input type="hidden" name="cart66_product_nonce" value="<?php echo wp_create_nonce('cart66_product_nonce'); ?>" />
   <input type="hidden" name="cart66-action" value="save product" />
   <input type="hidden" name="product[id]" value="<?php echo $product->id ?>" />
   <div id="widgets-left" style="margin-right: 50px;">
