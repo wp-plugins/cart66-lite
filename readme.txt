@@ -95,7 +95,7 @@ We are not able to provide anything other than community based support for Cart6
 
 = 1.5.1.15 =
 
-* FIXED: Cross Site Scripting vulnerability and XSS vulnerability
+* FIXED: CSRF and Code Injection vulnerabilities
 * FIXED: Issue with tax not calculating on PayPal Express
 
 = 1.5.1.14 =
