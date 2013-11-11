@@ -335,7 +335,8 @@ if($session_token == $token):
       <input type="hidden" name="tax" value="<?php echo $tax; ?>">
     
       <?php 
-        if(Cart66Common::isLoggedIn()) {
+        if($account_id = Cart66Common::isLoggedIn()) {
+          $account = new Cart66Account($account_id);
           $name = $account->firstName . '&nbsp;' . $account->lastName;
           $logout = Cart66Common::appendQueryString('cart66-task=logout');
           echo "<p id='Cart66PayPalExpressLoggedIn'><strong>You Are Logged In As $name</strong><br/>If you are not $name <a href='$logout'>Log out</a></p>";

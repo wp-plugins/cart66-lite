@@ -772,10 +772,10 @@ class Cart66Product extends Cart66ModelAbstract {
     return $total;
   }
   
-  public function validate() {
+  public function validate($override_nonce=false) {
     $errors = array();
     
-    if(!wp_verify_nonce($_POST['cart66_product_nonce'], 'cart66_product_nonce')) {
+    if(!$override_nonce && !wp_verify_nonce($_POST['cart66_product_nonce'], 'cart66_product_nonce')) {
       $errors['nonce'] = __("An unkown error occured, please try again later","cart66");
     }
     else {
@@ -1066,8 +1066,8 @@ class Cart66Product extends Cart66ModelAbstract {
    * @return int The product id
    * @throws Cart66Exception on save failure
    */
-  public function save() {
-    $errors = $this->validate();
+  public function save($override_nonce=false) {
+    $errors = $this->validate($override_nonce);
     if(count($errors) == 0) {
       $productId = parent::save();
       $errors = $this->validate();

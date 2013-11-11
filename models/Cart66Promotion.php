@@ -544,7 +544,8 @@ class Cart66Promotion extends Cart66ModelAbstract {
   }
  
   
-  public function getDiscountAmount($cartObject=null){
+  public function getDiscountAmount($cartObject=null, $taxed_products=false){
+    $p = new Cart66Product();
     //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Running getDiscountAmount()");
     $discount = 0; 
     if(!$cartObject){
@@ -564,57 +565,63 @@ class Cart66Promotion extends Cart66ModelAbstract {
         // apply coupon to every item in the cart
         $counter = 0;
         foreach($cartItems as $item) {
-          $basePrice = $item->getBaseProductPrice();
-          $stayPositivePrice =  $this->stayPositive($basePrice,$this->getAmount($basePrice));
-          $quantity = $item->getQuantity();
-          for($i=1; $i <= $quantity; $i++) {
-            if(empty($this->max_uses_per_order)){
-              $discount += $stayPositivePrice;
-              Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Max uses per order is empty. Discount: $discount");
+          $p->load($item->getProductId());
+          if(!$taxed_products || ($taxed_products && $p->taxable == 1)) {
+            $basePrice = $item->getBaseProductPrice();
+            $stayPositivePrice =  $this->stayPositive($basePrice,$this->getAmount($basePrice));
+            $quantity = $item->getQuantity();
+            for($i=1; $i <= $quantity; $i++) {
+              if(empty($this->max_uses_per_order)){
+                $discount += $stayPositivePrice;
+                Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Max uses per order is empty. Discount: $discount");
+              }
+              elseif($counter < ($this->max_uses_per_order)) {
+                $discount+= $stayPositivePrice;
+                Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Max uses per order is NOT empty. Discount: $discount :: Stay Positive: $stayPositivePrice");
+              }
+              $counter++;
             }
-            elseif($counter < ($this->max_uses_per_order)) {
-              $discount+= $stayPositivePrice;
-              Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Max uses per order is NOT empty. Discount: $discount :: Stay Positive: $stayPositivePrice");
-            }
-            $counter++;
           }
         }
       }
       else{
         // coupon applies to specific products
         foreach($cartItems as $item) {
-          if($this->exclude_from_products == 0) {
-            if(in_array($item->getProductId(), $products)) {
-              // add up discount
-              $itemQuantity = $item->getQuantity();
+          $p->load($item->getProductId());
+          if(!$taxed_products || ($taxed_products && $p->taxable == 1)) {
+            if($this->exclude_from_products == 0) {
+              if(in_array($item->getProductId(), $products)) {
+                // add up discount
+                $itemQuantity = $item->getQuantity();
 
-              if($this->max_uses_per_order > 0){
-                $usesRemaining = $this->max_uses_per_order - $usedThisOrder;
-                $allowedQuantity = ($usesRemaining <= $itemQuantity) ? $usesRemaining : $itemQuantity;
-              }
-              else{
-                $allowedQuantity = $itemQuantity;
-              }
+                if($this->max_uses_per_order > 0){
+                  $usesRemaining = $this->max_uses_per_order - $usedThisOrder;
+                  $allowedQuantity = ($usesRemaining <= $itemQuantity) ? $usesRemaining : $itemQuantity;
+                }
+                else{
+                  $allowedQuantity = $itemQuantity;
+                }
 
-              $productDiscount = $this->getAmount($item->getBaseProductPrice());
-              $discount += $allowedQuantity * $this->stayPositive($item->getBaseProductPrice(),$productDiscount);
+                $productDiscount = $this->getAmount($item->getBaseProductPrice());
+                $discount += $allowedQuantity * $this->stayPositive($item->getBaseProductPrice(),$productDiscount);
+              }
             }
-          }
-          elseif($this->exclude_from_products == 1) {
-            if(!in_array($item->getProductId(), $products)) {
-              // add up discount
-              $itemQuantity = $item->getQuantity();
+            elseif($this->exclude_from_products == 1) {
+              if(!in_array($item->getProductId(), $products)) {
+                // add up discount
+                $itemQuantity = $item->getQuantity();
 
-              if($this->max_uses_per_order > 0){
-                $usesRemaining = $this->max_uses_per_order - $usedThisOrder;
-                $allowedQuantity = ($usesRemaining <= $itemQuantity) ? $usesRemaining : $itemQuantity;
-              }
-              else{
-                $allowedQuantity = $itemQuantity;
-              }
+                if($this->max_uses_per_order > 0){
+                  $usesRemaining = $this->max_uses_per_order - $usedThisOrder;
+                  $allowedQuantity = ($usesRemaining <= $itemQuantity) ? $usesRemaining : $itemQuantity;
+                }
+                else{
+                  $allowedQuantity = $itemQuantity;
+                }
 
-              $productDiscount = $this->getAmount($item->getBaseProductPrice());
-              $discount += $allowedQuantity * $this->stayPositive($item->getBaseProductPrice(),$productDiscount);
+                $productDiscount = $this->getAmount($item->getBaseProductPrice());
+                $discount += $allowedQuantity * $this->stayPositive($item->getBaseProductPrice(),$productDiscount);
+              }
             }
           }
         }
@@ -639,23 +646,26 @@ class Cart66Promotion extends Cart66ModelAbstract {
       $cartItems = $cartObject->getItems();
         
       if(empty($this->products)) {
-        $products = $cartObject->getSubTotal();
+        $products = $cartObject->getSubTotal($taxed_products);
         $discount = $this->getAmount($products, $products);
       }
       else {
         $itemSubtotal = 0;
         // coupon applies to specific products
         foreach($cartItems as $item) {
-          if($this->exclude_from_products == 0) {
-            if(in_array($item->getProductId(), $products)) {
-              // add up discount
-              $itemSubtotal += $item->getProductPrice() * $item->getQuantity();
+          $p->load($item->getProductId());
+          if(!$taxed_products || ($taxed_products && $p->taxable == 1)) {
+            if($this->exclude_from_products == 0) {
+              if(in_array($item->getProductId(), $products)) {
+                // add up discount
+                $itemSubtotal += $item->getProductPrice() * $item->getQuantity();
+              }
             }
-          }
-          elseif($this->exclude_from_products == 1) {
-            if(!in_array($item->getProductId(), $products)) {
-              // add up discount
-              $itemSubtotal += $item->getProductPrice() * $item->getQuantity();
+            elseif($this->exclude_from_products == 1) {
+              if(!in_array($item->getProductId(), $products)) {
+                // add up discount
+                $itemSubtotal += $item->getProductPrice() * $item->getQuantity();
+              }
             }
           }
         }

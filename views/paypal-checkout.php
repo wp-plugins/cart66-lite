@@ -165,7 +165,7 @@
   
       <?php
       $paypalImageUrl = 'https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif';
-      if(CART66_PRO && Cart66Setting::getValue('custom_paypal_standard_image')) {
+      if(Cart66Setting::getValue('custom_paypal_standard_image')) {
         $paypalImageUrl = Cart66Setting::getValue('custom_paypal_standard_image');
       }
       ?>

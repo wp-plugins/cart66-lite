@@ -4,7 +4,7 @@ Donate link: http://cart66.com/
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales, shopping cart
 Requires at least: 2.8.2
 Tested up to: 3.6.1
-Stable tag: 1.5.1.15
+Stable tag: 1.5.1.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,9 +93,16 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.5.1.17 =
+
+* UPDATED: Ability to create products externally via override
+* FIXED: Issue with PayPal Standard image override not working
+* FIXED: Missing account details on paypal express page when logged in
+* FIXED: Issue with tax applying to discount on non taxed products
+
 = 1.5.1.15 =
 
-* FIXED: Cross Site Scripting vulnerability and XSS vulnerability
+* FIXED: CSRF and Code Injection vulnerabilities 
 * FIXED: Issue with tax not calculating on PayPal Express
 
 = 1.5.1.14 =

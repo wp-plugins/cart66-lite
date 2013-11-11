@@ -383,10 +383,14 @@ class Cart66Cart {
     }
   }
   
-  public function getSubTotal() {
+  public function getSubTotal($taxed=false) {
     $total = 0;
+    $p = new Cart66Product();
     foreach($this->_items as $item) {
-      $total += $item->getProductPrice() * $item->getQuantity();
+      $p->load($item->getProductId());
+      if(!$taxed || ($taxed && $p->taxable == 1)) {
+        $total += $item->getProductPrice() * $item->getQuantity();
+      }
     }
     return $total;
   }
@@ -458,7 +462,7 @@ class Cart66Cart {
     $promotion = $this->getPromotion();
     
     if($promotion){
-      $discount = $this->getDiscountAmount();
+      $discount = $this->getDiscountAmount(true);
     }
     
     if($tax_shipping) {
@@ -663,11 +667,10 @@ class Cart66Cart {
     return $products;
   }
   
-  
-  public function getDiscountAmount() {
+  public function getDiscountAmount($taxed=false) {
     $discount = 0;
     if(Cart66Session::get('Cart66Promotion')) {
-      $discount = number_format(Cart66Session::get('Cart66Promotion')->getDiscountAmount(Cart66Session::get('Cart66Cart')), 2, '.', '');
+      $discount = number_format(Cart66Session::get('Cart66Promotion')->getDiscountAmount(Cart66Session::get('Cart66Cart'), $taxed), 2, '.', '');
       // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Getting discount Total: $total -- Discounted Total: $discountedTotal -- Discount: $discount");
     }
     return $discount;
