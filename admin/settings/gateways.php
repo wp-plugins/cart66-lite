@@ -176,6 +176,13 @@ $tab = 'gateway-gateway_settings';
             </td>
           </tr>
           <tr valign="top">
+            <th scope="row"><?php _e('Strip Line breaks', 'cart66'); ?></th>
+            <td>
+              <input type="checkbox" name="strip_paypal_line_breaks" id="strip_paypal_line_breaks" value="true" <?php echo Cart66Setting::getValue('strip_paypal_line_breaks') ? 'checked="checked" ' : '' ?>>              
+              <p class="description"><?php _e( 'Check this box if there are display issues with line breaks being turned into p and br tags.' , 'cart66' ); ?></p>
+            </td>
+          </tr>
+          <tr valign="top">
             <th scope="row"><?php _e('Custom PayPal Standard Image', 'cart66'); ?></th>
             <td>
               <input type="text" class="regular-text" name="custom_paypal_standard_image" id="custom_paypal_standard_image" value="<?php echo Cart66Setting::getValue('custom_paypal_standard_image'); ?>" />
@@ -303,7 +310,7 @@ $tab = 'gateway-gateway_settings';
               <th scope="row"><?php _e('Transaction Key', 'cart66'); ?></th>
               <td>
                 <input type="text" name="auth_trans_key" id="auth_trans_key" class="regular-text" value="<?php echo Cart66Setting::getValue('auth_trans_key'); ?>" />
-                <p class="description authorize_help"><a href="http://cart66.com/system66/wp-content/uploads/authnet-api-login.jpg" target="_blank"><?php _e( 'Where can I find my Authorize.net API Login ID and Transaction Key?' , 'cart66' ); ?></a></p>
+                <p class="description authorize_help"><a href="https://www.authorize.net/support/CP/helpfiles/Account/Settings/Security_Settings/General_Settings/API_Login_ID_and_Transaction_Key.htm" target="_blank"><?php _e( 'Where can I find my Authorize.net API Login ID and Transaction Key?' , 'cart66' ); ?></a></p>
               </td>
             </tr>
             <tr valign="top" class="authorize_row">
@@ -313,7 +320,7 @@ $tab = 'gateway-gateway_settings';
                 <label for="disable_authorizenet_items_yes"><?php _e('Yes', 'cart66'); ?></label>
                 <input type="radio" name="disable_authorizenet_items" id="disable_authorizenet_items_no" value="0" <?php echo Cart66Setting::getValue('disable_authorizenet_items') != 1 ? 'checked="checked" ' : ''; ?>/>
                 <label for="disable_authorizenet_items_no"><?php _e('No', 'cart66'); ?></label>
-                <p class="description"><?php _e('Set this to yes to disable sending the item list to Authorize.net. This may be helpful if your product names include characters that Authorize.net does not support.', 'cart66'); ?></p>
+                <p class="description"><?php _e('Set this to yes to disable sending the item list to Authorize.net. Note that Authorize.net supports a maximum of 30 line items per transaction. This may be helpful if your product names include characters that Authorize.net does not support. ', 'cart66'); ?></p>
               </td>
             </tr>
             <tr valign="top" class="emulation_url_row">
@@ -450,6 +457,13 @@ $tab = 'gateway-gateway_settings';
               <th scope="row"><?php _e('Stripe Test API Key', 'cart66'); ?></th>
               <td>
                 <input type="text" name="stripe_test_api_key" id="stripe_test_api_key" class="regular-text" value="<?php echo Cart66Setting::getValue('stripe_test_api_key'); ?>" />
+              </td>
+            </tr>
+            <tr valign="top" class="stripe_row">
+              <th scope="row"><?php _e('Stripe Currency Code', 'cart66'); ?></th>
+              <td>
+                <input type="text" name="stripe_currency_code" id="stripe_currency_code" class="small-text" maxlength="3" value="<?php echo (Cart66Setting::getValue('stripe_currency_code')) ? Cart66Setting::getValue('stripe_currency_code') : Cart66Setting::getValue('currency_code'); ?>" /> <em><?php _e('Three-letter ISO currency code representing the currency in which the charge was made.', 'cart66'); ?></em>
+                <p class="description"><?php _e('View Stripe\'s supported gateways here:', 'cart66'); ?> <a href="https://support.stripe.com/questions/which-currencies-does-stripe-support" target="_blank">Which currencies does Stripe support?</a></p>
               </td>
             </tr>
           </tbody>

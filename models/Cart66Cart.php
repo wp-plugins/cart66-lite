@@ -72,6 +72,7 @@ class Cart66Cart {
     if(Cart66Product::confirmInventory($itemId, $options)) {
       if($ajax) {
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] yes, ajax here");
+        Cart66Session::set('Cart66LastPage', $productUrl);
         return $this->addItem($itemId, $itemQuantity, $options, null, $productUrl, $ajax, false, $optionResult);
       }
       $this->addItem($itemId, $itemQuantity, $options, null, $productUrl);
@@ -148,7 +149,28 @@ class Cart66Cart {
         if($formEntryId > 0) {
           $newItem->addFormEntryId($formEntryId);
           $newItem->setQuantity($qty);
-          $this->_items[] = $newItem;
+          
+          $actualQty = Cart66Product::checkInventoryLevelForProduct($product->id, $optionInfo->options);
+          $confirmInventory = Cart66Product::confirmInventory($product->id, $optionInfo->options, $qty);
+          if($actualQty !== NULL && $actualQty < $qty && !$confirmInventory){
+            if($actualQty > 0) {
+              $message = '<div class="alert-message alert-error Cart66Unavailable"><p>' . __('We are not able to fulfill your order for', 'cart66') . ' <strong>' .  $qty . '</strong> ' . $newItem->getFullDisplayName() . " " . __('because we only have', 'cart66') .  " <strong>$actualQty " . __('in stock.', 'cart66') . "</strong></p>" .
+                         "<p>" . __('Your cart has been updated based on our available inventory.', 'cart66') . "</p>" .
+                         '</div>';
+            }
+            else{
+              $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
+              $message = '<div class="alert-message alert-error Cart66Unavailable"><p>' . __('We are not able to fulfill your order for', 'cart66') . ' <strong>' .  $qty . '</strong> ' . $newItem->getFullDisplayName() . " " . __('because it is', 'cart66') . " <strong>" . $soldOutLabel . ".</strong></p>";
+              $message .= '</div>';
+            }
+            if(!empty($message)) {              
+              Cart66Session::set('Cart66InventoryWarning', $message);              
+            }
+          }
+          else{
+            $this->_items[] = $newItem;
+          }
+                              
         }
       }
       else {
@@ -1341,6 +1363,10 @@ class Cart66Cart {
    */
   protected function _processOptionInfo($product, $optionInfo) {
     $valid_options = array();
+    if($product->isSubscription()){
+      // ignore options for subscription - subs can have price changes so it doesnt matter
+      return true;
+    }
     if($product->isGravityProduct()) {
       $valid_options = Cart66GravityReader::getFormValuesArray($product->gravity_form_id);
     }
@@ -1425,7 +1451,9 @@ class Cart66Cart {
   
   private function _validate_option(&$valid_options, $choice, $is_gravity_form=false) {
     $found = false;
-    
+    if(empty($valid_options)){
+      return true;
+    }
     foreach($valid_options as $key => $option_group) {
       foreach($option_group as $option) {
         $choice = preg_replace('[\W]', '', $choice);

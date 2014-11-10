@@ -12,7 +12,7 @@ class Cart66TaxRate extends Cart66ModelAbstract {
     "NU" => 'Nunavut',
     "ON" => 'Ontario',
     "PE" => 'Prince Edward Island',
-    "PQ" => 'Quebec',
+    "QC" => 'Quebec',
     "SK" => 'Saskatchewan',
     "YT" => 'Yukon Territory'
   );

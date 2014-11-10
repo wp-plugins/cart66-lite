@@ -151,6 +151,12 @@ class Cart66ShortcodeManager {
         if(Cart66Session::get('Cart66Cart')->getGrandTotal()) {
           try {
             $view = Cart66Common::getView('views/paypal-checkout.php', $attrs);
+            // strip line breaks if necessary
+            if(Cart66Setting::getValue('strip_paypal_line_breaks')){
+              $view = str_replace("\r\n"," ",$view);
+              $view = str_replace("\r"," ",$view);
+              $view = str_replace("\n"," ",$view);  
+            }
           }
           catch(Cart66Exception $e) {
             $exception = Cart66Exception::exceptionMessages($e->getCode(), $e->getMessage());

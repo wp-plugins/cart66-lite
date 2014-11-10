@@ -61,7 +61,7 @@
       }
       var zip = $('#billing-zip').val();
       var state_text = $('#billing-state_text').val();
-      if($('.sameAsBilling').length !=0 && !$('.sameAsBilling').attr('checked')) {
+      if($('.sameAsBilling').length !=0 && !$('.sameAsBilling').is(':checked')) {
         if($('#shipping-zip').length != 0) {
           var zip = $('#shipping-zip').val();
         }
@@ -157,7 +157,7 @@
     
     $('.sameAsBilling').each(function() {
       var frm = $(this).closest('form').attr('id');
-      if($('#' + frm + ' input[name="sameAsBilling"]').attr('checked')) {
+      if($('#' + frm + ' input[name="sameAsBilling"]').is(':checked')) {
         $('#' + frm + ' .billing_countries').html(shipping_countries);
         setState(frm, 'billing');
         $('.limited-countries-label-billing').show();
@@ -179,7 +179,7 @@
     
     $('.sameAsBilling').click(function() {
       var frm = $(this).closest('form').attr('id');
-      if($('#' + frm + ' input[name="sameAsBilling"]').attr('checked')) {
+      if($('#' + frm + ' input[name="sameAsBilling"]').is(':checked')) {
         var billing_country = $('#' + frm + ' .billing_countries').val();
         $('#' + frm + ' .billing_countries').html(shipping_countries);
         $('#' + frm + ' .billing_countries').val(billing_country);
@@ -216,11 +216,14 @@
     })
     
     if(C66.billing_country != '') {      
+			$('#billing-country').val(C66.billing_country);
       $('.billing_countries').each(function(index) {
         var frm = $(this).closest('form').attr('id');
         initStateField(frm, 'billing', C66.billing_country);
       });
       
+			if(C66.shipping_country == ""){ C66.shipping_country = C66.billing_country; }
+			$('#shipping-country').val(C66.shipping_country);
       $('.shipping_countries').each(function(index) {
         var frm = $(this).closest('form').attr('id');
         initStateField(frm, 'shipping', C66.shipping_country);

@@ -207,7 +207,8 @@ if(!$ajaxRefresh) :
         <?php if(!empty($order->bill_country)): ?>
           <?php echo $order->bill_country ?><br/>
         <?php endif; ?>
-        <?php if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['billing'])): ?><br />
+
+        <?php if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['billing'])): ?>
           <?php foreach($additional_fields['billing'] as $af): ?>
             <?php echo $af['label']; ?>: <?php echo $af['value']; ?><br />
           <?php endforeach; ?>
@@ -308,6 +309,8 @@ if(!$ajaxRefresh) :
         </tr>
       <?php endif; ?>
     <?php endif; ?>
+
+   
     <?php if(isset($order->custom_field) && $order->custom_field != ''): ?>    
       <tr>
         <td colspan="3">

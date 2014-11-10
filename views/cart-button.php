@@ -11,7 +11,20 @@
 ?>
 
 <?php if($data['gravity_form_id'] && CART66_PRO && $data['showPrice'] != 'only'): ?>
-  <?php echo do_shortcode("[gravityform id=" . $data['gravity_form_id'] . " ajax=false] "); ?>
+  <?php if(!$data['product']->isInventoryTracked($data['product']->getInventoryKey())): ?>
+    <?php echo do_shortcode("[gravityform id=" . $data['gravity_form_id'] . " ajax=false] "); ?>
+  <?php else: ?>
+    
+    <?php if(Cart66Product::checkInventoryLevelForProduct($data['product']->id) == 0):  
+      $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
+    ?>      
+      <div class="alert-message alert-error Cart66Unavailable">
+        We're sorry but <?php echo Cart66GravityReader::getFormTitle($data['gravity_form_id']); ?> is currently <?php echo $soldOutLabel; ?>.
+      </div>
+      
+  <?php endif; ?>
+    
+<?php endif; ?>
 <?php elseif($data['showPrice'] == 'only'): ?>
   
   <?php if($data['product']->isSubscription()): ?>

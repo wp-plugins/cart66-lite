@@ -61,6 +61,22 @@
         <h2><?php _e( 'Your Address' , 'cart66' ); ?></h2>
       <?php endif; ?>
       
+      <?php if(CART66_PRO && Cart66Setting::getValue('checkout_custom_field_display') && Cart66Setting::getValue('checkout_custom_field_display') != 'disabled'): ?>
+        <div class="checkout-custom-field">
+          <?php if(Cart66Setting::getValue('checkout_custom_field_label')): ?>
+            <p><?php echo Cart66Setting::getValue('checkout_custom_field_label'); ?></p>
+          <?php else: ?>
+            <p><?php _e('Enter any special instructions you have for this order:', 'cart66'); ?></p>
+          <?php endif; ?>
+          <?php if(Cart66Setting::getValue('checkout_custom_field') == 'multi' || !Cart66Setting::getValue('checkout_custom_field')): ?>
+            <textarea id="checkout-custom-field-multi" name="payment[custom-field]"><?php Cart66Common::showValue($p['custom-field']); ?></textarea>
+          <?php elseif(Cart66Setting::getValue('checkout_custom_field') == 'single'): ?>
+            <input type="text" id="checkout-custom-field-single" name="payment[custom-field]" value="<?php Cart66Common::showValue($p['custom-field']); ?>" />
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+
+      
       <ul id="mijireh_shippingAddress" class="shippingAddress shortLabels" style="float:left;">
         <li>
           <label for="shipping-firstName"><?php _e( 'First name' , 'cart66' ); ?>:</label>

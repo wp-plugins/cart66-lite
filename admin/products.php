@@ -710,7 +710,7 @@ $data['spreedly'] = $product->getSpreedlyProducts(null, null, '1');
       return confirm('Are you sure you want to delete this item?');
     });
     function toggleLifeTime() {
-      if($('#product-lifetime_membership').attr('checked')) {
+      if($('#product-lifetime_membership').is(':checked')) {
         $('#product-billing_interval').val('');
         $('#product-billing_interval').attr('disabled', true);
         $('#product-billing_interval_unit').val('days');

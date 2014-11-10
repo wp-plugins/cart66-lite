@@ -90,6 +90,12 @@
         <?php if(!empty($order->bill_country)): ?>
           <?php echo $order->bill_country ?><br/>
         <?php endif; ?>
+
+        <?php if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['billing'])): ?>
+          <?php foreach($additional_fields['billing'] as $af): ?>
+            <?php echo $af['label']; ?>: <?php echo $af['value']; ?><br />
+          <?php endforeach; ?>
+        <?php endif; ?>
         </p>
       </td>
       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -100,6 +106,11 @@
         <?php endif; ?>
         Email: <?php echo $order->email ?><br/>
         Date: <?php echo date(get_option('date_format'), strtotime($order->ordered_on)) ?> <?php echo date(get_option('time_format'), strtotime($order->ordered_on)) ?>
+        <?php if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['payment'])): ?><br />
+          <?php foreach($additional_fields['payment'] as $af): ?>
+            <?php echo $af['label']; ?>: <?php echo $af['value']; ?><br />
+          <?php endforeach; ?>
+        <?php endif; ?>
         </p>
       </td>
     </tr>
@@ -125,6 +136,11 @@
           <?php echo $order->ship_country ?><br/>
 
         <?php endif; ?>
+        <?php if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['shipping'])): ?><br />
+          <?php foreach($additional_fields['shipping'] as $af): ?>
+            <?php echo $af['label']; ?>: <?php echo $af['value']; ?><br />
+          <?php endforeach; ?>
+        <?php endif; ?>
 
         <br/><em><?php _e( 'Delivery via' , 'cart66' ); ?>: <?php echo $order->shipping_method ?></em><br/>
         </p>
@@ -142,6 +158,11 @@
           <?php endif; ?>
           Email: <?php echo $order->email ?><br/>
           Date: <?php echo date(get_option('date_format'), strtotime($order->ordered_on)) ?> <?php echo date(get_option('time_format'), strtotime($order->ordered_on)) ?>
+          <?php if(is_array($additional_fields = maybe_unserialize($order->additional_fields)) && isset($additional_fields['billing'])): ?><br />
+          <?php foreach($additional_fields['billing'] as $af): ?>
+            <?php echo $af['label']; ?>: <?php echo $af['value']; ?><br />
+          <?php endforeach; ?>
+          <?php endif; ?>
           </p>
         </td>
       <?php endif; ?>

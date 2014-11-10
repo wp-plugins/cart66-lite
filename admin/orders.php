@@ -21,7 +21,7 @@
           foreach($stats as $s) {
             $s = trim(strtolower($s));
             Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Order status query: WHERE status='$s'");
-            $tmpRows = $order->getOrderRows("WHERE status='$s'");            
+            $tmpRows = $order->getOrderRows("WHERE status='$s'", null, null, 'id');
             $n = count($tmpRows);
             if($n > 0) {
               $url = Cart66Common::replaceQueryString("page=cart66_admin&status=$s");
@@ -32,7 +32,7 @@
             }
           }
         ?>
-        <a href="?page=cart66_admin">All (<?php echo count($order->getOrderRows("WHERE `status` != 'checkout_pending'")) ?>)</a>
+        <a href="?page=cart66_admin">All (<?php echo count($order->getOrderRows("WHERE `status` != 'checkout_pending'", null, null, 'id')) ?>)</a>
       </p>
   <?php
     }

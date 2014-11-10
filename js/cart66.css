@@ -413,3 +413,11 @@ font-size:1.3em
 	line-height: 22px;
 	margin-bottom: 1em;
 	}
+	
+#ccInfo div {clear:both;width:50%; display:block;  }
+#ccInfo div select {padding:2px}
+#billingInfo { }
+#paymentInfo { margin-left:0}
+#contactPaymentInfo .description {display:block; margin:0}
+#Cart66CheckoutButtonDiv { float: none; margin-left: 10px; width: 50%; }
+#Cart66CheckoutButtonDiv .Cart66ButtonPrimary {margin-left:0}

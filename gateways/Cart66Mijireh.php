@@ -49,7 +49,8 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
     // Add shipping method and promotion code as meta_data
     $order['meta_data'] = array(
       'shipping_method' => Cart66Session::get('Cart66Cart')->getShippingMethodName(),
-      'coupon' => Cart66Common::getPromoMessage()
+      'coupon' => Cart66Common::getPromoMessage(),
+      'custom-field' => $this->_payment['custom-field'],
     );
     
     // Add logged in users id to the meta_data for membership product upgrades/extensions
@@ -140,6 +141,7 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
   public function setPayment($p) {
     $this->_payment['phone'] = isset($p['phone']) ? $p['phone'] : '';
     $this->_payment['email'] = isset($p['email']) ? $p['email'] : '';
+    $this->_payment['custom-field'] = isset($p['custom-field']) ? $p['custom-field'] : '';
     
     // For subscription accounts
     if(isset($p['password'])) {
@@ -300,7 +302,8 @@ class Cart66Mijireh extends Cart66GatewayAbstract {
       'bill_last_name' => $cloud_order['last_name'],
       'ordered_on' => $cloud_order['order_date'],
       'ouid' => $ouid,
-      'coupon' => $cloud_order['meta_data']['coupon']
+      'coupon' => $cloud_order['meta_data']['coupon'],
+      'custom_field' => $cloud_order['meta_data']['custom-field'],
     );
     
     if(isset($cloud_order['shipping_address']) && is_array($cloud_order['shipping_address'])) {

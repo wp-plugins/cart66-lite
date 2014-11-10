@@ -9,7 +9,7 @@
     
     // store pending order with all information, then send to paypal at the above address via curl... so as to keep all the post data
     require_once(CART66_PATH . "/gateways/Cart66PayPalStandard.php");
-    $paypalStandard = new Cart66PayPalStandard();
+    $paypalStandard = new Cart66PayPalStandard();    
     $pendingOrderId = $paypalStandard->storePendingOrder();
     $order = new Cart66Order($pendingOrderId);
     $_POST['custom'] = $order->ouid . $_POST['custom'];
@@ -18,6 +18,7 @@
     exit;
   }
 
+  $taxRate = new Cart66TaxRate();
   $items = Cart66Session::get('Cart66Cart')->getItems();
   $shipping = Cart66Session::get('Cart66Cart')->getShippingCost();
   $shippingMethod = Cart66Session::get('Cart66Cart')->getShippingMethodName();
@@ -142,7 +143,22 @@
           echo "\n<input type='hidden' name='quantity_$i' value='1' />";
           $shipping = 0;
         }
-      ?>
+        
+        // calculate taxes on all sales
+        $tax = 0;
+        $isTaxed = $taxRate->loadByState('All Sales');
+        if($isTaxed) {
+          $taxable = Cart66Session::get('Cart66Cart')->getTaxableAmount($taxRate->tax_shipping);
+          $tax = number_format($taxable * ($taxRate->rate/100), 2, '.', '');
+          if($tax == 0) {
+            $tax = Cart66Session::get('Cart66Cart')->getTax('All Sales');
+          }   
+          if($tax > 0){
+            echo "<input type='hidden' name='tax_cart' value='$tax' />";          
+          }
+        }
+        
+      ?>      
       <input type='hidden' name='lc' value='en_US' />
       <input type='hidden' name='cmd' value='_cart' />
       <input type='hidden' name='charset' value='utf-8'>

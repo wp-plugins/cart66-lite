@@ -102,8 +102,8 @@ $tab = 'cc-cart_checkout';
             <th scope="row"><?php _e('Continue Shopping Button', 'cart66'); ?></th>
             <td>
               <select name="continue_shopping" id="continue_shopping">
-                <option value="0"><?php _e( 'Send customer back to the last page' , 'cart66' ); ?></option>
-                <option value="1"><?php _e( 'Always go to the store home page' , 'cart66' ); ?></option>
+                <option value="last_page"><?php _e( 'Send customer back to the last page' , 'cart66' ); ?></option>
+                <option value="store_home"><?php _e( 'Always go to the store home page' , 'cart66' ); ?></option>
               </select>
               <p class="description"><?php _e( 'You can choose to have customers go back to the last page they were on when they clicked "Add to Cart" or you can force the continue shopping button to always go to the store home page.' , 'cart66' ); ?></p>
             </td>

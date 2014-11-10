@@ -285,7 +285,9 @@ class Cart66Common {
       if($order->id > 0) {
         $subtractAmount = 0;
         $discount = $order->discountAmount;
+        $order_items = array();
         foreach($order->getItems() as $item) {
+          $order_items[] = $item->item_number;          
           $price = $item->product_price * $item->quantity;
 
           if($price > $discount) {
@@ -307,9 +309,6 @@ class Cart66Common {
           $item_id = $item->item_number;
           $buyer_email = $order->email;
           
-          // Affiliate Royale
-          do_action('wafp_award_commission', $referrer, $sale_amount, $txn_id, $item_id, $buyer_email); 
-
           if(function_exists('wp_aff_award_commission')) {
             // Make sure commission has not already been granted for this transaction
             $aff_sales_table = $wpdb->prefix . "affiliates_sales_tbl";
@@ -318,7 +317,25 @@ class Cart66Common {
               wp_aff_award_commission($referrer,$sale_amount,$txn_id,$item_id,$buyer_email);
             }
           }
+          
         }
+        
+        // valid order id
+        // Transaction if for commission is the id in th order items table
+        $txn_id = $order->trans_id;
+        $sale_amount = $order->total - ($order->shipping + $order->tax); // set eligible amount to total sans shipping
+        $item_id = implode(',',$order_items);
+        $buyer_email = $order->email;
+        
+        // Affiliate Royale
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] 
+         Running wafp_award_commission\n
+         referrer $referrer\n
+         sale_amount $sale_amount\n
+         txn_id $txn_id\n
+         item_id $item_id\n
+         buyer_email $buyer_email");
+         do_action('wafp_award_commission', $referrer, $sale_amount, $txn_id, $item_id, $buyer_email);
         
       }
     }
@@ -876,7 +893,7 @@ class Cart66Common {
     $ca['NU'] = 'Nunavut';
     $ca['ON'] = 'Ontario';
     $ca['PE'] = 'Prince Edward Island';
-    $ca['PQ'] = 'Quebec';
+    $ca['QC'] = 'Quebec';
     $ca['SK'] = 'Saskatchewan';
     $ca['YT'] = 'Yukon Territory';
     $zones['CA'] = $ca;
@@ -1234,7 +1251,13 @@ class Cart66Common {
 
     // close the curl resource, and free system resources
     curl_close($ch);
-
+    
+    // wp remote fallback
+    if(empty($output)){
+      $output = wp_remote_get($url);
+      $output = $output['body'];
+    }
+    
     return $output;
   }
   

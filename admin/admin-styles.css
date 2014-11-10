@@ -1074,3 +1074,21 @@ tr#cart66-lite.inactive td:last-child, tr#cart66-professional.inactive td:last-c
     background: url(../images/cart66_upgrade.png) 99% 12px no-repeat;
   }
 }
+
+/* 3.8 fixes */
+#products-form .widgets-holder-wrap{
+ margin:10px 0;
+}
+#products-form .closed .widget-holder{
+display:none;
+}
+#products-form div#widgets-left .sidebar-name h3{
+ padding:10px;	
+}
+#products-form .widget-holder{
+ padding-left:10px;
+}
+#cart66-shipping-header ul li a{
+ display:block !important;
+ margin-right:10px;
+}

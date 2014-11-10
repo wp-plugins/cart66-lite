@@ -485,7 +485,7 @@ elseif($_SERVER['REQUEST_METHOD'] == "POST") {
       $('#international_sales_no').click(function() {
         $('.eligible_countries_block').hide();
       });
-      if($('#international_sales_no').attr('checked')) {
+      if($('#international_sales_no').is(':checked')) {
         $('.eligible_countries_block').hide();
       }
       

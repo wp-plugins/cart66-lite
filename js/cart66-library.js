@@ -88,6 +88,7 @@ ajaxManager.run();
           $(this).remove();
         }
       });
+      $("#shipping_method_id option:eq(1)").attr('selected','selected').change();
     });
     
     $('#shipping_method_id').change(function() {

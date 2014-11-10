@@ -97,7 +97,7 @@ class Cart66Ajax {
     $prices = array();
   	$types = array(); 
   	//$options='';
-    $postId = Cart66Common::postVal('id');
+    $postId = intval(Cart66Common::postVal('id'));
     $product = new Cart66Product();
     $products = $product->getModels("where id=$postId", "order by name");
     $data = array();

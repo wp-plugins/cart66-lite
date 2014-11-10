@@ -76,7 +76,7 @@ $tab = 'integrations-amazon_s3';
       <?php endif; ?>
     </div>
     <div id="integrations-gravity_forms" class="pane">
-      <a href="#" target="_blank" style="float:right;"><img src="https://cart66.com/images/integrations/gravity-logo.png" align="left" alt="Gravity Forms"></a>
+      <a href="https://www.e-junkie.com/ecom/gb.php?cl=54585&c=ib&aff=45747" target="_blank" style="float:right;"><img src="https://cart66.com/images/integrations/gravity-logo.png" align="left" alt="Gravity Forms"></a>
       <h3><?php _e('Gravity Forms', 'cart66'); ?></h3>
       <?php if(CART66_PRO): ?>
         <table class="form-table">

@@ -3,8 +3,8 @@ Contributors: reality66
 Donate link: http://cart66.com/
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales, shopping cart
 Requires at least: 2.8.2
-Tested up to: 3.6.1
-Stable tag: 1.5.1.17
+Tested up to: 4.0
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,11 @@ We are not able to provide anything other than community based support for Cart6
 4. [Secure credit card processing with Mijireh](http://www.mijireh.com)
 
 == Changelog ==
+
+= 1.5.2 =
+
+* UPDATED: Security updates
+* UPDATED: User interface updates
 
 = 1.5.1.17 =
 

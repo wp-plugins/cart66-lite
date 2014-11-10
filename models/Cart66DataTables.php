@@ -542,7 +542,7 @@ Class Cart66DataTables {
   	if($_GET['sSearch'] != ""){
   		$where = "WHERE (";
   		for ($i=0; $i<count($columns); $i++){
-  			$where .= $columns[$i] . " LIKE '%" . mysql_real_escape_string(trim($_GET['sSearch'])) . "%' OR ";
+  			$where .= $columns[$i] . " LIKE '%" . esc_sql(trim($_GET['sSearch'])) . "%' OR ";
   		}
   		$where = substr_replace($where, "", -3) . ')';
   	}
@@ -555,7 +555,7 @@ Class Cart66DataTables {
   			else {
   				$where .= " AND ";
   			}
-  			$where .= $columns[$i] . " LIKE '%" . mysql_real_escape_string(trim($_GET['sSearch_' . $i])) . "%' ";
+  			$where .= $columns[$i] . " LIKE '%" . esc_sql(trim($_GET['sSearch_' . $i])) . "%' ";
   		}
   	}
     return $where;
@@ -564,7 +564,7 @@ Class Cart66DataTables {
   public static function dataTablesLimit() {
     $limit = "";
   	if(isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1'){
-  		$limit = mysql_real_escape_string($_GET['iDisplayStart']) . ", " . mysql_real_escape_string($_GET['iDisplayLength']);
+  		$limit = esc_sql($_GET['iDisplayStart']) . ", " . esc_sql($_GET['iDisplayLength']);
   	}
     return $limit;
   }
@@ -575,7 +575,7 @@ Class Cart66DataTables {
   		for($i=0; $i<intval($_GET['iSortingCols']); $i++){
   			if(isset($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])]) && $_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true"){
   				$order .= $columns[intval($_GET['iSortCol_' . $i])] . "
-  				 	" . mysql_real_escape_string($_GET['sSortDir_' . $i]) . ", ";
+  				 	" . esc_sql($_GET['sSortDir_' . $i]) . ", ";
   			}
   		}
 

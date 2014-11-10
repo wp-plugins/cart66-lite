@@ -23,7 +23,7 @@ class Cart66Dialog {
       $button = ' button';
     }
     $image = CART66_URL . '/images/cart66_tiny_type.png';
-    $cart66_button = '<a id="Cart66Thickbox" href="#TB_inline?width=670&height=440&inlineId=select_cart66_shortcode" class="thickbox' . $button . '" title="' . 
+    $cart66_button = '<a id="Cart66Thickbox" href="#TB_inline?width=670&height=500&inlineId=select_cart66_shortcode" class="thickbox' . $button . '" title="' . 
       __("Add Cart66 Shortcodes", 'cart66') 
       . '"><img src="'.$image.'" alt="' . 
       __("Add Cart66 Shortcodes", 'cart66') 

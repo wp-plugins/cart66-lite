@@ -13,7 +13,7 @@ $setting = new Cart66Setting();
 
 
 // Try to return buyers to the last page they were on when the click to continue shopping
-if(Cart66Setting::getValue('continue_shopping') == 1){
+if(Cart66Setting::getValue('continue_shopping') == 'store_home'){
   // force the last page to be store home
   $lastPage = Cart66Setting::getValue('store_url') ? Cart66Setting::getValue('store_url') : get_bloginfo('url');
   Cart66Session::set('Cart66LastPage', $lastPage);
@@ -71,7 +71,6 @@ if($cartImgPath) {
     ?></p>
   </div>
 <?php endif; ?>
-<?php if(count($items)): ?>
 
 <?php if(Cart66Session::get('Cart66InventoryWarning') && $fullMode): ?>
   <?php 
@@ -79,6 +78,8 @@ if($cartImgPath) {
     Cart66Session::drop('Cart66InventoryWarning');
   ?>
 <?php endif; ?>
+
+<?php if(count($items)): ?>
 
 <?php if(number_format(Cart66Setting::getValue('minimum_amount'), 2, '.', '') > number_format(Cart66Session::get('Cart66Cart')->getSubTotal(), 2, '.', '') && Cart66Setting::getValue('minimum_cart_amount') == 1): ?>
   <div id="minAmountMessage" class="alert-message alert-error Cart66Unavailable">

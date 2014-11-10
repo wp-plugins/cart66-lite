@@ -120,7 +120,7 @@ class Cart66Order extends Cart66ModelAbstract {
     return $this->_db->insert_id;
   }
   
-  public function getOrderRows($where=null, $orderBy=null, $limit=null) {
+  public function getOrderRows($where=null, $orderBy=null, $limit=null, $columns=false) {
     if(isset($where)) {
       $where = ' ' . $where;
     }
@@ -130,8 +130,12 @@ class Cart66Order extends Cart66ModelAbstract {
     if(isset($limit)) {
       $limit = ' limit ' . $limit;
     }
-
-    $sql = "SELECT * from $this->_tableName $where $orderBy $limit";
+    
+    if(!$columns) {
+      $columns = '*';
+    }
+    
+    $sql = "SELECT $columns from $this->_tableName $where $orderBy $limit";
     
     $orders = $this->_db->get_results($sql);
     return $orders;

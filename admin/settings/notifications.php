@@ -1441,7 +1441,7 @@ $mustache_elements = array(
         });
       
         $('.sendHtmlNo').each(function() {
-          if($(this).attr('checked')) {
+          if($(this).is(':checked')) {
             var blockName = $(this).attr('id').replace('_send_html_emails_no','');
             $('.' + blockName + '_html_email_block').hide();
           }

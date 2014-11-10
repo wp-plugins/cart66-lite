@@ -358,6 +358,12 @@ if(isset($b['country']) && !empty($b['country'])) {
   $shipping_country = isset($s['country']) ? $s['country'] : $b['country'];
 }
 
+if(Cart66Session::get('Cart66ShippingCountryCode')) {
+  $billing_country = Cart66Session::get('Cart66ShippingCountryCode');
+  $shipping_country = Cart66Session::get('Cart66ShippingCountryCode');
+}
+
+
 $error_field_names = array();
 if(isset($jqErrors) && is_array($jqErrors)) {
   foreach($jqErrors as $field_name) {

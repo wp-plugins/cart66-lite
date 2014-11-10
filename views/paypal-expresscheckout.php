@@ -11,7 +11,7 @@ if(!($username && $password && $signature)) {
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cart66-action']) && $_POST['cart66-action'] == 'paypalexpresscheckout') {
   // Set up the PayPal object
   $pp = new Cart66PayPalExpressCheckout();
-  
+  $taxRate = new Cart66TaxRate();
   // Calculate total amount to charge customer
   $total = Cart66Session::get('Cart66Cart')->getGrandTotal(false);
   $total = number_format($total, 2, '.', '');
@@ -71,14 +71,30 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cart66-action']) && $_P
     Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Not making shipping part of the item list. Item Total: $itemTotal");
   }
   
+  // calculate taxes on all sales
+  $tax = 0;
+  $isTaxed = $taxRate->loadByState('All Sales');
+  if($isTaxed) {
+    $taxable = Cart66Session::get('Cart66Cart')->getTaxableAmount($taxRate->tax_shipping);
+    $tax = number_format($taxable * ($taxRate->rate/100), 2, '.', '');
+    if($tax == 0) {
+      $tax = Cart66Session::get('Cart66Cart')->getTax('All Sales');
+    }   
+    if($tax > 0){
+      $total = $total + $tax;
+    }
+  }
+  
   // Set payment information
   $payment = array(
     'AMT' => $total,
+    'TAXAMT' => $tax,
     'CURRENCYCODE' => CURRENCY_CODE,
     'ITEMAMT' => $itemTotal,
     'SHIPPINGAMT' => $shipping,
     'NOTIFYURL' => $ipnUrl
   );
+  
   Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Setting Payment Details:\n".print_r($payment,true));
   $pp->setPaymentDetails($payment);
   

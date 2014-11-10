@@ -816,3 +816,14 @@ span.subscriptionOrMembership {
   #msg {
     width: 300px; margin: 10px 0px;
   }
+
+	@media (max-width: 600px) {
+		#ccInfo div {clear:both;width:50%; display:block; }
+		#ccInfo div select {padding:2px}
+		#billingInfo { }
+		#paymentInfo {margin-left: 0!important;}
+		#contactPaymentInfo .description {display:block; margin:0}
+		#paymentInfo, #accountInfo, #Cart66CheckoutButtonDiv {float: none;width: auto;margin-left: 0!Important;}
+		#Cart66CheckoutButtonDiv { float: none; margin-left: 10px; width: 50%; }
+		#Cart66CheckoutButtonDiv .Cart66ButtonPrimary {margin-left:0}
+	}

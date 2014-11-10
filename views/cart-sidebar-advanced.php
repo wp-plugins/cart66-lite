@@ -220,7 +220,7 @@
       $(document).ready(function(){
         var widget_original_methods = $('#widget_shipping_method_id').html();
         var widget_selected_country = $('#widget_shipping_country_code').val();
-        $('.methods-country').each(function() {
+        $('#widget_shipping_method_id .methods-country').each(function() {
           if(!$(this).hasClass(widget_selected_country) && !$(this).hasClass('all-countries') && !$(this).hasClass('select')) {
             $(this).remove();
           }
@@ -228,7 +228,7 @@
         $('#widget_shipping_country_code').change(function() {
           var widget_selected_country = $(this).val();
           $('#widget_shipping_method_id').html(widget_original_methods);
-          $('.methods-country').each(function() {
+          $('#widget_shipping_method_id .methods-country').each(function() {
             if(!$(this).hasClass(widget_selected_country) && !$(this).hasClass('all-countries') && !$(this).hasClass('select')) {
               $(this).remove();
             }

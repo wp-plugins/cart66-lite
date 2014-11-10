@@ -437,8 +437,8 @@ abstract class Cart66GatewayAbstract {
     $custom_shipping_fields = apply_filters('cart66_after_shipping_form', '');
     if(is_array($custom_shipping_fields)) {
       foreach($custom_shipping_fields as $key => $shipping_field) {
-        if(isset($s[$shipping_field['slug']])) {
-          $additional_fields[$shipping_field['section']][$shipping_field['slug']] = array('label' => $shipping_field['label'], 'value' => $s[$shipping_field['slug']]);
+        if(isset($address[$shipping_field['slug']])) {
+          $additional_fields[$shipping_field['section']][$shipping_field['slug']] = array('label' => $shipping_field['label'], 'value' => $address[$shipping_field['slug']]);
         }
       }
     }

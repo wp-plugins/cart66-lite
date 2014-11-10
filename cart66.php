@@ -3,7 +3,7 @@
 Plugin Name: Cart66 Lite
 Plugin URI: http://www.cart66.com
 Description: Wordpress Shopping Cart
-Version: 1.5.1.17
+Version: 1.5.2
 Author: Reality 66
 Author URI: http://www.Reality66.com
 Text Domain: cart66
@@ -116,6 +116,9 @@ function cart66_check_mail_plugins() {
         }
       }
     }
+  }
+  if(!file_exists('wp_mail.php')){
+    $wp_mail = false;
   }
   define('CART66_WPMAIL', $wp_mail);
   if(CART66_WPMAIL) {
