@@ -1,5 +1,5 @@
 <?php
-$tab = 'integrations-amazon_s3';
+$tab = 'integrations-hurricane';
 ?>
 <div id="saveResult"></div>
 <div id="cart66-inner-tabs">
@@ -7,6 +7,7 @@ $tab = 'integrations-amazon_s3';
     <!--li><a href="#integrations-main_settings" class="integrations-main_settings"><?php _e('Integrations', 'cart66'); ?></a> | </li-->
     <li><a href="#integrations-amazon_s3" class="integrations-amazon_s3"><?php _e('Amazon S3', 'cart66'); ?></a> | </li>
     <li><a href="#integrations-constant_contact" class="integrations-constant_contact"><?php _e('Constant Contact', 'cart66'); ?></a> | </li>
+    <li><a href="#integrations-hurricane" class="integrations-hurricane"><?php _e('Hurricane Affiliate Software', 'cart66'); ?></a> | </li>
     <li><a href="#integrations-google_analytics_ecommerce" class="integrations-google_analytics_ecommerce"><?php _e('Google Analytics Ecommerce Tracking', 'cart66'); ?></a> | </li>
     <li><a href="#integrations-gravity_forms" class="integrations-gravity_forms"><?php _e('Gravity Forms', 'cart66'); ?></a> | </li>
     <li><a href="#integrations-idevaffiliate" class="integrations-idevaffiliate"><?php _e('iDevAffiliate', 'cart66'); ?></a> | </li>
@@ -31,6 +32,79 @@ $tab = 'integrations-amazon_s3';
         </tbody>
       </table>
     </div-->
+    <div id="integrations-hurricane" class="pane">
+      <a href="http://hurricane.io" target="_blank" style="float:right;"><img src="https://cart66.com/images/integrations/hurricane.png" align="left" alt="Hurricane"></a>
+      <h3><?php _e('Hurricane Affiliate Software', 'cart66'); ?></h3>
+      <table class="form-table">
+        <tbody>
+          <tr valign="top">
+            <th scope="row"><?php _e('Your Hurricane Subdomain', 'cart66'); ?></th>
+            <td>
+              http://<input type="text" name="cart66_hurricane_subdomain" id="cart66_hurricane_subdomain" value="<?php echo Cart66Setting::getValue('cart66_hurricane_subdomain'); ?>" />.hurricane.io
+              <p class="description"><?php _e( 'Enter your Hurricane subdomain from your custom hurricane.io address.' , 'cart66' ); ?></p>
+                 <?php 
+                  if(Cart66Setting::getValue('cart66_hurricane_subdomain')):
+                    $hurricane_url = wp_remote_get("http://".Cart66Setting::getValue('cart66_hurricane_subdomain').".hurricane.io");
+                    $response_code = wp_remote_retrieve_response_code( $hurricane_url ); 
+                    if(!$response_code || $response_code != 200): ?>
+                      <p class="description" style="color:red;">
+                        There's a problem with your subdomain <a href="http://<?php echo Cart66Setting::getValue('cart66_hurricane_subdomain'); ?>.hurricane.io" target="_blank">http://<?php echo Cart66Setting::getValue('cart66_hurricane_subdomain'); ?>.hurricane.io</a>. Please make sure  you have entered it correctly.
+                      </p>
+                    <?php endif; ?>
+                 <?php endif; ?>
+
+                            
+              <div id="dashboard-widgets-wrap">
+                <div id="dashboard-widgets" class="metabox-holder">
+                  <div id="hurricane-help-box" class="postbox-container">
+                    <div id="dashboard_right_now" class="postbox">
+                      <h3 class="hndle"><span>How are commissions calculated?</span></h3>
+                       <div class="inside">
+                         <div class="main">
+
+
+                          <p>The order total sent to Hurricane used to calculate commissions is the order total (including discounts) less shipping and taxes.</p>
+
+                          <h4 style="padding: 10px 0px;">Example Order Amounts:</h4>
+
+                          <table>
+                            <tr>
+                              <td align="right">Cart subtotal:</td>
+                              <td>$50.00</td>
+                            </tr>
+                            <tr>
+                              <td align="right">Order discount:</td>
+                              <td>- $10.00</td>
+                            </tr>
+                            <tr>
+                              <td align="right">Shipping:</td>
+                              <td>$5.00</td>
+                            </tr>
+                            <tr>
+                              <td align="right">Tax:</td>
+                              <td>$2.00</td>
+                            </tr>
+                            <tr>
+                              <td align="right">Order total:</td>
+                              <td>$47.00</td>
+                            </tr>
+                            <tr>
+                              <td align="right"><strong>Total sent to Hurricane:</strong></td>
+                              <td><strong>$40.00</strong></td>
+                            </tr>
+                          </table>
+
+                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div id="integrations-google_analytics_ecommerce" class="pane">
       <a href="#" target="_blank" style="float:right;"><img src="https://cart66.com/images/integrations/Google-Analytics-Logo.png" align="left" alt="Google Analytics"></a>
       <h3><?php _e('Google Analytics Ecommerce Tracking', 'cart66'); ?></h3>
@@ -76,7 +150,7 @@ $tab = 'integrations-amazon_s3';
       <?php endif; ?>
     </div>
     <div id="integrations-gravity_forms" class="pane">
-      <a href="https://www.e-junkie.com/ecom/gb.php?cl=54585&c=ib&aff=45747" target="_blank" style="float:right;"><img src="https://cart66.com/images/integrations/gravity-logo.png" align="left" alt="Gravity Forms"></a>
+      <a href="#" target="_blank" style="float:right;"><img src="https://cart66.com/images/integrations/gravity-logo.png" align="left" alt="Gravity Forms"></a>
       <h3><?php _e('Gravity Forms', 'cart66'); ?></h3>
       <?php if(CART66_PRO): ?>
         <table class="form-table">

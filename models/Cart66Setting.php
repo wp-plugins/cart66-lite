@@ -37,7 +37,7 @@ class Cart66Setting {
       if($_POST['cart66-action'] == 'saveOrderNumber' && CART66_PRO) {
         $orderNumber = trim(Cart66Common::postVal('order_number'));
         Cart66Setting::setValue('order_number', $orderNumber);
-        $versionInfo = get_transient('_cart66_version_request');
+        $versionInfo = false; get_transient('_cart66_version_request');
         if(!$versionInfo) {
           $versionInfo = Cart66ProCommon::getVersionInfo();
           set_transient('_cart66_version_request', $versionInfo, 43200);
@@ -185,6 +185,15 @@ class Cart66Setting {
         }
         if($_POST['cart66-action'] == 'advanced notifications') {
           Cart66Setting::setValue('enable_advanced_notifications', $_POST['enable_advanced_notifications']);
+
+          if(isset($_POST['disable_plain_email'])){
+            Cart66Setting::setValue('disable_plain_email', $_POST['disable_plain_email']);
+          }
+          if(isset($_POST['include_mime_boundary'])){
+            Cart66Setting::setValue('include_mime_boundary', $_POST['include_mime_boundary']);
+          }
+          
+
           $successMessage = __('Your notification settings have been saved.', 'cart66');
           $tab = 'notifications-advanced_notifications';
         }

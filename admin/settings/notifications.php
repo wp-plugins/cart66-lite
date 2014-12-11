@@ -320,6 +320,7 @@ $mustache_elements = array(
                 <label for="receipt_send_html_emails_yes"><?php _e( 'Yes' , 'cart66' ); ?></label>
                 <input type="radio" name="receipt_send_html_emails" class="sendHtmlNo" id="receipt_send_html_emails_no" value="" <?php echo Cart66Setting::getValue('receipt_send_html_emails') != 1 ? 'checked="checked" ' : '' ?>/>
                 <label for="receipt_send_html_emails_no"><?php _e( 'No' , 'cart66' ); ?></label>
+                
               </td>
             </tr>
             <tr valign="top" class="receipt_html_email_block">
@@ -1297,6 +1298,18 @@ $mustache_elements = array(
                 <input type="radio" name="enable_advanced_notifications" id="enable_advanced_notifications_no" value="" <?php echo Cart66Setting::getValue('enable_advanced_notifications') != 1 ? 'checked="checked" ' : '' ?>/>
                 <label for="enable_advanced_notifications_no"><?php _e('No', 'cart66'); ?></label>
                 <p class="description"><?php _e('Selecting this will allow you to enable Advanced Notifications that include HTML emails and emails for status updates, fulfillment emails, followup emails and more.', 'cart66'); ?></p>
+
+                <br/>
+                
+                <input name="disable_plain_email" type="hidden" value="" />
+                <input type="checkbox" name="disable_plain_email" class="" id="disable_plain_email" value="1" <?php echo Cart66Setting::getValue('disable_plain_email') ? 'checked="checked" ' : '' ?>/>
+                <label for="disable_plain_email"><?php _e( 'Disable Plaintext Emails' , 'cart66' ); ?></label>
+                
+                <input name="include_mime_boundary" type="hidden" value="" />
+                <input type="checkbox" name="include_mime_boundary" class="" id="include_mime_boundary" value="1" <?php echo Cart66Setting::getValue('include_mime_boundary') ? 'checked="checked" ' : '' ?>/>
+                <label for="include_mime_boundary"><?php _e( 'Include MIME Boundary in Email Headers' , 'cart66' ); ?></label>
+                
+                
               </td>
             </tr>
             <tr valign="top">

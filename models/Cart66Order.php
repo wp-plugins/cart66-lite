@@ -348,4 +348,11 @@ class Cart66Order extends Cart66ModelAbstract {
     }
   }
   
+  public function getAffiliateTotal(){
+    // return portion of order total eligible for affiliate comission
+    $affiliate_total = $this->total - ($this->shipping + $this->tax);
+    $affiliate_total = Cart66Common::currencyFormat($affiliate_total, 2, '.', '');
+    return $affiliate_total;
+  }
+  
 }

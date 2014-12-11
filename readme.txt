@@ -4,7 +4,7 @@ Donate link: http://cart66.com/
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales, shopping cart
 Requires at least: 2.8.2
 Tested up to: 4.0
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,9 +32,13 @@ Cart66 is a simple to use yet powerful ecommerce plugin for WordPress.
 
 [vimeo http://vimeo.com/23207481]
 
-Some features in the video, such as the integration with Gravity Forms, are only available in Cart66 Professional.
+Some features in the video, such as the integration with Gravity Forms, are only available in [Cart66 Professional](http://cart66.com/pro).
 
-Checkout using
+**Affiliate Program Integration**
+
+If you want to run an affiliate program and reward people for referring sales to your store, Cart66 is integrated with [Hurricane affiliate software](http://hurricane.io) 
+
+**Checkout using**
 
 * [Mijireh Checkout - Secure credit card processing](http://www.mijireh.com "Secure credit card processing")
 * PayPal Website Payments Standard
@@ -92,6 +96,11 @@ We are not able to provide anything other than community based support for Cart6
 4. [Secure credit card processing with Mijireh](http://www.mijireh.com)
 
 == Changelog ==
+
+= 1.5.3 =
+* NEW: [Hurricane affiliate software](http://hurricane.io) integration
+* NEW: Toggle settings for email MIME type
+* NEW: Responsive styles for cart and checkout
 
 = 1.5.2 =
 
