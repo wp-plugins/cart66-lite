@@ -2,8 +2,8 @@
 class Cart66Common {
 
   /**
-   * Return the string to use as the input id while keeping track of 
-   * how many times a product is rendered to make sure there are no 
+   * Return the string to use as the input id while keeping track of
+   * how many times a product is rendered to make sure there are no
    * conflicting input ids.
    *
    * @param int $id - The databse id for the product
@@ -33,14 +33,14 @@ class Cart66Common {
 
     return $id;
   }
- 
+
   /**
    * Strip all non numeric characters, then format the phone number.
-   * 
+   *
    * Phone numbers are formatted as follows:
    *  7 digit phone numbers: 266-1789
    *  10 digit phone numbers: (804) 266-1789
-   * 
+   *
    * @return string
    */
   public static function formatPhone($phone) {
@@ -59,7 +59,7 @@ class Cart66Common {
     $isRegistered = ($orderNumber !== false) ? true : false;
     return $isRegistered;
   }
-  
+
   public static function activePromotions() {
     $active = false;
     $promo = new Cart66Promotion();
@@ -68,11 +68,11 @@ class Cart66Common {
     }
     return $active;
   }
-  
+
   public static function showValue($value) {
     echo isset($value)? $value : '';
   }
-  
+
   public static function displayCustomFormField($field, $post_data) {
     $output = '';
     $value = '';
@@ -86,7 +86,7 @@ class Cart66Common {
     }
     return $output;
   }
-  
+
   public static function getView($filename, $data=null, $notices=true, $minify=false) {
     $notice = '';
     if(strpos($filename, 'admin') !== false) {
@@ -109,7 +109,7 @@ class Cart66Common {
           </div>';
         }
       }
-      
+
       if(CART66_PRO && !self::isRegistered()) {
         $hardCoded = '';
         $settingsUrl = get_bloginfo('wpurl') . '/wp-admin/admin.php?page=cart66-settings';
@@ -127,7 +127,7 @@ class Cart66Common {
           ';
         }
       }
-      
+
     }
 
     $customView = false;
@@ -153,9 +153,9 @@ class Cart66Common {
     );
     $overrideDirectory = $themeDirectory."/cart66-templates";
     $userViewFile = $overrideDirectory."/$filename";
-    
+
     //Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Override: $overrideDirectory\nUser view file: $userViewFile");
-    
+
     if(file_exists($userViewFile) && in_array($filename,$approvedOverrideFiles)) {
       // File exists, make sure it's not empty
       if(filesize($userViewFile)>10) {
@@ -171,7 +171,7 @@ class Cart66Common {
       // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] File exists: ".var_export(file_exists($userViewFile),true)."\n");
       // Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Approved Override: ".var_export(in_array($filename,$approvedOverrideFiles),true));
     }
-  
+
     // Check for override and confirm we have a registered plugin
     if($customView && CART66_PRO && self::isRegistered()) {
       // override is present
@@ -181,15 +181,15 @@ class Cart66Common {
       // no override, render standard view
       $filename = CART66_PATH . "/$filename";
     }
-    
+
     ob_start();
     include $filename;
     $contents = ob_get_contents();
     ob_end_clean();
-    
+
     return ($minify) ? Cart66Common::minifyMarkup($notice . $contents) : $notice . $contents;
   }
-  
+
   public static function minifyMarkup($markup){
     $search = array(
             '/\>[^\S ]+/s', //strip whitespaces after tags, except space
@@ -204,36 +204,36 @@ class Cart66Common {
     $output = preg_replace($search, $replace, $markup);
     return $output;
   }
-  
+
   public static function getTableName($name, $prefix='cart66_'){
       global $wpdb;
       return $wpdb->prefix . $prefix . $name;
   }
-  
+
   public static function getTablePrefix(){
       global $wpdb;
       return $wpdb->prefix . "cart66_";
   }
-  
+
   /**
    * If CART66_DEBUG is defined as true and a log file exists in the root of the Cart66 plugin directory, log the $data
    */
   public static function log($data) {
-    
+
     if(defined('CART66_DEBUG') && CART66_DEBUG) {
       $tz = '- Server time zone ' . date('T');
       $date = date('m/d/Y g:i:s a', self::localTs());
       $header = strpos($_SERVER['REQUEST_URI'], 'wp-admin') ? "\n\n======= ADMIN REQUEST =======\n[LOG DATE: $date $tz]\n" : "\n\n[LOG DATE: $date $tz]\n";
-      $filename = CART66_PATH . "/log.txt"; 
+      $filename = CART66_PATH . "/log.txt";
       if(file_exists($filename) && is_writable($filename)) {
         file_put_contents($filename, $header . $data, FILE_APPEND);
       }
     }
-    
+
   }
-  
+
   public static function clearLog(){
-    $filename = CART66_PATH . "/log.txt"; 
+    $filename = CART66_PATH . "/log.txt";
     if(file_exists($filename) && is_writable($filename)) {
       file_put_contents($filename, '');
     }
@@ -242,12 +242,12 @@ class Cart66Common {
   public static function getRandNum($numChars = 7) {
     $id = '';
 		mt_srand((double)microtime()*1000000);
-		for ($i = 0; $i < $numChars; $i++) { 
+		for ($i = 0; $i < $numChars; $i++) {
 			$id .= chr(mt_rand(ord(0), ord(9)));
 		}
 		return $id;
 	}
-	
+
 	public static function getRandString($length = 14) {
 	  $string = '';
     $chrs = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -256,17 +256,17 @@ class Cart66Common {
       $string .= $chrs[$loc];
     }
 	  return $string;
-	} 
-  
+	}
+
   public static function camel2human($val) {
     $val = strtolower(preg_replace('/([A-Z])/', ' $1', $val));
     return $val;
   }
-  
+
   /**
    * Return the account id if the visitor is logged in, otherwise false.
    * This function has nothing to do with feature levels or subscription status
-   * 
+   *
    * @return int or false
    */
   public static function isLoggedIn() {
@@ -277,7 +277,7 @@ class Cart66Common {
     return $isLoggedIn;
   }
 
-  
+
   public static function awardCommission($orderId, $referrer) {
     global $wpdb;
     if (!empty($referrer)) {
@@ -287,7 +287,7 @@ class Cart66Common {
         $discount = $order->discountAmount;
         $order_items = array();
         foreach($order->getItems() as $item) {
-          $order_items[] = $item->item_number;          
+          $order_items[] = $item->item_number;
           $price = $item->product_price * $item->quantity;
 
           if($price > $discount) {
@@ -302,13 +302,13 @@ class Cart66Common {
           if($subtractAmount > 0) {
             $price = $price - $subtractAmount;
           }
-          
+
           // Transaction if for commission is the id in th order items table
           $txn_id = $order->trans_id;
           $sale_amount = $price;
           $item_id = $item->item_number;
           $buyer_email = $order->email;
-          
+
           if(function_exists('wp_aff_award_commission')) {
             // Make sure commission has not already been granted for this transaction
             $aff_sales_table = $wpdb->prefix . "affiliates_sales_tbl";
@@ -317,18 +317,18 @@ class Cart66Common {
               wp_aff_award_commission($referrer,$sale_amount,$txn_id,$item_id,$buyer_email);
             }
           }
-          
+
         }
-        
+
         // valid order id
         // Transaction if for commission is the id in th order items table
         $txn_id = $order->trans_id;
         $sale_amount = $order->total - ($order->shipping + $order->tax); // set eligible amount to total sans shipping
         $item_id = implode(',',$order_items);
         $buyer_email = $order->email;
-        
+
         // Affiliate Royale
-        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] 
+        Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "]
          Running wafp_award_commission\n
          referrer $referrer\n
          sale_amount $sale_amount\n
@@ -336,14 +336,14 @@ class Cart66Common {
          item_id $item_id\n
          buyer_email $buyer_email");
          do_action('wafp_award_commission', $referrer, $sale_amount, $txn_id, $item_id, $buyer_email);
-        
+
       }
     }
   }
-  
+
   /**
    * Return true if the email address is not empty and has a valid format
-   * 
+   *
    * @param string $email The email address to validate
    * @return boolean Empty or invalid email addresses return false, otherwise true
    */
@@ -364,7 +364,7 @@ class Cart66Common {
     }
     return $isValid;
   }
-  
+
   public static function isEmailUnique($email, $exceptId=0) {
     global $wpdb;
     $accounts = self::getTableName('accounts');
@@ -374,17 +374,17 @@ class Cart66Common {
     $isUnique = $count == 0;
     return $isUnique;
   }
-  
+
   public static function randomString($numChars = 7) {
     $letters = "";
     mt_srand((double)microtime()*1000000);
-    for ($i = 0; $i < $numChars; $i++) { 
+    for ($i = 0; $i < $numChars; $i++) {
       $randval = chr(mt_rand(ord("a"), ord("z")));
       $letters .= $randval;
     }
     return $letters;
   }
-  
+
   public static function isValidDate($val) {
     $isValid = false;
     if(preg_match("/\d{1,2}\/\d{1,2}\/\d{4}/", $val)) {
@@ -406,7 +406,7 @@ class Cart66Common {
     }
     return $isValid;
   }
-  
+
   /**
    * Strip slashes and escape sequences from POST values and returened the scrubbed value.
    * If the key is not set, return false.
@@ -418,7 +418,7 @@ class Cart66Common {
     }
     return $value;
   }
-  
+
   public static function deepTagClean(&$data) {
     if(is_array($data)) {
       foreach($data as $key => $value) {
@@ -437,7 +437,7 @@ class Cart66Common {
     }
     return $data;
   }
-  
+
 
   /**
    * Strip slashes and escape sequences from GET values and returened the scrubbed value.
@@ -451,22 +451,22 @@ class Cart66Common {
     }
     return $value;
   }
-  
+
   /**
    * Get home country code from cart settings or return US if no setting exists
-   * 
+   *
    * @return string
    */
   public static function getHomeCountryCode() {
     if($homeCountry = Cart66Setting::getValue('home_country')) {
-      list($homeCountryCode, $dummy) = explode('~', $homeCountry); 
+      list($homeCountryCode, $dummy) = explode('~', $homeCountry);
     }
     else {
       $homeCountryCode = 'US';
     }
     return $homeCountryCode;
   }
-  
+
   public static function getCountryName($code) {
     $countries = self::getCountries(true);
     return $countries[$code];
@@ -480,7 +480,7 @@ class Cart66Common {
     }
     return $localeCode;
   }
-  
+
   public static function getShippingCountries() {
     $countries = self::getCountries();
     $use_array = false;
@@ -504,7 +504,7 @@ class Cart66Common {
     }
     return $countries;
   }
-  
+
   public static function getCountries($all=false) {
     $countries = array(
       'AF'=>'Afghanistan',
@@ -748,7 +748,7 @@ class Cart66Common {
       'ZM'=>'Zambia',
       'ZW'=>'Zimbabwe'
     );
-    
+
     // Put home country at the top of the list
     $setting = new Cart66Setting();
     $home_country = Cart66Setting::getValue('home_country');
@@ -761,7 +761,7 @@ class Cart66Common {
     }
 
     $customCountries = self::getCustomCountries();
-    
+
     if($all) {
       if(is_array($customCountries)) {
         foreach($customCountries as $code => $name) {
@@ -782,12 +782,12 @@ class Cart66Common {
         }
       }
       else {
-        $countries = array_slice($countries, 0, 1, true); 
+        $countries = array_slice($countries, 0, 1, true);
       }
     }
-    
-    
-    
+
+
+
     return $countries;
   }
 
@@ -804,7 +804,7 @@ class Cart66Common {
     }
     return $list;
   }
-  
+
   public static function getPayPalCurrencyCodes() {
     $currencies = array(
       'United States Dollar' => 'USD',
@@ -833,11 +833,11 @@ class Cart66Common {
     return $currencies;
   }
 
-  
+
   public static function getZones($code='all') {
     $setting = new Cart66Setting();
     $zones = array();
-    
+
     $au = array();
     $au['0'] = '';
     $au['ACT'] = 'Australian Capital Territory';
@@ -849,7 +849,7 @@ class Cart66Common {
     $au['VIC'] = 'Victoria';
     $au['WA'] = 'Western Australia';
     $zones['AU'] = $au;
-    
+
     $br = array();
     $br['0'] = '';
     $br['Acre'] = 'Acre';
@@ -880,7 +880,7 @@ class Cart66Common {
     $br['Sergipe'] = 'Sergipe';
     $br['Tocantins'] = 'Tocantins';
     $zones['BR'] = $br;
-    
+
     $ca = array();
     $ca['0'] = '';
     $ca['AB'] = 'Alberta';
@@ -897,7 +897,7 @@ class Cart66Common {
     $ca['SK'] = 'Saskatchewan';
     $ca['YT'] = 'Yukon Territory';
     $zones['CA'] = $ca;
-    
+
     $my['0'] = '';
     $my['KUL'] = 'Kuala Lumpur (Federal Territory)';
     $my['LBN'] = 'Labuan (Federal Territory)';
@@ -916,7 +916,7 @@ class Cart66Common {
     $my['SGR'] = 'Selangor';
     $my['TRG'] = 'Terengganu';
     $zones['MY'] = $my;
-    
+
     $us = array();
     $us['0'] = '';
     $us['AL'] = 'Alabama';
@@ -973,7 +973,7 @@ class Cart66Common {
     $us['AA'] = 'Armed Forces (AA)';
     $us['AE'] = 'Armed Forces (AE)';
     $us['AP'] = 'Armed Forces (AP)';
-    
+
     if($setting->getValue('include_us_territories') == 1){
       $us['AS'] = 'American Samoa';
       $us['GU'] = 'Guam';
@@ -984,9 +984,9 @@ class Cart66Common {
       $us['MH'] = 'Marshall Islands';
       $us['PW'] = 'Palua';
     }
-    
+
     $zones['US'] = $us;
-    
+
     switch ($code) {
       case 'AU':
         $zones = $zones['AU'];
@@ -1004,10 +1004,10 @@ class Cart66Common {
         $zones = $zones['US'];
         break;
     }
-    
+
     return $zones;
   }
-  
+
 
 
   /**
@@ -1031,7 +1031,7 @@ class Cart66Common {
     }
     return $path;
   }
-  
+
   public static function localTs($timestamp=null) {
     $timestamp = isset($timestamp) ? $timestamp : time();
     if(date('T') == 'UTC') {
@@ -1068,13 +1068,13 @@ class Cart66Common {
     }
     return $promoMsg;
   }
-  
+
   //increment the number of redemptions
   public function updatePromoRedemptions() {
     $promotion = Cart66Session::get('Cart66Promotion');
     $promotion->updateRedemptions();
   }
-  
+
   public function showErrors($errors, $message=null) {
     $out = "<div id='cart66Errors' class='Cart66Error'>";
     if(empty($message)) {
@@ -1096,7 +1096,7 @@ class Cart66Common {
     $out .= "</ul></div>";
     return $out;
   }
-  
+
   public function getJqErrorScript(array $jqErrors) {
     $script = '
 <script type="text/javascript">
@@ -1121,7 +1121,7 @@ class Cart66Common {
 
   /**
    * Return the WP_CONTENT_URL taking into account HTTPS and the possibility that WP_CONTENT_URL may not be defined
-   * 
+   *
    * @return string
    */
   public static function getWpContentUrl() {
@@ -1134,7 +1134,7 @@ class Cart66Common {
     }
     return $wpurl;
   }
-  
+
   /**
    * Return the WordPress URL taking into account HTTPS
    */
@@ -1145,22 +1145,22 @@ class Cart66Common {
     }
     return $wpurl;
   }
-  
+
   /**
    * Detect if request occurred over HTTPS and, if so, return TRUE. Otherwise return FALSE.
-   * 
+   *
    * @return boolean
    */
   public static function isHttps() {
     $isHttps = false;
-    if((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || 
+    if((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ||
         (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) {
       $isHttps = true;
     }
     return $isHttps;
   }
-  
-  
+
+
   public static function getCurrentPageUrl() {
     $protocol = 'http://';
     if(self::isHttps()) {
@@ -1169,12 +1169,12 @@ class Cart66Common {
     $url = $protocol . $_SERVER['HTTP_HOST'] . htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8');
     return $url;
   }
-  
+
   /**
    * Attach a string of name/value pairs to a URL for the current page
    * This function looks for the presence of a ? and appropriately appends the new parameters.
    * Return a URL for the current page with the appended params.
-   * 
+   *
    * @return string
    */
   public function appendQueryString($nvPairs) {
@@ -1183,17 +1183,17 @@ class Cart66Common {
     $url .= $nvPairs;
     return $url;
   }
-  
+
   public static function appendWurlQueryString($nvPairs) {
     $url = home_url();
     $url .= strpos($url, '?') ? '&' : '/?';
     $url .= $nvPairs;
     return $url;
   }
-  
+
   /**
    * Replace the query string for the current page url
-   * 
+   *
    * @param string Name value pairs formatted as name1=value1&name2=value2
    * @return string The URL to the current page with the given query string
    */
@@ -1205,17 +1205,17 @@ class Cart66Common {
     }
     return $url;
   }
-  
 
-  
+
+
   public static function serializeSimpleXML(SimpleXMLElement $xmlObj) {
     return serialize($xmlObj->asXML());
   }
-  
+
   public static function unserializeSimpleXML($str) {
     return simplexml_load_string(unserialize($str));
   }
-  
+
   /**
    * Return either the live or the sandbox PayPal URL based on whether or not paypal_sandbox is set.
    */
@@ -1226,12 +1226,12 @@ class Cart66Common {
     }
     return $paypalUrl;
   }
-  
+
   public static function curl($url, $method='GET') {
     $method = strtoupper($method);
-    
+
     // Make sure curl is installed?
-    if (!function_exists('curl_init')){ 
+    if (!function_exists('curl_init')){
       throw new Cart66Exception('cURL is not installed!');
     }
 
@@ -1242,27 +1242,27 @@ class Cart66Common {
     curl_setopt($ch, CURLOPT_TIMEOUT, 20);
     curl_setopt($ch, CURLOPT_VERBOSE, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    
+
     if($method == 'POST') {
       curl_setopt($ch, CURLOPT_POST, true);
     }
-    
+
     $output = curl_exec($ch);
 
     // close the curl resource, and free system resources
     curl_close($ch);
-    
+
     // wp remote fallback
     if(empty($output)){
       $output = wp_remote_get($url);
       $output = $output['body'];
     }
-    
+
     return $output;
   }
-  
+
   public static function downloadFile($path) {
-    
+
     // Validate the $path
     if(!strpos($path, '://')) {
       if($productFolder = Cart66Setting::getValue('product_folder')) {
@@ -1288,18 +1288,19 @@ class Cart66Common {
           }
           Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Download file size: $bytes");
 
-          ob_start();
-          header("Pragma: public");
-          header("Expires: 0");
-          header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-          header("Cache-Control: private",false);
-          header("Content-Type: application/octet-stream;");
-          header('Content-Disposition: attachment; filename="' . $fileName . '"');
-          header("Content-Transfer-Encoding: binary");
-          header("Content-Length: $bytes");
-
           //open the file and stream download
           if($fp = fopen($path, 'rb')) {
+
+            ob_start();
+            header("Pragma: public");
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("Cache-Control: private",false);
+            header("Content-Type: application/octet-stream;");
+            header('Content-Disposition: attachment; filename="' . $fileName . '"');
+            header("Content-Transfer-Encoding: binary");
+            header("Content-Length: $bytes");
+
             while(!feof($fp)) {
               //reset time limit for big files
               @set_time_limit(0);
@@ -1321,15 +1322,15 @@ class Cart66Common {
         Cart66Common::log('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] Unable to download file because the product folder is not set.");
       }
     }
-    
+
   }
-  
+
   public static function remoteFileSize($remoteFile) {
     $ch = curl_init($remoteFile);
     curl_setopt($ch, CURLOPT_NOBODY, true);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, true);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     $data = curl_exec($ch);
     curl_close($ch);
     $contentLength = 'unknown';
@@ -1340,25 +1341,25 @@ class Cart66Common {
     }
     return $contentLength;
   }
-  
+
   public static function onlyUsingPayPalStandard() {
     $onlyPayPalStandard = false;
     if(Cart66Setting::getValue('paypal_email')) {
       $onlyPayPalStandard = true;
     }
-    
+
     if(Cart66Setting::getValue('auth_username') || Cart66Setting::getValue('paypalpro_api_username')) {
       $onlyPayPalStandard = false;
     }
-    
+
     return $onlyPayPalStandard;
   }
-  
+
   /**
    * Convert an array into XML
-   * 
+   *
    * Example use: echo arrayToXml($products,'products');
-   * 
+   *
    * @param array $array       - The array you wish to convert into a XML structure.
    * @param string $name       - The name you wish to enclose the array in, the 'parent' tag for XML.
    * @param string $space      - The xml namespace
@@ -1410,7 +1411,7 @@ class Cart66Common {
 
     return $output;
   }
-  
+
   public static function testResult($passed, $msg='') {
     $trace = debug_backtrace();
     $func = $trace[1]['function'];
@@ -1420,28 +1421,28 @@ class Cart66Common {
     if(!empty($msg)) { $out .= $msg . "\n"; }
     echo $out . "\n";
   }
-  
+
   public static function showReportData(){
     global $wpdb;
     $orders = Cart66Common::getTableName('orders');
     $reportData = array();
-    
+
     $sql = "SELECT sum(`total`) from $orders";
     $lifetimeTotal = $wpdb->get_var($sql);
     $reportData[] = array("Total Sales","total_sales",$lifetimeTotal);
-    
+
     $sql = "SELECT count('id') from $orders";
     $totalOrders = $wpdb->get_var($sql);
     $reportData[] = array("Total Orders","total_orders",$totalOrders);
-    
+
     $sql = "SELECT ordered_on from $orders order by id asc LIMIT 1";
     $firstSaleDate = $wpdb->get_var($sql);
     $reportData[] = array("First Sale","first_sale",$firstSaleDate);
-    
+
     $sql = "SELECT ordered_on from $orders order by id desc LIMIT 1";
     $lastSaleDate = $wpdb->get_var($sql);
     $reportData[] = array("Last Sale","last_sale",$lastSaleDate);
-    
+
     $postTypes = get_post_types('','names');
     foreach($postTypes as $postType){
       if(!in_array($postType,array("post","page","attachment","nav_menu_item","revision"))){
@@ -1450,7 +1451,7 @@ class Cart66Common {
     }
     $customPostTypes = (empty($customPostTypes)) ? "none" : implode(',',$customPostTypes);
     $reportData[] = array("Custom Post Types","custom_post_types",$customPostTypes);
-    
+
     $output = "First Sale: " . $firstSaleDate . "<br>";
     $output .= "Last Sale: " . $lastSaleDate . "<br>";
     $output .= "Total Orders: " . $totalOrders . "<br>";
@@ -1459,10 +1460,10 @@ class Cart66Common {
     $output .= "WordPress Version: " . get_bloginfo("version") . "<br>";
     $output .= (CART66_PRO) ? "Cart66 Version: Pro " . Cart66Setting::getValue('version') . "<br>" : "Cart66 Version: " .Cart66Setting::getValue('version') . "<br>";
     $output .= "PHP Version: " . phpversion() . "<br>";
-    
-    
+
+
     //$output .= ": " . "" . "<br>";
-    
+
     return $output;
   }
   public static function getElapsedTime($datestamp) {
@@ -1491,7 +1492,7 @@ class Cart66Common {
     }
     return $output;
   }
-  
+
   public static function getTimeLeft($datestamp) {
     $output = false;
     if(!empty($datestamp) && $datestamp != '0000-00-00 00:00:00') {
@@ -1518,7 +1519,7 @@ class Cart66Common {
     }
     return $output;
   }
-  
+
   public static function cart66UserCan($role) {
     $access = false;
     $pageRoles = Cart66Setting::getValue('admin_page_roles');
@@ -1534,18 +1535,18 @@ class Cart66Common {
     $pageRoles = unserialize($pageRoles);
     return $pageRoles[$role];
   }
-  
+
   public static function urlIsLive($url) {
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_NOBODY, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); 
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
     curl_exec($ch);
     $response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     return ($response_code == '200') ? true : false;
   }
-  
+
   public static function displayVersionInfo() {
     if(CART66_PRO) {
       echo '<meta name="generator" content="Cart66 Professional ' . Cart66Setting::getValue('version') . '" />' . "\n";
@@ -1554,14 +1555,14 @@ class Cart66Common {
       echo '<meta name="generator" content="Cart66 Lite ' . Cart66Setting::getValue('version') . '" />' . "\n";
     }
   }
-  
+
   public static function removeCart66Meta() {
     remove_action('wp_head', array('Cart66Common','displayVersionInfo'));
   }
-  
+
   /**
    * Return true if the current page is the mijireh checkout page, otherwise return false.
-   * 
+   *
    * @return boolean
    */
   public static function isSlurpPage() {
@@ -1578,14 +1579,14 @@ class Cart66Common {
     }
     return $isSlurp;
   }
-  
+
   /**
    * Return an array just like explode, but trim the values of the array.
-   * 
+   *
    * This allows for spaces in CSV strings. The following two strings would return the same array
    * option1, option2, option3
    * option1,option2,option3
-   * 
+   *
    * @return array
    */
   public static function trimmedExplode($split_on, $string) {
@@ -1596,7 +1597,7 @@ class Cart66Common {
     }
     return $values;
   }
-  
+
   public static function sessionType() {
     $type = Cart66Setting::getValue('session_type');
     if(!$type) {
@@ -1604,7 +1605,7 @@ class Cart66Common {
     }
     return $type;
   }
-  
+
   // Remove all non-numeric characters except for the decimal
   public static function cleanNumber($string) {
     $dec_point = Cart66Setting::getValue('currency_dec_point') ? Cart66Setting::getValue('currency_dec_point') : '.';
@@ -1612,7 +1613,7 @@ class Cart66Common {
     $number = preg_replace('/[^\d\.]/', '', $string);
     return $number;
   }
-  
+
   public static function verifyCartPages($outputType = 'full'){
     $requiredPages = array(
       "Store" => "store",
@@ -1634,7 +1635,7 @@ class Cart66Common {
          $error[] = "<li class='Cart66PageError'><strong>$page page not found!</strong> The page should be located at " . get_bloginfo('url') . "/$slug</li>";
        }
     }
-    
+
     switch($outputType){
       case "success":
         $output = $success;
@@ -1645,11 +1646,11 @@ class Cart66Common {
       default:
         $output = array_merge($error, $success);
     }
-    
+
     return implode(" ", $output);
-    
+
   }
-  
+
   public static function convert_currency_to_number($amount) {
     if(is_numeric($amount)) {
       return $amount;
@@ -1662,7 +1663,7 @@ class Cart66Common {
     $amount = substr_replace($amount, '.', - $decimal, 0);
     return $amount;
   }
-  
+
   public static function currency($amount, $html=true, $markup=false, $symbol=true) {
     if(!is_numeric($amount)) {
       $amount = 0;
@@ -1670,7 +1671,7 @@ class Cart66Common {
     $decimal = Cart66Setting::getValue('currency_decimals') == 'no_decimal' ? 0 : (Cart66Setting::getValue('currency_decimals') ? Cart66Setting::getValue('currency_decimals') : 2);
     $dec_point = Cart66Setting::getValue('currency_dec_point') ? Cart66Setting::getValue('currency_dec_point') : '.';
     $thousands_sep = Cart66Setting::getValue('currency_thousands_sep') ? Cart66Setting::getValue('currency_thousands_sep') : ',';
-    
+
     if($markup) {
       $amount = self::currencyMarkup($amount);
     }
@@ -1697,10 +1698,10 @@ class Cart66Common {
         $amount = self::currencyFormat($amount, $decimal, $dec_point, $thousands_sep);
       }
     }
-    
+
     return $amount;
   }
-  
+
   public static function tax($rate) {
     if($rate == 0) {
       $rate = '0.00';
@@ -1713,11 +1714,11 @@ class Cart66Common {
     }
     return $rate . '%';
   }
-  
+
   public static function currencyFormat($amount, $decimal, $dec_point, $thousands_sep) {
     return number_format($amount, $decimal, $dec_point, $thousands_sep);
   }
-  
+
   public static function currencyMarkup($amount) {
     $amount = str_replace(CART66_CURRENCY_SYMBOL, '', $amount);
     $decimal = Cart66Setting::getValue('currency_decimals') == 'no_decimal' ? 0 : (Cart66Setting::getValue('currency_decimals') ? Cart66Setting::getValue('currency_decimals') : 2);
@@ -1737,10 +1738,10 @@ class Cart66Common {
     else {
       $html = $amount;
     }
-    
+
     return $html;
   }
-  
+
   public static function currencySymbol($position, $html=true) {
     $symbol = '';
     if(Cart66Setting::getValue('currency_position')) {
@@ -1761,5 +1762,5 @@ class Cart66Common {
     }
     return $symbol;
   }
-  
+
 }

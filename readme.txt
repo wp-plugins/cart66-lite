@@ -3,8 +3,8 @@ Contributors: reality66
 Donate link: http://cart66.com/
 Tags: ecommerce, e-commerce, shopping, cart, store, paypal, sell, cart66, products, sales, shopping cart
 Requires at least: 2.8.2
-Tested up to: 4.0
-Stable tag: 1.5.3
+Tested up to: 4.1
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,7 +97,13 @@ We are not able to provide anything other than community based support for Cart6
 
 == Changelog ==
 
+= 1.5.4 =
+
+* FIXED: Security vulnerabilities 
+* FIXED: Conflict with DataTables library (causing links to stop working with Yoast Plugins) 
+
 = 1.5.3 =
+
 * NEW: [Hurricane affiliate software](http://hurricane.io) integration
 * NEW: Toggle settings for email MIME type
 * NEW: Responsive styles for cart and checkout

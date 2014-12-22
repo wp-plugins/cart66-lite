@@ -1,6 +1,6 @@
 <?php
 class Cart66Ajax {
-  
+
   public static function resendEmailFromLog() {
     $log_id = $_POST['id'];
     $resendEmail = Cart66EmailLog::resendEmailFromLog($log_id);
@@ -15,7 +15,7 @@ class Cart66Ajax {
     echo json_encode($result);
     die();
   }
-  
+
   public function forcePluginUpdate(){
     $output = false;
     update_option('_site_transient_update_plugins', '');
@@ -25,7 +25,7 @@ class Cart66Ajax {
     echo $output;
     die();
   }
-  
+
   public static function sendTestEmail() {
     $to = $_POST['email'];
     $status = $_POST['status'];
@@ -52,7 +52,7 @@ class Cart66Ajax {
     echo json_encode($result);
     die();
   }
-  
+
   public static function ajaxReceipt() {
     if(isset($_GET['order_id'])) {
       $orderReceipt = new Cart66Order($_GET['order_id']);
@@ -63,7 +63,7 @@ class Cart66Ajax {
       die();
     }
   }
-  
+
   public static function ajaxOrderLookUp() {
     $redirect = true;
     $order = new Cart66Order();
@@ -77,7 +77,7 @@ class Cart66Ajax {
     echo json_encode($redirect);
     die();
   }
-  
+
   public static function viewLoggedEmail() {
     if(isset($_POST['log_id'])) {
       $emailLog = new Cart66EmailLog($_POST['log_id']);
@@ -85,17 +85,17 @@ class Cart66Ajax {
       die();
     }
   }
-  
+
   public static function checkPages(){
     $Cart66 = new Cart66();
     echo $Cart66->cart66_page_check(true);
     die();
   }
-  
+
   public static function shortcodeProductsTable() {
     global $wpdb;
     $prices = array();
-  	$types = array(); 
+  	$types = array();
   	//$options='';
     $postId = intval(Cart66Common::postVal('id'));
     $product = new Cart66Product();
@@ -128,7 +128,7 @@ class Cart66Ajax {
     echo json_encode($data);
     die();
   }
-  
+
   public static function ajaxTaxUpdate() {
     if(isset($_POST['state']) && isset($_POST['state_text']) && isset($_POST['zip']) && isset($_POST['gateway'])) {
       $gateway = Cart66Ajax::loadAjaxGateway($_POST['gateway']);
@@ -167,7 +167,7 @@ class Cart66Ajax {
     echo json_encode($result);
     die();
   }
-  
+
   public static function loadAjaxGateway($gateway) {
     switch($gateway) {
       case 'Cart66ManualGateway':
@@ -211,7 +211,7 @@ class Cart66Ajax {
     }
     return $gateway;
   }
-  
+
   public static function ajaxCartElements($args="") {
 
     $items = Cart66Session::get('Cart66Cart')->getItems();
@@ -226,13 +226,13 @@ class Cart66Ajax {
         'productSubtotal' => Cart66Common::currency($item->getProductPrice() * $item->getQuantity())
       );
     }
-    
+
     $summary = array(
-      'items' => ' ' . _n('item', 'items', Cart66CartWidget::countItems(), 'cart66'), 
-      'amount' => Cart66Common::currency(Cart66CartWidget::getSubTotal()), 
+      'items' => ' ' . _n('item', 'items', Cart66CartWidget::countItems(), 'cart66'),
+      'amount' => Cart66Common::currency(Cart66CartWidget::getSubTotal()),
       'count' => Cart66CartWidget::countItems()
     );
-    
+
     $array = array(
       'summary' => $summary,
       'products' => $products,
@@ -243,7 +243,7 @@ class Cart66Ajax {
     echo json_encode($array);
     die();
   }
-  
+
   public static function ajaxAddToCart() {
     $message = Cart66Session::get('Cart66Cart')->addToCart(true);
     if(!is_array($message)) {
@@ -256,13 +256,14 @@ class Cart66Ajax {
     echo json_encode($message);
     die();
   }
-  
+
   public static function promotionProductSearch() {
     global $wpdb;
     $search = Cart66Common::getVal('q');
     $product = new Cart66Product();
     $tableName = Cart66Common::getTableName('products');
-    $products = $wpdb->get_results("SELECT id, name from $tableName WHERE name LIKE '%%%$search%%' ORDER BY id ASC LIMIT 10");
+    $search_sql = $wpdb->prepare( "SELECT id, name from $tableName WHERE name LIKE %s ORDER BY id ASC LIMIT 10", '%' . $wpdb->esc_like($search) . '%');
+    $products = $wpdb->get_results($search_sql);
     $data = array();
     foreach($products as $p) {
       $data[] = array('id' => $p->id, 'name' => $p->name);
@@ -270,7 +271,7 @@ class Cart66Ajax {
     echo json_encode($data);
     die();
   }
-  
+
   public static function loadPromotionProducts() {
     $productId = Cart66Common::postVal('productId');
     $product = new Cart66Product();
@@ -283,8 +284,11 @@ class Cart66Ajax {
     echo json_encode($selected);
     die();
   }
-  
+
   public static function saveSettings() {
+    if(!Cart66Common::cart66UserCan('settings')){
+      die();
+    }
     $error = '';
     foreach($_REQUEST as $key => $value) {
       if($key[0] != '_' && $key != 'action' && $key != 'submit' && $key) {
@@ -326,7 +330,7 @@ class Cart66Ajax {
           }
         }
         elseif($key == 'constantcontact_list_ids') {
-          
+
         }
         elseif($key == 'admin_page_roles') {
           $value = serialize($value);
@@ -358,14 +362,14 @@ class Cart66Ajax {
     }
     else {
       $result[0] = 'Cart66Modal alert-message success';
-      $result[1] = '<strong>Success</strong><br/>' . $_REQUEST['_success'] . '<br>'; 
+      $result[1] = '<strong>Success</strong><br/>' . $_REQUEST['_success'] . '<br>';
     }
 
     $out = json_encode($result);
     echo $out;
     die();
   }
-  
+
   public static function updateGravityProductQuantityField() {
     $formId = Cart66Common::getVal('formId');
     $gr = new Cart66GravityReader($formId);
@@ -374,7 +378,7 @@ class Cart66Ajax {
     echo json_encode($fields);
     die();
   }
-  
+
   public static function checkInventoryOnAddToCart() {
     $result = array(true);
     $itemId = Cart66Common::postVal('cart66ItemId');
@@ -414,22 +418,22 @@ class Cart66Ajax {
       $soldOutLabel = Cart66Setting::getValue('label_out_of_stock') ? strtolower(Cart66Setting::getValue('label_out_of_stock')) : __('out of stock', 'cart66');
       $result[1] = $p->name . " " . $optionsMsg . " is $soldOutLabel $out";
     }
-    
+
     $result = json_encode($result);
     echo $result;
     die();
   }
-  
+
   public static function pageSlurp() {
     require_once(CART66_PATH . "/models/Pest.php");
     require_once(CART66_PATH . "/models/PestJSON.php");
-    
+
     $page_id = Cart66Common::postVal('page_id');
     $page = get_page($page_id);
     $slurp_url = get_permalink($page->ID);
     $html = false;
     $job_id = $slurp_url;
-    
+
     if(wp_update_post(array('ID' => $page->ID, 'post_status' => 'publish'))) {
       $access_key = Cart66Setting::getValue('mijireh_access_key');
       $rest = new PestJSON(MIJIREH_CHECKOUT);
@@ -439,7 +443,7 @@ class Cart66Ajax {
         'page_id' => $page->ID,
         'return_url' => add_query_arg('task', 'mijireh_page_slurp', $slurp_url)
       );
-      
+
       try {
         $response = $rest->post('/api/1/slurps', $data);
         $job_id = $response['job_id'];
@@ -452,13 +456,13 @@ class Cart66Ajax {
     else {
       $job_id = 'did not update post successfully';
     }
-    
+
     echo $job_id;
     die;
   }
-  
+
   public static function dismissMijirehNotice() {
     Cart66Setting::setValue('mijireh_notice', 1);
   }
-  
+
 }
