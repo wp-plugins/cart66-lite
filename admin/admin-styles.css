@@ -1,4 +1,4 @@
-/* @override 
+/* @override
 	http://plugin.cart66/wp-content/plugins/cart66-gh/admin/admin-styles.css
 */
 
@@ -75,7 +75,7 @@ span.label_desc {
   background-color: #FEE;
   border: 1px solid red;
   padding: 5px 20px;
-  -moz-border-radius: 5px; 
+  -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
 }
 
@@ -114,7 +114,7 @@ span.label_desc {
   padding:5px;
   margin-right:15px;
   background-color:#ddd;
-  -moz-border-radius: 5px; 
+  -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
 }
 
@@ -133,8 +133,8 @@ span.label_desc {
   width: 280px;
   height: auto; /* 85px; */
   overflow: auto;
-  vertical-align: top;  
-  -moz-border-radius: 5px; 
+  vertical-align: top;
+  -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-box-shadow: 5px 5px 10px #cfcfcf;
   -webkit-box-shadow: 5px 5px 10px #cfcfcf;
@@ -270,12 +270,12 @@ span.label_desc {
 }
 
 .adminHeaderBlock {
-  padding: 5px; 
-  margin-bottom: 35px; 
-  background-color: #EEE; 
-  border: 1px solid #E0E0E0; 
-  width: 400px; 
-  -moz-border-radius: 5px; 
+  padding: 5px;
+  margin-bottom: 35px;
+  background-color: #EEE;
+  border: 1px solid #E0E0E0;
+  width: 400px;
+  -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
 }
 
@@ -284,7 +284,7 @@ span.label_desc {
 /************************************************************
  * Gravity Form Display Styles
  ************************************************************/
- 
+
 table .entry-details {
   width: 100%;
 }
@@ -323,10 +323,12 @@ form {margin: 0; padding: 0;}
 
 #ui-datepicker-div { font-size:80%; }
 .ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }
-.ui-timepicker-div dl{ text-align: left; }
+.ui-timepicker-div dl{ text-align: left; height:70px;}
 .ui-timepicker-div dl dt{ height: 25px;margin-left:10px; }
 .ui-timepicker-div dl dd{ margin: -25px 30px 10px 65px; }
 .ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
 
 .ui-multiselect { border: 1px solid #999; font-size: 0.8em; }
 .ui-multiselect ul { -moz-user-select: none; }
@@ -341,11 +343,11 @@ form {margin: 0; padding: 0;}
 .ui-multiselect div.available { position: relative; padding: 0; margin: 0; border: 0; float:left; border-left: 1px solid #999; }
 .ui-multiselect ul.available { position: relative; padding: 0; overflow: auto; overflow-x: hidden; background: #fff; margin: 0; list-style: none; border: 0; width: 100%; }
 .ui-multiselect ul.available li { padding-left: 10px; }
- 
+
 .ui-multiselect .ui-state-default { border: none; margin-bottom: 1px; position: relative; padding-left: 20px;}
 .ui-multiselect .ui-state-hover { border: none; }
 .ui-multiselect .ui-widget-header {border: none; font-size: 11px; margin-bottom: 1px;}
- 
+
 .ui-multiselect .add-all { float: right; padding: 7px;}
 .ui-multiselect .remove-all { float: right; padding: 7px;}
 .ui-multiselect .search { float: left; padding: 4px;}
@@ -353,7 +355,7 @@ form {margin: 0; padding: 0;}
 
 .ui-multiselect li span.ui-icon-arrowthick-2-n-s { position: absolute; left: 2px; }
 .ui-multiselect li a.action { position: absolute; right: 2px; top: 2px; }
- 
+
 .ui-multiselect input.search { height: 14px; padding: 1px; opacity: 0.5; margin: 4px; width: 100px; }
 
 
@@ -361,8 +363,8 @@ form {margin: 0; padding: 0;}
 
 /* Example tokeninput style #2: Facebook style */
 ul.token-input-list-facebook {
-    overflow: hidden; 
-    height: auto !important; 
+    overflow: hidden;
+    height: auto !important;
     height: 1%;
     width: 550px;
     border: 1px solid #8496ba;
@@ -388,8 +390,8 @@ ul.token-input-list-facebook li input {
 }
 
 li.token-input-token-facebook {
-    overflow: hidden; 
-    height: auto !important; 
+    overflow: hidden;
+    height: auto !important;
     height: 15px;
     margin: 3px;
     padding: 1px 3px;
@@ -529,11 +531,11 @@ div.dataTables_paginate {
     cursor: pointer;
     *cursor: hand;
 }
- 
+
 .dataTables_wrapper thead .sorting { background: url('images/sort_both.png') no-repeat center right; }
 .dataTables_wrapper thead .sorting_asc { background: url('images/sort_asc.png') no-repeat center right; }
 .dataTables_wrapper thead .sorting_desc { background: url('images/sort_desc.png') no-repeat center right; }
- 
+
 .dataTables_wrapper thead .sorting_asc_disabled { background: url('images/sort_asc_disabled.png') no-repeat center right; }
 .dataTables_wrapper thead .sorting_desc_disabled { background: url('images/sort_desc_disabled.png') no-repeat center right; }
 .dataTables_processing {
@@ -611,16 +613,16 @@ div.dataTables_paginate {
 }
 
 
-#notifications .cart66Tabbed ul.tabs { 
+#notifications .cart66Tabbed ul.tabs {
   float: left;
   display: inline;
   width: 100%;
   margin: 0;
-  padding: 0; 
+  padding: 0;
   color: #21759B;
 }
 
-#cart66-shipping-header, 
+#cart66-shipping-header,
 #cart66-shortcode-header,
 #cart66-notifications-header {
   margin: 0;
@@ -1064,7 +1066,7 @@ tr#cart66-lite.inactive td:last-child, tr#cart66-professional.inactive td:last-c
   background: none;
 }
 @media only screen and (max-width: 481px) {
-  
+
   tr#cart66-professional td:last-child, tr#cart66-lite td:last-child {
     background: none;
   }
@@ -1083,7 +1085,7 @@ tr#cart66-lite.inactive td:last-child, tr#cart66-professional.inactive td:last-c
 display:none;
 }
 #products-form div#widgets-left .sidebar-name h3{
- padding:10px;	
+ padding:10px;
 }
 #products-form .widget-holder{
  padding-left:10px;

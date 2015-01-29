@@ -44,7 +44,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
 
   <div id="widgets-left">
     <div id="available-widgets">
-    
+
       <div class="widgets-holder-wrap">
         <div class="sidebar-name">
           <div class="sidebar-name-arrow"><br/></div>
@@ -136,17 +136,17 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
                 </li>
                 <li>
                   <label class="long" for="promo-maximum_redemptions"><?php _e( 'Maximum redemptions' , 'cart66' ); ?>:</label>
-                  <input type='text' name='promo[maximum_redemptions]' id='promo-maximum_redemptions' value='<?php echo ($promo->maximum_redemptions == 0) ? "" : $promo->maximum_redemptions; ?>' />  
+                  <input type='text' name='promo[maximum_redemptions]' id='promo-maximum_redemptions' value='<?php echo ($promo->maximum_redemptions == 0) ? "" : $promo->maximum_redemptions; ?>' />
                   <?php if($promo->id > 0): ?>
                   <?php _e( 'Used' , 'cart66' ); ?>:</label>
-                      <strong><?php 
+                      <strong><?php
                       if($promo->redemptions != null) {
                         echo $promo->redemptions; ?> <?php echo ($promo->redemptions == 1) ? 'time' : 'times';
                       } else {
-                        echo __('Never', 'cart66'); 
+                        echo __('Never', 'cart66');
                       } ?></strong>
                   <?php endif; ?>
-                  
+
                   <span class="label_desc"><?php _e('Set the maximum number of times this promotion can be redeemed', 'cart66'); ?>.</span>
                 </li>
                 <li>
@@ -167,11 +167,11 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
                 <li>
                   <div class="desc"><?php _e('Additional settings', 'cart66'); ?>:</div>
                   <div class="collection checkbox">
-                    <input type="hidden" name='promo[enable]' value="" />  
+                    <input type="hidden" name='promo[enable]' value="" />
                     <input type="checkbox" name='promo[enable]' id='promo-enable' value="1" <?php echo ($promo->enable == '1' || !isset($promo->id)) ? 'checked="checked"' : ''; ?> />
                     <label for="promo-enable"><?php _e( 'Enable' , 'cart66' ); ?>?</label>
                     <span class="label_desc"><?php _e('Do you want this promotion to be valid', 'cart66'); ?>?</span>
-                    <input type="hidden" name='promo[auto_apply]' value="" />  
+                    <input type="hidden" name='promo[auto_apply]' value="" />
                     <input type="checkbox" name='promo[auto_apply]' id='promo-auto_apply' value="1" <?php echo ($promo->auto_apply == '1') ? 'checked="checked"' : ''; ?> />
                     <label for="promo-auto_apply"><?php _e( 'Auto Apply' , 'cart66' ); ?>?</label>
                     <span class="label_desc"><?php _e('Do you want this promotion to automatically apply when all conditions are met? (no user input required)', 'cart66'); ?></span>
@@ -226,7 +226,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
       	</tr>
       </tfoot>
       <tbody>
-        
+
       </tbody>
     </tr>
   </table>
@@ -236,7 +236,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
   (function($){
     $(document).ready(function(){
       $('#promo-products').tokenInput(productSearchUrl, { theme: 'facebook', hintText: 'Type in a product name',
-        onReady: function() { 
+        onReady: function() {
           var data = {
             action: 'loadPromotionProducts',
             productId: $('#promo-products-hidden').val()
@@ -251,7 +251,7 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
           }, 'json');
         }
       });
-      
+
       $('#promotions_table').dataTable({
         "bProcessing": true,
         "bServerSide": true,
@@ -263,19 +263,19 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
         "sAjaxSource": ajaxurl + "?action=promotions_table",
         "aaSorting": [[8,'desc']],
         "aoColumns": [
-          null, 
+          null,
           {
             "bsortable": true,
             "fnRender": function(oObj) {
               return "<a href=\"?page=cart66-promotions&task=edit&id=" + oObj.aData[0] + "\">" + oObj.aData[1] + "</a>"
             }
           },
-          null, null, 
-          { "bSearchable": false }, 
-          { "bSearchable": false }, 
-          { "bSearchable": false }, 
-          { "bSearchable": false }, 
-          null, 
+          null, null,
+          { "bSearchable": false },
+          { "bSearchable": false },
+          { "bSearchable": false },
+          { "bSearchable": false },
+          null,
           {
             "mData": null,
             "bSearchable": false,
@@ -285,21 +285,21 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
             }
           }
         ],
-        "oLanguage": { 
-          "sZeroRecords": "<?php _e('No matching Promotions found', 'cart66'); ?>", 
-          "sSearch": "<?php _e('Search', 'cart66'); ?>:", 
-          "sInfo": "<?php _e('Showing', 'cart66'); ?> _START_ <?php _e('to', 'cart66'); ?> _END_ <?php _e('of', 'cart66'); ?> _TOTAL_ <?php _e('entries', 'cart66'); ?>", 
-          "sInfoEmpty": "<?php _e('Showing 0 to 0 of 0 entries', 'cart66'); ?>", 
+        "oLanguage": {
+          "sZeroRecords": "<?php _e('No matching Promotions found', 'cart66'); ?>",
+          "sSearch": "<?php _e('Search', 'cart66'); ?>:",
+          "sInfo": "<?php _e('Showing', 'cart66'); ?> _START_ <?php _e('to', 'cart66'); ?> _END_ <?php _e('of', 'cart66'); ?> _TOTAL_ <?php _e('entries', 'cart66'); ?>",
+          "sInfoEmpty": "<?php _e('Showing 0 to 0 of 0 entries', 'cart66'); ?>",
           "oPaginate": {
-            "sNext": "<?php _e('Next', 'cart66'); ?>", 
-            "sPrevious": "<?php _e('Previous', 'cart66'); ?>", 
-            "sLast": "<?php _e('Last', 'cart66'); ?>", 
+            "sNext": "<?php _e('Next', 'cart66'); ?>",
+            "sPrevious": "<?php _e('Previous', 'cart66'); ?>",
+            "sLast": "<?php _e('Last', 'cart66'); ?>",
             "sFirst": "<?php _e('First', 'cart66'); ?>"
-          }, 
-          "sInfoFiltered": "(<?php _e('filtered from', 'cart66'); ?> _MAX_ <?php _e('total entries', 'cart66'); ?>)", 
-          "sLengthMenu": "<?php _e('Show', 'cart66'); ?> _MENU_ <?php _e('entries', 'cart66'); ?>", 
-          "sLoadingRecords": "<?php _e('Loading', 'cart66'); ?>...", 
-          "sProcessing": "<?php _e('Processing', 'cart66'); ?>..." 
+          },
+          "sInfoFiltered": "(<?php _e('filtered from', 'cart66'); ?> _MAX_ <?php _e('total entries', 'cart66'); ?>)",
+          "sLengthMenu": "<?php _e('Show', 'cart66'); ?> _MENU_ <?php _e('entries', 'cart66'); ?>",
+          "sLoadingRecords": "<?php _e('Loading', 'cart66'); ?>...",
+          "sProcessing": "<?php _e('Processing', 'cart66'); ?>..."
         }
       });
       $(".promo-rows tr:nth-child(even)").css("background-color", "#fff");
@@ -321,8 +321,8 @@ elseif(isset($_GET['task']) && $_GET['task'] == 'delete' && isset($_GET['id']) &
       $('.sidebar-name').click(function() {
         $(this.parentNode).toggleClass("closed");
       });
-      $(".from").datetimepicker({ changeMonth: true, numberOfMonths: 2, ampm: true})
-      $(".to").datetimepicker({ changeMonth: true, numberOfMonths: 2, ampm: true, hour: 23, minute: 59 })
+      $(".from").datetimepicker({ changeMonth: true, numberOfMonths: 2, timeFormat: "h:mmtt"})
+      $(".to").datetimepicker({ changeMonth: true, numberOfMonths: 2, timeFormat: "h:mmtt", hour: 23, minute: 59 })
       $('#Cart66AccountSearchField').quicksearch('table tbody tr');
     })
     $(document).on('click', '.delete', function(e) {

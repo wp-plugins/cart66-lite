@@ -290,17 +290,16 @@ class Cart66 {
         </div>
       </div>";
 
-    }
-    else{
-      $alert_output = '<div id="cart66_page_errors"></div>';
-    }
 
-    if($return){
-      return $alert_output;
+      if($return){
+        return $alert_output;
+      }
+      else{
+        echo $alert_output;
+      }
+    
     }
-    else{
-      echo $alert_output;
-    }
+    
   }
 
   public function check_cart66_pages_on_inline_edit(){
